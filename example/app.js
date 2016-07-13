@@ -20460,9 +20460,12 @@ var ImageZoom = function (_Component) {
     _this.renderUnzoomed = _this.renderUnzoomed.bind(_this);
     _this.zoom = _this.zoom.bind(_this);
     _this.unzoom = _this.unzoom.bind(_this);
-    _this.addScrollListener = _this.addScrollListener.bind(_this);
-    _this.removeScrollListener = _this.removeScrollListener.bind(_this);
+    _this.addListeners = _this.addListeners.bind(_this);
+    _this.removeListeners = _this.removeListeners.bind(_this);
     _this.handleScroll = _this.handleScroll.bind(_this);
+    _this.handleTouchStart = _this.handleTouchStart.bind(_this);
+    _this.handleTouchMove = _this.handleTouchMove.bind(_this);
+    _this.handleTouchEnd = _this.handleTouchEnd.bind(_this);
     return _this;
   }
 
@@ -20489,33 +20492,56 @@ var ImageZoom = function (_Component) {
   }, {
     key: 'zoom',
     value: function zoom() {
-      console.log('ZOOM');
-      this.setState({ isZoomed: true }, this.addScrollListener);
+      // add overlay
+      // create div and place image in said div
+      // transform it to the center of the page
+
+      this.setState({ isZoomed: true }, this.addListeners);
     }
   }, {
     key: 'unzoom',
     value: function unzoom() {
-      this.setState({ isZoomed: false }, this.removeScrollListener);
+      this.setState({ isZoomed: false }, this.removeListeners);
     }
   }, {
-    key: 'addScrollListener',
-    value: function addScrollListener() {
+    key: 'addListeners',
+    value: function addListeners() {
       this.scrollPosition = window.pageYOffset;
       window.addEventListener('scroll', this.handleScroll);
+      window.addEventListener('ontouchstart', this.handleTouchStart);
+      window.addEventListener('ontouchmove', this.handleTouchMove);
+      window.addEventListener('ontouchend', this.handleTouchEnd);
     }
   }, {
-    key: 'removeScrollListener',
-    value: function removeScrollListener() {
+    key: 'removeListeners',
+    value: function removeListeners() {
+      this.scrollPosition = undefined;
       window.removeEventListener('scroll', this.handleScroll);
+      window.removeEventListener('ontouchstart', this.handleTouchStart);
+      window.removeEventListener('ontouchmove', this.handleTouchMove);
+      window.removeEventListener('ontouchend', this.handleTouchEnd);
     }
   }, {
     key: 'handleScroll',
     value: function handleScroll() {
       var scrollChange = Math.abs(window.pageYOffset - this.scrollPosition);
-      if (scrollChange > 30) {
-        this.scrollPosition = undefined;
-        this.unzoom();
-      }
+      if (scrollChange > 30) this.unzoom();
+    }
+  }, {
+    key: 'handleTouchStart',
+    value: function handleTouchStart(e) {
+      this.yTouchPosition = e.touches[0].clientY;
+    }
+  }, {
+    key: 'handleTouchMove',
+    value: function handleTouchMove(e) {
+      var touchChange = Math.abs(e.touches[0].clientY - this.yTouchPosition);
+      if (touchChange > 10) this.unzoom();
+    }
+  }, {
+    key: 'handleTouchEnd',
+    value: function handleTouchEnd(e) {
+      this.yTouchPosition = undefined;
     }
   }], [{
     key: 'propTypes',
