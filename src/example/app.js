@@ -14,12 +14,14 @@ class App extends Component {
             image={{
               src: 'bridge.jpg',
               alt: 'Golden Gate Bridge',
-              className: ''
+              className: '',
+              style: {}
             }}
             zoomImage={{
               src: 'bridge-big.jpg',
               alt: 'Golden Gate Bridge',
-              className: ''
+              className: '',
+              style: {}
             }}
           />
         </div>
@@ -31,12 +33,14 @@ class App extends Component {
             image={{
               src: 'gazelle.jpg',
               alt: 'Gazelle Stomping',
-              className: ''
+              className: '',
+              style: {}
             }}
             zoomImage={{
               src: 'gazelle-big.jpg',
               alt: 'Gazelle Stomping',
-              className: ''
+              className: '',
+              style: {}
             }}
           />
         </div>

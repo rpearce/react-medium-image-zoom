@@ -20443,6 +20443,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var shape = _react.PropTypes.shape;
 var string = _react.PropTypes.string;
+var object = _react.PropTypes.object;
 
 var ImageZoom = function (_Component) {
   _inherits(ImageZoom, _Component);
@@ -20472,13 +20473,11 @@ var ImageZoom = function (_Component) {
     value: function render() {
       this.state.isZoomed ? this.renderZoomed() : this.removeZoomed();
 
-      var styles = this.state.isZoomed ? { visibility: 'hidden' } : {};
-
       return _react2.default.createElement('img', {
         src: this.props.image.src,
         alt: this.props.image.alt,
         className: this.props.image.className,
-        style: styles,
+        style: this.getImageStyle(),
         onClick: this.handleZoom
       });
     }
@@ -20492,6 +20491,13 @@ var ImageZoom = function (_Component) {
   }, {
     key: 'removeZoomed',
     value: function removeZoomed() {}
+  }, {
+    key: 'getImageStyle',
+    value: function getImageStyle() {
+      var style = {};
+      if (this.state.isZoomed) style.visibility = 'hidden';
+      return Object.assign({}, style, this.props.image.style);
+    }
   }, {
     key: 'handleZoom',
     value: function handleZoom() {
@@ -20549,12 +20555,14 @@ var ImageZoom = function (_Component) {
         image: shape({
           src: string.isRequired,
           alt: string,
-          className: string
+          className: string,
+          style: object
         }).isRequired,
         zoomImage: shape({
           src: string.isRequired,
           alt: string,
-          className: string
+          className: string,
+          style: object
         }).isRequired
       };
     }
@@ -20627,12 +20635,14 @@ var App = function (_Component) {
             image: {
               src: 'bridge.jpg',
               alt: 'Golden Gate Bridge',
-              className: ''
+              className: '',
+              style: {}
             },
             zoomImage: {
               src: 'bridge-big.jpg',
               alt: 'Golden Gate Bridge',
-              className: ''
+              className: '',
+              style: {}
             }
           })
         ),
@@ -20658,12 +20668,14 @@ var App = function (_Component) {
             image: {
               src: 'gazelle.jpg',
               alt: 'Gazelle Stomping',
-              className: ''
+              className: '',
+              style: {}
             },
             zoomImage: {
               src: 'gazelle-big.jpg',
               alt: 'Gazelle Stomping',
-              className: ''
+              className: '',
+              style: {}
             }
           })
         ),

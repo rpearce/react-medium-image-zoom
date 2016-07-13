@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 
-const { shape, string } = PropTypes
+const { shape, string, object } = PropTypes
 
 export default class ImageZoom extends Component {
   constructor(props) {
@@ -25,12 +25,14 @@ export default class ImageZoom extends Component {
       image: shape({
         src: string.isRequired,
         alt: string,
-        className: string
+        className: string,
+        style: object
       }).isRequired,
       zoomImage: shape({
         src: string.isRequired,
         alt: string,
-        className: string
+        className: string,
+        style: object
       }).isRequired
     }
   }
@@ -38,14 +40,12 @@ export default class ImageZoom extends Component {
   render() {
     this.state.isZoomed ? this.renderZoomed() : this.removeZoomed()
 
-    const styles = this.state.isZoomed ? { visibility: 'hidden' } : {}
-
     return (
       <img
         src={ this.props.image.src }
         alt={ this.props.image.alt }
         className={ this.props.image.className }
-        style={ styles }
+        style={ this.getImageStyle() }
         onClick={ this.handleZoom }
       />
     )
@@ -58,6 +58,12 @@ export default class ImageZoom extends Component {
   }
 
   removeZoomed() {
+  }
+
+  getImageStyle() {
+    const style = {}
+    if (this.state.isZoomed) style.visibility = 'hidden'
+    return Object.assign({}, style, this.props.image.style)
   }
 
   handleZoom() {
