@@ -22,7 +22,9 @@ export default class ImageZoom extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    this.state.isZoomed ? this.renderZoomed() : this.removeZoomed()
+    if (prevState.isZoomed !== this.state.isZoomed) {
+      this.state.isZoomed ? this.renderZoomed() : this.removeZoomed()
+    }
   }
 
   render() {
@@ -41,7 +43,7 @@ export default class ImageZoom extends Component {
   renderZoomed() {
     this.portal = document.createElement('div')
     document.body.appendChild(this.portal)
-    ReactDOM.render(<Zoom { ...this.props.zoomImage } />, this.portal)
+    ReactDOM.render(<Zoom { ...this.props.zoomImage } onClick={ this.handleUnzoom } />, this.portal)
   }
 
   removeZoomed() {
@@ -127,7 +129,7 @@ ImageZoom.defaultStyle = {
 // =============================================
 
 const Zoom = (props) =>
-  <div>
+  <div onClick={ props.onClick }>
     <ZoomImage { ...props } />
     <Overlay />
   </div>
@@ -151,7 +153,6 @@ const overlayStyles = {
   left            : 0,
   backgroundColor : '#fff',
   zIndex          : 998,
-  pointerEvents   : 'none',
   opacity         : 1,
   transition      : 'opacity 300ms'
 }

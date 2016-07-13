@@ -20427,6 +20427,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
@@ -20475,7 +20477,9 @@ var ImageZoom = function (_Component) {
   _createClass(ImageZoom, [{
     key: 'componentDidUpdate',
     value: function componentDidUpdate(prevProps, prevState) {
-      this.state.isZoomed ? this.renderZoomed() : this.removeZoomed();
+      if (prevState.isZoomed !== this.state.isZoomed) {
+        this.state.isZoomed ? this.renderZoomed() : this.removeZoomed();
+      }
     }
   }, {
     key: 'render',
@@ -20494,7 +20498,7 @@ var ImageZoom = function (_Component) {
     value: function renderZoomed() {
       this.portal = document.createElement('div');
       document.body.appendChild(this.portal);
-      _reactDom2.default.render(_react2.default.createElement(Zoom, this.props.zoomImage), this.portal);
+      _reactDom2.default.render(_react2.default.createElement(Zoom, _extends({}, this.props.zoomImage, { onClick: this.handleUnzoom })), this.portal);
     }
   }, {
     key: 'removeZoomed',
@@ -20597,7 +20601,7 @@ ImageZoom.defaultStyle = {
 var Zoom = function Zoom(props) {
   return _react2.default.createElement(
     'div',
-    null,
+    { onClick: props.onClick },
     _react2.default.createElement(ZoomImage, props),
     _react2.default.createElement(Overlay, null)
   );
@@ -20625,7 +20629,6 @@ var overlayStyles = {
   left: 0,
   backgroundColor: '#fff',
   zIndex: 998,
-  pointerEvents: 'none',
   opacity: 1,
   transition: 'opacity 300ms'
 };
