@@ -10,10 +10,8 @@ export default class ImageZoom extends Component {
       isZoomed: false
     }
 
-    this.renderZoomed     = this.renderZoomed.bind(this)
-    this.renderUnzoomed   = this.renderUnzoomed.bind(this)
-    this.zoom             = this.zoom.bind(this)
-    this.unzoom           = this.unzoom.bind(this)
+    this.handleZoom       = this.handleZoom.bind(this)
+    this.handleUnzoom     = this.handleUnzoom.bind(this)
     this.addListeners     = this.addListeners.bind(this)
     this.removeListeners  = this.removeListeners.bind(this)
     this.handleScroll     = this.handleScroll.bind(this)
@@ -38,33 +36,35 @@ export default class ImageZoom extends Component {
   }
 
   render() {
-    return this.state.isZoomed ? this.renderZoomed() : this.renderUnzoomed()
-  }
+    this.state.isZoomed ? this.renderZoomed() : this.removeZoomed()
 
-  renderZoomed() {
-    return null;
-  }
+    const styles = this.state.isZoomed ? { visibility: 'hidden' } : {}
 
-  renderUnzoomed() {
     return (
       <img
         src={ this.props.image.src }
         alt={ this.props.image.alt }
         className={ this.props.image.className }
-        onClick={ this.zoom }
+        style={ styles }
+        onClick={ this.handleZoom }
       />
     )
   }
 
-  zoom() {
+  renderZoomed() {
     // add overlay
     // create div and place image in said div
     // transform it to the center of the page
+  }
 
+  removeZoomed() {
+  }
+
+  handleZoom() {
     this.setState({ isZoomed: true }, this.addListeners)
   }
 
-  unzoom() {
+  handleUnzoom() {
     this.setState({ isZoomed: false }, this.removeListeners)
   }
 
@@ -86,7 +86,7 @@ export default class ImageZoom extends Component {
 
   handleScroll() {
     const scrollChange = Math.abs(window.pageYOffset - this.scrollPosition)
-    if (scrollChange > 30) this.unzoom()
+    if (scrollChange > 30) this.handleUnzoom()
   }
 
   handleTouchStart(e) {
@@ -95,7 +95,7 @@ export default class ImageZoom extends Component {
 
   handleTouchMove(e) {
     const touchChange = Math.abs(e.touches[0].clientY - this.yTouchPosition)
-    if (touchChange > 10) this.unzoom()
+    if (touchChange > 10) this.handleUnzoom()
   }
 
   handleTouchEnd(e) {

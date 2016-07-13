@@ -20456,10 +20456,8 @@ var ImageZoom = function (_Component) {
       isZoomed: false
     };
 
-    _this.renderZoomed = _this.renderZoomed.bind(_this);
-    _this.renderUnzoomed = _this.renderUnzoomed.bind(_this);
-    _this.zoom = _this.zoom.bind(_this);
-    _this.unzoom = _this.unzoom.bind(_this);
+    _this.handleZoom = _this.handleZoom.bind(_this);
+    _this.handleUnzoom = _this.handleUnzoom.bind(_this);
     _this.addListeners = _this.addListeners.bind(_this);
     _this.removeListeners = _this.removeListeners.bind(_this);
     _this.handleScroll = _this.handleScroll.bind(_this);
@@ -20472,35 +20470,36 @@ var ImageZoom = function (_Component) {
   _createClass(ImageZoom, [{
     key: 'render',
     value: function render() {
-      return this.state.isZoomed ? this.renderZoomed() : this.renderUnzoomed();
-    }
-  }, {
-    key: 'renderZoomed',
-    value: function renderZoomed() {
-      return null;
-    }
-  }, {
-    key: 'renderUnzoomed',
-    value: function renderUnzoomed() {
+      this.state.isZoomed ? this.renderZoomed() : this.removeZoomed();
+
+      var styles = this.state.isZoomed ? { visibility: 'hidden' } : {};
+
       return _react2.default.createElement('img', {
         src: this.props.image.src,
         alt: this.props.image.alt,
         className: this.props.image.className,
-        onClick: this.zoom
+        style: styles,
+        onClick: this.handleZoom
       });
     }
   }, {
-    key: 'zoom',
-    value: function zoom() {
+    key: 'renderZoomed',
+    value: function renderZoomed() {
       // add overlay
       // create div and place image in said div
       // transform it to the center of the page
-
+    }
+  }, {
+    key: 'removeZoomed',
+    value: function removeZoomed() {}
+  }, {
+    key: 'handleZoom',
+    value: function handleZoom() {
       this.setState({ isZoomed: true }, this.addListeners);
     }
   }, {
-    key: 'unzoom',
-    value: function unzoom() {
+    key: 'handleUnzoom',
+    value: function handleUnzoom() {
       this.setState({ isZoomed: false }, this.removeListeners);
     }
   }, {
@@ -20525,7 +20524,7 @@ var ImageZoom = function (_Component) {
     key: 'handleScroll',
     value: function handleScroll() {
       var scrollChange = Math.abs(window.pageYOffset - this.scrollPosition);
-      if (scrollChange > 30) this.unzoom();
+      if (scrollChange > 30) this.handleUnzoom();
     }
   }, {
     key: 'handleTouchStart',
@@ -20536,7 +20535,7 @@ var ImageZoom = function (_Component) {
     key: 'handleTouchMove',
     value: function handleTouchMove(e) {
       var touchChange = Math.abs(e.touches[0].clientY - this.yTouchPosition);
-      if (touchChange > 10) this.unzoom();
+      if (touchChange > 10) this.handleUnzoom();
     }
   }, {
     key: 'handleTouchEnd',
