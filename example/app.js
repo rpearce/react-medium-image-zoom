@@ -20433,6 +20433,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20469,10 +20473,14 @@ var ImageZoom = function (_Component) {
   }
 
   _createClass(ImageZoom, [{
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState) {
+      this.state.isZoomed ? this.renderZoomed() : this.removeZoomed();
+    }
+  }, {
     key: 'render',
     value: function render() {
-      this.state.isZoomed ? this.renderZoomed() : this.removeZoomed();
-
+      console.log(this.getImageStyle());
       return _react2.default.createElement('img', {
         src: this.props.image.src,
         alt: this.props.image.alt,
@@ -20484,19 +20492,21 @@ var ImageZoom = function (_Component) {
   }, {
     key: 'renderZoomed',
     value: function renderZoomed() {
-      // add overlay
-      // create div and place image in said div
-      // transform it to the center of the page
+      this.portal = document.createElement('div');
+      document.body.appendChild(this.portal);
+      _reactDom2.default.render(_react2.default.createElement(Zoom, this.props.zoomImage), this.portal);
     }
   }, {
     key: 'removeZoomed',
-    value: function removeZoomed() {}
+    value: function removeZoomed() {
+      if (this.portal) _reactDom2.default.unmountComponentAtNode(this.portal);
+    }
   }, {
     key: 'getImageStyle',
     value: function getImageStyle() {
       var style = {};
       if (this.state.isZoomed) style.visibility = 'hidden';
-      return Object.assign({}, style, this.props.image.style);
+      return Object.assign({}, ImageZoom.defaultStyle.image, style, this.props.image.style);
     }
   }, {
     key: 'handleZoom',
@@ -20548,24 +20558,6 @@ var ImageZoom = function (_Component) {
     value: function handleTouchEnd(e) {
       this.yTouchPosition = undefined;
     }
-  }], [{
-    key: 'propTypes',
-    get: function get() {
-      return {
-        image: shape({
-          src: string.isRequired,
-          alt: string,
-          className: string,
-          style: object
-        }).isRequired,
-        zoomImage: shape({
-          src: string.isRequired,
-          alt: string,
-          className: string,
-          style: object
-        }).isRequired
-      };
-    }
   }]);
 
   return ImageZoom;
@@ -20573,7 +20565,76 @@ var ImageZoom = function (_Component) {
 
 exports.default = ImageZoom;
 
-},{"react":171}],173:[function(require,module,exports){
+
+ImageZoom.propTypes = {
+  image: shape({
+    src: string.isRequired,
+    alt: string,
+    className: string,
+    style: object
+  }).isRequired,
+  zoomImage: shape({
+    src: string.isRequired,
+    alt: string,
+    className: string,
+    style: object
+  }).isRequired
+};
+
+ImageZoom.defaultStyle = {
+  image: {},
+  zoomImage: {
+    zIndex: 999,
+    position: 'fixed',
+    top: 20,
+    maxWidth: '95vw',
+    maxHeight: '95vh'
+  }
+};
+
+// =============================================
+
+var Zoom = function Zoom(props) {
+  return _react2.default.createElement(
+    'div',
+    null,
+    _react2.default.createElement(ZoomImage, props),
+    _react2.default.createElement(Overlay, null)
+  );
+};
+
+var ZoomImage = function ZoomImage(props) {
+  return _react2.default.createElement('img', {
+    src: props.src,
+    alt: props.alt,
+    className: props.className,
+    style: getZoomImageStyle(props.style),
+    onClick: props.handleUnzoom
+  });
+};
+
+var Overlay = function Overlay() {
+  return _react2.default.createElement('div', { style: overlayStyles });
+};
+
+var overlayStyles = {
+  position: 'fixed',
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
+  backgroundColor: '#fff',
+  zIndex: 998,
+  pointerEvents: 'none',
+  opacity: 1,
+  transition: 'opacity 300ms'
+};
+
+var getZoomImageStyle = function getZoomImageStyle(style) {
+  return Object.assign({}, ImageZoom.defaultStyle.zoomImage, style);
+};
+
+},{"react":171,"react-dom":29}],173:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -20635,13 +20696,13 @@ var App = function (_Component) {
             image: {
               src: 'bridge.jpg',
               alt: 'Golden Gate Bridge',
-              className: '',
+              className: 'img',
               style: {}
             },
             zoomImage: {
               src: 'bridge-big.jpg',
               alt: 'Golden Gate Bridge',
-              className: '',
+              className: 'img--zoomed',
               style: {}
             }
           })
@@ -20668,13 +20729,13 @@ var App = function (_Component) {
             image: {
               src: 'gazelle.jpg',
               alt: 'Gazelle Stomping',
-              className: '',
+              className: 'img',
               style: {}
             },
             zoomImage: {
               src: 'gazelle-big.jpg',
               alt: 'Gazelle Stomping',
-              className: '',
+              className: 'img--zoomed',
               style: {}
             }
           })
