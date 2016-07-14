@@ -62,7 +62,7 @@ export default class ImageZoom extends Component {
 
   getImageStyle() {
     const style = {}
-    //if (this.state.isZoomed) style.visibility = 'hidden'
+    if (this.state.isZoomed) style.visibility = 'hidden'
     return Object.assign({}, defaults.styles.image, style, this.props.image.style)
   }
 
@@ -87,5 +87,5 @@ ImageZoom.propTypes = {
     alt: string,
     className: string,
     style: object
-  }).isRequired
+  })
 }

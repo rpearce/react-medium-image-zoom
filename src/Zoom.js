@@ -11,7 +11,8 @@ export default class Zoom extends Component {
 
     this.state = {
       hasLoaded: false,
-      isZoomed: true
+      isZoomed: true,
+      src: this.props.image.src
     }
 
     this.handleUnzoom     = this.handleUnzoom.bind(this)
@@ -22,10 +23,13 @@ export default class Zoom extends Component {
   }
 
   componentDidMount() {
-    this.addListeners()
-    setTimeout(() => {
+    if (this.props.src) {
+      this.fetchZoomImage()
+    } else {
       this.setState({ hasLoaded: true })
-    }, 0)
+    }
+
+    this.addListeners()
   }
 
   componentWillUnmount() {
@@ -33,20 +37,25 @@ export default class Zoom extends Component {
   }
 
   render() {
-    const { src, alt, className, } = this.props
-
     return (
       <div onClick={ this.handleUnzoom }>
         <Overlay isVisible={ this.state.isZoomed } />
         <img
           ref="zoomImage"
-          src={ src }
-          alt={ alt }
-          className={ className }
+          src={ this.state.src }
+          alt={ this.props.alt }
+          className={ this.props.className }
           style={ this.getZoomImageStyle() }
         />
       </div>
     )
+  }
+
+  fetchZoomImage() {
+    const { src } = this.props
+    const img = new Image()
+    img.src = src
+    img.onload = () => this.setState({ hasLoaded: true, src })
   }
 
   addListeners() {
@@ -132,7 +141,7 @@ export default class Zoom extends Component {
 }
 
 Zoom.propTypes = {
-  src: string.isRequired,
+  src: string,
   alt: string,
   className: string,
   style: object,

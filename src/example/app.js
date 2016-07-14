@@ -52,12 +52,6 @@ class App extends Component {
               className: 'img',
               style: {}
             }}
-            zoomImage={{
-              src: 'gazelle-big.jpg',
-              alt: 'Gazelle Stomping',
-              className: 'img--zoomed',
-              style: {}
-            }}
           />
         </div>
         <p>Scenester chambray slow-carb, trust fund biodiesel ugh bicycle rights cornhole. Gentrify messenger bag Truffaut tousled roof party pork belly leggings, photo booth jean shorts. Austin readymade PBR plaid chambray. Squid Echo Park pour-over, wayfarers forage whatever locavore typewriter artisan deep v four loko. Locavore occupy Neutra Pitchfork McSweeney's, wayfarers fingerstache. Actually asymmetrical drinking vinegar yr brunch biodiesel. Before they sold out sustainable readymade craft beer Portland gastropub squid Austin, roof party Thundercats chambray narwhal Bushwick pug.</p>

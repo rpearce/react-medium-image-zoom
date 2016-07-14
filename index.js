@@ -101,7 +101,7 @@ var ImageZoom = function (_Component) {
     key: 'getImageStyle',
     value: function getImageStyle() {
       var style = {};
-      //if (this.state.isZoomed) style.visibility = 'hidden'
+      if (this.state.isZoomed) style.visibility = 'hidden';
       return Object.assign({}, _defaults2.default.styles.image, style, this.props.image.style);
     }
   }, {
@@ -134,7 +134,7 @@ ImageZoom.propTypes = {
     alt: string,
     className: string,
     style: object
-  }).isRequired
+  })
 };
 module.exports = exports['default'];
 'use strict';
@@ -213,7 +213,8 @@ var Zoom = function (_Component) {
 
     _this.state = {
       hasLoaded: false,
-      isZoomed: true
+      isZoomed: true,
+      src: _this.props.image.src
     };
 
     _this.handleUnzoom = _this.handleUnzoom.bind(_this);
@@ -227,12 +228,13 @@ var Zoom = function (_Component) {
   _createClass(Zoom, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var _this2 = this;
+      if (this.props.src) {
+        this.fetchZoomImage();
+      } else {
+        this.setState({ hasLoaded: true });
+      }
 
       this.addListeners();
-      setTimeout(function () {
-        _this2.setState({ hasLoaded: true });
-      }, 0);
     }
   }, {
     key: 'componentWillUnmount',
@@ -242,24 +244,31 @@ var Zoom = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _props = this.props;
-      var src = _props.src;
-      var alt = _props.alt;
-      var className = _props.className;
-
-
       return _react2.default.createElement(
         'div',
         { onClick: this.handleUnzoom },
         _react2.default.createElement(_Overlay2.default, { isVisible: this.state.isZoomed }),
         _react2.default.createElement('img', {
           ref: 'zoomImage',
-          src: src,
-          alt: alt,
-          className: className,
+          src: this.state.src,
+          alt: this.props.alt,
+          className: this.props.className,
           style: this.getZoomImageStyle()
         })
       );
+    }
+  }, {
+    key: 'fetchZoomImage',
+    value: function fetchZoomImage() {
+      var _this2 = this;
+
+      var src = this.props.src;
+
+      var img = new Image();
+      img.src = src;
+      img.onload = function () {
+        return _this2.setState({ hasLoaded: true, src: src });
+      };
     }
   }, {
     key: 'addListeners',
@@ -371,7 +380,7 @@ exports.default = Zoom;
 
 
 Zoom.propTypes = {
-  src: string.isRequired,
+  src: string,
   alt: string,
   className: string,
   style: object,
@@ -519,12 +528,6 @@ var App = function (_Component) {
               src: 'gazelle.jpg',
               alt: 'Gazelle Stomping',
               className: 'img',
-              style: {}
-            },
-            zoomImage: {
-              src: 'gazelle-big.jpg',
-              alt: 'Gazelle Stomping',
-              className: 'img--zoomed',
               style: {}
             }
           })
