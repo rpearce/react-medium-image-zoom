@@ -20712,7 +20712,7 @@ var Zoom = function (_Component) {
     value: function render() {
       return _react2.default.createElement(
         'div',
-        { onClick: this.handleUnzoom },
+        { onClick: this.handleUnzoom, style: _defaults2.default.styles.zoomContainer },
         _react2.default.createElement(_Overlay2.default, { isVisible: this.state.isZoomed }),
         _react2.default.createElement('img', {
           ref: 'zoomImage',
@@ -20863,19 +20863,25 @@ exports.default = {
   styles: {
     image: {},
     zoomImage: {
-      position: 'fixed',
-      zIndex: 999,
+      position: 'absolute',
       transition: 'all 300ms',
-      scale: 1
+      transform: 'translate3d(0, 0, 0)'
     },
-    overlay: {
+    zoomContainer: {
       position: 'fixed',
       top: 0,
       right: 0,
       bottom: 0,
       left: 0,
+      zIndex: 999
+    },
+    overlay: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
       backgroundColor: '#fff',
-      zIndex: 998,
       opacity: 0,
       transition: 'opacity 300ms'
     }

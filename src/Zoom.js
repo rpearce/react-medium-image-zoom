@@ -34,7 +34,7 @@ class Zoom extends Component {
 
   render() {
     return (
-      <div onClick={ this.handleUnzoom }>
+      <div onClick={ this.handleUnzoom } style={ defaults.styles.zoomContainer }>
         <Overlay isVisible={ this.state.isZoomed } />
         <img
           ref="zoomImage"
