@@ -64,6 +64,7 @@ class Zoom extends Component {
 
   removeListeners() {
     this.scrollPosition = undefined
+    this.yTouchPosition = undefined
     window.removeEventListener('scroll', this.handleScroll)
     window.removeEventListener('ontouchstart', this.handleTouchStart)
     window.removeEventListener('ontouchmove', this.handleTouchMove)
