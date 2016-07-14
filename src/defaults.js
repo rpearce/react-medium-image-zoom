@@ -1,11 +1,14 @@
 export default {
   styles: {
     image: {
+      cursor: 'zoom-in'
     },
     zoomImage: {
-      position   : 'absolute',
-      transition : 'all 300ms',
-      transform  : 'translate3d(0, 0, 0)'
+      cursor          : 'zoom-out',
+      position        : 'absolute',
+      transition      : 'all 300ms',
+      transform       : 'translate3d(0, 0, 0)',
+      transformOrigin : 'center center',
     },
     zoomContainer: {
       position        : 'fixed',

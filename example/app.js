@@ -20821,8 +20821,7 @@ var Zoom = function (_Component) {
       var scale = this.getScale({ width: width, height: height });
 
       var zoomStyle = {
-        transform: 'translate3d(' + translateX + 'px, ' + translateY + 'px, 0) scale(' + scale + ')',
-        transformOrigin: 'center center'
+        transform: 'translate3d(' + translateX + 'px, ' + translateY + 'px, 0) scale(' + scale + ')'
       };
 
       return Object.assign({}, _defaults2.default.styles.zoomImage, this.props.style, style, zoomStyle);
@@ -20862,11 +20861,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = {
   styles: {
-    image: {},
+    image: {
+      cursor: 'zoom-in'
+    },
     zoomImage: {
+      cursor: 'zoom-out',
       position: 'absolute',
       transition: 'all 300ms',
-      transform: 'translate3d(0, 0, 0)'
+      transform: 'translate3d(0, 0, 0)',
+      transformOrigin: 'center center'
     },
     zoomContainer: {
       position: 'fixed',

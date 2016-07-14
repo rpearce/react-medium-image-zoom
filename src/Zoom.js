@@ -123,7 +123,6 @@ class Zoom extends Component {
 
     const zoomStyle = {
       transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
-      transformOrigin: 'center center',
     }
 
     return Object.assign({}, defaults.styles.zoomImage, this.props.style, style, zoomStyle)
