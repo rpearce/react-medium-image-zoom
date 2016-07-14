@@ -2,12 +2,10 @@
   "name": "react-medium-image-zoom",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "lib/react-medium-image-zoom.js",
   "scripts": {
     "build:example": "browserify src/example/app.js -o example/app.js -t [ babelify ]",
-    "build": "babel src -o index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "watchify src/example/app.js -o example/app.js -t [ babelify ]"
+    "build": "babel src/react-medium-image-zoom.js -o lib/react-medium-image-zoom.js"
   },
   "repository": {
     "type": "git",
@@ -31,10 +29,8 @@
   },
   "devDependencies": {
     "babel-cli": "^6.10.1",
-    "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.11.1",
-    "babel-preset-stage-1": "^6.5.0",
     "babelify": "^7.3.0",
     "browserify": "^13.0.1"
   }
