@@ -18,6 +18,11 @@ class Overlay extends Component {
     if (!nextProps.isVisible) this.setState({ isVisible: false })
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.isVisible !== nextProps.isVisible ||
+      this.state.isVisible !== nextProps.isVisible
+  }
+
   render() {
     return <div style={ this.getStyle() }></div>
   }

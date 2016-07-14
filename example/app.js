@@ -20611,6 +20611,11 @@ var Overlay = function (_Component) {
       if (!nextProps.isVisible) this.setState({ isVisible: false });
     }
   }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextState) {
+      return this.props.isVisible !== nextProps.isVisible || this.state.isVisible !== nextProps.isVisible;
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement('div', { style: this.getStyle() });
