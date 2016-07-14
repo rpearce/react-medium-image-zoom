@@ -20451,6 +20451,37 @@ var shape = _react.PropTypes.shape;
 var string = _react.PropTypes.string;
 var object = _react.PropTypes.object;
 
+
+var defaultStyles = {
+  image: {},
+  zoomImage: {
+    position: 'fixed',
+    //left            : '50%',
+    //top             : '50%',
+    //willChange      : 'transform',
+    //WebkitTransform : 'translate3d(-50%, -50%, 0)',
+    //msTransform     : 'translate3d(-50%, -50%, 0)',
+    //transform       : 'translate3d(-50%, -50%, 0)',
+    //maxWidth        : '95vw',
+    //maxHeight       : '95vh',
+    zIndex: 999,
+    transition: 'all 300ms',
+    scale: 1
+  }
+};
+
+var overlayStyles = {
+  position: 'fixed',
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
+  backgroundColor: '#fff',
+  zIndex: 998,
+  opacity: 1,
+  transition: 'opacity 300ms'
+};
+
 var ImageZoom = function (_Component) {
   _inherits(ImageZoom, _Component);
 
@@ -20475,6 +20506,17 @@ var ImageZoom = function (_Component) {
   }
 
   _createClass(ImageZoom, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.portal = document.createElement('div');
+      document.body.appendChild(this.portal);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      document.body.removeChild(this.portal);
+    }
+  }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate(prevProps, prevState) {
       if (prevState.isZoomed !== this.state.isZoomed) {
@@ -20484,7 +20526,6 @@ var ImageZoom = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      console.log(this.getImageStyle());
       return _react2.default.createElement('img', {
         src: this.props.image.src,
         alt: this.props.image.alt,
@@ -20496,21 +20537,33 @@ var ImageZoom = function (_Component) {
   }, {
     key: 'renderZoomed',
     value: function renderZoomed() {
-      this.portal = document.createElement('div');
-      document.body.appendChild(this.portal);
-      _reactDom2.default.render(_react2.default.createElement(Zoom, _extends({}, this.props.zoomImage, { onClick: this.handleUnzoom })), this.portal);
+      var image = _reactDom2.default.findDOMNode(this);
+
+      _reactDom2.default.render(_react2.default.createElement(Zoom, _extends({}, this.props.zoomImage, {
+        image: image,
+        isZoomed: this.state.isZoomed,
+        onClick: this.handleUnzoom
+      })), this.portal);
     }
   }, {
     key: 'removeZoomed',
     value: function removeZoomed() {
-      if (this.portal) _reactDom2.default.unmountComponentAtNode(this.portal);
+      var _this2 = this;
+
+      if (this.portal) {
+        this.setState({ isZoomed: false }, function () {
+          setTimeout(function () {
+            return _reactDom2.default.unmountComponentAtNode(_this2.portal);
+          }, 300);
+        });
+      }
     }
   }, {
     key: 'getImageStyle',
     value: function getImageStyle() {
       var style = {};
-      if (this.state.isZoomed) style.visibility = 'hidden';
-      return Object.assign({}, ImageZoom.defaultStyle.image, style, this.props.image.style);
+      //if (this.state.isZoomed) style.visibility = 'hidden'
+      return Object.assign({}, defaultStyles.image, style, this.props.image.style);
     }
   }, {
     key: 'handleZoom',
@@ -20585,56 +20638,109 @@ ImageZoom.propTypes = {
   }).isRequired
 };
 
-ImageZoom.defaultStyle = {
-  image: {},
-  zoomImage: {
-    zIndex: 999,
-    position: 'fixed',
-    top: 20,
-    maxWidth: '95vw',
-    maxHeight: '95vh'
-  }
-};
-
 // =============================================
 
-var Zoom = function Zoom(props) {
-  return _react2.default.createElement(
-    'div',
-    { onClick: props.onClick },
-    _react2.default.createElement(ZoomImage, props),
-    _react2.default.createElement(Overlay, null)
-  );
-};
+var Zoom = function (_Component2) {
+  _inherits(Zoom, _Component2);
 
-var ZoomImage = function ZoomImage(props) {
-  return _react2.default.createElement('img', {
-    src: props.src,
-    alt: props.alt,
-    className: props.className,
-    style: getZoomImageStyle(props.style),
-    onClick: props.handleUnzoom
-  });
-};
+  function Zoom(props) {
+    _classCallCheck(this, Zoom);
+
+    var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(Zoom).call(this, props));
+
+    _this3.state = {
+      hasLoaded: false
+    };
+    return _this3;
+  }
+
+  _createClass(Zoom, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this4 = this;
+
+      setTimeout(function () {
+        _this4.setState({ hasLoaded: true });
+      }, 0);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props = this.props;
+      var src = _props.src;
+      var alt = _props.alt;
+      var className = _props.className;
+      var onClick = _props.onClick;
+
+
+      return _react2.default.createElement(
+        'div',
+        { onClick: onClick },
+        _react2.default.createElement(Overlay, null),
+        _react2.default.createElement('img', {
+          ref: 'zoomImage',
+          src: src,
+          alt: alt,
+          className: className,
+          style: this.getZoomImageStyle()
+        })
+      );
+    }
+  }, {
+    key: 'getZoomImageStyle',
+    value: function getZoomImageStyle() {
+      var image = this.props.image;
+
+      var imageOffset = image.getBoundingClientRect();
+
+      var viewportX = window.innerWidth / 2;
+      var viewportY = window.innerHeight / 2;
+
+      var imageCenterX = imageOffset.left + image.width / 2;
+      var imageCenterY = imageOffset.top + image.height / 2;
+
+      var translateX = viewportX - imageCenterX;
+      var translateY = viewportY - imageCenterY;
+
+      var top = imageOffset.top;
+      var left = imageOffset.left;
+      var width = image.width;
+      var height = image.height;
+
+
+      var style = { top: top, left: left, width: width, height: height };
+
+      if (!this.state.hasLoaded) {
+        return Object.assign({}, defaultStyles.zoomImage, this.props.style, style);
+      }
+
+      var scale = this.getScale({ width: width, height: height });
+
+      var zoomStyle = {
+        transform: 'translate3d(' + translateX + 'px, ' + translateY + 'px, 0) scale(' + scale + ')',
+        transformOrigin: 'center center'
+      };
+
+      return Object.assign({}, defaultStyles.zoomImage, this.props.style, style, zoomStyle);
+    }
+  }, {
+    key: 'getScale',
+    value: function getScale(_ref) {
+      var width = _ref.width;
+      var height = _ref.height;
+
+      var totalMargin = 40;
+      var scaleX = window.innerWidth / (width + totalMargin);
+      var scaleY = window.innerHeight / (height + totalMargin);
+      return Math.min(scaleX, scaleY);
+    }
+  }]);
+
+  return Zoom;
+}(_react.Component);
 
 var Overlay = function Overlay() {
   return _react2.default.createElement('div', { style: overlayStyles });
-};
-
-var overlayStyles = {
-  position: 'fixed',
-  top: 0,
-  right: 0,
-  bottom: 0,
-  left: 0,
-  backgroundColor: '#fff',
-  zIndex: 998,
-  opacity: 1,
-  transition: 'opacity 300ms'
-};
-
-var getZoomImageStyle = function getZoomImageStyle(style) {
-  return Object.assign({}, ImageZoom.defaultStyle.zoomImage, style);
 };
 
 },{"react":171,"react-dom":29}],173:[function(require,module,exports){
@@ -20714,6 +20820,24 @@ var App = function (_Component) {
           'p',
           null,
           'Thundercats freegan Truffaut, four loko twee Austin scenester lo-fi seitan High Life paleo quinoa cray. Schlitz butcher ethical Tumblr, pop-up DIY keytar ethnic iPhone PBR sriracha. Tonx direct trade bicycle rights gluten-free flexitarian asymmetrical. Whatever drinking vinegar PBR XOXO Bushwick gentrify. Cliche semiotics banjo retro squid Wes Anderson. Fashion axe dreamcatcher you probably haven\'t heard of them bicycle rights. Tote bag organic four loko ethical selfies gastropub, PBR fingerstache tattooed bicycle rights.'
+        ),
+        _react2.default.createElement(
+          'div',
+          { style: { float: 'left', margin: '0 1.5em 0 0' } },
+          _react2.default.createElement(_ImageZoom2.default, {
+            image: {
+              src: 'nz.jpg',
+              alt: 'Picture of Mt. Cook in New Zealand',
+              className: 'img',
+              style: {}
+            },
+            zoomImage: {
+              src: 'nz-big.jpg',
+              alt: 'Picture of Mt. Cook in New Zealand',
+              className: 'img--zoomed',
+              style: {}
+            }
+          })
         ),
         _react2.default.createElement(
           'p',

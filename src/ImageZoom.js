@@ -3,6 +3,37 @@ import ReactDOM from 'react-dom'
 
 const { shape, string, object } = PropTypes
 
+const defaultStyles = {
+  image: {
+  },
+  zoomImage: {
+    position        : 'fixed',
+    //left            : '50%',
+    //top             : '50%',
+    //willChange      : 'transform',
+    //WebkitTransform : 'translate3d(-50%, -50%, 0)',
+    //msTransform     : 'translate3d(-50%, -50%, 0)',
+    //transform       : 'translate3d(-50%, -50%, 0)',
+    //maxWidth        : '95vw',
+    //maxHeight       : '95vh',
+    zIndex          : 999,
+    transition      : 'all 300ms',
+    scale           : 1
+  }
+}
+
+const overlayStyles = {
+  position        : 'fixed',
+  top             : 0,
+  right           : 0,
+  bottom          : 0,
+  left            : 0,
+  backgroundColor : '#fff',
+  zIndex          : 998,
+  opacity         : 1,
+  transition      : 'opacity 300ms'
+}
+
 export default class ImageZoom extends Component {
   constructor(props) {
     super(props)
@@ -21,6 +52,15 @@ export default class ImageZoom extends Component {
     this.handleTouchEnd   = this.handleTouchEnd.bind(this)
   }
 
+  componentDidMount() {
+    this.portal = document.createElement('div')
+    document.body.appendChild(this.portal)
+  }
+
+  componentWillUnmount() {
+    document.body.removeChild(this.portal)
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (prevState.isZoomed !== this.state.isZoomed) {
       this.state.isZoomed ? this.renderZoomed() : this.removeZoomed()
@@ -28,7 +68,6 @@ export default class ImageZoom extends Component {
   }
 
   render() {
-    console.log(this.getImageStyle())
     return (
       <img
         src={ this.props.image.src }
@@ -41,19 +80,30 @@ export default class ImageZoom extends Component {
   }
 
   renderZoomed() {
-    this.portal = document.createElement('div')
-    document.body.appendChild(this.portal)
-    ReactDOM.render(<Zoom { ...this.props.zoomImage } onClick={ this.handleUnzoom } />, this.portal)
+    const image = ReactDOM.findDOMNode(this)
+
+    ReactDOM.render(
+      <Zoom
+        { ...this.props.zoomImage }
+        image={ image }
+        isZoomed={ this.state.isZoomed }
+        onClick={ this.handleUnzoom }
+      />
+    , this.portal)
   }
 
   removeZoomed() {
-    if (this.portal) ReactDOM.unmountComponentAtNode(this.portal)
+    if (this.portal) {
+      this.setState({ isZoomed: false }, () => {
+        setTimeout(() => ReactDOM.unmountComponentAtNode(this.portal), 300)
+      })
+    }
   }
 
   getImageStyle() {
     const style = {}
-    if (this.state.isZoomed) style.visibility = 'hidden'
-    return Object.assign({}, ImageZoom.defaultStyle.image, style, this.props.image.style)
+    //if (this.state.isZoomed) style.visibility = 'hidden'
+    return Object.assign({}, defaultStyles.image, style, this.props.image.style)
   }
 
   handleZoom() {
@@ -114,47 +164,78 @@ ImageZoom.propTypes = {
   }).isRequired
 }
 
-ImageZoom.defaultStyle = {
-  image: {
-  },
-  zoomImage: {
-    zIndex    : 999,
-    position  : 'fixed',
-    top       : 20,
-    maxWidth  : '95vw',
-    maxHeight : '95vh'
+// =============================================
+
+class Zoom extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      hasLoaded: false
+    }
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({ hasLoaded: true })
+    }, 0)
+  }
+
+  render() {
+    const { src, alt, className, onClick } = this.props
+
+    return (
+      <div onClick={ onClick }>
+        <Overlay />
+        <img
+          ref="zoomImage"
+          src={ src }
+          alt={ alt }
+          className={ className }
+          style={ this.getZoomImageStyle() }
+        />
+      </div>
+    )
+  }
+
+  getZoomImageStyle() {
+    const { image } = this.props
+    const imageOffset = image.getBoundingClientRect()
+
+    const viewportX = window.innerWidth / 2
+    const viewportY = window.innerHeight / 2
+
+    const imageCenterX = imageOffset.left + image.width / 2
+    const imageCenterY = imageOffset.top + image.height / 2
+
+    const translateX = viewportX - imageCenterX
+    const translateY = viewportY - imageCenterY
+
+    const { top, left } = imageOffset
+    const { width, height } = image
+
+    const style = { top, left, width, height }
+
+    if (!this.state.hasLoaded) {
+      return Object.assign({}, defaultStyles.zoomImage, this.props.style, style)
+    }
+
+    const scale = this.getScale({ width, height })
+
+    const zoomStyle = {
+      transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
+      transformOrigin: 'center center',
+    }
+
+    return Object.assign({}, defaultStyles.zoomImage, this.props.style, style, zoomStyle)
+  }
+
+  getScale({ width, height }) {
+    const totalMargin = 40
+    const scaleX = window.innerWidth / (width + totalMargin)
+    const scaleY = window.innerHeight / (height + totalMargin)
+    return Math.min(scaleX, scaleY)
   }
 }
 
-// =============================================
-
-const Zoom = (props) =>
-  <div onClick={ props.onClick }>
-    <ZoomImage { ...props } />
-    <Overlay />
-  </div>
-
-const ZoomImage = (props) =>
-  <img
-    src={ props.src }
-    alt={ props.alt }
-    className={ props.className }
-    style={ getZoomImageStyle(props.style) }
-    onClick={ props.handleUnzoom }
-  />
-
 const Overlay = () => <div style={ overlayStyles }></div>
-
-const overlayStyles = {
-  position        : 'fixed',
-  top             : 0,
-  right           : 0,
-  bottom          : 0,
-  left            : 0,
-  backgroundColor : '#fff',
-  zIndex          : 998,
-  opacity         : 1,
-  transition      : 'opacity 300ms'
-}
-
-const getZoomImageStyle = (style) => Object.assign({}, ImageZoom.defaultStyle.zoomImage, style)
