@@ -20693,15 +20693,6 @@ var Zoom = function (_Component2) {
 
       var imageOffset = image.getBoundingClientRect();
 
-      var viewportX = window.innerWidth / 2;
-      var viewportY = window.innerHeight / 2;
-
-      var imageCenterX = imageOffset.left + image.width / 2;
-      var imageCenterY = imageOffset.top + image.height / 2;
-
-      var translateX = viewportX - imageCenterX;
-      var translateY = viewportY - imageCenterY;
-
       var top = imageOffset.top;
       var left = imageOffset.left;
       var width = image.width;
@@ -20714,6 +20705,19 @@ var Zoom = function (_Component2) {
         return Object.assign({}, defaultStyles.zoomImage, this.props.style, style);
       }
 
+      // Get the the coords for center of the viewport
+      var viewportX = window.innerWidth / 2;
+      var viewportY = window.innerHeight / 2;
+
+      // Get the coords for center of the original image
+      var imageCenterX = imageOffset.left + image.width / 2;
+      var imageCenterY = imageOffset.top + image.height / 2;
+
+      // Get offset amounts for image coords to be centered on screen
+      var translateX = viewportX - imageCenterX;
+      var translateY = viewportY - imageCenterY;
+
+      // Figure out how much to scale the image so it doesn't overflow the screen
       var scale = this.getScale({ width: width, height: height });
 
       var zoomStyle = {
