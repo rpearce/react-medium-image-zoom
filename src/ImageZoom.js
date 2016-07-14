@@ -5,7 +5,7 @@ import Zoom from './Zoom'
 
 const { shape, string, object } = PropTypes
 
-export default class ImageZoom extends Component {
+class ImageZoom extends Component {
   constructor(props) {
     super(props)
 
@@ -89,3 +89,5 @@ ImageZoom.propTypes = {
     style: object
   })
 }
+
+export default ImageZoom

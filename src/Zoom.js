@@ -5,7 +5,7 @@ import defaults from './defaults'
 
 const { string, object } = PropTypes
 
-export default class Zoom extends Component {
+class Zoom extends Component {
   constructor(props) {
     super(props)
 
@@ -143,3 +143,5 @@ Zoom.propTypes = {
   style: object,
   image: object.isRequired
 }
+
+export default Zoom

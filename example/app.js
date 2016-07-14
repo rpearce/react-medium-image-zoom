@@ -20542,9 +20542,6 @@ var ImageZoom = function (_Component) {
   return ImageZoom;
 }(_react.Component);
 
-exports.default = ImageZoom;
-
-
 ImageZoom.propTypes = {
   image: shape({
     src: string.isRequired,
@@ -20559,6 +20556,8 @@ ImageZoom.propTypes = {
     style: object
   })
 };
+
+exports.default = ImageZoom;
 module.exports = exports['default'];
 
 },{"./Zoom":174,"./defaults":175,"react":171,"react-dom":29}],173:[function(require,module,exports){
@@ -20843,9 +20842,6 @@ var Zoom = function (_Component) {
   return Zoom;
 }(_react.Component);
 
-exports.default = Zoom;
-
-
 Zoom.propTypes = {
   src: string,
   alt: string,
@@ -20853,6 +20849,8 @@ Zoom.propTypes = {
   style: object,
   image: object.isRequired
 };
+
+exports.default = Zoom;
 module.exports = exports['default'];
 
 },{"./Overlay":173,"./defaults":175,"react":171,"react-dom":29}],175:[function(require,module,exports){

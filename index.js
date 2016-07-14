@@ -119,9 +119,6 @@ var ImageZoom = function (_Component) {
   return ImageZoom;
 }(_react.Component);
 
-exports.default = ImageZoom;
-
-
 ImageZoom.propTypes = {
   image: shape({
     src: string.isRequired,
@@ -136,6 +133,8 @@ ImageZoom.propTypes = {
     style: object
   })
 };
+
+exports.default = ImageZoom;
 module.exports = exports['default'];
 'use strict';
 
@@ -416,9 +415,6 @@ var Zoom = function (_Component) {
   return Zoom;
 }(_react.Component);
 
-exports.default = Zoom;
-
-
 Zoom.propTypes = {
   src: string,
   alt: string,
@@ -426,6 +422,8 @@ Zoom.propTypes = {
   style: object,
   image: object.isRequired
 };
+
+exports.default = Zoom;
 module.exports = exports['default'];
 'use strict';
 
