@@ -228,12 +228,8 @@ var Zoom = function (_Component) {
   _createClass(Zoom, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      if (this.props.src) {
-        this.fetchZoomImage();
-      } else {
-        this.setState({ hasLoaded: true });
-      }
-
+      this.setState({ hasLoaded: true });
+      if (this.props.src) this.fetchZoomImage();
       this.addListeners();
     }
   }, {

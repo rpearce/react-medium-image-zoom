@@ -23,12 +23,8 @@ export default class Zoom extends Component {
   }
 
   componentDidMount() {
-    if (this.props.src) {
-      this.fetchZoomImage()
-    } else {
-      this.setState({ hasLoaded: true })
-    }
-
+    this.setState({ hasLoaded: true })
+    if (this.props.src) this.fetchZoomImage()
     this.addListeners()
   }
 
