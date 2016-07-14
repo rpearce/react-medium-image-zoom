@@ -1,7 +1,7 @@
 {
   "name": "react-medium-image-zoom",
   "version": "0.1.0",
-  "description": "",
+  "description": "Medium.com style image zoom for React",
   "main": "lib/react-medium-image-zoom.js",
   "scripts": {
     "build:example": "browserify example/src/app.js -o example/app.js -t [ babelify ]",
