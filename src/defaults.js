@@ -16,7 +16,7 @@ export default {
       left            : 0,
       backgroundColor : '#fff',
       zIndex          : 998,
-      opacity         : 1,
+      opacity         : 0,
       transition      : 'opacity 300ms'
     }
   }
