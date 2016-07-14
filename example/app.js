@@ -20633,7 +20633,7 @@ var Zoom = function (_Component2) {
       return _react2.default.createElement(
         'div',
         { onClick: this.handleUnzoom },
-        _react2.default.createElement(Overlay, null),
+        _react2.default.createElement(Overlay, { isVisible: this.state.isZoomed }),
         _react2.default.createElement('img', {
           ref: 'zoomImage',
           src: src,
@@ -20707,8 +20707,6 @@ var Zoom = function (_Component2) {
 
       var style = { top: top, left: left, width: width, height: height, transform: 'none' };
 
-      console.log(this.props.isZoomed);
-
       if (!this.state.hasLoaded || !this.state.isZoomed) {
         return Object.assign({}, defaultStyles.zoomImage, this.props.style, style);
       }
@@ -20751,8 +20749,11 @@ var Zoom = function (_Component2) {
   return Zoom;
 }(_react.Component);
 
-var Overlay = function Overlay() {
-  return _react2.default.createElement('div', { style: overlayStyles });
+var Overlay = function Overlay(_ref2) {
+  var isVisible = _ref2.isVisible;
+
+  var style = isVisible ? overlayStyles : Object.assign({}, overlayStyles, { opacity: 0 });
+  return _react2.default.createElement('div', { style: style });
 };
 
 },{"react":171,"react-dom":29}],173:[function(require,module,exports){

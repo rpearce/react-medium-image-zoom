@@ -153,7 +153,7 @@ class Zoom extends Component {
 
     return (
       <div onClick={ this.handleUnzoom }>
-        <Overlay />
+        <Overlay isVisible={ this.state.isZoomed } />
         <img
           ref="zoomImage"
           src={ src }
@@ -212,8 +212,6 @@ class Zoom extends Component {
 
     const style = { top, left, width, height, transform: 'none' }
 
-    console.log(this.props.isZoomed)
-
     if (!this.state.hasLoaded || !this.state.isZoomed) {
       return Object.assign({}, defaultStyles.zoomImage, this.props.style, style)
     }
@@ -249,4 +247,7 @@ class Zoom extends Component {
   }
 }
 
-const Overlay = () => <div style={ overlayStyles }></div>
+const Overlay = ({ isVisible }) => {
+  const style = isVisible ? overlayStyles : Object.assign({}, overlayStyles, { opacity: 0 })
+  return <div style={ style }></div>
+}
