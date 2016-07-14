@@ -42,14 +42,8 @@ export default class ImageZoom extends Component {
       isZoomed: false
     }
 
-    this.handleZoom       = this.handleZoom.bind(this)
-    this.handleUnzoom     = this.handleUnzoom.bind(this)
-    this.addListeners     = this.addListeners.bind(this)
-    this.removeListeners  = this.removeListeners.bind(this)
-    this.handleScroll     = this.handleScroll.bind(this)
-    this.handleTouchStart = this.handleTouchStart.bind(this)
-    this.handleTouchMove  = this.handleTouchMove.bind(this)
-    this.handleTouchEnd   = this.handleTouchEnd.bind(this)
+    this.handleZoom   = this.handleZoom.bind(this)
+    this.handleUnzoom = this.handleUnzoom.bind(this)
   }
 
   componentDidMount() {
@@ -86,18 +80,13 @@ export default class ImageZoom extends Component {
       <Zoom
         { ...this.props.zoomImage }
         image={ image }
-        isZoomed={ this.state.isZoomed }
         onClick={ this.handleUnzoom }
       />
     , this.portal)
   }
 
   removeZoomed() {
-    if (this.portal) {
-      this.setState({ isZoomed: false }, () => {
-        setTimeout(() => ReactDOM.unmountComponentAtNode(this.portal), 300)
-      })
-    }
+    if (this.portal) ReactDOM.unmountComponentAtNode(this.portal)
   }
 
   getImageStyle() {
@@ -107,11 +96,73 @@ export default class ImageZoom extends Component {
   }
 
   handleZoom() {
-    this.setState({ isZoomed: true }, this.addListeners)
+    this.setState({ isZoomed: true })
   }
 
   handleUnzoom() {
-    this.setState({ isZoomed: false }, this.removeListeners)
+    this.setState({ isZoomed: false })
+  }
+}
+
+ImageZoom.propTypes = {
+  image: shape({
+    src: string.isRequired,
+    alt: string,
+    className: string,
+    style: object
+  }).isRequired,
+  zoomImage: shape({
+    src: string.isRequired,
+    alt: string,
+    className: string,
+    style: object
+  }).isRequired
+}
+
+// =============================================
+
+class Zoom extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      hasLoaded: false,
+      isZoomed: true
+    }
+
+    this.handleUnzoom     = this.handleUnzoom.bind(this)
+    this.handleScroll     = this.handleScroll.bind(this)
+    this.handleTouchStart = this.handleTouchStart.bind(this)
+    this.handleTouchMove  = this.handleTouchMove.bind(this)
+    this.handleTouchEnd   = this.handleTouchEnd.bind(this)
+  }
+
+  componentDidMount() {
+    this.addListeners()
+    setTimeout(() => {
+      this.setState({ hasLoaded: true })
+    }, 0)
+  }
+
+  componentWillUnmount() {
+    this.removeListeners()
+  }
+
+  render() {
+    const { src, alt, className, } = this.props
+
+    return (
+      <div onClick={ this.handleUnzoom }>
+        <Overlay />
+        <img
+          ref="zoomImage"
+          src={ src }
+          alt={ alt }
+          className={ className }
+          style={ this.getZoomImageStyle() }
+        />
+      </div>
+    )
   }
 
   addListeners() {
@@ -147,55 +198,9 @@ export default class ImageZoom extends Component {
   handleTouchEnd(e) {
     this.yTouchPosition = undefined
   }
-}
 
-ImageZoom.propTypes = {
-  image: shape({
-    src: string.isRequired,
-    alt: string,
-    className: string,
-    style: object
-  }).isRequired,
-  zoomImage: shape({
-    src: string.isRequired,
-    alt: string,
-    className: string,
-    style: object
-  }).isRequired
-}
-
-// =============================================
-
-class Zoom extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      hasLoaded: false
-    }
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ hasLoaded: true })
-    }, 0)
-  }
-
-  render() {
-    const { src, alt, className, onClick } = this.props
-
-    return (
-      <div onClick={ onClick }>
-        <Overlay />
-        <img
-          ref="zoomImage"
-          src={ src }
-          alt={ alt }
-          className={ className }
-          style={ this.getZoomImageStyle() }
-        />
-      </div>
-    )
+  handleUnzoom() {
+    this.setState({ isZoomed: false }, () => setTimeout(this.props.onClick, 300))
   }
 
   getZoomImageStyle() {
@@ -205,9 +210,11 @@ class Zoom extends Component {
     const { top, left } = imageOffset
     const { width, height } = image
 
-    const style = { top, left, width, height }
+    const style = { top, left, width, height, transform: 'none' }
 
-    if (!this.state.hasLoaded) {
+    console.log(this.props.isZoomed)
+
+    if (!this.state.hasLoaded || !this.state.isZoomed) {
       return Object.assign({}, defaultStyles.zoomImage, this.props.style, style)
     }
 
