@@ -1,0 +1,1 @@
+export ImageZoom from './ImageZoom'

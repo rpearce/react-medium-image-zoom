@@ -20439,6 +20439,14 @@ var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
+var _defaults = require('./defaults');
+
+var _defaults2 = _interopRequireDefault(_defaults);
+
+var _Zoom = require('./Zoom');
+
+var _Zoom2 = _interopRequireDefault(_Zoom);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20450,37 +20458,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var shape = _react.PropTypes.shape;
 var string = _react.PropTypes.string;
 var object = _react.PropTypes.object;
-
-
-var defaultStyles = {
-  image: {},
-  zoomImage: {
-    position: 'fixed',
-    //left            : '50%',
-    //top             : '50%',
-    //willChange      : 'transform',
-    //WebkitTransform : 'translate3d(-50%, -50%, 0)',
-    //msTransform     : 'translate3d(-50%, -50%, 0)',
-    //transform       : 'translate3d(-50%, -50%, 0)',
-    //maxWidth        : '95vw',
-    //maxHeight       : '95vh',
-    zIndex: 999,
-    transition: 'all 300ms',
-    scale: 1
-  }
-};
-
-var overlayStyles = {
-  position: 'fixed',
-  top: 0,
-  right: 0,
-  bottom: 0,
-  left: 0,
-  backgroundColor: '#fff',
-  zIndex: 998,
-  opacity: 1,
-  transition: 'opacity 300ms'
-};
 
 var ImageZoom = function (_Component) {
   _inherits(ImageZoom, _Component);
@@ -20533,7 +20510,7 @@ var ImageZoom = function (_Component) {
     value: function renderZoomed() {
       var image = _reactDom2.default.findDOMNode(this);
 
-      _reactDom2.default.render(_react2.default.createElement(Zoom, _extends({}, this.props.zoomImage, {
+      _reactDom2.default.render(_react2.default.createElement(_Zoom2.default, _extends({}, this.props.zoomImage, {
         image: image,
         onClick: this.handleUnzoom
       })), this.portal);
@@ -20548,7 +20525,7 @@ var ImageZoom = function (_Component) {
     value: function getImageStyle() {
       var style = {};
       //if (this.state.isZoomed) style.visibility = 'hidden'
-      return Object.assign({}, defaultStyles.image, style, this.props.image.style);
+      return Object.assign({}, _defaults2.default.styles.image, style, this.props.image.style);
     }
   }, {
     key: 'handleZoom',
@@ -20582,38 +20559,106 @@ ImageZoom.propTypes = {
     style: object
   }).isRequired
 };
+module.exports = exports['default'];
 
-// =============================================
+},{"./Zoom":174,"./defaults":175,"react":171,"react-dom":29}],173:[function(require,module,exports){
+'use strict';
 
-var Zoom = function (_Component2) {
-  _inherits(Zoom, _Component2);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _defaults = require('./defaults');
+
+var _defaults2 = _interopRequireDefault(_defaults);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Overlay = function Overlay(props) {
+  return _react2.default.createElement('div', { style: getStyle(props) });
+};
+
+var getStyle = function getStyle(_ref) {
+  var isVisible = _ref.isVisible;
+  return isVisible ? _defaults2.default.styles.overlay : Object.assign({}, _defaults2.default.styles.overlay, { opacity: 0 });
+};
+
+Overlay.propTypes = {
+  isVisible: _react.PropTypes.bool.isRequired
+};
+
+exports.default = Overlay;
+module.exports = exports['default'];
+
+},{"./defaults":175,"react":171}],174:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _Overlay = require('./Overlay');
+
+var _Overlay2 = _interopRequireDefault(_Overlay);
+
+var _defaults = require('./defaults');
+
+var _defaults2 = _interopRequireDefault(_defaults);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var string = _react.PropTypes.string;
+var object = _react.PropTypes.object;
+
+var Zoom = function (_Component) {
+  _inherits(Zoom, _Component);
 
   function Zoom(props) {
     _classCallCheck(this, Zoom);
 
-    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(Zoom).call(this, props));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Zoom).call(this, props));
 
-    _this2.state = {
+    _this.state = {
       hasLoaded: false,
       isZoomed: true
     };
 
-    _this2.handleUnzoom = _this2.handleUnzoom.bind(_this2);
-    _this2.handleScroll = _this2.handleScroll.bind(_this2);
-    _this2.handleTouchStart = _this2.handleTouchStart.bind(_this2);
-    _this2.handleTouchMove = _this2.handleTouchMove.bind(_this2);
-    _this2.handleTouchEnd = _this2.handleTouchEnd.bind(_this2);
-    return _this2;
+    _this.handleUnzoom = _this.handleUnzoom.bind(_this);
+    _this.handleScroll = _this.handleScroll.bind(_this);
+    _this.handleTouchStart = _this.handleTouchStart.bind(_this);
+    _this.handleTouchMove = _this.handleTouchMove.bind(_this);
+    _this.handleTouchEnd = _this.handleTouchEnd.bind(_this);
+    return _this;
   }
 
   _createClass(Zoom, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var _this3 = this;
+      var _this2 = this;
 
       this.addListeners();
       setTimeout(function () {
-        _this3.setState({ hasLoaded: true });
+        _this2.setState({ hasLoaded: true });
       }, 0);
     }
   }, {
@@ -20633,7 +20678,7 @@ var Zoom = function (_Component2) {
       return _react2.default.createElement(
         'div',
         { onClick: this.handleUnzoom },
-        _react2.default.createElement(Overlay, { isVisible: this.state.isZoomed }),
+        _react2.default.createElement(_Overlay2.default, { isVisible: this.state.isZoomed }),
         _react2.default.createElement('img', {
           ref: 'zoomImage',
           src: src,
@@ -20686,10 +20731,10 @@ var Zoom = function (_Component2) {
   }, {
     key: 'handleUnzoom',
     value: function handleUnzoom() {
-      var _this4 = this;
+      var _this3 = this;
 
       this.setState({ isZoomed: false }, function () {
-        return setTimeout(_this4.props.onClick, 300);
+        return setTimeout(_this3.props.onClick, 300);
       });
     }
   }, {
@@ -20708,7 +20753,7 @@ var Zoom = function (_Component2) {
       var style = { top: top, left: left, width: width, height: height, transform: 'none' };
 
       if (!this.state.hasLoaded || !this.state.isZoomed) {
-        return Object.assign({}, defaultStyles.zoomImage, this.props.style, style);
+        return Object.assign({}, _defaults2.default.styles.zoomImage, this.props.style, style);
       }
 
       // Get the the coords for center of the viewport
@@ -20731,7 +20776,7 @@ var Zoom = function (_Component2) {
         transformOrigin: 'center center'
       };
 
-      return Object.assign({}, defaultStyles.zoomImage, this.props.style, style, zoomStyle);
+      return Object.assign({}, _defaults2.default.styles.zoomImage, this.props.style, style, zoomStyle);
     }
   }, {
     key: 'getScale',
@@ -20749,14 +20794,49 @@ var Zoom = function (_Component2) {
   return Zoom;
 }(_react.Component);
 
-var Overlay = function Overlay(_ref2) {
-  var isVisible = _ref2.isVisible;
+exports.default = Zoom;
 
-  var style = isVisible ? overlayStyles : Object.assign({}, overlayStyles, { opacity: 0 });
-  return _react2.default.createElement('div', { style: style });
+
+Zoom.propTypes = {
+  src: string.isRequired,
+  alt: string,
+  className: string,
+  style: object,
+  image: object.isRequired
 };
+module.exports = exports['default'];
 
-},{"react":171,"react-dom":29}],173:[function(require,module,exports){
+},{"./Overlay":173,"./defaults":175,"react":171,"react-dom":29}],175:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  styles: {
+    image: {},
+    zoomImage: {
+      position: 'fixed',
+      zIndex: 999,
+      transition: 'all 300ms',
+      scale: 1
+    },
+    overlay: {
+      position: 'fixed',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+      backgroundColor: '#fff',
+      zIndex: 998,
+      opacity: 1,
+      transition: 'opacity 300ms'
+    }
+  }
+};
+module.exports = exports['default'];
+
+},{}],176:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -20905,4 +20985,4 @@ var App = function (_Component) {
 var container = document.querySelector('[data-app]');
 _reactDom2.default.render(_react2.default.createElement(App, null), container);
 
-},{"../ImageZoom":172,"react":171,"react-dom":29}]},{},[173]);
+},{"../ImageZoom":172,"react":171,"react-dom":29}]},{},[176]);
