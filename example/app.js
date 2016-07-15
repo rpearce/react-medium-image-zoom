@@ -20746,6 +20746,7 @@ var Zoom = function (_Component2) {
       src: _this2.props.image.src
     };
 
+    _this2.handleResize = _this2.handleResize.bind(_this2);
     _this2.handleUnzoom = _this2.handleUnzoom.bind(_this2);
     _this2.handleScroll = _this2.handleScroll.bind(_this2);
     _this2.handleTouchStart = _this2.handleTouchStart.bind(_this2);
@@ -20799,6 +20800,7 @@ var Zoom = function (_Component2) {
     key: 'addListeners',
     value: function addListeners() {
       this.scrollPosition = window.pageYOffset;
+      window.addEventListener('resize', this.handleResize);
       window.addEventListener('scroll', this.handleScroll);
       window.addEventListener('ontouchstart', this.handleTouchStart);
       window.addEventListener('ontouchmove', this.handleTouchMove);
@@ -20809,10 +20811,16 @@ var Zoom = function (_Component2) {
     value: function removeListeners() {
       this.scrollPosition = undefined;
       this.yTouchPosition = undefined;
+      window.removeEventListener('resize', this.handleResize);
       window.removeEventListener('scroll', this.handleScroll);
       window.removeEventListener('ontouchstart', this.handleTouchStart);
       window.removeEventListener('ontouchmove', this.handleTouchMove);
       window.removeEventListener('ontouchend', this.handleTouchEnd);
+    }
+  }, {
+    key: 'handleResize',
+    value: function handleResize() {
+      this.forceUpdate();
     }
   }, {
     key: 'handleScroll',
