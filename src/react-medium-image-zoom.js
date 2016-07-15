@@ -133,6 +133,7 @@ class Zoom extends Component {
       src: this.props.image.src
     }
 
+    this.handleResize     = this.handleResize.bind(this)
     this.handleUnzoom     = this.handleUnzoom.bind(this)
     this.handleScroll     = this.handleScroll.bind(this)
     this.handleTouchStart = this.handleTouchStart.bind(this)
@@ -174,6 +175,7 @@ class Zoom extends Component {
 
   addListeners() {
     this.scrollPosition = window.pageYOffset
+    window.addEventListener('resize', this.handleResize)
     window.addEventListener('scroll', this.handleScroll)
     window.addEventListener('ontouchstart', this.handleTouchStart)
     window.addEventListener('ontouchmove', this.handleTouchMove)
@@ -183,10 +185,15 @@ class Zoom extends Component {
   removeListeners() {
     this.scrollPosition = undefined
     this.yTouchPosition = undefined
+    window.removeEventListener('resize', this.handleResize)
     window.removeEventListener('scroll', this.handleScroll)
     window.removeEventListener('ontouchstart', this.handleTouchStart)
     window.removeEventListener('ontouchmove', this.handleTouchMove)
     window.removeEventListener('ontouchend', this.handleTouchEnd)
+  }
+
+  handleResize() {
+    this.forceUpdate()
   }
 
   handleScroll() {

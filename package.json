@@ -4,8 +4,9 @@
   "description": "Medium.com style image zoom for React",
   "main": "lib/react-medium-image-zoom.js",
   "scripts": {
+    "build": "babel src/react-medium-image-zoom.js -o lib/react-medium-image-zoom.js",
     "build:example": "browserify example/src/app.js -o example/app.js -t [ babelify ]",
-    "build": "babel src/react-medium-image-zoom.js -o lib/react-medium-image-zoom.js"
+    "build:all": "npm run build && npm run build:example"
   },
   "repository": {
     "type": "git",
