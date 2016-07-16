@@ -11,9 +11,10 @@ const defaults = {
     zoomImage: {
       cursor          : 'zoom-out',
       position        : 'absolute',
-      transition      : 'all 300ms',
-      transform       : 'translate3d(0, 0, 0)',
+      transition      : 'transform 300ms',
+      transform       : 'translate3d(0, 0, 0) scale(1)',
       transformOrigin : 'center center',
+      willChange      : 'transform'
     },
     zoomContainer: {
       position        : 'fixed',
@@ -173,22 +174,22 @@ class Zoom extends Component {
   }
 
   addListeners() {
-    this.scrollPosition = window.pageYOffset
     window.addEventListener('resize', this.handleResize)
     window.addEventListener('scroll', this.handleScroll)
     window.addEventListener('ontouchstart', this.handleTouchStart)
     window.addEventListener('ontouchmove', this.handleTouchMove)
     window.addEventListener('ontouchend', this.handleTouchEnd)
+    window.addEventListener('ontouchcancel', this.handleTouchEnd)
   }
 
   removeListeners() {
-    this.scrollPosition = undefined
     this.yTouchPosition = undefined
     window.removeEventListener('resize', this.handleResize)
     window.removeEventListener('scroll', this.handleScroll)
     window.removeEventListener('ontouchstart', this.handleTouchStart)
     window.removeEventListener('ontouchmove', this.handleTouchMove)
     window.removeEventListener('ontouchend', this.handleTouchEnd)
+    window.removeEventListener('ontouchcancel', this.handleTouchEnd)
   }
 
   handleResize() {
@@ -196,8 +197,8 @@ class Zoom extends Component {
   }
 
   handleScroll() {
-    const scrollChange = Math.abs(window.pageYOffset - this.scrollPosition)
-    if (scrollChange > 30) this.handleUnzoom()
+    this.forceUpdate()
+    if (this.state.isZoomed) this.handleUnzoom()
   }
 
   handleTouchStart(e) {
@@ -205,6 +206,7 @@ class Zoom extends Component {
   }
 
   handleTouchMove(e) {
+    this.forceUpdate()
     const touchChange = Math.abs(e.touches[0].clientY - this.yTouchPosition)
     if (touchChange > 10) this.handleUnzoom()
   }
@@ -224,7 +226,7 @@ class Zoom extends Component {
     const { top, left } = imageOffset
     const { width, height } = image
 
-    const style = { top, left, width, height, transform: 'none' }
+    const style = { top, left, width, height }
 
     if (!this.state.hasLoaded || !this.state.isZoomed) {
       return Object.assign({}, defaults.styles.zoomImage, this.props.style, style)
@@ -246,7 +248,7 @@ class Zoom extends Component {
     const scale = this.getScale({ width, height })
 
     const zoomStyle = {
-      transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`,
+      transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`
     }
 
     return Object.assign({}, defaults.styles.zoomImage, this.props.style, style, zoomStyle)

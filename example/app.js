@@ -20604,9 +20604,10 @@ var defaults = {
     zoomImage: {
       cursor: 'zoom-out',
       position: 'absolute',
-      transition: 'all 300ms',
-      transform: 'translate3d(0, 0, 0)',
-      transformOrigin: 'center center'
+      transition: 'transform 300ms',
+      transform: 'translate3d(0, 0, 0) scale(1)',
+      transformOrigin: 'center center',
+      willChange: 'transform'
     },
     zoomContainer: {
       position: 'fixed',
@@ -20798,23 +20799,23 @@ var Zoom = function (_Component2) {
   }, {
     key: 'addListeners',
     value: function addListeners() {
-      this.scrollPosition = window.pageYOffset;
       window.addEventListener('resize', this.handleResize);
       window.addEventListener('scroll', this.handleScroll);
       window.addEventListener('ontouchstart', this.handleTouchStart);
       window.addEventListener('ontouchmove', this.handleTouchMove);
       window.addEventListener('ontouchend', this.handleTouchEnd);
+      window.addEventListener('ontouchcancel', this.handleTouchEnd);
     }
   }, {
     key: 'removeListeners',
     value: function removeListeners() {
-      this.scrollPosition = undefined;
       this.yTouchPosition = undefined;
       window.removeEventListener('resize', this.handleResize);
       window.removeEventListener('scroll', this.handleScroll);
       window.removeEventListener('ontouchstart', this.handleTouchStart);
       window.removeEventListener('ontouchmove', this.handleTouchMove);
       window.removeEventListener('ontouchend', this.handleTouchEnd);
+      window.removeEventListener('ontouchcancel', this.handleTouchEnd);
     }
   }, {
     key: 'handleResize',
@@ -20824,8 +20825,8 @@ var Zoom = function (_Component2) {
   }, {
     key: 'handleScroll',
     value: function handleScroll() {
-      var scrollChange = Math.abs(window.pageYOffset - this.scrollPosition);
-      if (scrollChange > 30) this.handleUnzoom();
+      this.forceUpdate();
+      if (this.state.isZoomed) this.handleUnzoom();
     }
   }, {
     key: 'handleTouchStart',
@@ -20835,6 +20836,7 @@ var Zoom = function (_Component2) {
   }, {
     key: 'handleTouchMove',
     value: function handleTouchMove(e) {
+      this.forceUpdate();
       var touchChange = Math.abs(e.touches[0].clientY - this.yTouchPosition);
       if (touchChange > 10) this.handleUnzoom();
     }
@@ -20865,7 +20867,7 @@ var Zoom = function (_Component2) {
       var height = image.height;
 
 
-      var style = { top: top, left: left, width: width, height: height, transform: 'none' };
+      var style = { top: top, left: left, width: width, height: height };
 
       if (!this.state.hasLoaded || !this.state.isZoomed) {
         return Object.assign({}, defaults.styles.zoomImage, this.props.style, style);
