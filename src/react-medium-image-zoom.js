@@ -156,7 +156,6 @@ class Zoom extends Component {
       <div onClick={ this.handleUnzoom } style={ defaults.styles.zoomContainer }>
         <Overlay isVisible={ this.state.isZoomed } />
         <img
-          ref="zoomImage"
           src={ this.state.src }
           alt={ this.props.alt }
           className={ this.props.className }

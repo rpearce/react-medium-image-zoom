@@ -20775,7 +20775,6 @@ var Zoom = function (_Component2) {
         { onClick: this.handleUnzoom, style: defaults.styles.zoomContainer },
         _react2.default.createElement(Overlay, { isVisible: this.state.isZoomed }),
         _react2.default.createElement('img', {
-          ref: 'zoomImage',
           src: this.state.src,
           alt: this.props.alt,
           className: this.props.className,
