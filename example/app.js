@@ -84,7 +84,9 @@ var App = function (_Component) {
               src: 'nz.jpg',
               alt: 'Picture of Mt. Cook in New Zealand',
               className: 'img',
-              style: {}
+              style: {
+                width: '20em'
+              }
             },
             zoomImage: {
               src: 'nz-big.jpg',
@@ -20639,7 +20641,8 @@ var ImageZoom = function (_Component) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ImageZoom).call(this, props));
 
     _this.state = {
-      isZoomed: false
+      isZoomed: false,
+      src: null
     };
 
     _this.handleZoom = _this.handleZoom.bind(_this);
@@ -20669,7 +20672,7 @@ var ImageZoom = function (_Component) {
     key: 'render',
     value: function render() {
       return _react2.default.createElement('img', {
-        src: this.props.image.src,
+        src: this.state.src || this.props.image.src,
         alt: this.props.image.alt,
         className: this.props.image.className,
         style: this.getImageStyle(),
@@ -20683,6 +20686,7 @@ var ImageZoom = function (_Component) {
 
       _reactDom2.default.render(_react2.default.createElement(Zoom, _extends({}, this.props.zoomImage, {
         image: image,
+        hasAlreadyLoaded: !!this.state.src,
         onClick: this.handleUnzoom
       })), this.portal);
     }
@@ -20705,8 +20709,21 @@ var ImageZoom = function (_Component) {
     }
   }, {
     key: 'handleUnzoom',
-    value: function handleUnzoom() {
-      this.setState({ isZoomed: false });
+    value: function handleUnzoom(src) {
+      var _this2 = this;
+
+      return function () {
+        var opts = { isZoomed: false };
+        if (_this2.props.shouldReplaceImage) opts.src = src;
+        _this2.setState(opts);
+      };
+    }
+  }], [{
+    key: 'defaultProps',
+    get: function get() {
+      return {
+        shouldReplaceImage: true
+      };
     }
   }]);
 
@@ -20728,7 +20745,8 @@ ImageZoom.propTypes = {
     alt: string,
     className: string,
     style: object
-  })
+  }),
+  shouldReplaceImage: bool
 };
 
 //====================================================
@@ -20739,28 +20757,28 @@ var Zoom = function (_Component2) {
   function Zoom(props) {
     _classCallCheck(this, Zoom);
 
-    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(Zoom).call(this, props));
+    var _this3 = _possibleConstructorReturn(this, Object.getPrototypeOf(Zoom).call(this, props));
 
-    _this2.state = {
+    _this3.state = {
       hasLoaded: false,
       isZoomed: true,
-      src: _this2.props.image.src
+      src: _this3.props.image.src
     };
 
-    _this2.handleResize = _this2.handleResize.bind(_this2);
-    _this2.handleUnzoom = _this2.handleUnzoom.bind(_this2);
-    _this2.handleScroll = _this2.handleScroll.bind(_this2);
-    _this2.handleTouchStart = _this2.handleTouchStart.bind(_this2);
-    _this2.handleTouchMove = _this2.handleTouchMove.bind(_this2);
-    _this2.handleTouchEnd = _this2.handleTouchEnd.bind(_this2);
-    return _this2;
+    _this3.handleResize = _this3.handleResize.bind(_this3);
+    _this3.handleUnzoom = _this3.handleUnzoom.bind(_this3);
+    _this3.handleScroll = _this3.handleScroll.bind(_this3);
+    _this3.handleTouchStart = _this3.handleTouchStart.bind(_this3);
+    _this3.handleTouchMove = _this3.handleTouchMove.bind(_this3);
+    _this3.handleTouchEnd = _this3.handleTouchEnd.bind(_this3);
+    return _this3;
   }
 
   _createClass(Zoom, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
       this.setState({ hasLoaded: true });
-      if (this.props.src) this.fetchZoomImage();
+      if (this.props.src && !this.props.hasAlreadyLoaded) this.fetchZoomImage();
       this.addListeners();
     }
   }, {
@@ -20786,14 +20804,14 @@ var Zoom = function (_Component2) {
   }, {
     key: 'fetchZoomImage',
     value: function fetchZoomImage() {
-      var _this3 = this;
+      var _this4 = this;
 
       var src = this.props.src;
 
       var img = new Image();
       img.src = src;
       img.onload = function () {
-        return _this3.setState({ hasLoaded: true, src: src });
+        return _this4.setState({ hasLoaded: true, src: src });
       };
     }
   }, {
@@ -20848,10 +20866,10 @@ var Zoom = function (_Component2) {
   }, {
     key: 'handleUnzoom',
     value: function handleUnzoom() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.setState({ isZoomed: false }, function () {
-        return setTimeout(_this4.props.onClick, 300);
+        return setTimeout(_this5.props.onClick(_this5.state.src), 300);
       });
     }
   }, {
@@ -20915,7 +20933,8 @@ Zoom.propTypes = {
   alt: string,
   className: string,
   style: object,
-  image: object.isRequired
+  image: object.isRequired,
+  hasAlreadyLoaded: bool.isRequired
 };
 
 //====================================================
@@ -20926,12 +20945,12 @@ var Overlay = function (_Component3) {
   function Overlay(props) {
     _classCallCheck(this, Overlay);
 
-    var _this5 = _possibleConstructorReturn(this, Object.getPrototypeOf(Overlay).call(this, props));
+    var _this6 = _possibleConstructorReturn(this, Object.getPrototypeOf(Overlay).call(this, props));
 
-    _this5.state = {
+    _this6.state = {
       isVisible: false
     };
-    return _this5;
+    return _this6;
   }
 
   _createClass(Overlay, [{

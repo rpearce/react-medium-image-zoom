@@ -32,7 +32,9 @@ class App extends Component {
               src: 'nz.jpg',
               alt: 'Picture of Mt. Cook in New Zealand',
               className: 'img',
-              style: {}
+              style: {
+                width: '20em'
+              }
             }}
             zoomImage={{
               src: 'nz-big.jpg',
