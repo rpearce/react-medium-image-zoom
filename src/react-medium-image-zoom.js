@@ -42,11 +42,18 @@ export default class ImageZoom extends Component {
     super(props)
 
     this.state = {
-      isZoomed: false
+      isZoomed: false,
+      src: null
     }
 
     this.handleZoom   = this.handleZoom.bind(this)
     this.handleUnzoom = this.handleUnzoom.bind(this)
+  }
+
+  static get defaultProps() {
+    return {
+      shouldReplaceImage: true
+    }
   }
 
   componentDidMount() {
@@ -67,7 +74,7 @@ export default class ImageZoom extends Component {
   render() {
     return (
       <img
-        src={ this.props.image.src }
+        src={ this.state.src || this.props.image.src }
         alt={ this.props.image.alt }
         className={ this.props.image.className }
         style={ this.getImageStyle() }
@@ -83,6 +90,7 @@ export default class ImageZoom extends Component {
       <Zoom
         { ...this.props.zoomImage }
         image={ image }
+        hasAlreadyLoaded={ !!this.state.src }
         onClick={ this.handleUnzoom }
       />
     , this.portal)
@@ -102,8 +110,12 @@ export default class ImageZoom extends Component {
     this.setState({ isZoomed: true })
   }
 
-  handleUnzoom() {
-    this.setState({ isZoomed: false })
+  handleUnzoom(src) {
+    return () => {
+      const opts = { isZoomed: false }
+      if (this.props.shouldReplaceImage) opts.src = src
+      this.setState(opts)
+    }
   }
 }
 
@@ -119,7 +131,8 @@ ImageZoom.propTypes = {
     alt: string,
     className: string,
     style: object
-  })
+  }),
+  shouldReplaceImage: bool
 }
 
 //====================================================
@@ -144,7 +157,7 @@ class Zoom extends Component {
 
   componentDidMount() {
     this.setState({ hasLoaded: true })
-    if (this.props.src) this.fetchZoomImage()
+    if (this.props.src && !this.props.hasAlreadyLoaded) this.fetchZoomImage()
     this.addListeners()
   }
 
@@ -216,7 +229,7 @@ class Zoom extends Component {
   }
 
   handleUnzoom() {
-    this.setState({ isZoomed: false }, () => setTimeout(this.props.onClick, 300))
+    this.setState({ isZoomed: false }, () => setTimeout(this.props.onClick(this.state.src), 300))
   }
 
   getZoomImageStyle() {
@@ -267,7 +280,8 @@ Zoom.propTypes = {
   alt: string,
   className: string,
   style: object,
-  image: object.isRequired
+  image: object.isRequired,
+  hasAlreadyLoaded: bool.isRequired
 }
 
 //====================================================
