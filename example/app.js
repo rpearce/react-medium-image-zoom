@@ -20598,6 +20598,8 @@ var string = _react.PropTypes.string;
 var object = _react.PropTypes.object;
 
 
+var transitionDuration = 300;
+
 var defaults = {
   styles: {
     image: {
@@ -20606,10 +20608,10 @@ var defaults = {
     zoomImage: {
       cursor: 'zoom-out',
       position: 'absolute',
-      transition: 'transform 300ms',
+      transition: 'transform ' + transitionDuration + 'ms',
       transform: 'translate3d(0, 0, 0) scale(1)',
       transformOrigin: 'center center',
-      willChange: 'transform'
+      willChange: 'transform, top, left'
     },
     zoomContainer: {
       position: 'fixed',
@@ -20627,7 +20629,7 @@ var defaults = {
       left: 0,
       backgroundColor: '#fff',
       opacity: 0,
-      transition: 'opacity 300ms'
+      transition: 'opacity ' + transitionDuration + 'ms'
     }
   }
 };
@@ -20768,6 +20770,7 @@ var Zoom = function (_Component2) {
     _this3.handleResize = _this3.handleResize.bind(_this3);
     _this3.handleUnzoom = _this3.handleUnzoom.bind(_this3);
     _this3.handleScroll = _this3.handleScroll.bind(_this3);
+    _this3.handleKeyUp = _this3.handleKeyUp.bind(_this3);
     _this3.handleTouchStart = _this3.handleTouchStart.bind(_this3);
     _this3.handleTouchMove = _this3.handleTouchMove.bind(_this3);
     _this3.handleTouchEnd = _this3.handleTouchEnd.bind(_this3);
@@ -20817,8 +20820,10 @@ var Zoom = function (_Component2) {
   }, {
     key: 'addListeners',
     value: function addListeners() {
+      this.isTicking = false;
       window.addEventListener('resize', this.handleResize);
       window.addEventListener('scroll', this.handleScroll);
+      window.addEventListener('keyup', this.handleKeyUp);
       window.addEventListener('ontouchstart', this.handleTouchStart);
       window.addEventListener('ontouchmove', this.handleTouchMove);
       window.addEventListener('ontouchend', this.handleTouchEnd);
@@ -20827,9 +20832,9 @@ var Zoom = function (_Component2) {
   }, {
     key: 'removeListeners',
     value: function removeListeners() {
-      this.yTouchPosition = undefined;
       window.removeEventListener('resize', this.handleResize);
       window.removeEventListener('scroll', this.handleScroll);
+      window.removeEventListener('keyup', this.handleKeyUp);
       window.removeEventListener('ontouchstart', this.handleTouchStart);
       window.removeEventListener('ontouchmove', this.handleTouchMove);
       window.removeEventListener('ontouchend', this.handleTouchEnd);
@@ -20847,6 +20852,17 @@ var Zoom = function (_Component2) {
       if (this.state.isZoomed) this.handleUnzoom();
     }
   }, {
+    key: 'handleKeyUp',
+    value: function handleKeyUp(_ref) {
+      var which = _ref.which;
+
+      var opts = {
+        27: this.handleUnzoom
+      };
+
+      if (opts[which]) return opts[which]();
+    }
+  }, {
     key: 'handleTouchStart',
     value: function handleTouchStart(e) {
       this.yTouchPosition = e.touches[0].clientY;
@@ -20856,7 +20872,7 @@ var Zoom = function (_Component2) {
     value: function handleTouchMove(e) {
       this.forceUpdate();
       var touchChange = Math.abs(e.touches[0].clientY - this.yTouchPosition);
-      if (touchChange > 10) this.handleUnzoom();
+      if (touchChange > 10 && this.state.isZoomed) this.handleUnzoom();
     }
   }, {
     key: 'handleTouchEnd',
@@ -20869,7 +20885,7 @@ var Zoom = function (_Component2) {
       var _this5 = this;
 
       this.setState({ isZoomed: false }, function () {
-        return setTimeout(_this5.props.onClick(_this5.state.src), 300);
+        return setTimeout(_this5.props.onClick(_this5.state.src), transitionDuration);
       });
     }
   }, {
@@ -20914,9 +20930,9 @@ var Zoom = function (_Component2) {
     }
   }, {
     key: 'getScale',
-    value: function getScale(_ref) {
-      var width = _ref.width;
-      var height = _ref.height;
+    value: function getScale(_ref2) {
+      var width = _ref2.width;
+      var height = _ref2.height;
 
       var totalMargin = 40;
       var scaleX = window.innerWidth / (width + totalMargin);

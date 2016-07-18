@@ -3,18 +3,20 @@ import ReactDOM from 'react-dom'
 
 const { bool, shape, string, object } = PropTypes
 
+const transitionDuration = 300
+
 const defaults = {
   styles: {
     image: {
-      cursor: 'zoom-in'
+      cursor          : 'zoom-in'
     },
     zoomImage: {
       cursor          : 'zoom-out',
       position        : 'absolute',
-      transition      : 'transform 300ms',
+      transition      : `transform ${transitionDuration}ms`,
       transform       : 'translate3d(0, 0, 0) scale(1)',
       transformOrigin : 'center center',
-      willChange      : 'transform'
+      willChange      : 'transform, top, left'
     },
     zoomContainer: {
       position        : 'fixed',
@@ -32,7 +34,7 @@ const defaults = {
       left            : 0,
       backgroundColor : '#fff',
       opacity         : 0,
-      transition      : 'opacity 300ms'
+      transition      : `opacity ${transitionDuration}ms`
     }
   }
 }
@@ -150,6 +152,7 @@ class Zoom extends Component {
     this.handleResize     = this.handleResize.bind(this)
     this.handleUnzoom     = this.handleUnzoom.bind(this)
     this.handleScroll     = this.handleScroll.bind(this)
+    this.handleKeyUp      = this.handleKeyUp.bind(this)
     this.handleTouchStart = this.handleTouchStart.bind(this)
     this.handleTouchMove  = this.handleTouchMove.bind(this)
     this.handleTouchEnd   = this.handleTouchEnd.bind(this)
@@ -187,8 +190,10 @@ class Zoom extends Component {
   }
 
   addListeners() {
+    this.isTicking = false
     window.addEventListener('resize', this.handleResize)
     window.addEventListener('scroll', this.handleScroll)
+    window.addEventListener('keyup', this.handleKeyUp)
     window.addEventListener('ontouchstart', this.handleTouchStart)
     window.addEventListener('ontouchmove', this.handleTouchMove)
     window.addEventListener('ontouchend', this.handleTouchEnd)
@@ -196,9 +201,9 @@ class Zoom extends Component {
   }
 
   removeListeners() {
-    this.yTouchPosition = undefined
     window.removeEventListener('resize', this.handleResize)
     window.removeEventListener('scroll', this.handleScroll)
+    window.removeEventListener('keyup', this.handleKeyUp)
     window.removeEventListener('ontouchstart', this.handleTouchStart)
     window.removeEventListener('ontouchmove', this.handleTouchMove)
     window.removeEventListener('ontouchend', this.handleTouchEnd)
@@ -214,6 +219,14 @@ class Zoom extends Component {
     if (this.state.isZoomed) this.handleUnzoom()
   }
 
+  handleKeyUp({ which }) {
+    const opts = {
+      27: this.handleUnzoom
+    }
+
+    if(opts[which]) return opts[which]()
+  }
+
   handleTouchStart(e) {
     this.yTouchPosition = e.touches[0].clientY
   }
@@ -221,7 +234,7 @@ class Zoom extends Component {
   handleTouchMove(e) {
     this.forceUpdate()
     const touchChange = Math.abs(e.touches[0].clientY - this.yTouchPosition)
-    if (touchChange > 10) this.handleUnzoom()
+    if (touchChange > 10 && this.state.isZoomed) this.handleUnzoom()
   }
 
   handleTouchEnd(e) {
@@ -229,7 +242,7 @@ class Zoom extends Component {
   }
 
   handleUnzoom() {
-    this.setState({ isZoomed: false }, () => setTimeout(this.props.onClick(this.state.src), 300))
+    this.setState({ isZoomed: false }, () => setTimeout(this.props.onClick(this.state.src), transitionDuration))
   }
 
   getZoomImageStyle() {
