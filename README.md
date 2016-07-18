@@ -18,13 +18,11 @@ const MyComponent = (props) =>
         src: 'bridge.jpg',
         alt: 'Golden Gate Bridge',
         className: 'img',
-        style: {}
+        style: { width: '50em' }
       }}
       zoomImage={{
         src: 'bridge-big.jpg',
-        alt: 'Golden Gate Bridge',
-        className: 'img--zoomed',
-        style: {}
+        alt: 'Golden Gate Bridge'
       }}
     />
 
@@ -42,6 +40,14 @@ Each one of these image props accepts four props:
 * `alt` [ string | optional ]: the alt text for the image
 * `className` [ string | optional ]: classes to apply to the image
 * `style` [ object | optional ]: additional styles to apply to the image
+
+## Browser Support
+Currently, this has only been tested on the latest modern browsers. Pull requests are welcome.
+
+## Development
+The source code is located within the `src` directory. Use `$npm run build:all` to build the main file as well as the example during development.
+
+You can view the the example via `$ open example/index.html`.
 
 ## Contribute
 
