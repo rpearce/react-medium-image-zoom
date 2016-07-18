@@ -129,7 +129,7 @@ ImageZoom.propTypes = {
     style: object
   }).isRequired,
   zoomImage: shape({
-    src: string.isRequired,
+    src: string,
     alt: string,
     className: string,
     style: object
