@@ -1,4 +1,7 @@
 # react-medium-image-zoom
+This library is a different implementation of [Medium.com's image zoom](https://medium.com/design/image-zoom-on-medium-24d146fc0c20) that allows for a low-res and high-res images to work together for "zooming" effects, works regardless of parent elements that have `overflow: hidden` and is made to work explicitly with [React.js](https://github.com/facebook/react) >= v0.14.
+
+You can [view the demo here](https://rpearce.github.io/react-medium-image-zoom/).
 
 ## Installation
 ```
@@ -35,7 +38,7 @@ The component accepts three props:
 * `zoomImage` [ object | optional ]: the image to be used for zooming
 * `replaceImage` [ boolean | optional | default `true` ]: once the image has been "zoomed" and downloaded the larger image, replace the original image. This is set to `true` by default.
 
-Each one of these image props accepts four props:
+Each one of these image props accepts normal `image` props, for example:
 * `src` [ string | required ]: the source for the image
 * `alt` [ string | optional ]: the alt text for the image
 * `className` [ string | optional ]: classes to apply to the image
