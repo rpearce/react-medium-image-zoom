@@ -1,4 +1,8 @@
 # react-medium-image-zoom
+
+![](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)
+![](https://img.shields.io/npm/v/react-medium-image-zoom.svg)
+
 This library is a different implementation of [Medium.com's image zoom](https://medium.com/design/image-zoom-on-medium-24d146fc0c20) that allows for a low-res and high-res images to work together for "zooming" effects, works regardless of parent elements that have `overflow: hidden` and is made to work explicitly with [React.js](https://github.com/facebook/react) >= v0.14.
 
 You can [view the demo here](https://rpearce.github.io/react-medium-image-zoom/).
