@@ -14,14 +14,12 @@ class App extends Component {
             image={{
               src: 'bridge.jpg',
               alt: 'Golden Gate Bridge',
-              className: 'img',
-              style: {}
+              className: 'img'
             }}
             zoomImage={{
               src: 'bridge-big.jpg',
               alt: 'Golden Gate Bridge',
-              className: 'img--zoomed',
-              style: {}
+              className: 'img--zoomed'
             }}
           />
         </div>
@@ -39,8 +37,7 @@ class App extends Component {
             zoomImage={{
               src: 'nz-big.jpg',
               alt: 'Picture of Mt. Cook in New Zealand',
-              className: 'img--zoomed',
-              style: {}
+              className: 'img--zoomed'
             }}
           />
         </div>
@@ -51,8 +48,7 @@ class App extends Component {
             image={{
               src: 'gazelle.jpg',
               alt: 'Gazelle Stomping',
-              className: 'img',
-              style: {}
+              className: 'img'
             }}
           />
         </div>
