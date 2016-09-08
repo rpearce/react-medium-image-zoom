@@ -421,7 +421,7 @@ var Zoom = function (_Component2) {
     value: function addListeners() {
       this.isTicking = false;
       window.addEventListener('resize', this.handleResize);
-      window.addEventListener('scroll', this.handleScroll);
+      window.addEventListener('scroll', this.handleScroll, true);
       window.addEventListener('keyup', this.handleKeyUp);
       window.addEventListener('ontouchstart', this.handleTouchStart);
       window.addEventListener('ontouchmove', this.handleTouchMove);
@@ -432,7 +432,7 @@ var Zoom = function (_Component2) {
     key: 'removeListeners',
     value: function removeListeners() {
       window.removeEventListener('resize', this.handleResize);
-      window.removeEventListener('scroll', this.handleScroll);
+      window.removeEventListener('scroll', this.handleScroll, true);
       window.removeEventListener('keyup', this.handleKeyUp);
       window.removeEventListener('ontouchstart', this.handleTouchStart);
       window.removeEventListener('ontouchmove', this.handleTouchMove);
