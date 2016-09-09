@@ -480,9 +480,13 @@ var Zoom = function (_Component2) {
     }
   }, {
     key: 'handleUnzoom',
-    value: function handleUnzoom() {
+    value: function handleUnzoom(e) {
       var _this5 = this;
 
+      if (e) {
+        e.stopPropagation();
+        e.nativeEvent.stopImmediatePropagation();
+      }
       this.setState({ isZoomed: false }, function () {
         return setTimeout(_this5.props.onClick(_this5.state.src), transitionDuration);
       });

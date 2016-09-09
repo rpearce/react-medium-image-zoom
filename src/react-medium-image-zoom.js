@@ -241,7 +241,11 @@ class Zoom extends Component {
     this.yTouchPosition = undefined
   }
 
-  handleUnzoom() {
+  handleUnzoom(e) {
+    if (e) {
+      e.stopPropagation();
+      e.nativeEvent.stopImmediatePropagation();
+    }
     this.setState({ isZoomed: false }, () => setTimeout(this.props.onClick(this.state.src), transitionDuration))
   }
 
