@@ -16,25 +16,28 @@ $ npm install --save react-medium-image-zoom
 ```js
 import ImageZoom from 'react-medium-image-zoom'
 
-const MyComponent = (props) =>
-  <div>
-    <p>Some text...</p>
+function MyComponent(props) {
+  return (
+    <div>
+      <p>Some text...</p>
 
-    <ImageZoom
-      image={{
-        src: 'bridge.jpg',
-        alt: 'Golden Gate Bridge',
-        className: 'img',
-        style: { width: '50em' }
-      }}
-      zoomImage={{
-        src: 'bridge-big.jpg',
-        alt: 'Golden Gate Bridge'
-      }}
-    />
+      <ImageZoom
+        image={{
+          src: 'bridge.jpg',
+          alt: 'Golden Gate Bridge',
+          className: 'img',
+          style: { width: '50em' }
+        }}
+        zoomImage={{
+          src: 'bridge-big.jpg',
+          alt: 'Golden Gate Bridge'
+        }}
+      />
 
-    <p>Some text...</p>
-  </div>
+      <p>Some text...</p>
+    </div>
+  )
+}
 ```
 
 The component accepts three props:
@@ -52,7 +55,7 @@ Each one of these image props accepts normal `image` props, for example:
 Currently, this has only been tested on the latest modern browsers. Pull requests are welcome.
 
 ## Development
-The source code is located within the `src` directory. Use `$npm run build:all` to build the main file as well as the example during development.
+The source code is located within the `src` directory. Use `$npm run build:example` to build the main file as well as the example during development.
 
 You can view the the example via `$ open example/index.html`.
 
