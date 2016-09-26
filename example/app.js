@@ -248,7 +248,7 @@ var ImageZoom = function (_Component) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ImageZoom).call(this, props));
 
     _this.state = {
-      isZoomed: false,
+      isZoomed: props.isZoomed,
       src: null
     };
 
@@ -262,16 +262,21 @@ var ImageZoom = function (_Component) {
     value: function componentDidMount() {
       this.portal = document.createElement('div');
       document.body.appendChild(this.portal);
+      if (this.state.isZoomed) this.renderZoomed();
     }
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
       document.body.removeChild(this.portal);
+      delete this.portal;
+      delete this.portalInstance;
     }
   }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate(prevProps, prevState) {
-      if (prevState.isZoomed !== this.state.isZoomed) {
+      if (prevProps.isZoomed !== this.props.isZoomed && this.portalInstance) {
+        this.props.isZoomed ? this.renderZoomed() : this.portalInstance.handleUnzoom();
+      } else if (prevState.isZoomed !== this.state.isZoomed) {
         this.state.isZoomed ? this.renderZoomed() : this.removeZoomed();
       }
     }
@@ -291,7 +296,7 @@ var ImageZoom = function (_Component) {
     value: function renderZoomed() {
       var image = _reactDom2.default.findDOMNode(this);
 
-      _reactDom2.default.render(_react2.default.createElement(Zoom, _extends({}, this.props.zoomImage, {
+      this.portalInstance = _reactDom2.default.render(_react2.default.createElement(Zoom, _extends({}, this.props.zoomImage, {
         image: image,
         hasAlreadyLoaded: !!this.state.src,
         onClick: this.handleUnzoom
@@ -329,6 +334,7 @@ var ImageZoom = function (_Component) {
     key: 'defaultProps',
     get: function get() {
       return {
+        isZoomed: false,
         shouldReplaceImage: true
       };
     }
@@ -352,6 +358,7 @@ ImageZoom.propTypes = {
     className: string,
     style: object
   }),
+  isZoomed: bool,
   shouldReplaceImage: bool
 };
 
