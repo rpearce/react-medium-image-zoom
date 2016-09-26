@@ -40,16 +40,21 @@ function MyComponent(props) {
 }
 ```
 
-The component accepts three props:
-* `image` [ object | required ]: the original image
-* `zoomImage` [ object | optional ]: the image to be used for zooming
-* `replaceImage` [ boolean | optional | default `true` ]: once the image has been "zoomed" and downloaded the larger image, replace the original image. This is set to `true` by default.
+| Prop | Type | Required | Default | Details |
+| ------ |  ---- | ------- | ------- | ------- |
+| `image` | object | yes | none | The original image |
+| `zoomImage` | object | no | `image` | The image to be used for zooming |
+| `isZoomed` | boolean | no | `false` | For more direct control over the zoom state |
+| `replaceImage` | boolean | no | `true` | Once the image has been "zoomed" and downloaded the larger image, this replaces the original `image` with the `zoomImage` |
 
 Each one of these image props accepts normal `image` props, for example:
-* `src` [ string | required ]: the source for the image
-* `alt` [ string | optional ]: the alt text for the image
-* `className` [ string | optional ]: classes to apply to the image
-* `style` [ object | optional ]: additional styles to apply to the image
+| Prop | Type | Required | Details |
+| ------ |  ---- | ------- | ------- |
+| `src` | string | yes | The source for the image |
+| `alt` | string | no | The alt text for the image |
+| `className` | string | no | Classes to apply to the image |
+| `style` | object | no | Additional styles to apply to the image |
+| ... | ... | no | ... |
 
 ## Browser Support
 Currently, this has only been tested on the latest modern browsers. Pull requests are welcome.

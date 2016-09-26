@@ -44,7 +44,7 @@ export default class ImageZoom extends Component {
     super(props)
 
     this.state = {
-      isZoomed: false,
+      isZoomed: props.isZoomed,
       src: null
     }
 
@@ -54,6 +54,7 @@ export default class ImageZoom extends Component {
 
   static get defaultProps() {
     return {
+      isZoomed: false,
       shouldReplaceImage: true
     }
   }
@@ -61,14 +62,19 @@ export default class ImageZoom extends Component {
   componentDidMount() {
     this.portal = document.createElement('div')
     document.body.appendChild(this.portal)
+    if (this.state.isZoomed) this.renderZoomed()
   }
 
   componentWillUnmount() {
     document.body.removeChild(this.portal)
+    delete this.portal;
+    delete this.portalInstance;
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.isZoomed !== this.state.isZoomed) {
+    if (prevProps.isZoomed !== this.props.isZoomed && this.portalInstance) {
+      this.props.isZoomed ? this.renderZoomed() : this.portalInstance.handleUnzoom()
+    } else if (prevState.isZoomed !== this.state.isZoomed) {
       this.state.isZoomed ? this.renderZoomed() : this.removeZoomed()
     }
   }
@@ -88,7 +94,7 @@ export default class ImageZoom extends Component {
   renderZoomed() {
     const image = ReactDOM.findDOMNode(this)
 
-    ReactDOM.render(
+    this.portalInstance = ReactDOM.render(
       <Zoom
         { ...this.props.zoomImage }
         image={ image }
@@ -134,6 +140,7 @@ ImageZoom.propTypes = {
     className: string,
     style: object
   }),
+  isZoomed: bool,
   shouldReplaceImage: bool
 }
 
