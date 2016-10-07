@@ -260,7 +260,7 @@ class Zoom extends Component {
   }
 
   getZoomImageStyle() {
-    const { image, shouldRespectMaxDimension } = this.props
+    const { image, shouldRespectMaxDimension, src } = this.props
     const imageOffset = image.getBoundingClientRect()
 
     const { top, left } = imageOffset
@@ -284,8 +284,10 @@ class Zoom extends Component {
     const translateX = viewportX - imageCenterX
     const translateY = viewportY - imageCenterY
 
-    // Figure out how much to scale the image so it doesn't overflow the screen
-    const scale = this.getScale({ width, height, naturalWidth, naturalHeight })
+    // Figure out how much to scale the image
+    const scale = shouldRespectMaxDimension && !src
+      ? getMaxDimensionScale({ width, height, naturalWidth, naturalHeight })
+      : getScale({ width, height })
 
     const zoomStyle = {
       transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`
@@ -293,26 +295,29 @@ class Zoom extends Component {
 
     return Object.assign({}, defaults.styles.zoomImage, this.props.style, style, zoomStyle)
   }
-
-  getScale({ width, height, naturalWidth, naturalHeight }) {
-    const { shouldRespectMaxDimension, src } = this.props
-
-    if (shouldRespectMaxDimension && !src) {
-      const scale = calcScale({ width: naturalWidth, height: naturalHeight })
-      const largestDimension = Math.max(width, height)
-      const largestNaturalDimension = Math.max(naturalWidth, naturalHeight)
-      return Math.max(largestDimension, largestNaturalDimension) / Math.min(largestDimension, largestNaturalDimension)
-    }
-
-    return calcScale({ width, height })
-  }
 }
 
-function calcScale({ width, height }) {
+/**
+ * Figure out how much to scale based
+ * solely on no maxing out the browser
+ */
+function getScale({ width, height }) {
   const totalMargin = 40 // TODO: pass this in as an option
   const scaleX = window.innerWidth / (width + totalMargin)
   const scaleY = window.innerHeight / (height + totalMargin)
   return Math.min(scaleX, scaleY)
+}
+
+/**
+ * Figure out how much to scale so you're
+ * not larger than the original image
+ */
+function getMaxDimensionScale({ width, height, naturalWidth, naturalHeight }) {
+  const scale = getScale({ width: naturalWidth, height: naturalHeight })
+  const largestDimension = Math.max(width, height)
+  const largestNaturalDimension = Math.max(naturalWidth, naturalHeight)
+  const ratio = Math.min(largestDimension, largestNaturalDimension) / Math.max(largestDimension, largestNaturalDimension)
+  return scale > 1 ? ratio : scale * ratio
 }
 
 Zoom.propTypes = {
