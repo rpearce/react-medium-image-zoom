@@ -316,7 +316,9 @@ function getMaxDimensionScale({ width, height, naturalWidth, naturalHeight }) {
   const scale = getScale({ width: naturalWidth, height: naturalHeight })
   const largestDimension = Math.max(width, height)
   const largestNaturalDimension = Math.max(naturalWidth, naturalHeight)
-  const ratio = Math.min(largestDimension, largestNaturalDimension) / Math.max(largestDimension, largestNaturalDimension)
+  const min = Math.min(largestDimension, largestNaturalDimension)
+  const max = Math.max(largestDimension, largestNaturalDimension)
+  const ratio = naturalWidth > naturalHeight ? max / min : min / max
   return scale > 1 ? ratio : scale * ratio
 }
 

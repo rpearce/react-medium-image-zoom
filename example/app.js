@@ -583,7 +583,9 @@ function getMaxDimensionScale(_ref3) {
   var scale = getScale({ width: naturalWidth, height: naturalHeight });
   var largestDimension = Math.max(width, height);
   var largestNaturalDimension = Math.max(naturalWidth, naturalHeight);
-  var ratio = Math.min(largestDimension, largestNaturalDimension) / Math.max(largestDimension, largestNaturalDimension);
+  var min = Math.min(largestDimension, largestNaturalDimension);
+  var max = Math.max(largestDimension, largestNaturalDimension);
+  var ratio = naturalWidth > naturalHeight ? max / min : min / max;
   return scale > 1 ? ratio : scale * ratio;
 }
 
