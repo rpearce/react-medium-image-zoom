@@ -49,6 +49,7 @@ function MyComponent(props) {
 | `shouldRespectMaxDimension` | boolean | no       | `false` | When true, don't make the zoomed image's dimensions larger than the original dimensions. _Currently only supported when NO zoomImage is provided._  |
 
 Each one of these image props accepts normal `image` props, for example:
+
 | Prop | Type | Required | Details |
 | ------ |  ---- | ------- | ------- |
 | `src` | string | yes | The source for the image |
