@@ -48,6 +48,7 @@ class App extends Component {
             image={{
               src: 'gazelle.jpg',
               alt: 'Gazelle Stomping',
+              title: "Don't exceed original image dimensions...",
               className: 'img',
               style: {
                 width: '80%'

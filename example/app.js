@@ -110,6 +110,7 @@ var App = function (_Component) {
             image: {
               src: 'gazelle.jpg',
               alt: 'Gazelle Stomping',
+              title: "Don't exceed original image dimensions...",
               className: 'img',
               style: {
                 width: '80%'
@@ -511,6 +512,7 @@ var Zoom = function (_Component2) {
       var _props = this.props;
       var image = _props.image;
       var shouldRespectMaxDimension = _props.shouldRespectMaxDimension;
+      var src = _props.src;
 
       var imageOffset = image.getBoundingClientRect();
 
@@ -539,8 +541,8 @@ var Zoom = function (_Component2) {
       var translateX = viewportX - imageCenterX;
       var translateY = viewportY - imageCenterY;
 
-      // Figure out how much to scale the image so it doesn't overflow the screen
-      var scale = this.getScale({ width: width, height: height, naturalWidth: naturalWidth, naturalHeight: naturalHeight });
+      // Figure out how much to scale the image
+      var scale = shouldRespectMaxDimension && !src ? getMaxDimensionScale({ width: width, height: height, naturalWidth: naturalWidth, naturalHeight: naturalHeight }) : getScale({ width: width, height: height });
 
       var zoomStyle = {
         transform: 'translate3d(' + translateX + 'px, ' + translateY + 'px, 0) scale(' + scale + ')'
@@ -548,39 +550,41 @@ var Zoom = function (_Component2) {
 
       return Object.assign({}, defaults.styles.zoomImage, this.props.style, style, zoomStyle);
     }
-  }, {
-    key: 'getScale',
-    value: function getScale(_ref2) {
-      var width = _ref2.width;
-      var height = _ref2.height;
-      var naturalWidth = _ref2.naturalWidth;
-      var naturalHeight = _ref2.naturalHeight;
-      var _props2 = this.props;
-      var shouldRespectMaxDimension = _props2.shouldRespectMaxDimension;
-      var src = _props2.src;
-
-      if (shouldRespectMaxDimension && !src) {
-        var scale = calcScale({ width: naturalWidth, height: naturalHeight });
-        var largestDimension = Math.max(width, height);
-        var largestNaturalDimension = Math.max(naturalWidth, naturalHeight);
-        return Math.max(largestDimension, largestNaturalDimension) / Math.min(largestDimension, largestNaturalDimension);
-      }
-
-      return calcScale({ width: width, height: height });
-    }
   }]);
 
   return Zoom;
 }(_react.Component);
 
-function calcScale(_ref3) {
-  var width = _ref3.width;
-  var height = _ref3.height;
+/**
+ * Figure out how much to scale based
+ * solely on no maxing out the browser
+ */
+
+function getScale(_ref2) {
+  var width = _ref2.width;
+  var height = _ref2.height;
 
   var totalMargin = 40; // TODO: pass this in as an option
   var scaleX = window.innerWidth / (width + totalMargin);
   var scaleY = window.innerHeight / (height + totalMargin);
   return Math.min(scaleX, scaleY);
+}
+
+/**
+ * Figure out how much to scale so you're
+ * not larger than the original image
+ */
+function getMaxDimensionScale(_ref3) {
+  var width = _ref3.width;
+  var height = _ref3.height;
+  var naturalWidth = _ref3.naturalWidth;
+  var naturalHeight = _ref3.naturalHeight;
+
+  var scale = getScale({ width: naturalWidth, height: naturalHeight });
+  var largestDimension = Math.max(width, height);
+  var largestNaturalDimension = Math.max(naturalWidth, naturalHeight);
+  var ratio = Math.min(largestDimension, largestNaturalDimension) / Math.max(largestDimension, largestNaturalDimension);
+  return scale > 1 ? ratio : scale * ratio;
 }
 
 Zoom.propTypes = {
