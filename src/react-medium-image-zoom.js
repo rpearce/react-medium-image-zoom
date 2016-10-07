@@ -315,20 +315,9 @@ function getScale({ width, height, zoomMargin }) {
  */
 function getMaxDimensionScale({ width, height, naturalWidth, naturalHeight, zoomMargin }) {
   const scale = getScale({ width: naturalWidth, height: naturalHeight, zoomMargin })
-  let max, min, ratio
-
-  if (naturalWidth > naturalHeight) {
-    // wide
-    max = Math.max(width, naturalWidth) + zoomMargin
-    min = Math.min(width, naturalWidth) + zoomMargin
-    ratio = max / min
-  } else {
-    // tall
-    max = Math.max(height, naturalHeight) + zoomMargin
-    min = Math.min(height, naturalHeight) + zoomMargin
-    ratio = min / max
-  }
-
+  const ratio = naturalWidth > naturalHeight
+    ? naturalWidth / width
+    : naturalHeight / height
   return scale > 1 ? ratio : scale * ratio
 }
 
