@@ -55,7 +55,8 @@ export default class ImageZoom extends Component {
   static get defaultProps() {
     return {
       isZoomed: false,
-      shouldReplaceImage: true
+      shouldReplaceImage: true,
+      shouldRespectMaxDimension: false
     }
   }
 
@@ -100,6 +101,7 @@ export default class ImageZoom extends Component {
         image={ image }
         hasAlreadyLoaded={ !!this.state.src }
         onClick={ this.handleUnzoom }
+        shouldRespectMaxDimension={ this.props.shouldRespectMaxDimension }
       />
     , this.portal)
   }
@@ -141,7 +143,8 @@ ImageZoom.propTypes = {
     style: object
   }),
   isZoomed: bool,
-  shouldReplaceImage: bool
+  shouldReplaceImage: bool,
+  shouldRespectMaxDimension: bool
 }
 
 //====================================================
@@ -257,11 +260,11 @@ class Zoom extends Component {
   }
 
   getZoomImageStyle() {
-    const { image } = this.props
+    const { image, shouldRespectMaxDimension } = this.props
     const imageOffset = image.getBoundingClientRect()
 
     const { top, left } = imageOffset
-    const { width, height } = image
+    const { width, height, naturalWidth, naturalHeight } = image
 
     const style = { top, left, width, height }
 
@@ -274,15 +277,15 @@ class Zoom extends Component {
     const viewportY = window.innerHeight / 2
 
     // Get the coords for center of the original image
-    const imageCenterX = imageOffset.left + image.width / 2
-    const imageCenterY = imageOffset.top + image.height / 2
+    const imageCenterX = imageOffset.left + width / 2
+    const imageCenterY = imageOffset.top + height / 2
 
     // Get offset amounts for image coords to be centered on screen
     const translateX = viewportX - imageCenterX
     const translateY = viewportY - imageCenterY
 
     // Figure out how much to scale the image so it doesn't overflow the screen
-    const scale = this.getScale({ width, height })
+    const scale = this.getScale({ width, height, naturalWidth, naturalHeight })
 
     const zoomStyle = {
       transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`
@@ -291,12 +294,25 @@ class Zoom extends Component {
     return Object.assign({}, defaults.styles.zoomImage, this.props.style, style, zoomStyle)
   }
 
-  getScale({ width, height }) {
-    const totalMargin = 40
-    const scaleX = window.innerWidth / (width + totalMargin)
-    const scaleY = window.innerHeight / (height + totalMargin)
-    return Math.min(scaleX, scaleY)
+  getScale({ width, height, naturalWidth, naturalHeight }) {
+    const { shouldRespectMaxDimension, src } = this.props
+
+    if (shouldRespectMaxDimension && !src) {
+      const scale = calcScale({ width: naturalWidth, height: naturalHeight })
+      const largestDimension = Math.max(width, height)
+      const largestNaturalDimension = Math.max(naturalWidth, naturalHeight)
+      return Math.max(largestDimension, largestNaturalDimension) / Math.min(largestDimension, largestNaturalDimension)
+    }
+
+    return calcScale({ width, height })
   }
+}
+
+function calcScale({ width, height }) {
+  const totalMargin = 40 // TODO: pass this in as an option
+  const scaleX = window.innerWidth / (width + totalMargin)
+  const scaleY = window.innerHeight / (height + totalMargin)
+  return Math.min(scaleX, scaleY)
 }
 
 Zoom.propTypes = {

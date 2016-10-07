@@ -40,12 +40,13 @@ function MyComponent(props) {
 }
 ```
 
-| Prop | Type | Required | Default | Details |
-| ------ |  ---- | ------- | ------- | ------- |
-| `image` | object | yes | none | The original image |
-| `zoomImage` | object | no | `image` | The image to be used for zooming |
-| `isZoomed` | boolean | no | `false` | For more direct control over the zoom state |
-| `replaceImage` | boolean | no | `true` | Once the image has been "zoomed" and downloaded the larger image, this replaces the original `image` with the `zoomImage` |
+| Prop                        | Type    | Required | Default | Details |
+| ------                      | ------- | -------  | ------- | ------- |
+| `image`                     | object  | yes      | none    | The original image |
+| `zoomImage`                 | object  | no       | `image` | The image to be used for zooming |
+| `isZoomed`                  | boolean | no       | `false` | For more direct control over the zoom state |
+| `shouldReplaceImage`        | boolean | no       | `true`  | Once the image has been "zoomed" and downloaded the larger image, this replaces the original `image` with the `zoomImage` |
+| `shouldRespectMaxDimension` | boolean | no       | `false` | When true, don't make the zoomed image's dimensions larger than the original dimensions. _Currently only supported when NO zoomImage is provided._  |
 
 Each one of these image props accepts normal `image` props, for example:
 | Prop | Type | Required | Details |

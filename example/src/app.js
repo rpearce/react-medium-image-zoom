@@ -48,8 +48,12 @@ class App extends Component {
             image={{
               src: 'gazelle.jpg',
               alt: 'Gazelle Stomping',
-              className: 'img'
+              className: 'img',
+              style: {
+                width: '80%'
+              }
             }}
+            shouldRespectMaxDimension={ true }
           />
         </div>
         <p>Scenester chambray slow-carb, trust fund biodiesel ugh bicycle rights cornhole. Gentrify messenger bag Truffaut tousled roof party pork belly leggings, photo booth jean shorts. Austin readymade PBR plaid chambray. Squid Echo Park pour-over, wayfarers forage whatever locavore typewriter artisan deep v four loko. Locavore occupy Neutra Pitchfork McSweeney's, wayfarers fingerstache. Actually asymmetrical drinking vinegar yr brunch biodiesel. Before they sold out sustainable readymade craft beer Portland gastropub squid Austin, roof party Thundercats chambray narwhal Bushwick pug.</p>

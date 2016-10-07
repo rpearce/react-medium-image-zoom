@@ -110,8 +110,12 @@ var App = function (_Component) {
             image: {
               src: 'gazelle.jpg',
               alt: 'Gazelle Stomping',
-              className: 'img'
-            }
+              className: 'img',
+              style: {
+                width: '80%'
+              }
+            },
+            shouldRespectMaxDimension: true
           })
         ),
         _react2.default.createElement(
@@ -299,7 +303,8 @@ var ImageZoom = function (_Component) {
       this.portalInstance = _reactDom2.default.render(_react2.default.createElement(Zoom, _extends({}, this.props.zoomImage, {
         image: image,
         hasAlreadyLoaded: !!this.state.src,
-        onClick: this.handleUnzoom
+        onClick: this.handleUnzoom,
+        shouldRespectMaxDimension: this.props.shouldRespectMaxDimension
       })), this.portal);
     }
   }, {
@@ -335,7 +340,8 @@ var ImageZoom = function (_Component) {
     get: function get() {
       return {
         isZoomed: false,
-        shouldReplaceImage: true
+        shouldReplaceImage: true,
+        shouldRespectMaxDimension: false
       };
     }
   }]);
@@ -359,7 +365,8 @@ ImageZoom.propTypes = {
     style: object
   }),
   isZoomed: bool,
-  shouldReplaceImage: bool
+  shouldReplaceImage: bool,
+  shouldRespectMaxDimension: bool
 };
 
 //====================================================
@@ -501,7 +508,9 @@ var Zoom = function (_Component2) {
   }, {
     key: 'getZoomImageStyle',
     value: function getZoomImageStyle() {
-      var image = this.props.image;
+      var _props = this.props;
+      var image = _props.image;
+      var shouldRespectMaxDimension = _props.shouldRespectMaxDimension;
 
       var imageOffset = image.getBoundingClientRect();
 
@@ -509,6 +518,8 @@ var Zoom = function (_Component2) {
       var left = imageOffset.left;
       var width = image.width;
       var height = image.height;
+      var naturalWidth = image.naturalWidth;
+      var naturalHeight = image.naturalHeight;
 
       var style = { top: top, left: left, width: width, height: height };
 
@@ -521,15 +532,15 @@ var Zoom = function (_Component2) {
       var viewportY = window.innerHeight / 2;
 
       // Get the coords for center of the original image
-      var imageCenterX = imageOffset.left + image.width / 2;
-      var imageCenterY = imageOffset.top + image.height / 2;
+      var imageCenterX = imageOffset.left + width / 2;
+      var imageCenterY = imageOffset.top + height / 2;
 
       // Get offset amounts for image coords to be centered on screen
       var translateX = viewportX - imageCenterX;
       var translateY = viewportY - imageCenterY;
 
       // Figure out how much to scale the image so it doesn't overflow the screen
-      var scale = this.getScale({ width: width, height: height });
+      var scale = this.getScale({ width: width, height: height, naturalWidth: naturalWidth, naturalHeight: naturalHeight });
 
       var zoomStyle = {
         transform: 'translate3d(' + translateX + 'px, ' + translateY + 'px, 0) scale(' + scale + ')'
@@ -542,16 +553,35 @@ var Zoom = function (_Component2) {
     value: function getScale(_ref2) {
       var width = _ref2.width;
       var height = _ref2.height;
+      var naturalWidth = _ref2.naturalWidth;
+      var naturalHeight = _ref2.naturalHeight;
+      var _props2 = this.props;
+      var shouldRespectMaxDimension = _props2.shouldRespectMaxDimension;
+      var src = _props2.src;
 
-      var totalMargin = 40;
-      var scaleX = window.innerWidth / (width + totalMargin);
-      var scaleY = window.innerHeight / (height + totalMargin);
-      return Math.min(scaleX, scaleY);
+      if (shouldRespectMaxDimension && !src) {
+        var scale = calcScale({ width: naturalWidth, height: naturalHeight });
+        var largestDimension = Math.max(width, height);
+        var largestNaturalDimension = Math.max(naturalWidth, naturalHeight);
+        return Math.max(largestDimension, largestNaturalDimension) / Math.min(largestDimension, largestNaturalDimension);
+      }
+
+      return calcScale({ width: width, height: height });
     }
   }]);
 
   return Zoom;
 }(_react.Component);
+
+function calcScale(_ref3) {
+  var width = _ref3.width;
+  var height = _ref3.height;
+
+  var totalMargin = 40; // TODO: pass this in as an option
+  var scaleX = window.innerWidth / (width + totalMargin);
+  var scaleY = window.innerHeight / (height + totalMargin);
+  return Math.min(scaleX, scaleY);
+}
 
 Zoom.propTypes = {
   src: string,
