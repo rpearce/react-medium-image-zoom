@@ -585,22 +585,7 @@ function getMaxDimensionScale(_ref3) {
   var zoomMargin = _ref3.zoomMargin;
 
   var scale = getScale({ width: naturalWidth, height: naturalHeight, zoomMargin: zoomMargin });
-  var max = void 0,
-      min = void 0,
-      ratio = void 0;
-
-  if (naturalWidth > naturalHeight) {
-    // wide
-    max = Math.max(width, naturalWidth) + zoomMargin;
-    min = Math.min(width, naturalWidth) + zoomMargin;
-    ratio = max / min;
-  } else {
-    // tall
-    max = Math.max(height, naturalHeight) + zoomMargin;
-    min = Math.min(height, naturalHeight) + zoomMargin;
-    ratio = min / max;
-  }
-
+  var ratio = naturalWidth > naturalHeight ? naturalWidth / width : naturalHeight / height;
   return scale > 1 ? ratio : scale * ratio;
 }
 
