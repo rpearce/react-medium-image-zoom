@@ -304,8 +304,9 @@ var ImageZoom = function (_Component) {
       this.portalInstance = _reactDom2.default.render(_react2.default.createElement(Zoom, _extends({}, this.props.zoomImage, {
         image: image,
         hasAlreadyLoaded: !!this.state.src,
-        onClick: this.handleUnzoom,
-        shouldRespectMaxDimension: this.props.shouldRespectMaxDimension
+        shouldRespectMaxDimension: this.props.shouldRespectMaxDimension,
+        zoomMargin: this.props.zoomMargin,
+        onClick: this.handleUnzoom
       })), this.portal);
     }
   }, {
@@ -342,7 +343,8 @@ var ImageZoom = function (_Component) {
       return {
         isZoomed: false,
         shouldReplaceImage: true,
-        shouldRespectMaxDimension: false
+        shouldRespectMaxDimension: false,
+        zoomMargin: 40
       };
     }
   }]);
@@ -513,6 +515,7 @@ var Zoom = function (_Component2) {
       var image = _props.image;
       var shouldRespectMaxDimension = _props.shouldRespectMaxDimension;
       var src = _props.src;
+      var zoomMargin = _props.zoomMargin;
 
       var imageOffset = image.getBoundingClientRect();
 
@@ -542,7 +545,7 @@ var Zoom = function (_Component2) {
       var translateY = viewportY - imageCenterY;
 
       // Figure out how much to scale the image
-      var scale = shouldRespectMaxDimension && !src ? getMaxDimensionScale({ width: width, height: height, naturalWidth: naturalWidth, naturalHeight: naturalHeight }) : getScale({ width: width, height: height });
+      var scale = shouldRespectMaxDimension && !src ? getMaxDimensionScale({ width: width, height: height, naturalWidth: naturalWidth, naturalHeight: naturalHeight, zoomMargin: zoomMargin }) : getScale({ width: width, height: height, zoomMargin: zoomMargin });
 
       var zoomStyle = {
         transform: 'translate3d(' + translateX + 'px, ' + translateY + 'px, 0) scale(' + scale + ')'
@@ -563,10 +566,10 @@ var Zoom = function (_Component2) {
 function getScale(_ref2) {
   var width = _ref2.width;
   var height = _ref2.height;
+  var zoomMargin = _ref2.zoomMargin;
 
-  var totalMargin = 40; // TODO: pass this in as an option
-  var scaleX = window.innerWidth / (width + totalMargin);
-  var scaleY = window.innerHeight / (height + totalMargin);
+  var scaleX = window.innerWidth / (width + zoomMargin);
+  var scaleY = window.innerHeight / (height + zoomMargin);
   return Math.min(scaleX, scaleY);
 }
 
@@ -579,13 +582,25 @@ function getMaxDimensionScale(_ref3) {
   var height = _ref3.height;
   var naturalWidth = _ref3.naturalWidth;
   var naturalHeight = _ref3.naturalHeight;
+  var zoomMargin = _ref3.zoomMargin;
 
-  var scale = getScale({ width: naturalWidth, height: naturalHeight });
-  var largestDimension = Math.max(width, height);
-  var largestNaturalDimension = Math.max(naturalWidth, naturalHeight);
-  var min = Math.min(largestDimension, largestNaturalDimension);
-  var max = Math.max(largestDimension, largestNaturalDimension);
-  var ratio = naturalWidth > naturalHeight ? max / min : min / max;
+  var scale = getScale({ width: naturalWidth, height: naturalHeight, zoomMargin: zoomMargin });
+  var max = void 0,
+      min = void 0,
+      ratio = void 0;
+
+  if (naturalWidth > naturalHeight) {
+    // wide
+    max = Math.max(width, naturalWidth) + zoomMargin;
+    min = Math.min(width, naturalWidth) + zoomMargin;
+    ratio = max / min;
+  } else {
+    // tall
+    max = Math.max(height, naturalHeight) + zoomMargin;
+    min = Math.min(height, naturalHeight) + zoomMargin;
+    ratio = min / max;
+  }
+
   return scale > 1 ? ratio : scale * ratio;
 }
 

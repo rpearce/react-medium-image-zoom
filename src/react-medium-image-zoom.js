@@ -56,7 +56,8 @@ export default class ImageZoom extends Component {
     return {
       isZoomed: false,
       shouldReplaceImage: true,
-      shouldRespectMaxDimension: false
+      shouldRespectMaxDimension: false,
+      zoomMargin: 40
     }
   }
 
@@ -100,8 +101,9 @@ export default class ImageZoom extends Component {
         { ...this.props.zoomImage }
         image={ image }
         hasAlreadyLoaded={ !!this.state.src }
-        onClick={ this.handleUnzoom }
         shouldRespectMaxDimension={ this.props.shouldRespectMaxDimension }
+        zoomMargin={ this.props.zoomMargin }
+        onClick={ this.handleUnzoom }
       />
     , this.portal)
   }
@@ -260,7 +262,7 @@ class Zoom extends Component {
   }
 
   getZoomImageStyle() {
-    const { image, shouldRespectMaxDimension, src } = this.props
+    const { image, shouldRespectMaxDimension, src, zoomMargin } = this.props
     const imageOffset = image.getBoundingClientRect()
 
     const { top, left } = imageOffset
@@ -286,8 +288,8 @@ class Zoom extends Component {
 
     // Figure out how much to scale the image
     const scale = shouldRespectMaxDimension && !src
-      ? getMaxDimensionScale({ width, height, naturalWidth, naturalHeight })
-      : getScale({ width, height })
+      ? getMaxDimensionScale({ width, height, naturalWidth, naturalHeight, zoomMargin })
+      : getScale({ width, height, zoomMargin })
 
     const zoomStyle = {
       transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`
@@ -301,10 +303,9 @@ class Zoom extends Component {
  * Figure out how much to scale based
  * solely on no maxing out the browser
  */
-function getScale({ width, height }) {
-  const totalMargin = 40 // TODO: pass this in as an option
-  const scaleX = window.innerWidth / (width + totalMargin)
-  const scaleY = window.innerHeight / (height + totalMargin)
+function getScale({ width, height, zoomMargin }) {
+  const scaleX = window.innerWidth / (width + zoomMargin)
+  const scaleY = window.innerHeight / (height + zoomMargin)
   return Math.min(scaleX, scaleY)
 }
 
@@ -312,13 +313,22 @@ function getScale({ width, height }) {
  * Figure out how much to scale so you're
  * not larger than the original image
  */
-function getMaxDimensionScale({ width, height, naturalWidth, naturalHeight }) {
-  const scale = getScale({ width: naturalWidth, height: naturalHeight })
-  const largestDimension = Math.max(width, height)
-  const largestNaturalDimension = Math.max(naturalWidth, naturalHeight)
-  const min = Math.min(largestDimension, largestNaturalDimension)
-  const max = Math.max(largestDimension, largestNaturalDimension)
-  const ratio = naturalWidth > naturalHeight ? max / min : min / max
+function getMaxDimensionScale({ width, height, naturalWidth, naturalHeight, zoomMargin }) {
+  const scale = getScale({ width: naturalWidth, height: naturalHeight, zoomMargin })
+  let max, min, ratio
+
+  if (naturalWidth > naturalHeight) {
+    // wide
+    max = Math.max(width, naturalWidth) + zoomMargin
+    min = Math.min(width, naturalWidth) + zoomMargin
+    ratio = max / min
+  } else {
+    // tall
+    max = Math.max(height, naturalHeight) + zoomMargin
+    min = Math.min(height, naturalHeight) + zoomMargin
+    ratio = min / max
+  }
+
   return scale > 1 ? ratio : scale * ratio
 }
 
