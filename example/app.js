@@ -277,6 +277,13 @@ var ImageZoom = function (_Component) {
       delete this.portalInstance;
     }
   }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      if (this.props.image.src !== nextProps.image.src) {
+        this.setState({ src: nextProps.image.src });
+      }
+    }
+  }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate(prevProps, prevState) {
       if (prevProps.isZoomed !== this.props.isZoomed && this.portalInstance) {

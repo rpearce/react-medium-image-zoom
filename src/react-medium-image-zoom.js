@@ -73,6 +73,12 @@ export default class ImageZoom extends Component {
     delete this.portalInstance;
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.image.src !== nextProps.image.src) {
+      this.setState({ src: nextProps.image.src })
+    }
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.isZoomed !== this.props.isZoomed && this.portalInstance) {
       this.props.isZoomed ? this.renderZoomed() : this.portalInstance.handleUnzoom()
