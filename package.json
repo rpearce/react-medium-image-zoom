@@ -1,6 +1,6 @@
 {
   "name": "react-medium-image-zoom",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Medium.com style image zoom for React",
   "main": "lib/react-medium-image-zoom.js",
   "scripts": {

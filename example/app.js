@@ -279,7 +279,6 @@ var ImageZoom = function (_Component) {
   }, {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      console.log(nextProps.image.src);
       if (this.props.image.src !== nextProps.image.src) {
         this.setState({ src: nextProps.image.src });
       }
