@@ -310,6 +310,7 @@ var ImageZoom = function (_Component) {
 
       this.portalInstance = _reactDom2.default.render(_react2.default.createElement(Zoom, _extends({}, this.props.zoomImage, {
         image: image,
+        defaultStyles: this.props.defaultStyles,
         hasAlreadyLoaded: !!this.state.src,
         shouldRespectMaxDimension: this.props.shouldRespectMaxDimension,
         zoomMargin: this.props.zoomMargin,
@@ -326,7 +327,7 @@ var ImageZoom = function (_Component) {
     value: function getImageStyle() {
       var style = {};
       if (this.state.isZoomed) style.visibility = 'hidden';
-      return Object.assign({}, defaults.styles.image, style, this.props.image.style);
+      return Object.assign({}, defaults.styles.image, style, this.props.defaultStyles.image, this.props.image.style);
     }
   }, {
     key: 'handleZoom',
@@ -351,7 +352,13 @@ var ImageZoom = function (_Component) {
         isZoomed: false,
         shouldReplaceImage: true,
         shouldRespectMaxDimension: false,
-        zoomMargin: 40
+        zoomMargin: 40,
+        defaultStyles: {
+          zoomContainer: {},
+          overlay: {},
+          image: {},
+          zoomImage: {}
+        }
       };
     }
   }]);
@@ -374,6 +381,7 @@ ImageZoom.propTypes = {
     className: string,
     style: object
   }),
+  defaultStyles: object,
   isZoomed: bool,
   shouldReplaceImage: bool,
   shouldRespectMaxDimension: bool
@@ -420,12 +428,20 @@ var Zoom = function (_Component2) {
   }, {
     key: 'render',
     value: function render() {
-      return _react2.default.createElement('div', { onClick: this.handleUnzoom, style: defaults.styles.zoomContainer }, _react2.default.createElement(Overlay, { isVisible: this.state.isZoomed }), _react2.default.createElement('img', {
+      return _react2.default.createElement('div', { onClick: this.handleUnzoom, style: this.getZoomContainerStyle() }, _react2.default.createElement(Overlay, {
+        isVisible: this.state.isZoomed,
+        defaultStyles: this.props.defaultStyles
+      }), _react2.default.createElement('img', {
         src: this.state.src,
         alt: this.props.alt,
         className: this.props.className,
         style: this.getZoomImageStyle()
       }));
+    }
+  }, {
+    key: 'getZoomContainerStyle',
+    value: function getZoomContainerStyle() {
+      return Object.assign({}, defaults.styles.zoomContainer, this.props.defaultStyles.zoomContainer);
     }
   }, {
     key: 'fetchZoomImage',
@@ -536,7 +552,7 @@ var Zoom = function (_Component2) {
       var style = { top: top, left: left, width: width, height: height };
 
       if (!this.state.hasLoaded || !this.state.isZoomed) {
-        return Object.assign({}, defaults.styles.zoomImage, this.props.style, style);
+        return Object.assign({}, defaults.styles.zoomImage, this.props.defaultStyles.zoomImage, this.props.style, style);
       }
 
       // Get the the coords for center of the viewport
@@ -558,7 +574,7 @@ var Zoom = function (_Component2) {
         transform: 'translate3d(' + translateX + 'px, ' + translateY + 'px, 0) scale(' + scale + ')'
       };
 
-      return Object.assign({}, defaults.styles.zoomImage, this.props.style, style, zoomStyle);
+      return Object.assign({}, defaults.styles.zoomImage, this.props.defaultStyles.zoomImage, this.props.style, style, zoomStyle);
     }
   }]);
 
@@ -602,7 +618,8 @@ Zoom.propTypes = {
   className: string,
   style: object,
   image: object.isRequired,
-  hasAlreadyLoaded: bool.isRequired
+  hasAlreadyLoaded: bool.isRequired,
+  defaultStyles: object.isRequired
 };
 
 //====================================================
@@ -645,7 +662,7 @@ var Overlay = function (_Component3) {
     key: 'getStyle',
     value: function getStyle() {
       var opacity = this.state.isVisible & 1; // bitwise and; converts bool to 0 or 1
-      return Object.assign({}, defaults.styles.overlay, { opacity: opacity });
+      return Object.assign({}, defaults.styles.overlay, this.props.defaultStyles.overlay, { opacity: opacity });
     }
   }]);
 
@@ -653,7 +670,8 @@ var Overlay = function (_Component3) {
 }(_react.Component);
 
 Overlay.propTypes = {
-  isVisible: bool.isRequired
+  isVisible: bool.isRequired,
+  defaultStyles: object.isRequired
 };
 
 },{"react":173,"react-dom":31}],3:[function(require,module,exports){

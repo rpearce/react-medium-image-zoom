@@ -57,7 +57,13 @@ export default class ImageZoom extends Component {
       isZoomed: false,
       shouldReplaceImage: true,
       shouldRespectMaxDimension: false,
-      zoomMargin: 40
+      zoomMargin: 40,
+      defaultStyles: {
+        zoomContainer: {},
+        overlay: {},
+        image: {},
+        zoomImage: {}
+      }
     }
   }
 
@@ -106,6 +112,7 @@ export default class ImageZoom extends Component {
       <Zoom
         { ...this.props.zoomImage }
         image={ image }
+        defaultStyles={ this.props.defaultStyles }
         hasAlreadyLoaded={ !!this.state.src }
         shouldRespectMaxDimension={ this.props.shouldRespectMaxDimension }
         zoomMargin={ this.props.zoomMargin }
@@ -121,7 +128,13 @@ export default class ImageZoom extends Component {
   getImageStyle() {
     const style = {}
     if (this.state.isZoomed) style.visibility = 'hidden'
-    return Object.assign({}, defaults.styles.image, style, this.props.image.style)
+    return Object.assign(
+      {},
+      defaults.styles.image,
+      style,
+      this.props.defaultStyles.image,
+      this.props.image.style
+    )
   }
 
   handleZoom() {
@@ -150,6 +163,7 @@ ImageZoom.propTypes = {
     className: string,
     style: object
   }),
+  defaultStyles: object,
   isZoomed: bool,
   shouldReplaceImage: bool,
   shouldRespectMaxDimension: bool
@@ -188,8 +202,11 @@ class Zoom extends Component {
 
   render() {
     return (
-      <div onClick={ this.handleUnzoom } style={ defaults.styles.zoomContainer }>
-        <Overlay isVisible={ this.state.isZoomed } />
+      <div onClick={ this.handleUnzoom } style={ this.getZoomContainerStyle() }>
+        <Overlay
+          isVisible={ this.state.isZoomed }
+          defaultStyles={ this.props.defaultStyles }
+        />
         <img
           src={ this.state.src }
           alt={ this.props.alt }
@@ -197,6 +214,14 @@ class Zoom extends Component {
           style={ this.getZoomImageStyle() }
         />
       </div>
+    )
+  }
+
+  getZoomContainerStyle() {
+    return Object.assign(
+      {},
+      defaults.styles.zoomContainer,
+      this.props.defaultStyles.zoomContainer
     )
   }
 
@@ -277,7 +302,13 @@ class Zoom extends Component {
     const style = { top, left, width, height }
 
     if (!this.state.hasLoaded || !this.state.isZoomed) {
-      return Object.assign({}, defaults.styles.zoomImage, this.props.style, style)
+      return Object.assign(
+        {},
+        defaults.styles.zoomImage,
+        this.props.defaultStyles.zoomImage,
+        this.props.style,
+        style
+      )
     }
 
     // Get the the coords for center of the viewport
@@ -301,7 +332,14 @@ class Zoom extends Component {
       transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`
     }
 
-    return Object.assign({}, defaults.styles.zoomImage, this.props.style, style, zoomStyle)
+    return Object.assign(
+      {},
+      defaults.styles.zoomImage,
+      this.props.defaultStyles.zoomImage,
+      this.props.style,
+      style,
+      zoomStyle
+    )
   }
 }
 
@@ -333,7 +371,8 @@ Zoom.propTypes = {
   className: string,
   style: object,
   image: object.isRequired,
-  hasAlreadyLoaded: bool.isRequired
+  hasAlreadyLoaded: bool.isRequired,
+  defaultStyles: object.isRequired
 }
 
 //====================================================
@@ -366,10 +405,16 @@ class Overlay extends Component {
 
   getStyle() {
     const opacity = this.state.isVisible & 1 // bitwise and; converts bool to 0 or 1
-    return Object.assign({}, defaults.styles.overlay, { opacity })
+    return Object.assign(
+      {},
+      defaults.styles.overlay,
+      this.props.defaultStyles.overlay,
+      { opacity }
+    )
   }
 }
 
 Overlay.propTypes = {
-  isVisible: bool.isRequired
+  isVisible: bool.isRequired,
+  defaultStyles: object.isRequired
 }
