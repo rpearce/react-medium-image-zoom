@@ -49,6 +49,7 @@ function MyComponent(props) {
 | `shouldReplaceImage`        | boolean | no       | `true`  | Once the image has been "zoomed" and downloaded the larger image, this replaces the original `image` with the `zoomImage` |
 | `shouldRespectMaxDimension` | boolean | no       | `false` | When true, don't make the zoomed image's dimensions larger than the original dimensions. _Currently only supported when NO zoomImage is provided._  |
 | `defaultStyles`             | object  | no       | `{}`    | For fine-grained control over all default styles (`zoomContainer`, `overlay`, `image`, `zoomImage`) |
+| `shouldHandleZoom`          | func    | no       | `(event) => true` | Pass this callback to intercept a zoom click event and determine whether or not to zoom. Function must return a truthy or falsy value |
 
 Each one of these image props accepts normal `image` props, for example:
 

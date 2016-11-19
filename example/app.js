@@ -204,9 +204,10 @@ function _inherits(subClass, superClass) {
 }
 
 var bool = _react.PropTypes.bool;
+var func = _react.PropTypes.func;
+var object = _react.PropTypes.object;
 var shape = _react.PropTypes.shape;
 var string = _react.PropTypes.string;
-var object = _react.PropTypes.object;
 
 var transitionDuration = 300;
 
@@ -331,8 +332,10 @@ var ImageZoom = function (_Component) {
     }
   }, {
     key: 'handleZoom',
-    value: function handleZoom() {
-      this.setState({ isZoomed: true });
+    value: function handleZoom(event) {
+      if (this.props.shouldHandleZoom(event)) {
+        this.setState({ isZoomed: true });
+      }
     }
   }, {
     key: 'handleUnzoom',
@@ -358,6 +361,9 @@ var ImageZoom = function (_Component) {
           overlay: {},
           image: {},
           zoomImage: {}
+        },
+        shouldHandleZoom: function shouldHandleZoom(_) {
+          return true;
         }
       };
     }
@@ -384,7 +390,8 @@ ImageZoom.propTypes = {
   defaultStyles: object,
   isZoomed: bool,
   shouldReplaceImage: bool,
-  shouldRespectMaxDimension: bool
+  shouldRespectMaxDimension: bool,
+  shouldHandleZoom: func
 };
 
 //====================================================
