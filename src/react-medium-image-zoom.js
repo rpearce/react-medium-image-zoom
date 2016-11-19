@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 
-const { bool, shape, string, object } = PropTypes
+const { bool, func, object, shape, string } = PropTypes
 
 const transitionDuration = 300
 
@@ -63,7 +63,8 @@ export default class ImageZoom extends Component {
         overlay: {},
         image: {},
         zoomImage: {}
-      }
+      },
+      shouldHandleZoom: (_) => true
     }
   }
 
@@ -137,8 +138,10 @@ export default class ImageZoom extends Component {
     )
   }
 
-  handleZoom() {
-    this.setState({ isZoomed: true })
+  handleZoom(event) {
+    if (this.props.shouldHandleZoom(event)) {
+      this.setState({ isZoomed: true })
+    }
   }
 
   handleUnzoom(src) {
@@ -166,7 +169,8 @@ ImageZoom.propTypes = {
   defaultStyles: object,
   isZoomed: bool,
   shouldReplaceImage: bool,
-  shouldRespectMaxDimension: bool
+  shouldRespectMaxDimension: bool,
+  shouldHandleZoom: func
 }
 
 //====================================================
