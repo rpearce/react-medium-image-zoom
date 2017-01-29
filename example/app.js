@@ -286,7 +286,7 @@ var ImageZoom = function (_Component) {
     value: function componentWillReceiveProps(nextProps) {
       var imageChanged = this.state.image.src !== nextProps.image.src;
       var isZoomedChanged = this.props.isZoomed !== nextProps.isZoomed;
-      var changes = Object.assign({}, imageChanged && { image: nextProps.image }, isZoomedChanged && { isZoomed: nextProps.isZoomed });
+      var changes = _extends({}, imageChanged && { image: nextProps.image }, isZoomedChanged && { isZoomed: nextProps.isZoomed });
 
       if (Object.keys(changes).length) {
         this.setState(changes);
@@ -346,9 +346,9 @@ var ImageZoom = function (_Component) {
   }, {
     key: 'getImageStyle',
     value: function getImageStyle() {
-      var style = Object.assign({}, this.state.isZoomed && { visibility: 'hidden' });
+      var style = _extends({}, this.state.isZoomed && { visibility: 'hidden' });
 
-      return Object.assign({}, defaults.styles.image, style, this.props.defaultStyles.image, this.state.image.style);
+      return _extends({}, defaults.styles.image, style, this.props.defaultStyles.image, this.state.image.style);
     }
   }, {
     key: 'handleZoom',
@@ -371,7 +371,7 @@ var ImageZoom = function (_Component) {
       var _this2 = this;
 
       return function () {
-        var changes = Object.assign({}, { isZoomed: false }, { hasAlreadyLoaded: true }, _this2.props.shouldReplaceImage && { image: Object.assign({}, _this2.state.image, { src: src }) });
+        var changes = _extends({}, { isZoomed: false }, { hasAlreadyLoaded: true }, _this2.props.shouldReplaceImage && { image: _extends({}, _this2.state.image, { src: src }) });
         _this2.setState(changes, _this2.removeZoomed);
       };
     }
@@ -475,7 +475,7 @@ var Zoom = function (_Component2) {
   }, {
     key: 'getZoomContainerStyle',
     value: function getZoomContainerStyle() {
-      return Object.assign({}, defaults.styles.zoomContainer, this.props.defaultStyles.zoomContainer);
+      return _extends({}, defaults.styles.zoomContainer, this.props.defaultStyles.zoomContainer);
     }
   }, {
     key: 'fetchZoomImage',
@@ -586,7 +586,7 @@ var Zoom = function (_Component2) {
       var style = { top: top, left: left, width: width, height: height };
 
       if (!this.state.hasLoaded || !this.state.isZoomed) {
-        return Object.assign({}, defaults.styles.zoomImage, this.props.defaultStyles.zoomImage, this.props.style, style);
+        return _extends({}, defaults.styles.zoomImage, this.props.defaultStyles.zoomImage, this.props.style, style);
       }
 
       // Get the the coords for center of the viewport
@@ -608,7 +608,7 @@ var Zoom = function (_Component2) {
         transform: 'translate3d(' + translateX + 'px, ' + translateY + 'px, 0) scale(' + scale + ')'
       };
 
-      return Object.assign({}, defaults.styles.zoomImage, this.props.defaultStyles.zoomImage, this.props.style, style, zoomStyle);
+      return _extends({}, defaults.styles.zoomImage, this.props.defaultStyles.zoomImage, this.props.style, style, zoomStyle);
     }
   }]);
 
@@ -696,7 +696,7 @@ var Overlay = function (_Component3) {
     key: 'getStyle',
     value: function getStyle() {
       var opacity = this.state.isVisible & 1; // bitwise and; converts bool to 0 or 1
-      return Object.assign({}, defaults.styles.overlay, this.props.defaultStyles.overlay, { opacity: opacity });
+      return _extends({}, defaults.styles.overlay, this.props.defaultStyles.overlay, { opacity: opacity });
     }
   }]);
 
