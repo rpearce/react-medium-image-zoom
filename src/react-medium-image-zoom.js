@@ -45,7 +45,8 @@ export default class ImageZoom extends Component {
 
     this.state = {
       isZoomed: props.isZoomed,
-      src: null
+      image: props.image,
+      hasAlreadyLoaded: false
     }
 
     this.handleZoom   = this.handleZoom.bind(this)
@@ -69,52 +70,59 @@ export default class ImageZoom extends Component {
   }
 
   componentDidMount() {
-    this.portal = document.createElement('div')
-    document.body.appendChild(this.portal)
     if (this.state.isZoomed) this.renderZoomed()
   }
 
+  // Clean up any mess we made of the DOM before we unmount
   componentWillUnmount() {
-    document.body.removeChild(this.portal)
-    delete this.portal;
-    delete this.portalInstance;
+    this.removeZoomed()
   }
 
+  // We need to check to see if any changes are being
+  // mandated by the consumer and if so, update accordingly
   componentWillReceiveProps(nextProps) {
-    if (this.props.image.src !== nextProps.image.src) {
-      this.setState({ src: nextProps.image.src })
+    const imageChanged = this.state.image.src !== nextProps.image.src
+    const isZoomedChanged = this.props.isZoomed !== nextProps.isZoomed
+    const changes = Object.assign({},
+      imageChanged && { image: nextProps.image },
+      isZoomedChanged && { isZoomed : nextProps.isZoomed }
+    )
+
+    if (Object.keys(changes).length) {
+      this.setState(changes)
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.isZoomed !== this.props.isZoomed && this.portalInstance) {
-      this.props.isZoomed ? this.renderZoomed() : this.portalInstance.handleUnzoom()
-    } else if (prevState.isZoomed !== this.state.isZoomed) {
-      this.state.isZoomed ? this.renderZoomed() : this.removeZoomed()
+  // When the component's state updates, check for changes
+  // and either zoom or start the unzoom procedure
+  componentDidUpdate(_, prevState) {
+    if (prevState.isZoomed !== this.state.isZoomed) {
+      if (this.state.isZoomed) this.renderZoomed()
+      else if (this.portalInstance) this.portalInstance.handleUnzoom()
     }
   }
 
   render() {
     return (
       <img
-        src={ this.state.src || this.props.image.src }
-        alt={ this.props.image.alt }
-        className={ this.props.image.className }
+        src={ this.state.image.src }
+        alt={ this.state.image.alt }
+        className={ this.state.image.className }
         style={ this.getImageStyle() }
         onClick={ this.handleZoom }
       />
     )
   }
 
+  // Side-effects!
   renderZoomed() {
-    const image = ReactDOM.findDOMNode(this)
-
+    this.portal = createPortal('div')
     this.portalInstance = ReactDOM.render(
       <Zoom
         { ...this.props.zoomImage }
-        image={ image }
+        image={ ReactDOM.findDOMNode(this) }
         defaultStyles={ this.props.defaultStyles }
-        hasAlreadyLoaded={ !!this.state.src }
+        hasAlreadyLoaded={ this.state.hasAlreadyLoaded }
         shouldRespectMaxDimension={ this.props.shouldRespectMaxDimension }
         zoomMargin={ this.props.zoomMargin }
         onClick={ this.handleUnzoom }
@@ -122,19 +130,27 @@ export default class ImageZoom extends Component {
     , this.portal)
   }
 
+  // Side-effects!
   removeZoomed() {
-    if (this.portal) ReactDOM.unmountComponentAtNode(this.portal)
+    if (this.portal) {
+      ReactDOM.unmountComponentAtNode(this.portal)
+      removePortal(this.portal)
+      delete this.portalInstance
+      delete this.portal
+    }
   }
 
   getImageStyle() {
-    const style = {}
-    if (this.state.isZoomed) style.visibility = 'hidden'
+    const style = Object.assign({},
+      this.state.isZoomed && { visibility: 'hidden' }
+    )
+
     return Object.assign(
       {},
       defaults.styles.image,
       style,
       this.props.defaultStyles.image,
-      this.props.image.style
+      this.state.image.style
     )
   }
 
@@ -144,11 +160,20 @@ export default class ImageZoom extends Component {
     }
   }
 
+  // This gets passed to the zoomed component as a callback
+  // to trigger when the time is right to shut down the zoom.
+  // If `shouldReplaceImage`, update the normal image we're showing
+  // with the zoomed image -- useful when wanting to replace a low-res
+  // image with a high-res one once it's already been downloaded.
+  // Once `setState` runs, then run the removeZoomed cleanup function.
   handleUnzoom(src) {
     return () => {
-      const opts = { isZoomed: false }
-      if (this.props.shouldReplaceImage) opts.src = src
-      this.setState(opts)
+      const changes = Object.assign({},
+        { isZoomed: false },
+        { hasAlreadyLoaded: true },
+        this.props.shouldReplaceImage && { image: Object.assign({}, this.state.image, { src }) }
+      )
+      this.setState(changes, this.removeZoomed)
     }
   }
 }
@@ -285,7 +310,7 @@ class Zoom extends Component {
   }
 
   handleTouchEnd(e) {
-    this.yTouchPosition = undefined
+    delete this.yTouchPosition
   }
 
   handleUnzoom(e) {
@@ -421,4 +446,16 @@ class Overlay extends Component {
 Overlay.propTypes = {
   isVisible: bool.isRequired,
   defaultStyles: object.isRequired
+}
+
+//====================================================
+
+function createPortal(tag) {
+  const portal = document.createElement(tag)
+  document.body.appendChild(portal)
+  return portal
+}
+
+function removePortal(portal) {
+  document.body.removeChild(portal)
 }
