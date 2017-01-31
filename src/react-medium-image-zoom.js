@@ -165,8 +165,7 @@ export default class ImageZoom extends Component {
 
   handleZoom(event) {
     if (this.props.shouldHandleZoom(event)) {
-      this.setState({ isZoomed: true })
-      this.props.onZoom()
+      this.setState({ isZoomed: true }, this.props.onZoom)
     }
   }
 
@@ -195,8 +194,7 @@ export default class ImageZoom extends Component {
        */
       this.removeZoomed()
 
-      this.setState(changes)
-      this.props.onUnzoom()
+      this.setState(changes, this.props.onUnzoom)
     }
   }
 }
