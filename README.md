@@ -50,6 +50,8 @@ function MyComponent(props) {
 | `shouldRespectMaxDimension` | boolean | no       | `false` | When true, don't make the zoomed image's dimensions larger than the original dimensions. _Currently only supported when NO zoomImage is provided._  |
 | `defaultStyles`             | object  | no       | `{}`    | For fine-grained control over all default styles (`zoomContainer`, `overlay`, `image`, `zoomImage`) |
 | `shouldHandleZoom`          | func    | no       | `(event) => true` | Pass this callback to intercept a zoom click event and determine whether or not to zoom. Function must return a truthy or falsy value |
+| `onZoom`                    | func    | no       | `() => {}`        | Pass this callback to respond to a zoom interaction. |
+| `onUnzoom`                  | func    | no       | `() => {}`        | Pass this callback to respond to an unzoom interaction. |
 
 Each one of these image props accepts normal `image` props, for example:
 

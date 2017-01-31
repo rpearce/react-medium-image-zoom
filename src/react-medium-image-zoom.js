@@ -65,7 +65,9 @@ export default class ImageZoom extends Component {
         image: {},
         zoomImage: {}
       },
-      shouldHandleZoom: (_) => true
+      shouldHandleZoom: (_) => true,
+      onZoom: () => {},
+      onUnzoom: () => {}
     }
   }
 
@@ -164,6 +166,7 @@ export default class ImageZoom extends Component {
   handleZoom(event) {
     if (this.props.shouldHandleZoom(event)) {
       this.setState({ isZoomed: true })
+      this.props.onZoom()
     }
   }
 
@@ -193,6 +196,7 @@ export default class ImageZoom extends Component {
       this.removeZoomed()
 
       this.setState(changes)
+      this.props.onUnzoom()
     }
   }
 }
@@ -214,7 +218,9 @@ ImageZoom.propTypes = {
   isZoomed: bool,
   shouldReplaceImage: bool,
   shouldRespectMaxDimension: bool,
-  shouldHandleZoom: func
+  shouldHandleZoom: func,
+  onZoom: func,
+  onUnzoom: func
 }
 
 //====================================================
