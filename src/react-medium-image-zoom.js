@@ -107,14 +107,17 @@ export default class ImageZoom extends Component {
   }
 
   render() {
+    /**
+     * Take whatever attributes you want to pass the image
+     * and then override with the properties we need
+     */
+    const attrs = Object.assign({}, this.state.image, {
+      style: this.getImageStyle(),
+      onClick: this.handleZoom
+    })
+
     return (
-      <img
-        src={ this.state.image.src }
-        alt={ this.state.image.alt }
-        className={ this.state.image.className }
-        style={ this.getImageStyle() }
-        onClick={ this.handleZoom }
-      />
+      <img { ...attrs } />
     )
   }
 
