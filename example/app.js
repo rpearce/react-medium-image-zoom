@@ -26,13 +26,40 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var App = function (_Component) {
   _inherits(App, _Component);
 
-  function App() {
+  function App(props) {
     _classCallCheck(this, App);
 
-    return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+
+    _this.state = { firstActive: false };
+    return _this;
   }
 
   _createClass(App, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      /**
+       * This is an example demonstrating how to manually
+       * control the `isZoomed` state of the first image
+       * using the `j` and `k` keys
+       */
+      document.addEventListener('keyup', this.handleKeyup.bind(this));
+    }
+  }, {
+    key: 'handleKeyup',
+    value: function handleKeyup(e) {
+      switch (e.keyCode) {
+        case 74:
+          return this.setState({ firstActive: true });
+
+        case 75:
+          return this.setState({ firstActive: false });
+
+        default:
+          return;
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
@@ -66,7 +93,8 @@ var App = function (_Component) {
               src: 'bridge-big.jpg',
               alt: 'Golden Gate Bridge',
               className: 'img--zoomed'
-            }
+            },
+            isZoomed: this.state.firstActive
           })
         ),
         _react2.default.createElement(
@@ -278,14 +306,16 @@ var ImageZoom = function (_Component) {
       this.removeZoomed();
     }
 
-    // We need to check to see if any changes are being
-    // mandated by the consumer and if so, update accordingly
+    /**
+     * We need to check to see if any changes are being
+     * mandated by the consumer and if so, update accordingly
+     */
 
   }, {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      var imageChanged = this.state.image.src !== nextProps.image.src;
-      var isZoomedChanged = this.props.isZoomed !== nextProps.isZoomed;
+      var imageChanged = this.props.image.src !== nextProps.image.src;
+      var isZoomedChanged = this.state.isZoomed !== nextProps.isZoomed;
       var changes = _extends({}, imageChanged && { image: nextProps.image }, isZoomedChanged && { isZoomed: nextProps.isZoomed });
 
       if (Object.keys(changes).length) {
@@ -293,8 +323,10 @@ var ImageZoom = function (_Component) {
       }
     }
 
-    // When the component's state updates, check for changes
-    // and either zoom or start the unzoom procedure
+    /**
+     * When the component's state updates, check for changes
+     * and either zoom or start the unzoom procedure
+     */
 
   }, {
     key: 'componentDidUpdate',
@@ -358,12 +390,14 @@ var ImageZoom = function (_Component) {
       }
     }
 
-    // This gets passed to the zoomed component as a callback
-    // to trigger when the time is right to shut down the zoom.
-    // If `shouldReplaceImage`, update the normal image we're showing
-    // with the zoomed image -- useful when wanting to replace a low-res
-    // image with a high-res one once it's already been downloaded.
-    // Once `setState` runs, then run the removeZoomed cleanup function.
+    /**
+     * This gets passed to the zoomed component as a callback
+     * to trigger when the time is right to shut down the zoom.
+     * If `shouldReplaceImage`, update the normal image we're showing
+     * with the zoomed image -- useful when wanting to replace a low-res
+     * image with a high-res one once it's already been downloaded.
+     * It also cleans up the zoom references and then updates state.
+     */
 
   }, {
     key: 'handleUnzoom',
@@ -372,7 +406,17 @@ var ImageZoom = function (_Component) {
 
       return function () {
         var changes = _extends({}, { isZoomed: false }, { hasAlreadyLoaded: true }, _this2.props.shouldReplaceImage && { image: _extends({}, _this2.state.image, { src: src }) });
-        _this2.setState(changes, _this2.removeZoomed);
+
+        /**
+         * Lamentable but necessary right now in order to
+         * remove the portal instance before the next
+         * `componentDidUpdate` check for the portalInstance.
+         * The reasoning is so we can differentiate between an
+         * external `isZoomed` command and an internal one.
+         */
+        _this2.removeZoomed();
+
+        _this2.setState(changes);
       };
     }
   }], [{

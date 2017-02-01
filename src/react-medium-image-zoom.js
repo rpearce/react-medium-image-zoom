@@ -78,11 +78,13 @@ export default class ImageZoom extends Component {
     this.removeZoomed()
   }
 
-  // We need to check to see if any changes are being
-  // mandated by the consumer and if so, update accordingly
+  /**
+   * We need to check to see if any changes are being
+   * mandated by the consumer and if so, update accordingly
+   */
   componentWillReceiveProps(nextProps) {
     const imageChanged = this.props.image.src !== nextProps.image.src
-    const isZoomedChanged = this.props.isZoomed !== nextProps.isZoomed
+    const isZoomedChanged = this.state.isZoomed !== nextProps.isZoomed
     const changes = Object.assign({},
       imageChanged && { image: nextProps.image },
       isZoomedChanged && { isZoomed : nextProps.isZoomed }
@@ -93,8 +95,10 @@ export default class ImageZoom extends Component {
     }
   }
 
-  // When the component's state updates, check for changes
-  // and either zoom or start the unzoom procedure
+  /**
+   * When the component's state updates, check for changes
+   * and either zoom or start the unzoom procedure
+   */
   componentDidUpdate(_, prevState) {
     if (prevState.isZoomed !== this.state.isZoomed) {
       if (this.state.isZoomed) this.renderZoomed()
@@ -160,12 +164,14 @@ export default class ImageZoom extends Component {
     }
   }
 
-  // This gets passed to the zoomed component as a callback
-  // to trigger when the time is right to shut down the zoom.
-  // If `shouldReplaceImage`, update the normal image we're showing
-  // with the zoomed image -- useful when wanting to replace a low-res
-  // image with a high-res one once it's already been downloaded.
-  // Once `setState` runs, then run the removeZoomed cleanup function.
+  /**
+   * This gets passed to the zoomed component as a callback
+   * to trigger when the time is right to shut down the zoom.
+   * If `shouldReplaceImage`, update the normal image we're showing
+   * with the zoomed image -- useful when wanting to replace a low-res
+   * image with a high-res one once it's already been downloaded.
+   * It also cleans up the zoom references and then updates state.
+   */
   handleUnzoom(src) {
     return () => {
       const changes = Object.assign({},
@@ -173,7 +179,17 @@ export default class ImageZoom extends Component {
         { hasAlreadyLoaded: true },
         this.props.shouldReplaceImage && { image: Object.assign({}, this.state.image, { src }) }
       )
-      this.setState(changes, this.removeZoomed)
+
+      /**
+       * Lamentable but necessary right now in order to
+       * remove the portal instance before the next
+       * `componentDidUpdate` check for the portalInstance.
+       * The reasoning is so we can differentiate between an
+       * external `isZoomed` command and an internal one.
+       */
+      this.removeZoomed()
+
+      this.setState(changes)
     }
   }
 }

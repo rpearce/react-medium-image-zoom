@@ -3,6 +3,34 @@ import ReactDOM from 'react-dom'
 import ImageZoom from '../../lib/react-medium-image-zoom'
 
 class App extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = { firstActive: false }
+  }
+
+  componentDidMount() {
+    /**
+     * This is an example demonstrating how to manually
+     * control the `isZoomed` state of the first image
+     * using the `j` and `k` keys
+     */
+    document.addEventListener('keyup', this.handleKeyup.bind(this))
+  }
+
+  handleKeyup(e) {
+    switch (e.keyCode) {
+      case 74:
+        return this.setState({ firstActive: true })
+
+      case 75:
+        return this.setState({ firstActive: false })
+
+      default:
+        return
+    }
+  }
+
   render() {
     return (
       <div className="container">
@@ -21,6 +49,7 @@ class App extends Component {
               alt: 'Golden Gate Bridge',
               className: 'img--zoomed'
             }}
+            isZoomed={ this.state.firstActive }
           />
         </div>
         <p>Thundercats freegan Truffaut, four loko twee Austin scenester lo-fi seitan High Life paleo quinoa cray. Schlitz butcher ethical Tumblr, pop-up DIY keytar ethnic iPhone PBR sriracha. Tonx direct trade bicycle rights gluten-free flexitarian asymmetrical. Whatever drinking vinegar PBR XOXO Bushwick gentrify. Cliche semiotics banjo retro squid Wes Anderson. Fashion axe dreamcatcher you probably haven't heard of them bicycle rights. Tote bag organic four loko ethical selfies gastropub, PBR fingerstache tattooed bicycle rights.</p>
