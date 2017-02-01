@@ -338,13 +338,16 @@ var ImageZoom = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      return _react2.default.createElement('img', {
-        src: this.state.image.src,
-        alt: this.state.image.alt,
-        className: this.state.image.className,
+      /**
+       * Take whatever attributes you want to pass the image
+       * and then override with the properties we need
+       */
+      var attrs = _extends({}, this.state.image, {
         style: this.getImageStyle(),
         onClick: this.handleZoom
       });
+
+      return _react2.default.createElement('img', attrs);
     }
 
     // Side-effects!
