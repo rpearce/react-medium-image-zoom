@@ -389,7 +389,7 @@ var ImageZoom = function (_Component) {
     key: 'handleZoom',
     value: function handleZoom(event) {
       if (this.props.shouldHandleZoom(event)) {
-        this.setState({ isZoomed: true });
+        this.setState({ isZoomed: true }, this.props.onZoom);
       }
     }
 
@@ -419,7 +419,7 @@ var ImageZoom = function (_Component) {
          */
         _this2.removeZoomed();
 
-        _this2.setState(changes);
+        _this2.setState(changes, _this2.props.onUnzoom);
       };
     }
   }], [{
@@ -438,7 +438,9 @@ var ImageZoom = function (_Component) {
         },
         shouldHandleZoom: function shouldHandleZoom(_) {
           return true;
-        }
+        },
+        onZoom: function onZoom() {},
+        onUnzoom: function onUnzoom() {}
       };
     }
   }]);
@@ -465,7 +467,9 @@ ImageZoom.propTypes = {
   isZoomed: bool,
   shouldReplaceImage: bool,
   shouldRespectMaxDimension: bool,
-  shouldHandleZoom: func
+  shouldHandleZoom: func,
+  onZoom: func,
+  onUnzoom: func
 };
 
 //====================================================
