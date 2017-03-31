@@ -5,7 +5,7 @@
   "main": "lib/react-medium-image-zoom.js",
   "scripts": {
     "build": "babel src/react-medium-image-zoom.js -o lib/react-medium-image-zoom.js",
-    "build:example": "npm run build && browserify example/src/app.js -o example/app.js -t [ babelify ]",
+    "build:example": "npm run build && browserify example/src/app.js -o example/build/app.js -t [ babelify ]",
     "prepublish": "npm run build"
   },
   "repository": {
