@@ -118,9 +118,20 @@ export default class ImageZoom extends Component {
       onClick: this.handleZoom
     })
 
-    return (
-      <img { ...attrs } />
+    const image = (
+      <img ref="image" { ...attrs } />
     )
+
+    if (this.props.shouldPreload && this.props.zoomImage && this.props.zoomImage.src) {
+      return (
+        <span>
+          <link rel="preload" href={this.props.zoomImage.src} as="image" />
+          { image }
+        </span>
+      )
+    }
+
+    return image
   }
 
   // Side-effects!
@@ -129,7 +140,7 @@ export default class ImageZoom extends Component {
     this.portalInstance = ReactDOM.render(
       <Zoom
         { ...this.props.zoomImage }
-        image={ ReactDOM.findDOMNode(this) }
+        image={ ReactDOM.findDOMNode(this.refs.image) }
         defaultStyles={ this.props.defaultStyles }
         hasAlreadyLoaded={ this.state.hasAlreadyLoaded }
         shouldRespectMaxDimension={ this.props.shouldRespectMaxDimension }
@@ -214,9 +225,10 @@ ImageZoom.propTypes = {
   }),
   defaultStyles: object,
   isZoomed: bool,
+  shouldHandleZoom: func,
+  shouldPreload: bool,
   shouldReplaceImage: bool,
   shouldRespectMaxDimension: bool,
-  shouldHandleZoom: func,
   onZoom: func,
   onUnzoom: func
 }
