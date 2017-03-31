@@ -94,7 +94,8 @@ var App = function (_Component) {
               alt: 'Golden Gate Bridge',
               className: 'img--zoomed'
             },
-            isZoomed: this.state.firstActive
+            isZoomed: this.state.firstActive,
+            shouldPreload: true
           })
         ),
         _react2.default.createElement(
@@ -347,7 +348,13 @@ var ImageZoom = function (_Component) {
         onClick: this.handleZoom
       });
 
-      return _react2.default.createElement('img', attrs);
+      var image = _react2.default.createElement('img', _extends({ ref: 'image' }, attrs));
+
+      if (this.props.shouldPreload && this.props.zoomImage && this.props.zoomImage.src) {
+        return _react2.default.createElement('span', null, _react2.default.createElement('link', { rel: 'preload', href: this.props.zoomImage.src, as: 'image' }), image);
+      }
+
+      return image;
     }
 
     // Side-effects!
@@ -357,7 +364,7 @@ var ImageZoom = function (_Component) {
     value: function renderZoomed() {
       this.portal = createPortal('div');
       this.portalInstance = _reactDom2.default.render(_react2.default.createElement(Zoom, _extends({}, this.props.zoomImage, {
-        image: _reactDom2.default.findDOMNode(this),
+        image: _reactDom2.default.findDOMNode(this.refs.image),
         defaultStyles: this.props.defaultStyles,
         hasAlreadyLoaded: this.state.hasAlreadyLoaded,
         shouldRespectMaxDimension: this.props.shouldRespectMaxDimension,
@@ -465,9 +472,10 @@ ImageZoom.propTypes = {
   }),
   defaultStyles: object,
   isZoomed: bool,
+  shouldHandleZoom: func,
+  shouldPreload: bool,
   shouldReplaceImage: bool,
   shouldRespectMaxDimension: bool,
-  shouldHandleZoom: func,
   onZoom: func,
   onUnzoom: func
 };
