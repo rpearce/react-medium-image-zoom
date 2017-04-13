@@ -33,6 +33,7 @@
   },
   "homepage": "https://github.com/rpearce/react-medium-image-zoom#readme",
   "peerDependencies": {
+    "prop-types": "^15.5.8",
     "react": ">=0.14.0",
     "react-dom": ">=0.14.0"
   },
