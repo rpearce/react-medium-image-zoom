@@ -79,6 +79,7 @@ You can view the the example via `$ open example/index.html`.
 1. Clone your fork
 1. Check out a feature branch (`$ git checkout -b my-feature`)
 1. Make your changes and push your branch to your GitHub repo
+1. Make sure to update the example via `$ npm run build:example`
 1. Create a pull request from your branch to this repo's master branch
 1. When all is merged, pull down the upstream changes to your master
 1. Delete your feature branch
