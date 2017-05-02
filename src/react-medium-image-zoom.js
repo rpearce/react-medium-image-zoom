@@ -140,7 +140,7 @@ export default class ImageZoom extends Component {
     this.portal = createPortal('div')
     this.portalInstance = ReactDOM.render(
       <Zoom
-        { ...this.props.zoomImage }
+        zoomImage={ this.props.zoomImage }
         image={ ReactDOM.findDOMNode(this.refs.image) }
         defaultStyles={ this.props.defaultStyles }
         hasAlreadyLoaded={ this.state.hasAlreadyLoaded }
@@ -243,7 +243,7 @@ class Zoom extends Component {
     this.state = {
       hasLoaded: false,
       isZoomed: true,
-      src: this.props.image.src
+      src: this.props.image.currentSrc || this.props.image.src
     }
 
     this.handleResize     = this.handleResize.bind(this)
@@ -256,8 +256,10 @@ class Zoom extends Component {
   }
 
   componentDidMount() {
+    const { hasAlreadyLoaded, zoomImage: { src, srcSet } } = this.props
+
     this.setState({ hasLoaded: true })
-    if (this.props.src && !this.props.hasAlreadyLoaded) this.fetchZoomImage()
+    if ((src || srcSet) && !hasAlreadyLoaded) this.fetchZoomImage()
     this.addListeners()
   }
 
@@ -273,9 +275,9 @@ class Zoom extends Component {
           defaultStyles={ this.props.defaultStyles }
         />
         <img
+          { ...this.props.zoomImage }
           src={ this.state.src }
-          alt={ this.props.alt }
-          className={ this.props.className }
+          srcSet={ this.state.srcSet }
           style={ this.getZoomImageStyle() }
         />
       </div>
@@ -291,10 +293,28 @@ class Zoom extends Component {
   }
 
   fetchZoomImage() {
-    const { src } = this.props
+    const { src, srcSet, sizes } = this.props.zoomImage
     const img = new Image()
+
     img.src = src
-    img.onload = () => this.setState({ hasLoaded: true, src })
+    img.srcset = srcSet
+    img.sizes = sizes
+
+    const onLoad = () => {
+      // Only set state if component is still mounted
+      if (this.state.isZoomed) {
+        this.setState({ hasLoaded: true, src, srcSet })
+      }
+
+      /**
+       * If using srcset, future resize events can trigger
+       * additional onload events to fire.
+       * Remove listener after first load
+       */
+      img.removeEventListener('load', onLoad)
+    }
+
+    img.addEventListener('load', onLoad);
   }
 
   addListeners() {
@@ -431,10 +451,12 @@ function getMaxDimensionScale({ width, height, naturalWidth, naturalHeight, zoom
 }
 
 Zoom.propTypes = {
-  src: string,
-  alt: string,
-  className: string,
-  style: object,
+  zoomImage: shape({
+    src: string,
+    alt: string,
+    className: string,
+    style: object
+  }).isRequired,
   image: object.isRequired,
   hasAlreadyLoaded: bool.isRequired,
   defaultStyles: object.isRequired
