@@ -268,16 +268,19 @@ class Zoom extends Component {
   }
 
   render() {
+    const { defaultStyles, hasAlreadyLoaded, zoomImage } = this.props
+    const { isZoomed, src } = this.state
+
     return (
       <div onClick={ this.handleUnzoom } style={ this.getZoomContainerStyle() }>
         <Overlay
-          isVisible={ this.state.isZoomed }
-          defaultStyles={ this.props.defaultStyles }
+          isVisible={ isZoomed }
+          defaultStyles={ defaultStyles }
         />
         <img
-          { ...this.props.zoomImage }
-          src={ this.state.src }
-          srcSet={ this.state.srcSet }
+          { ...zoomImage }
+          src={ src }
+          srcSet={ hasAlreadyLoaded ? zoomImage.srcSet : null }
           style={ this.getZoomImageStyle() }
         />
       </div>
@@ -303,7 +306,7 @@ class Zoom extends Component {
     const onLoad = () => {
       // Only set state if component is still mounted
       if (this.state.isZoomed) {
-        this.setState({ hasLoaded: true, src, srcSet })
+        this.setState({ hasLoaded: true, src: img.currentSrc || img.src })
       }
 
       /**
