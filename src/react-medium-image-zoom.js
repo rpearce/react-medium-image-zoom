@@ -255,6 +255,12 @@ class Zoom extends Component {
     this.handleTouchEnd   = this.handleTouchEnd.bind(this)
   }
 
+  static get defaultProps() {
+    return {
+      zoomImage: {},
+    }
+  }
+
   componentDidMount() {
     const { hasAlreadyLoaded, zoomImage: { src, srcSet } } = this.props
 
