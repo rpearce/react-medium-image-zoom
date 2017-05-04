@@ -534,7 +534,6 @@ var Zoom = function (_Component2) {
     value: function render() {
       var _props2 = this.props,
           defaultStyles = _props2.defaultStyles,
-          hasAlreadyLoaded = _props2.hasAlreadyLoaded,
           zoomImage = _props2.zoomImage;
       var _state = this.state,
           isZoomed = _state.isZoomed,

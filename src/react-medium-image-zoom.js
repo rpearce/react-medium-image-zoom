@@ -274,7 +274,7 @@ class Zoom extends Component {
   }
 
   render() {
-    const { defaultStyles, hasAlreadyLoaded, zoomImage } = this.props
+    const { defaultStyles, zoomImage } = this.props
     const { isZoomed, src } = this.state
 
     return (
