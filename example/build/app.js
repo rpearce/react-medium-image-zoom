@@ -367,14 +367,15 @@ var ImageZoom = function (_Component) {
     key: 'renderZoomed',
     value: function renderZoomed() {
       this.portal = createPortal('div');
-      this.portalInstance = _reactDom2.default.render(_react2.default.createElement(Zoom, _extends({}, this.props.zoomImage, {
+      this.portalInstance = _reactDom2.default.render(_react2.default.createElement(Zoom, {
+        zoomImage: this.props.zoomImage,
         image: _reactDom2.default.findDOMNode(this.refs.image),
         defaultStyles: this.props.defaultStyles,
         hasAlreadyLoaded: this.state.hasAlreadyLoaded,
         shouldRespectMaxDimension: this.props.shouldRespectMaxDimension,
         zoomMargin: this.props.zoomMargin,
         onClick: this.handleUnzoom
-      })), this.portal);
+      }), this.portal);
     }
 
     // Side-effects!
@@ -497,7 +498,7 @@ var Zoom = function (_Component2) {
     _this3.state = {
       hasLoaded: false,
       isZoomed: true,
-      src: _this3.props.image.src
+      src: _this3.props.image.currentSrc || _this3.props.image.src
     };
 
     _this3.handleResize = _this3.handleResize.bind(_this3);
@@ -513,8 +514,14 @@ var Zoom = function (_Component2) {
   _createClass(Zoom, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
+      var _props = this.props,
+          hasAlreadyLoaded = _props.hasAlreadyLoaded,
+          _props$zoomImage = _props.zoomImage,
+          src = _props$zoomImage.src,
+          srcSet = _props$zoomImage.srcSet;
+
       this.setState({ hasLoaded: true });
-      if (this.props.src && !this.props.hasAlreadyLoaded) this.fetchZoomImage();
+      if ((src || srcSet) && !hasAlreadyLoaded) this.fetchZoomImage();
       this.addListeners();
     }
   }, {
@@ -525,15 +532,21 @@ var Zoom = function (_Component2) {
   }, {
     key: 'render',
     value: function render() {
+      var _props2 = this.props,
+          defaultStyles = _props2.defaultStyles,
+          hasAlreadyLoaded = _props2.hasAlreadyLoaded,
+          zoomImage = _props2.zoomImage;
+      var _state = this.state,
+          isZoomed = _state.isZoomed,
+          src = _state.src;
+
       return _react2.default.createElement('div', { onClick: this.handleUnzoom, style: this.getZoomContainerStyle() }, _react2.default.createElement(Overlay, {
-        isVisible: this.state.isZoomed,
-        defaultStyles: this.props.defaultStyles
-      }), _react2.default.createElement('img', {
-        src: this.state.src,
-        alt: this.props.alt,
-        className: this.props.className,
+        isVisible: isZoomed,
+        defaultStyles: defaultStyles
+      }), _react2.default.createElement('img', _extends({}, zoomImage, {
+        src: src,
         style: this.getZoomImageStyle()
-      }));
+      })));
     }
   }, {
     key: 'getZoomContainerStyle',
@@ -545,13 +558,32 @@ var Zoom = function (_Component2) {
     value: function fetchZoomImage() {
       var _this4 = this;
 
-      var src = this.props.src;
+      var _props$zoomImage2 = this.props.zoomImage,
+          src = _props$zoomImage2.src,
+          srcSet = _props$zoomImage2.srcSet,
+          sizes = _props$zoomImage2.sizes;
 
       var img = new Image();
+
       img.src = src;
-      img.onload = function () {
-        return _this4.setState({ hasLoaded: true, src: src });
+      if (srcSet) img.srcset = srcSet;
+      if (sizes) img.sizes = sizes;
+
+      var onLoad = function onLoad() {
+        // Only set state if component is still mounted
+        if (_this4.state.isZoomed) {
+          _this4.setState({ hasLoaded: true, src: img.currentSrc || img.src });
+        }
+
+        /**
+         * If using srcset, future resize events can trigger
+         * additional onload events to fire.
+         * Remove listener after first load
+         */
+        img.removeEventListener('load', onLoad);
       };
+
+      img.addEventListener('load', onLoad);
     }
   }, {
     key: 'addListeners',
@@ -631,11 +663,11 @@ var Zoom = function (_Component2) {
   }, {
     key: 'getZoomImageStyle',
     value: function getZoomImageStyle() {
-      var _props = this.props,
-          image = _props.image,
-          shouldRespectMaxDimension = _props.shouldRespectMaxDimension,
-          src = _props.src,
-          zoomMargin = _props.zoomMargin;
+      var _props3 = this.props,
+          image = _props3.image,
+          shouldRespectMaxDimension = _props3.shouldRespectMaxDimension,
+          src = _props3.src,
+          zoomMargin = _props3.zoomMargin;
 
       var imageOffset = image.getBoundingClientRect();
 
@@ -672,6 +704,13 @@ var Zoom = function (_Component2) {
       };
 
       return _extends({}, defaults.styles.zoomImage, this.props.defaultStyles.zoomImage, this.props.style, style, zoomStyle);
+    }
+  }], [{
+    key: 'defaultProps',
+    get: function get() {
+      return {
+        zoomImage: {}
+      };
     }
   }]);
 
@@ -710,10 +749,12 @@ function getMaxDimensionScale(_ref3) {
 }
 
 Zoom.propTypes = {
-  src: string,
-  alt: string,
-  className: string,
-  style: object,
+  zoomImage: shape({
+    src: string,
+    alt: string,
+    className: string,
+    style: object
+  }).isRequired,
   image: object.isRequired,
   hasAlreadyLoaded: bool.isRequired,
   defaultStyles: object.isRequired

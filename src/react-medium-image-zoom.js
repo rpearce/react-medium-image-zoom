@@ -286,7 +286,6 @@ class Zoom extends Component {
         <img
           { ...zoomImage }
           src={ src }
-          srcSet={ hasAlreadyLoaded ? zoomImage.srcSet : null }
           style={ this.getZoomImageStyle() }
         />
       </div>
@@ -306,8 +305,8 @@ class Zoom extends Component {
     const img = new Image()
 
     img.src = src
-    img.srcset = srcSet
-    img.sizes = sizes
+    if (srcSet) img.srcset = srcSet
+    if (sizes) img.sizes = sizes
 
     const onLoad = () => {
       // Only set state if component is still mounted
