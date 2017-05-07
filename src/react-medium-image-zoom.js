@@ -503,8 +503,8 @@ class Overlay extends Component {
     return Object.assign(
       {},
       defaults.styles.overlay,
-      this.props.defaultStyles.overlay,
-      { opacity }
+      { opacity },
+      this.props.defaultStyles.overlay
     )
   }
 }
