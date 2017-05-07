@@ -799,7 +799,7 @@ var Overlay = function (_Component3) {
     key: 'getStyle',
     value: function getStyle() {
       var opacity = this.state.isVisible & 1; // bitwise and; converts bool to 0 or 1
-      return _extends({}, defaults.styles.overlay, this.props.defaultStyles.overlay, { opacity: opacity });
+      return _extends({}, defaults.styles.overlay, { opacity: opacity }, this.props.defaultStyles.overlay);
     }
   }]);
 
