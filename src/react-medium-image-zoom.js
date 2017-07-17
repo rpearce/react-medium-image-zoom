@@ -87,7 +87,7 @@ export default class ImageZoom extends Component {
    */
   componentWillReceiveProps(nextProps) {
     const imageChanged = this.props.image.src !== nextProps.image.src
-    const isZoomedChanged = this.state.isZoomed !== nextProps.isZoomed
+    const isZoomedChanged = this.props.isZoomed !== nextProps.isZoomed
     const changes = Object.assign({},
       imageChanged && { image: nextProps.image },
       isZoomedChanged && { isZoomed : nextProps.isZoomed }
