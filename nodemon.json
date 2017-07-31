@@ -1,0 +1,9 @@
+{
+  "exec": "npm run build && npm start",
+  "ext": "js",
+  "verbose": true,
+  "watch": [
+    "example/src/",
+    "src/"
+  ]
+}

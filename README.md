@@ -68,9 +68,9 @@ Each one of these image props accepts normal `image` props, for example:
 Currently, this has only been tested on the latest modern browsers. Pull requests are welcome.
 
 ## Development
-The source code is located within the `src` directory. Use `$npm run build:example` to build the main file as well as the example during development.
+The source code is located within the `src` directory. Use `$ make` to build the main file as well as the example during development, and use `$ make dev` to have it watch for changes to `src/` and `example/src`.
 
-You can view the the example via `$ open example/index.html`.
+You can view the built example as a file via `$ open example/build/index.html`, or you can use `$ make dev` to start a local dev server and navigate to [http://localhost:3000](http://localhost:3000).
 
 ## Contribute
 
@@ -78,8 +78,10 @@ You can view the the example via `$ open example/index.html`.
 1. Fork this repository
 1. Clone your fork
 1. Check out a feature branch (`$ git checkout -b my-feature`)
-1. Make your changes and push your branch to your GitHub repo
-1. Make sure to update the example via `$ npm run build:example`
+1. Make your changes
+1. Run `$ make` to compile your changes and build the example
+1. Test your example (see the "Development" section above)
+1. Push your branch to your GitHub repo
 1. Create a pull request from your branch to this repo's master branch
 1. When all is merged, pull down the upstream changes to your master
 1. Delete your feature branch
