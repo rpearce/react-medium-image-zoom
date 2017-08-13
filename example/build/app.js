@@ -26,40 +26,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var App = function (_Component) {
   _inherits(App, _Component);
 
-  function App(props) {
+  function App() {
     _classCallCheck(this, App);
 
-    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
-
-    _this.state = { firstActive: false };
-    return _this;
+    return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
   }
 
   _createClass(App, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      /**
-       * This is an example demonstrating how to manually
-       * control the `isZoomed` state of the first image
-       * using the `j` and `k` keys
-       */
-      document.addEventListener('keyup', this.handleKeyup.bind(this));
-    }
-  }, {
-    key: 'handleKeyup',
-    value: function handleKeyup(e) {
-      switch (e.keyCode) {
-        case 74:
-          return this.setState({ firstActive: true });
-
-        case 75:
-          return this.setState({ firstActive: false });
-
-        default:
-          return;
-      }
-    }
-  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
@@ -93,8 +66,7 @@ var App = function (_Component) {
               src: 'bridge-big.jpg',
               alt: 'Golden Gate Bridge',
               className: 'img--zoomed'
-            },
-            isZoomed: this.state.firstActive
+            }
           })
         ),
         _react2.default.createElement(
@@ -236,8 +208,10 @@ function _inherits(subClass, superClass) {
 }
 
 var bool = _propTypes2.default.bool,
+    element = _propTypes2.default.element,
     func = _propTypes2.default.func,
     object = _propTypes2.default.object,
+    number = _propTypes2.default.number,
     shape = _propTypes2.default.shape,
     string = _propTypes2.default.string;
 
@@ -277,6 +251,9 @@ var defaults = {
   }
 };
 
+var uncontrolledControlledError = 'A component is changing a react-medium-image-zoom component from an uncontrolled component to a controlled one. ImageZoom elements should not switch from uncontrolled to controlled (or vice versa). Decide between using a controlled or uncontrolled image zoom element for the lifetime of the component.';
+var controlledUncontrolledError = 'A component is changing a react-medium-image-zoom component from a controlled component to an uncontrolled one. ImageZoom elements should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled image zoom element for the lifetime of the component.';
+
 var ImageZoom = function (_Component) {
   _inherits(ImageZoom, _Component);
 
@@ -286,20 +263,20 @@ var ImageZoom = function (_Component) {
     var _this = _possibleConstructorReturn(this, (ImageZoom.__proto__ || Object.getPrototypeOf(ImageZoom)).call(this, props));
 
     _this.state = {
-      isZoomed: props.isZoomed,
+      isZoomed: false,
       image: props.image,
       hasAlreadyLoaded: false
     };
 
-    _this.handleZoom = _this.handleZoom.bind(_this);
-    _this.handleUnzoom = _this.handleUnzoom.bind(_this);
+    _this._handleZoom = _this._handleZoom.bind(_this);
+    _this._handleUnzoom = _this._handleUnzoom.bind(_this);
     return _this;
   }
 
   _createClass(ImageZoom, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      if (this.state.isZoomed) this.renderZoomed();
+      if (this.state.isZoomed || this.props.isZoomed) this.renderZoomed();
     }
 
     // Clean up any mess we made of the DOM before we unmount
@@ -309,34 +286,36 @@ var ImageZoom = function (_Component) {
     value: function componentWillUnmount() {
       this.removeZoomed();
     }
-
-    /**
-     * We need to check to see if any changes are being
-     * mandated by the consumer and if so, update accordingly
-     */
-
   }, {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      var imageChanged = this.props.image.src !== nextProps.image.src;
-      var isZoomedChanged = this.state.isZoomed !== nextProps.isZoomed;
-      var changes = _extends({}, imageChanged && { image: nextProps.image }, isZoomedChanged && { isZoomed: nextProps.isZoomed });
+      if (this.props.isZoomed == null && nextProps.isZoomed != null) {
+        throw new Error(uncontrolledControlledError);
+      } else if (this.props.isZoomed != null && nextProps.isZoomed == null) {
+        throw new Error(controlledUncontrolledError);
+      }
 
-      if (Object.keys(changes).length) {
-        this.setState(changes);
+      // If the consumer wants to change the image's src, then so be it.
+      if (this.props.image.src !== nextProps.image.src) {
+        this.setState({ image: nextProps.image });
       }
     }
 
     /**
      * When the component's state updates, check for changes
-     * and either zoom or start the unzoom procedure
+     * and either zoom or start the unzoom procedure.
+     * NOTE: We need to differentiate whether this is a
+     * controlled or uncontrolled component and do the check
+     * based off of that.
      */
 
   }, {
     key: 'componentDidUpdate',
-    value: function componentDidUpdate(_, prevState) {
-      if (prevState.isZoomed !== this.state.isZoomed) {
-        if (this.state.isZoomed) this.renderZoomed();else if (this.portalInstance) this.portalInstance.handleUnzoom();
+    value: function componentDidUpdate(prevProps, prevState) {
+      var prevIsZoomed = prevProps.isZoomed != null ? prevProps.isZoomed : prevState.isZoomed;
+      var isZoomed = this.props.isZoomed != null ? this.props.isZoomed : this.state.isZoomed;
+      if (prevIsZoomed !== isZoomed) {
+        if (isZoomed) this._renderZoomed();else if (this.portalInstance) this.portalInstance.unzoom();
       }
     }
   }, {
@@ -347,35 +326,35 @@ var ImageZoom = function (_Component) {
        * and then override with the properties we need
        */
       var attrs = _extends({}, this.state.image, {
-        style: this.getImageStyle(),
-        onClick: this.handleZoom
+        style: this._getImageStyle(),
+        onClick: this._handleZoom
       });
 
       return _react2.default.createElement('img', _extends({ ref: 'image' }, attrs));
     }
-
-    // Side-effects!
-
   }, {
-    key: 'renderZoomed',
-    value: function renderZoomed() {
-      this.portal = createPortal('div');
-      this.portalInstance = _reactDom2.default.render(_react2.default.createElement(Zoom, {
-        zoomImage: this.props.zoomImage,
-        image: _reactDom2.default.findDOMNode(this.refs.image),
+    key: '_renderZoomed',
+    value: function _renderZoomed() {
+      /**
+       * If it's an uncontrolled component, include all wrap controls.
+       * If it's a controlled component, only wrap it in the resize controls.
+       */
+      var innerComponent = _react2.default.createElement(ResizeWrapper, null, _react2.default.createElement(Zoom, {
         defaultStyles: this.props.defaultStyles,
+        image: _reactDom2.default.findDOMNode(this.refs.image),
         hasAlreadyLoaded: this.state.hasAlreadyLoaded,
         shouldRespectMaxDimension: this.props.shouldRespectMaxDimension,
+        zoomImage: this.props.zoomImage,
         zoomMargin: this.props.zoomMargin,
-        onClick: this.handleUnzoom
-      }), this.portal);
+        onUnzoom: this._handleUnzoom
+      }));
+      var component = this.props.isZoomed == null ? _react2.default.createElement(FullWrapper, null, innerComponent) : innerComponent;
+      this.portal = createPortal('div');
+      this.portalInstance = _reactDom2.default.render(component, this.portal);
     }
-
-    // Side-effects!
-
   }, {
-    key: 'removeZoomed',
-    value: function removeZoomed() {
+    key: '_removeZoomed',
+    value: function _removeZoomed() {
       if (this.portal) {
         _reactDom2.default.unmountComponentAtNode(this.portal);
         removePortal(this.portal);
@@ -384,17 +363,19 @@ var ImageZoom = function (_Component) {
       }
     }
   }, {
-    key: 'getImageStyle',
-    value: function getImageStyle() {
+    key: '_getImageStyle',
+    value: function _getImageStyle() {
       var style = _extends({}, this.state.isZoomed && { visibility: 'hidden' });
 
       return _extends({}, defaults.styles.image, style, this.props.defaultStyles.image, this.state.image.style);
     }
   }, {
-    key: 'handleZoom',
-    value: function handleZoom(event) {
-      if (this.props.shouldHandleZoom(event)) {
+    key: '_handleZoom',
+    value: function _handleZoom(event) {
+      if (this.props.isZoomed == null && this.props.shouldHandleZoom(event)) {
         this.setState({ isZoomed: true }, this.props.onZoom);
+      } else {
+        this.props.onZoom();
       }
     }
 
@@ -408,12 +389,14 @@ var ImageZoom = function (_Component) {
      */
 
   }, {
-    key: 'handleUnzoom',
-    value: function handleUnzoom(src) {
+    key: '_handleUnzoom',
+    value: function _handleUnzoom(src) {
       var _this2 = this;
 
       return function () {
-        var changes = _extends({}, { isZoomed: false }, { hasAlreadyLoaded: true }, _this2.props.shouldReplaceImage && { image: _extends({}, _this2.state.image, { src: src }) });
+        var changes = _extends({}, { hasAlreadyLoaded: true, isZoomed: false }, _this2.props.shouldReplaceImage && {
+          image: _extends({}, _this2.state.image, { src: src })
+        });
 
         /**
          * Lamentable but necessary right now in order to
@@ -422,7 +405,7 @@ var ImageZoom = function (_Component) {
          * The reasoning is so we can differentiate between an
          * external `isZoomed` command and an internal one.
          */
-        _this2.removeZoomed();
+        _this2._removeZoomed();
 
         _this2.setState(changes, _this2.props.onUnzoom);
       };
@@ -431,7 +414,6 @@ var ImageZoom = function (_Component) {
     key: 'defaultProps',
     get: function get() {
       return {
-        isZoomed: false,
         shouldReplaceImage: true,
         shouldRespectMaxDimension: false,
         zoomMargin: 40,
@@ -472,35 +454,171 @@ ImageZoom.propTypes = {
   isZoomed: bool,
   shouldHandleZoom: func,
   shouldReplaceImage: bool,
-  shouldRespectMaxDimension: bool,
+  shouldRespectMaxDimension: bool.isRequired,
   onZoom: func,
   onUnzoom: func
 };
 
 //====================================================
 
-var Zoom = function (_Component2) {
-  _inherits(Zoom, _Component2);
+var ResizeWrapper = function (_Component2) {
+  _inherits(ResizeWrapper, _Component2);
+
+  function ResizeWrapper() {
+    _classCallCheck(this, ResizeWrapper);
+
+    var _this3 = _possibleConstructorReturn(this, (ResizeWrapper.__proto__ || Object.getPrototypeOf(ResizeWrapper)).call(this));
+
+    _this3._handleResize = _this3._handleResize.bind(_this3);
+    return _this3;
+  }
+
+  _createClass(ResizeWrapper, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      window.addEventListener('resize', this._handleResize);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      window.removeEventListener('resize', this._handleResize);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var cloned = _react2.default.cloneElement(_react2.default.Children.only(this.props.children), { ref: 'child' });
+      return _react2.default.createElement('div', null, cloned);
+    }
+  }, {
+    key: 'unzoom',
+    value: function unzoom() {
+      this.refs.child.unzoom();
+    }
+  }, {
+    key: '_handleResize',
+    value: function _handleResize() {
+      this.forceUpdate();
+    }
+  }]);
+
+  return ResizeWrapper;
+}(_react.Component);
+
+ResizeWrapper.propTypes = {
+  children: element.isRequired
+};
+
+//====================================================
+
+var FullWrapper = function (_Component3) {
+  _inherits(FullWrapper, _Component3);
+
+  function FullWrapper() {
+    _classCallCheck(this, FullWrapper);
+
+    var _this4 = _possibleConstructorReturn(this, (FullWrapper.__proto__ || Object.getPrototypeOf(FullWrapper)).call(this));
+
+    _this4._handleScroll = _this4._handleScroll.bind(_this4);
+    _this4._handleKeyUp = _this4._handleKeyUp.bind(_this4);
+    _this4._handleTouchStart = _this4._handleTouchStart.bind(_this4);
+    _this4._handleTouchMove = _this4._handleTouchMove.bind(_this4);
+    _this4._handleTouchEnd = _this4._handleTouchEnd.bind(_this4);
+    return _this4;
+  }
+
+  _createClass(FullWrapper, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      window.addEventListener('scroll', this._handleScroll, true);
+      window.addEventListener('keyup', this._handleKeyUp);
+      window.addEventListener('ontouchstart', this._handleTouchStart);
+      window.addEventListener('ontouchmove', this._handleTouchMove);
+      window.addEventListener('ontouchend', this._handleTouchEnd);
+      window.addEventListener('ontouchcancel', this._handleTouchEnd);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      window.removeEventListener('scroll', this._handleScroll, true);
+      window.removeEventListener('keyup', this._handleKeyUp);
+      window.removeEventListener('ontouchstart', this._handleTouchStart);
+      window.removeEventListener('ontouchmove', this._handleTouchMove);
+      window.removeEventListener('ontouchend', this._handleTouchEnd);
+      window.removeEventListener('ontouchcancel', this._handleTouchEnd);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var cloned = _react2.default.cloneElement(_react2.default.Children.only(this.props.children), { ref: 'child' });
+      return _react2.default.createElement('div', { onClick: this.unzoom.bind(this) }, cloned);
+    }
+  }, {
+    key: 'unzoom',
+    value: function unzoom() {
+      this.refs.child.unzoom();
+    }
+  }, {
+    key: '_handleScroll',
+    value: function _handleScroll() {
+      this.forceUpdate();
+      this.unzoom();
+    }
+  }, {
+    key: '_handleKeyUp',
+    value: function _handleKeyUp(_ref) {
+      var which = _ref.which;
+
+      var opts = {
+        27: this.unzoom
+      };
+
+      if (opts[which]) return opts[which]();
+    }
+  }, {
+    key: '_handleTouchStart',
+    value: function _handleTouchStart(e) {
+      this.yTouchPosition = e.touches[0].clientY;
+    }
+  }, {
+    key: '_handleTouchMove',
+    value: function _handleTouchMove(e) {
+      this.forceUpdate();
+      var touchChange = Math.abs(e.touches[0].clientY - this.yTouchPosition);
+      if (touchChange > 10) this.unzoom();
+    }
+  }, {
+    key: '_handleTouchEnd',
+    value: function _handleTouchEnd(e) {
+      delete this.yTouchPosition;
+    }
+  }]);
+
+  return FullWrapper;
+}(_react.Component);
+
+FullWrapper.propTypes = {
+  children: element.isRequired
+};
+
+//====================================================
+
+var Zoom = function (_Component4) {
+  _inherits(Zoom, _Component4);
 
   function Zoom(props) {
     _classCallCheck(this, Zoom);
 
-    var _this3 = _possibleConstructorReturn(this, (Zoom.__proto__ || Object.getPrototypeOf(Zoom)).call(this, props));
+    var _this5 = _possibleConstructorReturn(this, (Zoom.__proto__ || Object.getPrototypeOf(Zoom)).call(this, props));
 
-    _this3.state = {
+    _this5.state = {
       hasLoaded: false,
       isZoomed: true,
-      src: _this3.props.image.currentSrc || _this3.props.image.src
+      src: _this5.props.image.currentSrc || _this5.props.image.src
     };
 
-    _this3.handleResize = _this3.handleResize.bind(_this3);
-    _this3.handleUnzoom = _this3.handleUnzoom.bind(_this3);
-    _this3.handleScroll = _this3.handleScroll.bind(_this3);
-    _this3.handleKeyUp = _this3.handleKeyUp.bind(_this3);
-    _this3.handleTouchStart = _this3.handleTouchStart.bind(_this3);
-    _this3.handleTouchMove = _this3.handleTouchMove.bind(_this3);
-    _this3.handleTouchEnd = _this3.handleTouchEnd.bind(_this3);
-    return _this3;
+    _this5.unzoom = _this5.unzoom.bind(_this5);
+    _this5._handleImageLoad = _this5._handleImageLoad.bind(_this5);
+    return _this5;
   }
 
   _createClass(Zoom, [{
@@ -513,152 +631,48 @@ var Zoom = function (_Component2) {
           srcSet = _props$zoomImage.srcSet;
 
       this.setState({ hasLoaded: true });
-      if ((src || srcSet) && !hasAlreadyLoaded) this.fetchZoomImage();
-      this.addListeners();
-    }
-  }, {
-    key: 'componentWillUnmount',
-    value: function componentWillUnmount() {
-      this.removeListeners();
+      if ((src || srcSet) && !hasAlreadyLoaded) fetchImage(this.props.zoomImage, this._handleImageLoad);
     }
   }, {
     key: 'render',
     value: function render() {
-      var _props2 = this.props,
-          defaultStyles = _props2.defaultStyles,
-          zoomImage = _props2.zoomImage;
-      var _state = this.state,
-          isZoomed = _state.isZoomed,
-          src = _state.src;
-
-      return _react2.default.createElement('div', { onClick: this.handleUnzoom, style: this.getZoomContainerStyle() }, _react2.default.createElement(Overlay, {
-        isVisible: isZoomed,
-        defaultStyles: defaultStyles
-      }), _react2.default.createElement('img', _extends({}, zoomImage, {
-        src: src,
-        style: this.getZoomImageStyle()
+      return _react2.default.createElement('div', { style: this._getZoomContainerStyle() }, _react2.default.createElement(Overlay, {
+        isVisible: this.state.isZoomed,
+        defaultStyles: this.props.defaultStyles
+      }), _react2.default.createElement('img', _extends({}, this.props.zoomImage, {
+        src: this.state.src,
+        style: this._getZoomImageStyle()
       })));
     }
   }, {
-    key: 'getZoomContainerStyle',
-    value: function getZoomContainerStyle() {
-      return _extends({}, defaults.styles.zoomContainer, this.props.defaultStyles.zoomContainer);
-    }
-  }, {
-    key: 'fetchZoomImage',
-    value: function fetchZoomImage() {
-      var _this4 = this;
-
-      var _props$zoomImage2 = this.props.zoomImage,
-          src = _props$zoomImage2.src,
-          srcSet = _props$zoomImage2.srcSet,
-          sizes = _props$zoomImage2.sizes;
-
-      var img = new Image();
-
-      img.src = src;
-      if (srcSet) img.srcset = srcSet;
-      if (sizes) img.sizes = sizes;
-
-      var onLoad = function onLoad() {
-        // Only set state if component is still mounted
-        if (_this4.state.isZoomed) {
-          _this4.setState({ hasLoaded: true, src: img.currentSrc || img.src });
-        }
-
-        /**
-         * If using srcset, future resize events can trigger
-         * additional onload events to fire.
-         * Remove listener after first load
-         */
-        img.removeEventListener('load', onLoad);
-      };
-
-      img.addEventListener('load', onLoad);
-    }
-  }, {
-    key: 'addListeners',
-    value: function addListeners() {
-      this.isTicking = false;
-      window.addEventListener('resize', this.handleResize);
-      window.addEventListener('scroll', this.handleScroll, true);
-      window.addEventListener('keyup', this.handleKeyUp);
-      window.addEventListener('ontouchstart', this.handleTouchStart);
-      window.addEventListener('ontouchmove', this.handleTouchMove);
-      window.addEventListener('ontouchend', this.handleTouchEnd);
-      window.addEventListener('ontouchcancel', this.handleTouchEnd);
-    }
-  }, {
-    key: 'removeListeners',
-    value: function removeListeners() {
-      window.removeEventListener('resize', this.handleResize);
-      window.removeEventListener('scroll', this.handleScroll, true);
-      window.removeEventListener('keyup', this.handleKeyUp);
-      window.removeEventListener('ontouchstart', this.handleTouchStart);
-      window.removeEventListener('ontouchmove', this.handleTouchMove);
-      window.removeEventListener('ontouchend', this.handleTouchEnd);
-      window.removeEventListener('ontouchcancel', this.handleTouchEnd);
-    }
-  }, {
-    key: 'handleResize',
-    value: function handleResize() {
-      this.forceUpdate();
-    }
-  }, {
-    key: 'handleScroll',
-    value: function handleScroll() {
-      this.forceUpdate();
-      if (this.state.isZoomed) this.handleUnzoom();
-    }
-  }, {
-    key: 'handleKeyUp',
-    value: function handleKeyUp(_ref) {
-      var which = _ref.which;
-
-      var opts = {
-        27: this.handleUnzoom
-      };
-
-      if (opts[which]) return opts[which]();
-    }
-  }, {
-    key: 'handleTouchStart',
-    value: function handleTouchStart(e) {
-      this.yTouchPosition = e.touches[0].clientY;
-    }
-  }, {
-    key: 'handleTouchMove',
-    value: function handleTouchMove(e) {
-      this.forceUpdate();
-      var touchChange = Math.abs(e.touches[0].clientY - this.yTouchPosition);
-      if (touchChange > 10 && this.state.isZoomed) this.handleUnzoom();
-    }
-  }, {
-    key: 'handleTouchEnd',
-    value: function handleTouchEnd(e) {
-      delete this.yTouchPosition;
-    }
-  }, {
-    key: 'handleUnzoom',
-    value: function handleUnzoom(e) {
-      var _this5 = this;
-
-      if (e) {
-        e.stopPropagation();
-        e.nativeEvent.stopImmediatePropagation();
-      }
+    key: 'unzoom',
+    value: function unzoom() {
+      var onUnzoom = this.props.onUnzoom(this.state.src);
       this.setState({ isZoomed: false }, function () {
-        return setTimeout(_this5.props.onClick(_this5.state.src), transitionDuration);
+        return setTimeout(onUnzoom, transitionDuration);
       });
     }
   }, {
-    key: 'getZoomImageStyle',
-    value: function getZoomImageStyle() {
-      var _props3 = this.props,
-          image = _props3.image,
-          shouldRespectMaxDimension = _props3.shouldRespectMaxDimension,
-          src = _props3.src,
-          zoomMargin = _props3.zoomMargin;
+    key: '_handleImageLoad',
+    value: function _handleImageLoad(img) {
+      // Only set state if component is still mounted
+      if (this.state.isZoomed) {
+        this.setState({ hasLoaded: true, src: img.currentSrc || img.src });
+      }
+    }
+  }, {
+    key: '_getZoomContainerStyle',
+    value: function _getZoomContainerStyle() {
+      return _extends({}, defaults.styles.zoomContainer, this.props.defaultStyles.zoomContainer);
+    }
+  }, {
+    key: '_getZoomImageStyle',
+    value: function _getZoomImageStyle() {
+      var _props2 = this.props,
+          image = _props2.image,
+          shouldRespectMaxDimension = _props2.shouldRespectMaxDimension,
+          src = _props2.src,
+          zoomMargin = _props2.zoomMargin;
 
       var imageOffset = image.getBoundingClientRect();
 
@@ -708,53 +722,25 @@ var Zoom = function (_Component2) {
   return Zoom;
 }(_react.Component);
 
-/**
- * Figure out how much to scale based
- * solely on no maxing out the browser
- */
-
-function getScale(_ref2) {
-  var width = _ref2.width,
-      height = _ref2.height,
-      zoomMargin = _ref2.zoomMargin;
-
-  var scaleX = window.innerWidth / (width + zoomMargin);
-  var scaleY = window.innerHeight / (height + zoomMargin);
-  return Math.min(scaleX, scaleY);
-}
-
-/**
- * Figure out how much to scale so you're
- * not larger than the original image
- */
-function getMaxDimensionScale(_ref3) {
-  var width = _ref3.width,
-      height = _ref3.height,
-      naturalWidth = _ref3.naturalWidth,
-      naturalHeight = _ref3.naturalHeight,
-      zoomMargin = _ref3.zoomMargin;
-
-  var scale = getScale({ width: naturalWidth, height: naturalHeight, zoomMargin: zoomMargin });
-  var ratio = naturalWidth > naturalHeight ? naturalWidth / width : naturalHeight / height;
-  return scale > 1 ? ratio : scale * ratio;
-}
-
 Zoom.propTypes = {
+  defaultStyles: object.isRequired,
+  hasAlreadyLoaded: bool.isRequired,
+  image: object.isRequired,
+  shouldRespectMaxDimension: bool,
   zoomImage: shape({
     src: string,
     alt: string,
     className: string,
     style: object
   }).isRequired,
-  image: object.isRequired,
-  hasAlreadyLoaded: bool.isRequired,
-  defaultStyles: object.isRequired
+  zoomMargin: number.isRequired,
+  onUnzoom: func.isRequired
 };
 
 //====================================================
 
-var Overlay = function (_Component3) {
-  _inherits(Overlay, _Component3);
+var Overlay = function (_Component5) {
+  _inherits(Overlay, _Component5);
 
   function Overlay(props) {
     _classCallCheck(this, Overlay);
@@ -785,11 +771,11 @@ var Overlay = function (_Component3) {
   }, {
     key: 'render',
     value: function render() {
-      return _react2.default.createElement('div', { style: this.getStyle() });
+      return _react2.default.createElement('div', { style: this._getStyle() });
     }
   }, {
-    key: 'getStyle',
-    value: function getStyle() {
+    key: '_getStyle',
+    value: function _getStyle() {
       var opacity = this.state.isVisible & 1; // bitwise and; converts bool to 0 or 1
       return _extends({}, defaults.styles.overlay, { opacity: opacity }, this.props.defaultStyles.overlay);
     }
@@ -813,6 +799,58 @@ function createPortal(tag) {
 
 function removePortal(portal) {
   document.body.removeChild(portal);
+}
+
+function fetchImage(image, cb) {
+  var src = image.src,
+      srcSet = image.srcSet,
+      sizes = image.sizes;
+
+  var img = new Image();
+  var onLoad = function onLoad() {
+    cb(img);
+
+    /**
+     * If using srcset, future resize events can trigger
+     * additional onload events to fire.
+     * Remove listener after first load
+     */
+    img.removeEventListener('load', onLoad);
+  };
+  img.addEventListener('load', onLoad);
+  img.src = src;
+  if (srcSet) img.srcset = srcSet;
+  if (sizes) img.sizes = sizes;
+}
+
+/**
+ * Figure out how much to scale based
+ * solely on no maxing out the browser
+ */
+function getScale(_ref2) {
+  var width = _ref2.width,
+      height = _ref2.height,
+      zoomMargin = _ref2.zoomMargin;
+
+  var scaleX = window.innerWidth / (width + zoomMargin);
+  var scaleY = window.innerHeight / (height + zoomMargin);
+  return Math.min(scaleX, scaleY);
+}
+
+/**
+ * Figure out how much to scale so you're
+ * not larger than the original image
+ */
+function getMaxDimensionScale(_ref3) {
+  var width = _ref3.width,
+      height = _ref3.height,
+      naturalWidth = _ref3.naturalWidth,
+      naturalHeight = _ref3.naturalHeight,
+      zoomMargin = _ref3.zoomMargin;
+
+  var scale = getScale({ width: naturalWidth, height: naturalHeight, zoomMargin: zoomMargin });
+  var ratio = naturalWidth > naturalHeight ? naturalWidth / width : naturalHeight / height;
+  return scale > 1 ? ratio : scale * ratio;
 }
 
 },{"prop-types":32,"react":185,"react-dom":34}],3:[function(require,module,exports){

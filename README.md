@@ -63,6 +63,11 @@ Each one of these image props accepts normal `image` props, for example:
 | `style` | object | no | Additional styles to apply to the image |
 | ... | ... | no | ... |
 
+## Controlled vs Uncontrolled Modes
+Similar to how an `<input />` works in React, if the consumer initially chooses to control the `isZoomed` value, then this means the consumer is now responsible for telling the component the value of `isZoomed`. If the consumer instantiates the component with a non-null `isZoomed` value and subsequently does _not_ pass a value for it on updates, then an error will be thrown notifying the consumer that this is a controlled component.
+
+The reverse is true, as well. If the component is instantiated without an `isZoomed` value, then the component will handle its own `isZoomed` state. If a non-null `isZoomed` prop is passed _after_ instantiation, then an error will be thrown notifying the consumer that this component controls its own state.
+
 ## Browser Support
 Currently, this has only been tested on the latest modern browsers. Pull requests are welcome.
 
