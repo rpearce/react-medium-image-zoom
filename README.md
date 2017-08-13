@@ -47,7 +47,6 @@ function MyComponent(props) {
 | `zoomMargin`                | number  | no       | `40`    | Pixel number to offset zoomed image from the window |
 | `isZoomed`                  | boolean | no       | `false` | For more direct control over the zoom state |
 | `shouldHandleZoom`          | func    | no       | `(event) => true` | Pass this callback to intercept a zoom click event and determine whether or not to zoom. Function must return a truthy or falsy value |
-| `shouldPreload`             | bool    | no       | `false` | When `true` and `zoomImage` is included, preload the `zoomImage.src` by including a `<link rel="preload">` for image's source |
 | `shouldReplaceImage`        | boolean | no       | `true`  | Once the image has been "zoomed" and downloaded the larger image, this replaces the original `image` with the `zoomImage` |
 | `shouldRespectMaxDimension` | boolean | no       | `false` | When `true`, don't make the zoomed image's dimensions larger than the original dimensions. _Currently only supported when NO zoomImage is provided._  |
 | `defaultStyles`             | object  | no       | `{}` | For fine-grained control over all default styles (`zoomContainer`, `overlay`, `image`, `zoomImage`) |
