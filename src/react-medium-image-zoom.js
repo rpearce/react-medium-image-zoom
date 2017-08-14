@@ -119,20 +119,7 @@ export default class ImageZoom extends Component {
       onClick: this.handleZoom
     })
 
-    const image = (
-      <img ref="image" { ...attrs } />
-    )
-
-    if (this.props.shouldPreload && this.props.zoomImage && this.props.zoomImage.src) {
-      return (
-        <span>
-          <link rel="preload" href={this.props.zoomImage.src} as="image" />
-          { image }
-        </span>
-      )
-    }
-
-    return image
+    return <img ref="image" { ...attrs } />
   }
 
   // Side-effects!
@@ -227,7 +214,6 @@ ImageZoom.propTypes = {
   defaultStyles: object,
   isZoomed: bool,
   shouldHandleZoom: func,
-  shouldPreload: bool,
   shouldReplaceImage: bool,
   shouldRespectMaxDimension: bool,
   onZoom: func,
