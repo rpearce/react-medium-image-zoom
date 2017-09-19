@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import ImageZoom from '../../lib/react-medium-image-zoom'
+import ImageZoom from '../../lib'
 
 class App extends Component {
   render() {

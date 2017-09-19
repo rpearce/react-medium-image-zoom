@@ -2,9 +2,9 @@
   "name": "react-medium-image-zoom",
   "version": "1.0.4",
   "description": "Medium.com style image zoom for React",
-  "main": "lib/react-medium-image-zoom.js",
+  "main": "lib/index.js",
   "scripts": {
-    "build:js": "babel src/react-medium-image-zoom.js -o lib/react-medium-image-zoom.js",
+    "build:js": "babel src --out-dir lib",
     "build:example": "browserify example/src/app.js -o example/build/app.js -t [ babelify ]",
     "build": "npm run build:js && npm run build:example",
     "dev": "nodemon",
