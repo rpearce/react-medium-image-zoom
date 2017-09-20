@@ -1,5 +1,5 @@
 {
-  "exec": "npm run build && npm start",
+  "exec": "npm run build && node index.js",
   "ext": "js",
   "verbose": true,
   "watch": [

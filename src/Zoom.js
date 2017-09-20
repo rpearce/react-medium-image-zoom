@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { bool, func, object, number, shape, string } from 'prop-types'
 import defaults from './defaults'
 import { fetchImage, getMaxDimensionScale, getScale } from './helpers'
 
 import Overlay from './Overlay'
-
-const { bool, func, object, number, shape, string } = PropTypes
 
 export default class Zoom extends Component {
   constructor(props) {
@@ -31,7 +29,10 @@ export default class Zoom extends Component {
     const { hasAlreadyLoaded, zoomImage: { src, srcSet } } = this.props
 
     this.setState({ hasLoaded: true })
-    if ((src || srcSet) && !hasAlreadyLoaded) fetchImage(this.props.zoomImage, this._handleImageLoad)
+
+    if ((src || srcSet) && !hasAlreadyLoaded) {
+      fetchImage(this.props.zoomImage, this._handleImageLoad)
+    }
   }
 
   render() {

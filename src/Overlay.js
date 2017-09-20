@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { bool, object } from 'prop-types'
 import defaults from './defaults'
-
-const { bool, object } = PropTypes
 
 export default class Overlay extends Component {
   constructor(props) {
@@ -27,7 +25,7 @@ export default class Overlay extends Component {
   }
 
   render() {
-    return <div style={ this._getStyle() }></div>
+    return <div style={ this._getStyle() } />
   }
 
   _getStyle() {

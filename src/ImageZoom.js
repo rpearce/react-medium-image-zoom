@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { bool, element, func, object, number, shape, string } from 'prop-types'
 import ReactDOM from 'react-dom'
 import defaults from './defaults'
 import { createPortal, removePortal } from './helpers'
 
-import FullWrapper from './FullWrapper'
+import EventsWrapper from './EventsWrapper'
 import Overlay from './Overlay'
-import ResizeWrapper from './ResizeWrapper'
 import Zoom from './Zoom'
 
-const { bool, element, func, object, number, shape, string } = PropTypes
+
+const isControlled = isZoomed => isZoomed != null
 
 export default class ImageZoom extends Component {
   constructor(props) {
@@ -43,7 +43,7 @@ export default class ImageZoom extends Component {
   }
 
   componentDidMount() {
-    if (this.state.isZoomed || this.props.isZoomed) this.renderZoomed()
+    if (this.props.isZoomed) this._renderZoomed()
   }
 
   // Clean up any mess we made of the DOM before we unmount
@@ -52,9 +52,9 @@ export default class ImageZoom extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.isZoomed == null && nextProps.isZoomed != null) {
+    if (!isControlled(this.props.isZoomed) && isControlled(nextProps.isZoomed)) {
       throw new Error(defaults.errors.uncontrolled)
-    } else if (this.props.isZoomed != null && nextProps.isZoomed == null) {
+    } else if (isControlled(this.props.isZoomed) && !isControlled(nextProps.isZoomed)) {
       throw new Error(defaults.errors.controlled)
     }
 
@@ -72,11 +72,14 @@ export default class ImageZoom extends Component {
    * based off of that.
    */
   componentDidUpdate(prevProps, prevState) {
-    const prevIsZoomed = prevProps.isZoomed != null ? prevProps.isZoomed : prevState.isZoomed
-    const isZoomed = this.props.isZoomed != null ? this.props.isZoomed : this.state.isZoomed
+    const prevIsZoomed = isControlled(prevProps.isZoomed) ? prevProps.isZoomed : prevState.isZoomed
+    const isZoomed = isControlled(this.props.isZoomed) ? this.props.isZoomed : this.state.isZoomed
     if (prevIsZoomed !== isZoomed) {
-      if (isZoomed) this._renderZoomed()
-      else if (this.portalInstance) this.portalInstance.unzoom()
+      if (isZoomed) {
+        this._renderZoomed()
+      } else if (this.portalInstance) {
+        this.portalInstance.unzoom({ force: true })
+      }
     }
   }
 
@@ -94,12 +97,9 @@ export default class ImageZoom extends Component {
   }
 
   _renderZoomed() {
-    /**
-     * If it's an uncontrolled component, include all wrap controls.
-     * If it's a controlled component, only wrap it in the resize controls.
-     */
-    const innerComponent = (
-      <ResizeWrapper>
+    this.portal = createPortal('div')
+    this.portalInstance = ReactDOM.render(
+      <EventsWrapper controlledEventFn={this._getControlledEventFn()}>
         <Zoom
           defaultStyles={ this.props.defaultStyles }
           image={ ReactDOM.findDOMNode(this.refs.image) }
@@ -109,13 +109,8 @@ export default class ImageZoom extends Component {
           zoomMargin={ this.props.zoomMargin }
           onUnzoom={ this._handleUnzoom }
         />
-      </ResizeWrapper>
-    )
-    const component = this.props.isZoomed == null
-      ? <FullWrapper>{innerComponent}</FullWrapper>
-      : innerComponent
-    this.portal = createPortal('div')
-    this.portalInstance = ReactDOM.render(component, this.portal)
+      </EventsWrapper>
+    , this.portal)
   }
 
   _removeZoomed() {
@@ -176,6 +171,12 @@ export default class ImageZoom extends Component {
 
       this.setState(changes, this.props.onUnzoom)
     }
+  }
+
+  _getControlledEventFn() {
+    return isControlled(this.props.isZoomed)
+      ? this.props.onUnzoom
+      : null
   }
 }
 
