@@ -8,7 +8,7 @@
     "build:example": "browserify example/src/app.js -o example/build/app.js -t [ babelify ]",
     "build": "npm run build:js && npm run build:example",
     "dev": "nodemon",
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "start": "node index.js"
   },
   "repository": {
@@ -41,16 +41,16 @@
     "react-dom": ">=0.14.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.10.1",
+    "babel-cli": "^6.26.0",
     "babel-plugin-transform-object-assign": "^6.22.0",
-    "babel-preset-latest": "^6.22.0",
-    "babel-preset-react": "^6.11.1",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.24.1",
     "babelify": "^7.3.0",
-    "browserify": "^13.0.1",
+    "browserify": "^14.4.0",
     "koa": "^2.3.0",
     "koa-static": "^4.0.1",
     "nodemon": "^1.11.0",
-    "react": "15.5.4",
-    "react-dom": "15.5.4"
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1"
   }
 }

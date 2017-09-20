@@ -1,4 +1,4 @@
 {
-  "presets": ["latest", "react"],
+  "presets": ["env", "react"],
   "plugins": ["transform-object-assign"]
 }
