@@ -8,7 +8,6 @@ import EventsWrapper from './EventsWrapper'
 import Overlay from './Overlay'
 import Zoom from './Zoom'
 
-
 const isControlled = isZoomed => isZoomed != null
 
 export default class ImageZoom extends Component {
@@ -43,7 +42,14 @@ export default class ImageZoom extends Component {
   }
 
   componentDidMount() {
-    if (this.props.isZoomed) this._renderZoomed()
+    if (this.props.isZoomed) {
+      /**
+       * Add to the end of the execution queue
+       * to make sure other things can execute
+       * first and prevent it from being "jumpy"
+       */
+      setTimeout(this._renderZoomed.bind(this), 0)
+    }
   }
 
   // Clean up any mess we made of the DOM before we unmount
