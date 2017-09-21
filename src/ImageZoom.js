@@ -53,7 +53,7 @@ export default class ImageZoom extends Component {
 
   // Clean up any mess we made of the DOM before we unmount
   componentWillUnmount() {
-    this.removeZoomed()
+    this._removeZoomed()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -67,6 +67,16 @@ export default class ImageZoom extends Component {
       !isControlled(nextProps.isZoomed)
     ) {
       throw new Error(defaults.errors.controlled)
+    }
+
+    /**
+     * When component is controlled, we need a flag
+     * set when it's about to close in order to keep
+     * hiding the original image on the page until the
+     * unzooming is complete
+     */
+    if (this.props.isZoomed && !nextProps.isZoomed) {
+      this.isClosing = true
     }
 
     // If the consumer wants to change the image's src, then so be it.
@@ -139,10 +149,9 @@ export default class ImageZoom extends Component {
   }
 
   _getImageStyle() {
-    const style = Object.assign(
-      {},
-      this.state.isZoomed && { visibility: 'hidden' }
-    )
+    const isHidden =
+      this.state.isZoomed || this.props.isZoomed || this.isClosing
+    const style = Object.assign({}, isHidden && { visibility: 'hidden' })
 
     return Object.assign(
       {},
@@ -190,6 +199,8 @@ export default class ImageZoom extends Component {
        * external `isZoomed` command and an internal one.
        */
       this._removeZoomed()
+
+      delete this.isClosing
 
       this.setState(changes, this.props.onUnzoom)
     }

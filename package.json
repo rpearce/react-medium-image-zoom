@@ -14,7 +14,9 @@
     "lint:fix": "eslint src/**/*.js --ext .js --fix",
     "precommit": "lint-staged",
     "prepublishOnly": "npm run build",
-    "start": "node index.js"
+    "start": "node index.js",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "lint-staged": {
     "*.js": [
@@ -71,6 +73,9 @@
     "nodemon": "^1.11.0",
     "prettier": "^1.7.0",
     "react": "^15.6.1",
-    "react-dom": "^15.6.1"
+    "react-dom": "^15.6.1",
+    "@storybook/react": "^3.2.8",
+    "@storybook/addon-actions": "^3.2.6",
+    "@storybook/addon-links": "^3.2.6"
   }
 }

@@ -135,7 +135,7 @@
                   _react2.default.createElement(
                     'p',
                     null,
-                    'Trust fund seitan chia, wolf lomo letterpress Bushwick before they sold out. Carles kogi fixie, squid twee Tonx readymade cred typewriter scenester locavore kale chips vegan organic. Meggings pug wolf Shoreditch typewriter skateboard. McSweeney"s iPhone chillwave, food truck direct trade disrupt flannel irony tousled Cosby sweater single-origin coffee. Organic disrupt bicycle rights, tattooed messenger bag flannel craft beer fashion axe bitters. Readymade sartorial craft beer, quinoa sustainable butcher Marfa Echo Park Terry Richardson gluten-free flannel retro cred mlkshk banjo. Salvia 90"s art party Blue Bottle, PBR&B cardigan 8-bit.'
+                    "Trust fund seitan chia, wolf lomo letterpress Bushwick before they sold out. Carles kogi fixie, squid twee Tonx readymade cred typewriter scenester locavore kale chips vegan organic. Meggings pug wolf Shoreditch typewriter skateboard. McSweeney's iPhone chillwave, food truck direct trade disrupt flannel irony tousled Cosby sweater single-origin coffee. Organic disrupt bicycle rights, tattooed messenger bag flannel craft beer fashion axe bitters. Readymade sartorial craft beer, quinoa sustainable butcher Marfa Echo Park Terry Richardson gluten-free flannel retro cred mlkshk banjo. Salvia 90's art party Blue Bottle, PBR&B cardigan 8-bit."
                   ),
                   _react2.default.createElement(
                     'p',
@@ -161,7 +161,7 @@
                   _react2.default.createElement(
                     'p',
                     null,
-                    'Thundercats freegan Truffaut, four loko twee Austin scenester lo-fi seitan High Life paleo quinoa cray. Schlitz butcher ethical Tumblr, pop-up DIY keytar ethnic iPhone PBR sriracha. Tonx direct trade bicycle rights gluten-free flexitarian asymmetrical. Whatever drinking vinegar PBR XOXO Bushwick gentrify. Cliche semiotics banjo retro squid Wes Anderson. Fashion axe dreamcatcher you probably haven"t heard of them bicycle rights. Tote bag organic four loko ethical selfies gastropub, PBR fingerstache tattooed bicycle rights.'
+                    "Thundercats freegan Truffaut, four loko twee Austin scenester lo-fi seitan High Life paleo quinoa cray. Schlitz butcher ethical Tumblr, pop-up DIY keytar ethnic iPhone PBR sriracha. Tonx direct trade bicycle rights gluten-free flexitarian asymmetrical. Whatever drinking vinegar PBR XOXO Bushwick gentrify. Cliche semiotics banjo retro squid Wes Anderson. Fashion axe dreamcatcher you probably haven't heard of them bicycle rights. Tote bag organic four loko ethical selfies gastropub, PBR fingerstache tattooed bicycle rights."
                   ),
                   _react2.default.createElement(
                     'div',
@@ -185,12 +185,12 @@
                   _react2.default.createElement(
                     'p',
                     null,
-                    'Ugh Portland Austin, distillery tattooed typewriter polaroid pug Banksy Neutra keffiyeh. Shoreditch mixtape wolf PBR&B, tote bag dreamcatcher literally bespoke Odd Future selfies 90"s master cleanse vegan. Flannel tofu deep v next level pickled, authentic Etsy Shoreditch literally swag photo booth iPhone pug semiotics banjo. Bicycle rights butcher Blue Bottle, actually DIY semiotics Banksy banjo mixtape Austin pork belly post-ironic. American Apparel gastropub hashtag, McSweeney"s master cleanse occupy High Life bitters wayfarers next level bicycle rights. Wolf chia Terry Richardson, pop-up plaid kitsch ugh. Butcher +1 Carles, swag selfies Blue Bottle viral.'
+                    "Ugh Portland Austin, distillery tattooed typewriter polaroid pug Banksy Neutra keffiyeh. Shoreditch mixtape wolf PBR&B, tote bag dreamcatcher literally bespoke Odd Future selfies 90's master cleanse vegan. Flannel tofu deep v next level pickled, authentic Etsy Shoreditch literally swag photo booth iPhone pug semiotics banjo. Bicycle rights butcher Blue Bottle, actually DIY semiotics Banksy banjo mixtape Austin pork belly post-ironic. American Apparel gastropub hashtag, McSweeney's master cleanse occupy High Life bitters wayfarers next level bicycle rights. Wolf chia Terry Richardson, pop-up plaid kitsch ugh. Butcher +1 Carles, swag selfies Blue Bottle viral."
                   ),
                   _react2.default.createElement(
                     'p',
                     null,
-                    'Keffiyeh food truck organic letterpress leggings iPhone four loko hella pour-over occupy, Wes Anderson cray post-ironic. Neutra retro fixie gastropub +1, High Life semiotics. Vinyl distillery Etsy freegan flexitarian cliche jean shorts, Schlitz wayfarers skateboard tousled irony locavore XOXO meh. Ethnic Wes Anderson McSweeney"s messenger bag, mixtape XOXO slow-carb cornhole aesthetic Marfa banjo Thundercats bitters. Raw denim banjo typewriter cray Tumblr, High Life single-origin coffee. 90"s Tumblr cred, Terry Richardson occupy raw denim tofu fashion axe photo booth banh mi. Trust fund locavore Helvetica, fashion axe selvage authentic Shoreditch swag selfies stumptown +1.'
+                    "Keffiyeh food truck organic letterpress leggings iPhone four loko hella pour-over occupy, Wes Anderson cray post-ironic. Neutra retro fixie gastropub +1, High Life semiotics. Vinyl distillery Etsy freegan flexitarian cliche jean shorts, Schlitz wayfarers skateboard tousled irony locavore XOXO meh. Ethnic Wes Anderson McSweeney's messenger bag, mixtape XOXO slow-carb cornhole aesthetic Marfa banjo Thundercats bitters. Raw denim banjo typewriter cray Tumblr, High Life single-origin coffee. 90's Tumblr cred, Terry Richardson occupy raw denim tofu fashion axe photo booth banh mi. Trust fund locavore Helvetica, fashion axe selvage authentic Shoreditch swag selfies stumptown +1."
                   ),
                   _react2.default.createElement(
                     'div',
@@ -211,17 +211,17 @@
                   _react2.default.createElement(
                     'p',
                     null,
-                    'Scenester chambray slow-carb, trust fund biodiesel ugh bicycle rights cornhole. Gentrify messenger bag Truffaut tousled roof party pork belly leggings, photo booth jean shorts. Austin readymade PBR plaid chambray. Squid Echo Park pour-over, wayfarers forage whatever locavore typewriter artisan deep v four loko. Locavore occupy Neutra Pitchfork McSweeney"s, wayfarers fingerstache. Actually asymmetrical drinking vinegar yr brunch biodiesel. Before they sold out sustainable readymade craft beer Portland gastropub squid Austin, roof party Thundercats chambray narwhal Bushwick pug.'
+                    "Scenester chambray slow-carb, trust fund biodiesel ugh bicycle rights cornhole. Gentrify messenger bag Truffaut tousled roof party pork belly leggings, photo booth jean shorts. Austin readymade PBR plaid chambray. Squid Echo Park pour-over, wayfarers forage whatever locavore typewriter artisan deep v four loko. Locavore occupy Neutra Pitchfork McSweeney's, wayfarers fingerstache. Actually asymmetrical drinking vinegar yr brunch biodiesel. Before they sold out sustainable readymade craft beer Portland gastropub squid Austin, roof party Thundercats chambray narwhal Bushwick pug."
                   ),
                   _react2.default.createElement(
                     'p',
                     null,
-                    'Literally typewriter chillwave, bicycle rights Carles flannel wayfarers. Biodiesel farm-to-table actually, locavore keffiyeh hella shabby chic pour-over try-hard Bushwick. Sriracha American Apparel Brooklyn, synth cray stumptown blog Bushwick +1 VHS hashtag. Wolf umami Carles Marfa, 90"s food truck Cosby sweater. Fanny pack try-hard keytar pop-up readymade, master cleanse four loko trust fund polaroid salvia. Photo booth kitsch forage chambray, Carles scenester slow-carb lomo cardigan dreamcatcher. Swag asymmetrical leggings, biodiesel Tonx shabby chic ethnic master cleanse freegan.'
+                    "Literally typewriter chillwave, bicycle rights Carles flannel wayfarers. Biodiesel farm-to-table actually, locavore keffiyeh hella shabby chic pour-over try-hard Bushwick. Sriracha American Apparel Brooklyn, synth cray stumptown blog Bushwick +1 VHS hashtag. Wolf umami Carles Marfa, 90's food truck Cosby sweater. Fanny pack try-hard keytar pop-up readymade, master cleanse four loko trust fund polaroid salvia. Photo booth kitsch forage chambray, Carles scenester slow-carb lomo cardigan dreamcatcher. Swag asymmetrical leggings, biodiesel Tonx shabby chic ethnic master cleanse freegan."
                   ),
                   _react2.default.createElement(
                     'p',
                     null,
-                    'Raw denim Banksy shabby chic, 8-bit salvia narwhal fashion axe. Ethical Williamsburg four loko, chia kale chips distillery Shoreditch messenger bag swag iPhone Pitchfork. Viral PBR&B single-origin coffee quinoa readymade, ethical chillwave drinking vinegar gluten-free Wes Anderson kitsch Tumblr synth actually bitters. Butcher McSweeney"s forage mlkshk kogi fingerstache. Selvage scenester butcher Shoreditch, Carles beard plaid disrupt DIY. Pug readymade selvage retro, Austin salvia vinyl master cleanse flexitarian deep v bicycle rights plaid Terry Richardson mlkshk pour-over. Trust fund try-hard banh mi Brooklyn, 90"s Etsy kogi YOLO salvia.'
+                    "Raw denim Banksy shabby chic, 8-bit salvia narwhal fashion axe. Ethical Williamsburg four loko, chia kale chips distillery Shoreditch messenger bag swag iPhone Pitchfork. Viral PBR&B single-origin coffee quinoa readymade, ethical chillwave drinking vinegar gluten-free Wes Anderson kitsch Tumblr synth actually bitters. Butcher McSweeney's forage mlkshk kogi fingerstache. Selvage scenester butcher Shoreditch, Carles beard plaid disrupt DIY. Pug readymade selvage retro, Austin salvia vinyl master cleanse flexitarian deep v bicycle rights plaid Terry Richardson mlkshk pour-over. Trust fund try-hard banh mi Brooklyn, 90's Etsy kogi YOLO salvia."
                   )
                 )
               }
@@ -690,7 +690,7 @@
               {
                 key: 'componentWillUnmount',
                 value: function componentWillUnmount() {
-                  this.removeZoomed()
+                  this._removeZoomed()
                 }
               },
               {
@@ -706,6 +706,16 @@
                     !isControlled(nextProps.isZoomed)
                   ) {
                     throw new Error(_defaults2.default.errors.controlled)
+                  }
+
+                  /**
+       * When component is controlled, we need a flag
+       * set when it's about to close in order to keep
+       * hiding the original image on the page until the
+       * unzooming is complete
+       */
+                  if (this.props.isZoomed && !nextProps.isZoomed) {
+                    this.isClosing = true
                   }
 
                   // If the consumer wants to change the image's src, then so be it.
@@ -795,10 +805,9 @@
               {
                 key: '_getImageStyle',
                 value: function _getImageStyle() {
-                  var style = _extends(
-                    {},
-                    this.state.isZoomed && { visibility: 'hidden' }
-                  )
+                  var isHidden =
+                    this.state.isZoomed || this.props.isZoomed || this.isClosing
+                  var style = _extends({}, isHidden && { visibility: 'hidden' })
 
                   return _extends(
                     {},
@@ -853,6 +862,8 @@
          * external `isZoomed` command and an internal one.
          */
                     _this2._removeZoomed()
+
+                    delete _this2.isClosing
 
                     _this2.setState(changes, _this2.props.onUnzoom)
                   }
@@ -2542,11 +2553,18 @@
 
           /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  * @typechecks
  */
@@ -3801,60 +3819,62 @@
           var warning = emptyFunction
 
           if (process.env.NODE_ENV !== 'production') {
-            var printWarning = function printWarning(format) {
-              for (
-                var _len = arguments.length,
-                  args = Array(_len > 1 ? _len - 1 : 0),
-                  _key = 1;
-                _key < _len;
-                _key++
-              ) {
-                args[_key - 1] = arguments[_key]
-              }
-
-              var argIndex = 0
-              var message =
-                'Warning: ' +
-                format.replace(/%s/g, function() {
-                  return args[argIndex++]
-                })
-              if (typeof console !== 'undefined') {
-                console.error(message)
-              }
-              try {
-                // --- Welcome to debugging React ---
-                // This error was thrown as a convenience so that you can use this stack
-                // to find the callsite that caused this warning to fire.
-                throw new Error(message)
-              } catch (x) {}
-            }
-
-            warning = function warning(condition, format) {
-              if (format === undefined) {
-                throw new Error(
-                  '`warning(condition, format, ...args)` requires a warning ' +
-                    'message argument'
-                )
-              }
-
-              if (format.indexOf('Failed Composite propType: ') === 0) {
-                return // Ignore CompositeComponent proptype check.
-              }
-
-              if (!condition) {
+            ;(function() {
+              var printWarning = function printWarning(format) {
                 for (
-                  var _len2 = arguments.length,
-                    args = Array(_len2 > 2 ? _len2 - 2 : 0),
-                    _key2 = 2;
-                  _key2 < _len2;
-                  _key2++
+                  var _len = arguments.length,
+                    args = Array(_len > 1 ? _len - 1 : 0),
+                    _key = 1;
+                  _key < _len;
+                  _key++
                 ) {
-                  args[_key2 - 2] = arguments[_key2]
+                  args[_key - 1] = arguments[_key]
                 }
 
-                printWarning.apply(undefined, [format].concat(args))
+                var argIndex = 0
+                var message =
+                  'Warning: ' +
+                  format.replace(/%s/g, function() {
+                    return args[argIndex++]
+                  })
+                if (typeof console !== 'undefined') {
+                  console.error(message)
+                }
+                try {
+                  // --- Welcome to debugging React ---
+                  // This error was thrown as a convenience so that you can use this stack
+                  // to find the callsite that caused this warning to fire.
+                  throw new Error(message)
+                } catch (x) {}
               }
-            }
+
+              warning = function warning(condition, format) {
+                if (format === undefined) {
+                  throw new Error(
+                    '`warning(condition, format, ...args)` requires a warning ' +
+                      'message argument'
+                  )
+                }
+
+                if (format.indexOf('Failed Composite propType: ') === 0) {
+                  return // Ignore CompositeComponent proptype check.
+                }
+
+                if (!condition) {
+                  for (
+                    var _len2 = arguments.length,
+                      args = Array(_len2 > 2 ? _len2 - 2 : 0),
+                      _key2 = 2;
+                    _key2 < _len2;
+                    _key2++
+                  ) {
+                    args[_key2 - 2] = arguments[_key2]
+                  }
+
+                  printWarning.apply(undefined, [format].concat(args))
+                }
+              }
+            })()
           }
 
           module.exports = warning
@@ -4137,12 +4157,6 @@ object-assign
         process.removeListener = noop
         process.removeAllListeners = noop
         process.emit = noop
-        process.prependListener = noop
-        process.prependOnceListener = noop
-
-        process.listeners = function(name) {
-          return []
-        }
 
         process.binding = function(name) {
           throw new Error('process.binding is not supported')
