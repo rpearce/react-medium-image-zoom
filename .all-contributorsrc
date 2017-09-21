@@ -1,0 +1,90 @@
+{
+  "projectName": "react-medium-image-zoom",
+  "projectOwner": "rpearce",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "contributors": [
+    {
+      "login": "cbothner",
+      "name": "Cameron Bothner",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/4642599?v=4",
+      "profile": "https://github.com/cbothner",
+      "contributions": [
+        "code",
+        "doc",
+        "bug",
+        "example",
+        "ideas",
+        "review",
+        "test"
+      ]
+    },
+    {
+      "login": "jeremybini",
+      "name": "Jeremy Bini",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/12982155?v=4",
+      "profile": "https://github.com/jeremybini",
+      "contributions": [
+        "code",
+        "bug"
+      ]
+    },
+    {
+      "login": "ismay",
+      "name": "ismay",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/7355199?v=4",
+      "profile": "https://ismaywolff.nl",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
+    },
+    {
+      "login": "rajit",
+      "name": "Rajit Singh",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/220647?v=4",
+      "profile": "https://www.qeek.co",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "rsaccon",
+      "name": "Roberto Saccon",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/16122?v=4",
+      "profile": "https://github.com/rsaccon",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "wtfdaemon",
+      "name": "wtfdaemon",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/6598350?v=4",
+      "profile": "https://github.com/wtfdaemon",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "rpearce",
+      "name": "Robert Pearce",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/592876?v=4",
+      "profile": "https://robertwpearce.com",
+      "contributions": [
+        "code",
+        "question",
+        "test",
+        "bug",
+        "example",
+        "design",
+        "review",
+        "ideas",
+        "doc"
+      ]
+    }
+  ]
+}
