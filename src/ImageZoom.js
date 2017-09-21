@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
-import { bool, element, func, object, number, shape, string } from 'prop-types'
+import { bool, func, object, shape, string } from 'prop-types'
 import ReactDOM from 'react-dom'
 import defaults from './defaults'
 import { createPortal, removePortal } from './helpers'
 
 import EventsWrapper from './EventsWrapper'
-import Overlay from './Overlay'
 import Zoom from './Zoom'
 
-const isControlled = isZoomed => isZoomed != null
+const isControlled = isZoomed => isZoomed !== null && isZoomed !== undefined
 
 export default class ImageZoom extends Component {
   constructor(props) {
@@ -35,7 +34,7 @@ export default class ImageZoom extends Component {
         image: {},
         zoomImage: {}
       },
-      shouldHandleZoom: (_) => true,
+      shouldHandleZoom: () => true,
       onZoom: () => {},
       onUnzoom: () => {}
     }
@@ -58,9 +57,15 @@ export default class ImageZoom extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!isControlled(this.props.isZoomed) && isControlled(nextProps.isZoomed)) {
+    if (
+      !isControlled(this.props.isZoomed) &&
+      isControlled(nextProps.isZoomed)
+    ) {
       throw new Error(defaults.errors.uncontrolled)
-    } else if (isControlled(this.props.isZoomed) && !isControlled(nextProps.isZoomed)) {
+    } else if (
+      isControlled(this.props.isZoomed) &&
+      !isControlled(nextProps.isZoomed)
+    ) {
       throw new Error(defaults.errors.controlled)
     }
 
@@ -78,8 +83,12 @@ export default class ImageZoom extends Component {
    * based off of that.
    */
   componentDidUpdate(prevProps, prevState) {
-    const prevIsZoomed = isControlled(prevProps.isZoomed) ? prevProps.isZoomed : prevState.isZoomed
-    const isZoomed = isControlled(this.props.isZoomed) ? this.props.isZoomed : this.state.isZoomed
+    const prevIsZoomed = isControlled(prevProps.isZoomed)
+      ? prevProps.isZoomed
+      : prevState.isZoomed
+    const isZoomed = isControlled(this.props.isZoomed)
+      ? this.props.isZoomed
+      : this.state.isZoomed
     if (prevIsZoomed !== isZoomed) {
       if (isZoomed) {
         this._renderZoomed()
@@ -99,7 +108,7 @@ export default class ImageZoom extends Component {
       onClick: this._handleZoom
     })
 
-    return <img ref="image" { ...attrs } />
+    return <img ref="image" {...attrs} />
   }
 
   _renderZoomed() {
@@ -107,16 +116,17 @@ export default class ImageZoom extends Component {
     this.portalInstance = ReactDOM.render(
       <EventsWrapper controlledEventFn={this._getControlledEventFn()}>
         <Zoom
-          defaultStyles={ this.props.defaultStyles }
-          image={ ReactDOM.findDOMNode(this.refs.image) }
-          hasAlreadyLoaded={ this.state.hasAlreadyLoaded }
-          shouldRespectMaxDimension={ this.props.shouldRespectMaxDimension }
-          zoomImage={ this.props.zoomImage }
-          zoomMargin={ this.props.zoomMargin }
-          onUnzoom={ this._handleUnzoom }
+          defaultStyles={this.props.defaultStyles}
+          image={ReactDOM.findDOMNode(this.refs.image)}
+          hasAlreadyLoaded={this.state.hasAlreadyLoaded}
+          shouldRespectMaxDimension={this.props.shouldRespectMaxDimension}
+          zoomImage={this.props.zoomImage}
+          zoomMargin={this.props.zoomMargin}
+          onUnzoom={this._handleUnzoom}
         />
-      </EventsWrapper>
-    , this.portal)
+      </EventsWrapper>,
+      this.portal
+    )
   }
 
   _removeZoomed() {
@@ -129,7 +139,8 @@ export default class ImageZoom extends Component {
   }
 
   _getImageStyle() {
-    const style = Object.assign({},
+    const style = Object.assign(
+      {},
       this.state.isZoomed && { visibility: 'hidden' }
     )
 
@@ -143,7 +154,10 @@ export default class ImageZoom extends Component {
   }
 
   _handleZoom(event) {
-    if (this.props.isZoomed == null && this.props.shouldHandleZoom(event)) {
+    if (
+      !isControlled(this.props.isZoomed) &&
+      this.props.shouldHandleZoom(event)
+    ) {
       this.setState({ isZoomed: true }, this.props.onZoom)
     } else {
       this.props.onZoom()
@@ -160,7 +174,9 @@ export default class ImageZoom extends Component {
    */
   _handleUnzoom(src) {
     return () => {
-      const changes = Object.assign({}, { hasAlreadyLoaded: true, isZoomed: false },
+      const changes = Object.assign(
+        {},
+        { hasAlreadyLoaded: true, isZoomed: false },
         this.props.shouldReplaceImage && {
           image: Object.assign({}, this.state.image, { src })
         }
@@ -180,9 +196,7 @@ export default class ImageZoom extends Component {
   }
 
   _getControlledEventFn() {
-    return isControlled(this.props.isZoomed)
-      ? this.props.onUnzoom
-      : null
+    return isControlled(this.props.isZoomed) ? this.props.onUnzoom : null
   }
 }
 
@@ -207,4 +221,3 @@ ImageZoom.propTypes = {
   onZoom: func,
   onUnzoom: func
 }
-
