@@ -8,6 +8,8 @@ This library is a different implementation of [Medium.com's image zoom](https://
 
 You can [view the demo here](https://rpearce.github.io/react-medium-image-zoom/).
 
+![demo](https://user-images.githubusercontent.com/592876/30678463-7ef720f0-9ee6-11e7-925d-924da1b58157.gif)
+
 ## Installation
 ```
 $ npm install --save react-medium-image-zoom
@@ -73,11 +75,21 @@ The reverse is true, as well. If the component is instantiated without an `isZoo
 Currently, this has only been tested on the latest modern browsers. Pull requests are welcome.
 
 ## Development
-The source code is located within the `src` directory. Use `$ make` to build the main file as well as the example during development, and use `$ make dev` to have it watch for changes to `src/` and `example/src`.
+The source code is located within the `src` directory. Use `$ npm run build` to build the main file as well as the example during development, and use `$ npm run dev dev` to have it watch for changes to `src/` and `example/src`.
 
-You can view the built example as a file via `$ open example/build/index.html`, or you can use `$ make dev` to start a local dev server and navigate to [http://localhost:3000](http://localhost:3000).
+You can view the built example as a file via `$ open example/build/index.html`, or you can use `$ npm run dev` to start a local dev server and navigate to [http://localhost:3000](http://localhost:3000).
 
-## Contribute
+### Storybook
+This project's different options and use cases are documented in [storybook](https://github.com/storybooks/storybook). You can use this in dev like so:
+
+* `$ yarn run storybook` (or `$ npm run storybook`)
+* navigate to http://localhost:6006
+
+The page should look like this:
+
+![image](https://user-images.githubusercontent.com/592876/30678386-097f05c2-9ee6-11e7-936d-56a12b59d4b8.png)
+
+## Contributing
 
 1. Check out the [issues](https://github.com/rpearce/react-medium-image-zoom/issues)
 1. Fork this repository
