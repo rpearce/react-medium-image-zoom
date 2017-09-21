@@ -6,6 +6,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.0.1] - 2017-09-21
+### Added
+- Dev: eslint & prettier for code formatting and double-dhecking
+
+### Changed
+n/a
+
+### Deprecated
+n/a
+
+### Removed
+n/a
+
+### Fixed
+n/a
+
 ## [2.0.0] - 2017-09-21
 ### Added
 - Changelog (so meta...)
