@@ -38,14 +38,10 @@ export default class EventsWrapper extends Component {
   }
 
   render() {
-    return (
-      <div onClick={this.unzoom}>
-        {this._cloneChild()}
-      </div>
-    )
+    return <div onClick={this.unzoom}>{this._cloneChild()}</div>
   }
 
-  unzoom({ force=false }={}) {
+  unzoom({ force = false } = {}) {
     if (this.props.controlledEventFn && !force) {
       return this.props.controlledEventFn()
     }
@@ -54,10 +50,9 @@ export default class EventsWrapper extends Component {
   }
 
   _cloneChild() {
-    return React.cloneElement(
-      React.Children.only(this.props.children),
-      { ref: 'child' }
-    )
+    return React.cloneElement(React.Children.only(this.props.children), {
+      ref: 'child'
+    })
   }
 
   _handleKeyUp({ which }) {
@@ -74,7 +69,7 @@ export default class EventsWrapper extends Component {
     this.forceUpdate()
   }
 
-  _handleScroll(e) {
+  _handleScroll() {
     this.forceUpdate()
     const scrollChange = Math.abs(window.pageYOffset - this.pageYOffset)
     if (scrollChange > 10) {
@@ -94,7 +89,7 @@ export default class EventsWrapper extends Component {
     }
   }
 
-  _handleTouchEnd(e) {
+  _handleTouchEnd() {
     delete this.yTouchPosition
   }
 }

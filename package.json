@@ -6,10 +6,20 @@
   "scripts": {
     "build:js": "babel src --out-dir lib",
     "build:example": "browserify example/src/app.js -o example/build/app.js -t [ babelify ]",
-    "build": "npm run build:js && npm run build:example",
+    "build": "npm run lint && npm run build:js && npm run build:example",
     "dev": "nodemon",
+    "lint": "eslint eslint src/**/*.js --ext .js",
+    "lint:fix": "eslint src/**/*.js --ext .js --fix",
+    "precommit": "lint-staged",
     "prepublishOnly": "npm run build",
     "start": "node index.js"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
@@ -47,9 +57,16 @@
     "babel-preset-react": "^6.24.1",
     "babelify": "^7.3.0",
     "browserify": "^14.4.0",
+    "eslint": "^4.7.1",
+    "eslint-config-prettier": "^2.5.0",
+    "eslint-plugin-prettier": "^2.3.1",
+    "eslint-plugin-react": "^7.3.0",
+    "husky": "^0.14.3",
     "koa": "^2.3.0",
     "koa-static": "^4.0.1",
+    "lint-staged": "^4.2.1",
     "nodemon": "^1.11.0",
+    "prettier": "^1.7.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1"
   }
