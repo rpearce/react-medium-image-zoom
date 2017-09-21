@@ -1,4 +1,5 @@
 # react-medium-image-zoom
+[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors)
 
 ![](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)
 ![](https://img.shields.io/npm/v/react-medium-image-zoom.svg)
@@ -89,3 +90,14 @@ You can view the built example as a file via `$ open example/build/index.html`, 
 1. Create a pull request from your branch to this repo's master branch
 1. When all is merged, pull down the upstream changes to your master
 1. Delete your feature branch
+
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+| [<img src="https://avatars1.githubusercontent.com/u/4642599?v=4" width="100px;"/><br /><sub>Cameron Bothner</sub>](https://github.com/cbothner)<br />[💻](https://github.com/rpearce/react-medium-image-zoom/commits?author=cbothner "Code") [📖](https://github.com/rpearce/react-medium-image-zoom/commits?author=cbothner "Documentation") [🐛](https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Acbothner "Bug reports") [💡](#example-cbothner "Examples") [🤔](#ideas-cbothner "Ideas, Planning, & Feedback") [👀](#review-cbothner "Reviewed Pull Requests") [⚠️](https://github.com/rpearce/react-medium-image-zoom/commits?author=cbothner "Tests") | [<img src="https://avatars2.githubusercontent.com/u/12982155?v=4" width="100px;"/><br /><sub>Jeremy Bini</sub>](https://github.com/jeremybini)<br />[💻](https://github.com/rpearce/react-medium-image-zoom/commits?author=jeremybini "Code") [🐛](https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Ajeremybini "Bug reports") | [<img src="https://avatars1.githubusercontent.com/u/7355199?v=4" width="100px;"/><br /><sub>ismay</sub>](https://ismaywolff.nl)<br />[🐛](https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Aismay "Bug reports") [🤔](#ideas-ismay "Ideas, Planning, & Feedback") | [<img src="https://avatars0.githubusercontent.com/u/220647?v=4" width="100px;"/><br /><sub>Rajit Singh</sub>](https://www.qeek.co)<br />[🐛](https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Arajit "Bug reports") | [<img src="https://avatars1.githubusercontent.com/u/16122?v=4" width="100px;"/><br /><sub>Roberto Saccon</sub>](https://github.com/rsaccon)<br />[🐛](https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Arsaccon "Bug reports") | [<img src="https://avatars0.githubusercontent.com/u/6598350?v=4" width="100px;"/><br /><sub>wtfdaemon</sub>](https://github.com/wtfdaemon)<br />[🐛](https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Awtfdaemon "Bug reports") | [<img src="https://avatars2.githubusercontent.com/u/592876?v=4" width="100px;"/><br /><sub>Robert Pearce</sub>](https://robertwpearce.com)<br />[💻](https://github.com/rpearce/react-medium-image-zoom/commits?author=rpearce "Code") [💬](#question-rpearce "Answering Questions") [⚠️](https://github.com/rpearce/react-medium-image-zoom/commits?author=rpearce "Tests") [🐛](https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Arpearce "Bug reports") [💡](#example-rpearce "Examples") [🎨](#design-rpearce "Design") [👀](#review-rpearce "Reviewed Pull Requests") [🤔](#ideas-rpearce "Ideas, Planning, & Feedback") [📖](https://github.com/rpearce/react-medium-image-zoom/commits?author=rpearce "Documentation") |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!

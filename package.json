@@ -7,6 +7,8 @@
     "build:js": "babel src --out-dir lib",
     "build:example": "browserify example/src/app.js -o example/build/app.js -t [ babelify ]",
     "build": "npm run lint && npm run build:js && npm run build:example",
+    "contributors:add": "all-contributors add",
+    "contributors:generate": "all-contributors generate",
     "dev": "nodemon",
     "lint": "eslint eslint src/**/*.js --ext .js",
     "lint:fix": "eslint src/**/*.js --ext .js --fix",
@@ -51,6 +53,7 @@
     "react-dom": ">=0.14.0"
   },
   "devDependencies": {
+    "all-contributors-cli": "^4.4.0",
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-object-assign": "^6.22.0",
     "babel-preset-env": "^1.6.0",
