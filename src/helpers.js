@@ -48,9 +48,15 @@ export const getMaxDimensionScale = ({
   naturalHeight,
   zoomMargin
 }) => {
-  const scale = getScale({ width: naturalWidth, height: naturalHeight, zoomMargin })
-  const ratio = naturalWidth > naturalHeight
-    ? naturalWidth / width
-    : naturalHeight / height
+  const scale = getScale({
+    width: naturalWidth,
+    height: naturalHeight,
+    zoomMargin
+  })
+  const ratio =
+    naturalWidth > naturalHeight ? naturalWidth / width : naturalHeight / height
   return scale > 1 ? ratio : scale * ratio
 }
+
+export const isMaxDimension = img =>
+  img.clientWidth >= img.naturalWidth || img.clientHeight >= img.naturalHeight

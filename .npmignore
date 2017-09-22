@@ -1,3 +1,12 @@
-.babelrc
+.storybook/
 example/
 src/
+stories/
+.all-contributorsrc
+.babelrc
+*.md
+.eslintignore
+.eslintrc
+.prettierignore
+.prettierrc
+nodemon.json
