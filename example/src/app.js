@@ -107,7 +107,7 @@ class App extends Component {
               title: "Don't exceed original image dimensions...",
               className: 'img',
               style: {
-                width: '80%'
+                width: '250px'
               }
             }}
             shouldRespectMaxDimension={true}

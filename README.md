@@ -43,18 +43,18 @@ function MyComponent(props) {
 }
 ```
 
-| Prop                        | Type    | Required | Default | Details |
-| ------                      | ------- | -------  | ------- | ------- |
-| `image`                     | object  | yes      | none    | The original image |
-| `zoomImage`                 | object  | no       | `image` | The image to be used for zooming |
-| `zoomMargin`                | number  | no       | `40`    | Pixel number to offset zoomed image from the window |
-| `isZoomed`                  | boolean | no       | `false` | For more direct control over the zoom state |
-| `shouldHandleZoom`          | func    | no       | `(event) => true` | Pass this callback to intercept a zoom click event and determine whether or not to zoom. Function must return a truthy or falsy value |
-| `shouldReplaceImage`        | boolean | no       | `true`  | Once the image has been "zoomed" and downloaded the larger image, this replaces the original `image` with the `zoomImage` |
-| `shouldRespectMaxDimension` | boolean | no       | `false` | When `true`, don't make the zoomed image's dimensions larger than the original dimensions. _Currently only supported when NO zoomImage is provided._  |
-| `defaultStyles`             | object  | no       | `{}` | For fine-grained control over all default styles (`zoomContainer`, `overlay`, `image`, `zoomImage`) |
-| `onZoom`                    | func    | no       | `() => {}` | Pass this callback to respond to a zoom interaction. |
-| `onUnzoom`                  | func    | no       | `() => {}` | Pass this callback to respond to an unzoom interaction. |
+| Prop                          | Type    | Required | Default           | Details |
+| ---                           | ---     | ---      | ---               | ---     |
+| `image`                       | object  | yes      | none              | The original image |
+| `zoomImage`                   | object  | no       | `image`           | The image to be used for zooming |
+| `zoomMargin`                  | number  | no       | `40`              | Pixel number to offset zoomed image from the window |
+| `isZoomed`                    | boolean | no       | `false`           | For more direct control over the zoom state |
+| `shouldHandleZoom`            | func    | no       | `(event) => true` | Pass this callback to intercept a zoom click event and determine whether or not to zoom. Function must return a truthy or falsy value |
+| `shouldReplaceImage`          | boolean | no       | `true`            | Once the image has been "zoomed" and downloaded the larger image, this replaces the original `image` with the `zoomImage` |
+| `shouldRespectMaxDimension`   | boolean | no       | `false`           | When `true`, don't make the zoomed image's dimensions larger than the original dimensions. Only supported if no `zoomImage` is provided. Will also disable the zooming if the image's is already rendered at its maximum width & height |
+| `defaultStyles`               | object  | no       | `{}`              | For fine-grained control over all default styles (`zoomContainer`, `overlay`, `image`, `zoomImage`) |
+| `onZoom`                      | func    | no       | `() => {}`        | Pass this callback to respond to a zoom interaction. |
+| `onUnzoom`                    | func    | no       | `() => {}`        | Pass this callback to respond to an unzoom interaction. |
 
 Each one of these image props accepts normal `image` props, for example:
 

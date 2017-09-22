@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { bool, func, object, shape, string } from 'prop-types'
 import ReactDOM from 'react-dom'
 import defaults from './defaults'
-import { createPortal, removePortal } from './helpers'
+import { createPortal, removePortal, isMaxDimension } from './helpers'
 
 import EventsWrapper from './EventsWrapper'
 import Zoom from './Zoom'
@@ -14,6 +14,7 @@ export default class ImageZoom extends Component {
     super(props)
 
     this.state = {
+      isMaxDimension: false,
       isZoomed: false,
       image: props.image,
       hasAlreadyLoaded: false
@@ -21,6 +22,7 @@ export default class ImageZoom extends Component {
 
     this._handleZoom = this._handleZoom.bind(this)
     this._handleUnzoom = this._handleUnzoom.bind(this)
+    this._handleLoad = this._handleLoad.bind(this)
   }
 
   static get defaultProps() {
@@ -111,14 +113,43 @@ export default class ImageZoom extends Component {
   render() {
     /**
      * Take whatever attributes you want to pass the image
-     * and then override with the properties we need
+     * and then override with the properties we need.
+     * Also, disable any clicking if the componenet is
+     * already at its maximum dimensions.
      */
-    const attrs = Object.assign({}, this.state.image, {
-      style: this._getImageStyle(),
-      onClick: this._handleZoom
-    })
+    const attrs = Object.assign(
+      {},
+      this.state.image,
+      { style: this._getImageStyle() },
+      !this.state.isMaxDimension && { onClick: this._handleZoom }
+    )
 
-    return <img ref="image" {...attrs} />
+    return (
+      <img
+        ref={x => {
+          this.image = x
+        }}
+        onLoad={this._handleLoad}
+        {...attrs}
+      />
+    )
+  }
+
+  /**
+   * If the image should not exceed its original
+   * dimensions AND there is no zoomImage AND the
+   * image is already rendered at its maximum dimensions,
+   * then we shouldn't try to zoom it at all. We currently
+   * only do this on componentDidMount, though on window
+   * resize could be something to consider if necessary.
+   */
+  _checkShouldDisableComponent() {
+    this.setState({
+      isMaxDimension:
+        this.props.shouldRespectMaxDimension &&
+        !this.props.zoomImage &&
+        isMaxDimension(this.image)
+    })
   }
 
   _renderZoomed() {
@@ -127,7 +158,7 @@ export default class ImageZoom extends Component {
       <EventsWrapper controlledEventFn={this._getControlledEventFn()}>
         <Zoom
           defaultStyles={this.props.defaultStyles}
-          image={ReactDOM.findDOMNode(this.refs.image)}
+          image={this.image}
           hasAlreadyLoaded={this.state.hasAlreadyLoaded}
           shouldRespectMaxDimension={this.props.shouldRespectMaxDimension}
           zoomImage={this.props.zoomImage}
@@ -158,8 +189,18 @@ export default class ImageZoom extends Component {
       defaults.styles.image,
       style,
       this.props.defaultStyles.image,
-      this.state.image.style
+      this.state.image.style,
+      this.state.isMaxDimension && { cursor: 'inherit' }
     )
+  }
+
+  /**
+   * We need to wait for the main image
+   * to load before we can do any width/height
+   * checks on it.
+   */
+  _handleLoad() {
+    this._checkShouldDisableComponent()
   }
 
   _handleZoom(event) {
@@ -228,7 +269,7 @@ ImageZoom.propTypes = {
   isZoomed: bool,
   shouldHandleZoom: func,
   shouldReplaceImage: bool,
-  shouldRespectMaxDimension: bool.isRequired,
+  shouldRespectMaxDimension: bool,
   onZoom: func,
   onUnzoom: func
 }

@@ -113,7 +113,7 @@ var App = function (_Component) {
               title: "Don't exceed original image dimensions...",
               className: 'img',
               style: {
-                width: '80%'
+                width: '250px'
               }
             },
             shouldRespectMaxDimension: true
@@ -411,6 +411,7 @@ var ImageZoom = function (_Component) {
     var _this = _possibleConstructorReturn(this, (ImageZoom.__proto__ || Object.getPrototypeOf(ImageZoom)).call(this, props));
 
     _this.state = {
+      isMaxDimension: false,
       isZoomed: false,
       image: props.image,
       hasAlreadyLoaded: false
@@ -418,6 +419,7 @@ var ImageZoom = function (_Component) {
 
     _this._handleZoom = _this._handleZoom.bind(_this);
     _this._handleUnzoom = _this._handleUnzoom.bind(_this);
+    _this._handleLoad = _this._handleLoad.bind(_this);
     return _this;
   }
 
@@ -490,16 +492,39 @@ var ImageZoom = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       /**
        * Take whatever attributes you want to pass the image
-       * and then override with the properties we need
+       * and then override with the properties we need.
+       * Also, disable any clicking if the componenet is
+       * already at its maximum dimensions.
        */
-      var attrs = _extends({}, this.state.image, {
-        style: this._getImageStyle(),
-        onClick: this._handleZoom
-      });
+      var attrs = _extends({}, this.state.image, { style: this._getImageStyle() }, !this.state.isMaxDimension && { onClick: this._handleZoom });
 
-      return _react2.default.createElement('img', _extends({ ref: 'image' }, attrs));
+      return _react2.default.createElement('img', _extends({
+        ref: function ref(x) {
+          _this2.image = x;
+        },
+        onLoad: this._handleLoad
+      }, attrs));
+    }
+
+    /**
+     * If the image should not exceed its original
+     * dimensions AND there is no zoomImage AND the
+     * image is already rendered at its maximum dimensions,
+     * then we shouldn't try to zoom it at all. We currently
+     * only do this on componentDidMount, though on window
+     * resize could be something to consider if necessary.
+     */
+
+  }, {
+    key: '_checkShouldDisableComponent',
+    value: function _checkShouldDisableComponent() {
+      this.setState({
+        isMaxDimension: this.props.shouldRespectMaxDimension && !this.props.zoomImage && (0, _helpers.isMaxDimension)(this.image)
+      });
     }
   }, {
     key: '_renderZoomed',
@@ -507,7 +532,7 @@ var ImageZoom = function (_Component) {
       this.portal = (0, _helpers.createPortal)('div');
       this.portalInstance = _reactDom2.default.render(_react2.default.createElement(_EventsWrapper2.default, { controlledEventFn: this._getControlledEventFn() }, _react2.default.createElement(_Zoom2.default, {
         defaultStyles: this.props.defaultStyles,
-        image: _reactDom2.default.findDOMNode(this.refs.image),
+        image: this.image,
         hasAlreadyLoaded: this.state.hasAlreadyLoaded,
         shouldRespectMaxDimension: this.props.shouldRespectMaxDimension,
         zoomImage: this.props.zoomImage,
@@ -531,7 +556,19 @@ var ImageZoom = function (_Component) {
       var isHidden = this.state.isZoomed || this.props.isZoomed || this.isClosing;
       var style = _extends({}, isHidden && { visibility: 'hidden' });
 
-      return _extends({}, _defaults2.default.styles.image, style, this.props.defaultStyles.image, this.state.image.style);
+      return _extends({}, _defaults2.default.styles.image, style, this.props.defaultStyles.image, this.state.image.style, this.state.isMaxDimension && { cursor: 'inherit' });
+    }
+
+    /**
+     * We need to wait for the main image
+     * to load before we can do any width/height
+     * checks on it.
+     */
+
+  }, {
+    key: '_handleLoad',
+    value: function _handleLoad() {
+      this._checkShouldDisableComponent();
     }
   }, {
     key: '_handleZoom',
@@ -555,11 +592,11 @@ var ImageZoom = function (_Component) {
   }, {
     key: '_handleUnzoom',
     value: function _handleUnzoom(src) {
-      var _this2 = this;
+      var _this3 = this;
 
       return function () {
-        var changes = _extends({}, { hasAlreadyLoaded: true, isZoomed: false }, _this2.props.shouldReplaceImage && {
-          image: _extends({}, _this2.state.image, { src: src })
+        var changes = _extends({}, { hasAlreadyLoaded: true, isZoomed: false }, _this3.props.shouldReplaceImage && {
+          image: _extends({}, _this3.state.image, { src: src })
         });
 
         /**
@@ -569,11 +606,11 @@ var ImageZoom = function (_Component) {
          * The reasoning is so we can differentiate between an
          * external `isZoomed` command and an internal one.
          */
-        _this2._removeZoomed();
+        _this3._removeZoomed();
 
-        delete _this2.isClosing;
+        delete _this3.isClosing;
 
-        _this2.setState(changes, _this2.props.onUnzoom);
+        _this3.setState(changes, _this3.props.onUnzoom);
       };
     }
   }, {
@@ -625,7 +662,7 @@ ImageZoom.propTypes = {
   isZoomed: _propTypes.bool,
   shouldHandleZoom: _propTypes.func,
   shouldReplaceImage: _propTypes.bool,
-  shouldRespectMaxDimension: _propTypes.bool.isRequired,
+  shouldRespectMaxDimension: _propTypes.bool,
   onZoom: _propTypes.func,
   onUnzoom: _propTypes.func
 };
@@ -1062,9 +1099,17 @@ var getMaxDimensionScale = exports.getMaxDimensionScale = function getMaxDimensi
       naturalHeight = _ref2.naturalHeight,
       zoomMargin = _ref2.zoomMargin;
 
-  var scale = getScale({ width: naturalWidth, height: naturalHeight, zoomMargin: zoomMargin });
+  var scale = getScale({
+    width: naturalWidth,
+    height: naturalHeight,
+    zoomMargin: zoomMargin
+  });
   var ratio = naturalWidth > naturalHeight ? naturalWidth / width : naturalHeight / height;
   return scale > 1 ? ratio : scale * ratio;
+};
+
+var isMaxDimension = exports.isMaxDimension = function isMaxDimension(img) {
+  return img.clientWidth >= img.naturalWidth || img.clientHeight >= img.naturalHeight;
 };
 
 },{}],8:[function(require,module,exports){
