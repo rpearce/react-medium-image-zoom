@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { bool, func, object, shape, string } from 'prop-types'
-import ReactDOM from 'react-dom'
 import defaults from './defaults'
-import { createPortal, removePortal, isMaxDimension } from './helpers'
+import { isMaxDimension } from './helpers'
 
 import EventsWrapper from './EventsWrapper'
 import Zoom from './Zoom'
@@ -40,22 +39,6 @@ export default class ImageZoom extends Component {
       onZoom: () => {},
       onUnzoom: () => {}
     }
-  }
-
-  componentDidMount() {
-    if (this.props.isZoomed) {
-      /**
-       * Add to the end of the execution queue
-       * to make sure other things can execute
-       * first and prevent it from being "jumpy"
-       */
-      setTimeout(this._renderZoomed.bind(this), 0)
-    }
-  }
-
-  // Clean up any mess we made of the DOM before we unmount
-  componentWillUnmount() {
-    this._removeZoomed()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -102,9 +85,7 @@ export default class ImageZoom extends Component {
       ? this.props.isZoomed
       : this.state.isZoomed
     if (prevIsZoomed !== isZoomed) {
-      if (isZoomed) {
-        this._renderZoomed()
-      } else if (this.portalInstance) {
+      if (!isZoomed && this.portalInstance) {
         this.portalInstance.unzoom({ force: true })
       }
     }
@@ -123,16 +104,39 @@ export default class ImageZoom extends Component {
       { style: this._getImageStyle() },
       !this.state.isMaxDimension && { onClick: this._handleZoom }
     )
+    const isZoomed = isControlled(this.props.isZoomed)
+      ? this.props.isZoomed
+      : this.state.isZoomed
 
-    return (
+    return [
       <img
+        key="image"
         ref={x => {
           this.image = x
         }}
         onLoad={this._handleLoad}
         {...attrs}
-      />
-    )
+      />,
+      isZoomed || this.isClosing ?
+        <EventsWrapper
+          key="portal"
+          ref={node => {
+            this.portalInstance = node
+          }}
+          controlledEventFn={this._getControlledEventFn()}
+        >
+          <Zoom
+            defaultStyles={this.props.defaultStyles}
+            image={this.image}
+            hasAlreadyLoaded={this.state.hasAlreadyLoaded}
+            shouldRespectMaxDimension={this.props.shouldRespectMaxDimension}
+            zoomImage={this.props.zoomImage}
+            zoomMargin={this.props.zoomMargin}
+            onUnzoom={this._handleUnzoom}
+          />
+        </EventsWrapper>
+       : null
+    ]
   }
 
   /**
@@ -150,33 +154,6 @@ export default class ImageZoom extends Component {
         !this.props.zoomImage &&
         isMaxDimension(this.image)
     })
-  }
-
-  _renderZoomed() {
-    this.portal = createPortal('div')
-    this.portalInstance = ReactDOM.render(
-      <EventsWrapper controlledEventFn={this._getControlledEventFn()}>
-        <Zoom
-          defaultStyles={this.props.defaultStyles}
-          image={this.image}
-          hasAlreadyLoaded={this.state.hasAlreadyLoaded}
-          shouldRespectMaxDimension={this.props.shouldRespectMaxDimension}
-          zoomImage={this.props.zoomImage}
-          zoomMargin={this.props.zoomMargin}
-          onUnzoom={this._handleUnzoom}
-        />
-      </EventsWrapper>,
-      this.portal
-    )
-  }
-
-  _removeZoomed() {
-    if (this.portal) {
-      ReactDOM.unmountComponentAtNode(this.portal)
-      removePortal(this.portal)
-      delete this.portalInstance
-      delete this.portal
-    }
   }
 
   _getImageStyle() {
@@ -239,8 +216,6 @@ export default class ImageZoom extends Component {
        * The reasoning is so we can differentiate between an
        * external `isZoomed` command and an internal one.
        */
-      this._removeZoomed()
-
       delete this.isClosing
 
       this.setState(changes, this.props.onUnzoom)

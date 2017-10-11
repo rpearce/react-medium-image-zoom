@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
+import { createPortal } from 'react-dom'
 import { element, func } from 'prop-types'
 import defaults from './defaults'
+import { createPortalContainer, removePortalContainer } from './helpers'
 
 export default class EventsWrapper extends Component {
   constructor() {
     super()
+    this.portal = createPortalContainer('div')
     this.unzoom = this.unzoom.bind(this)
     this._handleScroll = this._handleScroll.bind(this)
     this._handleKeyUp = this._handleKeyUp.bind(this)
@@ -35,10 +38,16 @@ export default class EventsWrapper extends Component {
     window.removeEventListener('ontouchend', this._handleTouchEnd)
     window.removeEventListener('ontouchcancel', this._handleTouchEnd)
     window.removeEventListener('resize', this._handleResize)
+    removePortalContainer(this.portal)
   }
 
   render() {
-    return <div onClick={this.unzoom}>{this._cloneChild()}</div>
+    return this.portal
+      ? createPortal(
+          <div onClick={this.unzoom}>{this._cloneChild()}</div>,
+          this.portal
+        )
+      : null
   }
 
   unzoom({ force = false } = {}) {
@@ -46,12 +55,14 @@ export default class EventsWrapper extends Component {
       return this.props.controlledEventFn()
     }
 
-    return this.refs.child.unzoom()
+    return this.child.unzoom()
   }
 
   _cloneChild() {
     return React.cloneElement(React.Children.only(this.props.children), {
-      ref: 'child'
+      ref: child => {
+        this.child = child
+      }
     })
   }
 
