@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.0.0] - 2017-10-13
+
+### Added
+- support for React v16, making use of such things as its portals concept
+
+### Removed
+- support for React < v16
+
 ## [2.0.3] - 2017-09-22
 
 ### Fixed
