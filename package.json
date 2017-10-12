@@ -1,6 +1,6 @@
 {
   "name": "react-medium-image-zoom",
-  "version": "2.0.3",
+  "version": "3.0.0",
   "description": "Medium.com style image zoom for React",
   "main": "lib/index.js",
   "scripts": {
@@ -51,10 +51,13 @@
   "homepage": "https://github.com/rpearce/react-medium-image-zoom#readme",
   "peerDependencies": {
     "prop-types": "^15.5.8",
-    "react": ">=0.14.0",
-    "react-dom": ">=0.14.0"
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^3.2.6",
+    "@storybook/addon-links": "^3.2.6",
+    "@storybook/react": "^3.2.8",
     "all-contributors-cli": "^4.4.0",
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-object-assign": "^6.22.0",
@@ -72,10 +75,7 @@
     "lint-staged": "^4.2.1",
     "nodemon": "^1.11.0",
     "prettier": "^1.7.0",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "@storybook/react": "^3.2.8",
-    "@storybook/addon-actions": "^3.2.6",
-    "@storybook/addon-links": "^3.2.6"
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
   }
 }
