@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { element, func } from 'prop-types'
 import defaults from './defaults'
+import { isEscapeKey, isEnterOrSpaceBarKey } from './keyboardEvents'
 
 export default class EventsWrapper extends Component {
   constructor() {
     super()
     this.unzoom = this.unzoom.bind(this)
     this._handleScroll = this._handleScroll.bind(this)
-    this._handleKeyUp = this._handleKeyUp.bind(this)
+    this._handleKeyDown = this._handleKeyDown.bind(this)
     this._handleResize = this._handleResize.bind(this)
     this._handleTouchStart = this._handleTouchStart.bind(this)
     this._handleTouchMove = this._handleTouchMove.bind(this)
@@ -18,7 +19,7 @@ export default class EventsWrapper extends Component {
     this.pageYOffset = window.pageYOffset
     setTimeout(() => {
       window.addEventListener('scroll', this._handleScroll, true)
-      window.addEventListener('keyup', this._handleKeyUp)
+      window.addEventListener('keydown', this._handleKeyDown)
       window.addEventListener('ontouchstart', this._handleTouchStart)
       window.addEventListener('ontouchmove', this._handleTouchMove)
       window.addEventListener('ontouchend', this._handleTouchEnd)
@@ -29,7 +30,7 @@ export default class EventsWrapper extends Component {
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this._handleScroll, true)
-    window.removeEventListener('keyup', this._handleKeyUp)
+    window.removeEventListener('keydown', this._handleKeyDown)
     window.removeEventListener('ontouchstart', this._handleTouchStart)
     window.removeEventListener('ontouchmove', this._handleTouchMove)
     window.removeEventListener('ontouchend', this._handleTouchEnd)
@@ -41,12 +42,12 @@ export default class EventsWrapper extends Component {
     return <div onClick={this.unzoom}>{this._cloneChild()}</div>
   }
 
-  unzoom({ force = false } = {}) {
+  unzoom({ force = false, allowRefocus = true } = {}) {
     if (this.props.controlledEventFn && !force) {
       return this.props.controlledEventFn()
     }
 
-    return this.refs.child.unzoom()
+    return this.refs.child.unzoom(allowRefocus)
   }
 
   _cloneChild() {
@@ -55,13 +56,18 @@ export default class EventsWrapper extends Component {
     })
   }
 
-  _handleKeyUp({ which }) {
-    const opts = {
-      27: this.unzoom
+  _handleKeyDown(e) {
+    const { allowAccessibilityClose } = this.props
+    const unzoomForEnterOrSpace =
+      allowAccessibilityClose && isEnterOrSpaceBarKey(e)
+    const unzoomForEscape = isEscapeKey(e)
+
+    if (unzoomForEnterOrSpace) {
+      e.preventDefault() // prevent space bar from scrolling
     }
 
-    if (opts[which]) {
-      return opts[which]()
+    if (unzoomForEnterOrSpace || unzoomForEscape) {
+      this.unzoom()
     }
   }
 
@@ -73,7 +79,7 @@ export default class EventsWrapper extends Component {
     this.forceUpdate()
     const scrollChange = Math.abs(window.pageYOffset - this.pageYOffset)
     if (scrollChange > 10) {
-      this.unzoom()
+      this.unzoom({ allowRefocus: false }) // disallow refocus when dismissing w/ scroll
     }
   }
 
