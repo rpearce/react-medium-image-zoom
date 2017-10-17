@@ -37,23 +37,25 @@ export default class Zoom extends Component {
 
   render() {
     return (
-      <div style={ this._getZoomContainerStyle() }>
+      <div style={this._getZoomContainerStyle()}>
         <Overlay
-          isVisible={ this.state.isZoomed }
-          defaultStyles={ this.props.defaultStyles }
+          isVisible={this.state.isZoomed}
+          defaultStyles={this.props.defaultStyles}
         />
         <img
-          { ...this.props.zoomImage }
-          src={ this.state.src }
-          style={ this._getZoomImageStyle() }
+          {...this.props.zoomImage}
+          src={this.state.src}
+          style={this._getZoomImageStyle()}
         />
       </div>
     )
   }
 
-  unzoom() {
-    const onUnzoom = this.props.onUnzoom(this.state.src)
-    this.setState({ isZoomed: false }, () => setTimeout(onUnzoom, defaults.transitionDuration))
+  unzoom(allowRefocus = true) {
+    const onUnzoom = this.props.onUnzoom(this.state.src, allowRefocus)
+    this.setState({ isZoomed: false }, () =>
+      setTimeout(onUnzoom, defaults.transitionDuration)
+    )
   }
 
   _handleImageLoad(img) {
@@ -103,9 +105,16 @@ export default class Zoom extends Component {
     const translateY = viewportY - imageCenterY
 
     // Figure out how much to scale the image
-    const scale = shouldRespectMaxDimension && !src
-      ? getMaxDimensionScale({ width, height, naturalWidth, naturalHeight, zoomMargin })
-      : getScale({ width, height, zoomMargin })
+    const scale =
+      shouldRespectMaxDimension && !src
+        ? getMaxDimensionScale({
+            width,
+            height,
+            naturalWidth,
+            naturalHeight,
+            zoomMargin
+          })
+        : getScale({ width, height, zoomMargin })
 
     const zoomStyle = {
       transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`
