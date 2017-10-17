@@ -10,6 +10,7 @@ import Zoom from './Zoom'
 
 const isControlled = isZoomed => isZoomed !== null && isZoomed !== undefined
 const focusableTabIndex = 0
+const unfocusableTabIndex = -1
 
 export default class ImageZoom extends Component {
   constructor(props) {
@@ -127,8 +128,10 @@ export default class ImageZoom extends Component {
       !isMaxDimension && { tabIndex: focusableTabIndex },
       image,
       { style: this._getImageStyle() },
-      !isMaxDimension && { onClick: this._handleZoom },
-      !isMaxDimension && { onKeyDown: this._handleKeyDown }
+      !isMaxDimension && {
+        onClick: this._handleZoom,
+        onKeyDown: this._handleKeyDown
+      }
     )
 
     return (
@@ -273,7 +276,7 @@ export default class ImageZoom extends Component {
   }
 
   _allowTabNavigation() {
-    return this.image.tabIndex === focusableTabIndex
+    return this.image.tabIndex !== unfocusableTabIndex
   }
 }
 
