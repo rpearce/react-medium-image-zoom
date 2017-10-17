@@ -964,7 +964,13 @@ var Zoom = function (_Component) {
       var translateY = viewportY - imageCenterY;
 
       // Figure out how much to scale the image
-      var scale = shouldRespectMaxDimension && !src ? (0, _helpers.getMaxDimensionScale)({ width: width, height: height, naturalWidth: naturalWidth, naturalHeight: naturalHeight, zoomMargin: zoomMargin }) : (0, _helpers.getScale)({ width: width, height: height, zoomMargin: zoomMargin });
+      var scale = shouldRespectMaxDimension && !src ? (0, _helpers.getMaxDimensionScale)({
+        width: width,
+        height: height,
+        naturalWidth: naturalWidth,
+        naturalHeight: naturalHeight,
+        zoomMargin: zoomMargin
+      }) : (0, _helpers.getScale)({ width: width, height: height, zoomMargin: zoomMargin });
 
       var zoomStyle = {
         transform: 'translate3d(' + translateX + 'px, ' + translateY + 'px, 0) scale(' + scale + ')'
