@@ -10,6 +10,7 @@ import ShouldRespectMaxDimension from './ShouldRespectMaxDimension'
 import Uncontrolled from './Uncontrolled'
 import Welcome from './Welcome'
 import ZoomImage from './ZoomImage'
+import ShouldRespectTabIndex from './ShouldRespectTabIndex'
 
 storiesOf('react-medium-image-zoom', module)
   .add('README', () => <Welcome />)
@@ -26,3 +27,4 @@ storiesOf('react-medium-image-zoom', module)
   .add("Respect image's maximum dimensions", () =>
     <ShouldRespectMaxDimension />
   )
+  .add("Respect image's tab index", () => <ShouldRespectTabIndex />)
