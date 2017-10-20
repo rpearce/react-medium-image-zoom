@@ -85,6 +85,17 @@
         "ideas",
         "doc"
       ]
+    },
+    {
+      "login": "joshsloat",
+      "name": "Josh Sloat",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/606159?v=4",
+      "profile": "http://www.joshsloat.com",
+      "contributions": [
+        "bug",
+        "code",
+        "example"
+      ]
     }
   ]
 }
