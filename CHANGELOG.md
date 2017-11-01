@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.0.5] - 2017-11-01
+
+### Fixed
+- Fixed issue where updating other image attributes after mounting was not respected; the image was cached in `this.state` when only the `src` should have been.
+
 ## [2.0.4] - 2017-10-16
 
 ### Fixed
