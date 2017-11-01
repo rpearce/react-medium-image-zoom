@@ -19,6 +19,8 @@
     "array-bracket-spacing": ["error", "always"],
     "camelcase": "error",
     "global-require": "error",
+    "no-console": "warn",
+    "no-debugger": "warn",
     "no-duplicate-imports": "error",
     "no-eq-null": "error",
     "no-extra-parens": "error",
