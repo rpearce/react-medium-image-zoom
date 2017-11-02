@@ -124,7 +124,7 @@ export default class ImageZoom extends Component {
     /**
      * Take whatever attributes you want to pass the image
      * and then override with the properties we need,
-     * including using state as source of truth for hi/low-res 
+     * including using state as source of truth for hi/low-res
      * version img src.
      * Also, disable any clicking if the component is
      * already at its maximum dimensions.
@@ -135,6 +135,7 @@ export default class ImageZoom extends Component {
       image,
       { src, style: this._getImageStyle() },
       !isMaxDimension && {
+        onMouseDown: this._preventFocus,
         onClick: this._handleZoom,
         onKeyDown: this._handleKeyDown
       }
@@ -222,18 +223,19 @@ export default class ImageZoom extends Component {
     this._checkShouldDisableComponent()
   }
 
-  _handleKeyDown(event) {
-    if (isEnterOrSpaceBarKey(event)) {
-      event.preventDefault()
-      this._handleZoom(event)
+  _handleKeyDown(e) {
+    if (isEnterOrSpaceBarKey(e)) {
+      e.preventDefault()
+      this._handleZoom(e)
     }
   }
 
-  _handleZoom(event) {
-    if (
-      !isControlled(this.props.isZoomed) &&
-      this.props.shouldHandleZoom(event)
-    ) {
+  _preventFocus(e) {
+    e.preventDefault()
+  }
+
+  _handleZoom(e) {
+    if (!isControlled(this.props.isZoomed) && this.props.shouldHandleZoom(e)) {
       this.setState({ isZoomed: true }, this.props.onZoom)
     } else {
       this.props.onZoom()

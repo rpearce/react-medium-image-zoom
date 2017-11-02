@@ -15,11 +15,11 @@ const escapeKey = {
 
 /**
  * Per the MDN, KeyboardEvent.keyCode and KeyboardEvent.which
- * are deprecated. KeyboardEvent.code is not to be used to 
+ * are deprecated. KeyboardEvent.code is not to be used to
  * determine what character corresponds with a key event
  * and is also not supported on Edge. KeyboardEvent.key is the
  * preferred method, but seems less reliable than keyCode given
- * it returns different strings for different browsers; ex: "Escape" 
+ * it returns different strings for different browsers; ex: "Escape"
  * in Chrome, but "Esc" in Edge. This function future proofs
  * against deprecation, while still giving preference to the more
  * reliable keyCode.
@@ -27,7 +27,7 @@ const escapeKey = {
  * https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code
  * https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
  * https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/which
- * 
+ *
  * KeyMap : { keyCode: Number, keys: [ String ] }
  * isKey : KeyMap -> KeyboardEvent -> Boolean
  */
