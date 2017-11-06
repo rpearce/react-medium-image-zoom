@@ -257,10 +257,8 @@ var EventsWrapper = function (_Component) {
     key: 'unzoom',
     value: function unzoom() {
       var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref$force = _ref.force,
-          force = _ref$force === undefined ? false : _ref$force,
-          _ref$allowRefocus = _ref.allowRefocus,
-          allowRefocus = _ref$allowRefocus === undefined ? true : _ref$allowRefocus;
+          force = _ref.force,
+          allowRefocus = _ref.allowRefocus;
 
       if (this.props.controlledEventFn && !force) {
         return this.props.controlledEventFn();
@@ -292,7 +290,7 @@ var EventsWrapper = function (_Component) {
       }
 
       if (unzoomForEnterOrSpace || unzoomForEscape) {
-        this.unzoom();
+        this.unzoom({ allowRefocus: true });
       }
     }
   }, {
@@ -306,7 +304,7 @@ var EventsWrapper = function (_Component) {
       this.forceUpdate();
       var scrollChange = Math.abs(window.pageYOffset - this.pageYOffset);
       if (scrollChange > 10) {
-        this.unzoom({ allowRefocus: false }); // disallow refocus when dismissing w/ scroll
+        this.unzoom();
       }
     }
   }, {
@@ -509,6 +507,7 @@ var ImageZoom = function (_Component) {
        */
 
       var attrs = _extends({}, !isMaxDimension && { tabIndex: focusableTabIndex }, image, { src: src, style: this._getImageStyle() }, !isMaxDimension && {
+        onMouseDown: this._preventFocus,
         onClick: this._handleZoom,
         onKeyDown: this._handleKeyDown
       });
@@ -576,16 +575,21 @@ var ImageZoom = function (_Component) {
     }
   }, {
     key: '_handleKeyDown',
-    value: function _handleKeyDown(event) {
-      if ((0, _keyboardEvents.isEnterOrSpaceBarKey)(event)) {
-        event.preventDefault();
-        this._handleZoom(event);
+    value: function _handleKeyDown(e) {
+      if ((0, _keyboardEvents.isEnterOrSpaceBarKey)(e)) {
+        e.preventDefault();
+        this._handleZoom(e);
       }
     }
   }, {
+    key: '_preventFocus',
+    value: function _preventFocus(e) {
+      e.preventDefault();
+    }
+  }, {
     key: '_handleZoom',
-    value: function _handleZoom(event) {
-      if (!isControlled(this.props.isZoomed) && this.props.shouldHandleZoom(event)) {
+    value: function _handleZoom(e) {
+      if (!isControlled(this.props.isZoomed) && this.props.shouldHandleZoom(e)) {
         this.setState({ isZoomed: true }, this.props.onZoom);
       } else {
         this.props.onZoom();
@@ -911,9 +915,7 @@ var Zoom = function (_Component) {
     }
   }, {
     key: 'unzoom',
-    value: function unzoom() {
-      var allowRefocus = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-
+    value: function unzoom(allowRefocus) {
       var onUnzoom = this.props.onUnzoom(this.state.src, allowRefocus);
       this.setState({ isZoomed: false }, function () {
         return setTimeout(onUnzoom, _defaults2.default.transitionDuration);
@@ -1176,11 +1178,11 @@ var escapeKey = {
 
   /**
    * Per the MDN, KeyboardEvent.keyCode and KeyboardEvent.which
-   * are deprecated. KeyboardEvent.code is not to be used to 
+   * are deprecated. KeyboardEvent.code is not to be used to
    * determine what character corresponds with a key event
    * and is also not supported on Edge. KeyboardEvent.key is the
    * preferred method, but seems less reliable than keyCode given
-   * it returns different strings for different browsers; ex: "Escape" 
+   * it returns different strings for different browsers; ex: "Escape"
    * in Chrome, but "Esc" in Edge. This function future proofs
    * against deprecation, while still giving preference to the more
    * reliable keyCode.
@@ -1188,7 +1190,7 @@ var escapeKey = {
    * https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code
    * https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
    * https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/which
-   * 
+   *
    * KeyMap : { keyCode: Number, keys: [ String ] }
    * isKey : KeyMap -> KeyboardEvent -> Boolean
    */

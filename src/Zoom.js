@@ -51,7 +51,7 @@ export default class Zoom extends Component {
     )
   }
 
-  unzoom(allowRefocus = true) {
+  unzoom(allowRefocus) {
     const onUnzoom = this.props.onUnzoom(this.state.src, allowRefocus)
     this.setState({ isZoomed: false }, () =>
       setTimeout(onUnzoom, defaults.transitionDuration)

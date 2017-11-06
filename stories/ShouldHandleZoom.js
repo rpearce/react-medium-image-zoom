@@ -29,7 +29,7 @@ const ShouldHandleZoom = ({ isEnabled, onToggle }) =>
     </p>
     <p>
       Try it! Click this checkbox to enable zooming{' '}
-      <strong>only when the image is clicked</strong>
+      <strong>only when the image is clicked </strong>
       and uncheck it to disable the zoom capabilities altogether.
     </p>
     <p>
