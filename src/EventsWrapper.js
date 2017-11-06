@@ -51,7 +51,7 @@ export default class EventsWrapper extends Component {
       : null
   }
 
-  unzoom({ force = false, allowRefocus = true } = {}) {
+  unzoom({ force, allowRefocus } = {}) {
     if (this.props.controlledEventFn && !force) {
       return this.props.controlledEventFn()
     }
@@ -78,7 +78,7 @@ export default class EventsWrapper extends Component {
     }
 
     if (unzoomForEnterOrSpace || unzoomForEscape) {
-      this.unzoom()
+      this.unzoom({ allowRefocus: true })
     }
   }
 
@@ -90,7 +90,7 @@ export default class EventsWrapper extends Component {
     this.forceUpdate()
     const scrollChange = Math.abs(window.pageYOffset - this.pageYOffset)
     if (scrollChange > 10) {
-      this.unzoom({ allowRefocus: false }) // disallow refocus when dismissing w/ scroll
+      this.unzoom()
     }
   }
 

@@ -4,9 +4,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [3.0.2] - 2017-11-06
+
+### Fixed
+- Includes the keyboard navigation and clicking updates from 2.0.5 and 2.0.6 for React >16
+
+## [2.0.6] - 2017-11-02
+
+### Fixed
+- Fixed issue where clicking to open & close a zoomable image resulted in the focusing of that element which could cause the page to scroll it completely into view and leave an outline on the image (aka focus) when it was not accessed via the keyboard.
+
+## [2.0.5] - 2017-11-01
+
+### Fixed
+- Fixed issue where updating other image attributes after mounting was not respected; the image was cached in `this.state` when only the `src` should have been.
 
 ## [3.0.1] - 2017-10-20
+
+### Fixed
+- Now supporting keyboard interaction for accessibility (https://github.com/rpearce/react-medium-image-zoom/issues/70). Classified this as a bug and therefore a patch version.
+
+## [2.0.4] - 2017-10-16
 
 ### Fixed
 - Now supporting keyboard interaction for accessibility (https://github.com/rpearce/react-medium-image-zoom/issues/70). Classified this as a bug and therefore a patch version.
