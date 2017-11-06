@@ -18,7 +18,7 @@ export default class ImageZoom extends Component {
     this.state = {
       isMaxDimension: false,
       isZoomed: false,
-      image: props.image,
+      src: props.image.src,
       hasAlreadyLoaded: false
     }
 
@@ -68,9 +68,12 @@ export default class ImageZoom extends Component {
       this.isClosing = true
     }
 
+    const { src } = this.props.image
+    const { src: nextSrc } = nextProps.image
+
     // If the consumer wants to change the image's src, then so be it.
-    if (this.props.image.src !== nextProps.image.src) {
-      this.setState({ image: nextProps.image })
+    if (src !== nextSrc) {
+      this.setState({ src: nextSrc })
     }
   }
 
@@ -96,11 +99,14 @@ export default class ImageZoom extends Component {
   }
 
   render() {
-    const { image, isMaxDimension } = this.state
+    const { image } = this.props
+    const { isMaxDimension, src } = this.state
 
     /**
      * Take whatever attributes you want to pass the image
-     * and then override with the properties we need.
+     * and then override with the properties we need,
+     * including using state as source of truth for hi/low-res
+     * version img src.
      * Also, disable any clicking if the component is
      * already at its maximum dimensions.
      */
@@ -108,8 +114,9 @@ export default class ImageZoom extends Component {
       {},
       !isMaxDimension && { tabIndex: focusableTabIndex },
       image,
-      { style: this._getImageStyle() },
+      { src, style: this._getImageStyle() },
       !isMaxDimension && {
+        onMouseDown: this._preventFocus,
         onClick: this._handleZoom,
         onKeyDown: this._handleKeyDown
       }
@@ -177,7 +184,7 @@ export default class ImageZoom extends Component {
       defaults.styles.image,
       style,
       this.props.defaultStyles.image,
-      this.state.image.style,
+      this.props.image.style,
       this.state.isMaxDimension && { cursor: 'inherit' }
     )
   }
@@ -191,18 +198,19 @@ export default class ImageZoom extends Component {
     this._checkShouldDisableComponent()
   }
 
-  _handleKeyDown(event) {
-    if (isEnterOrSpaceBarKey(event)) {
-      event.preventDefault()
-      this._handleZoom(event)
+  _handleKeyDown(e) {
+    if (isEnterOrSpaceBarKey(e)) {
+      e.preventDefault()
+      this._handleZoom(e)
     }
   }
 
-  _handleZoom(event) {
-    if (
-      !isControlled(this.props.isZoomed) &&
-      this.props.shouldHandleZoom(event)
-    ) {
+  _preventFocus(e) {
+    e.preventDefault()
+  }
+
+  _handleZoom(e) {
+    if (!isControlled(this.props.isZoomed) && this.props.shouldHandleZoom(e)) {
       this.setState({ isZoomed: true }, this.props.onZoom)
     } else {
       this.props.onZoom()
@@ -222,9 +230,7 @@ export default class ImageZoom extends Component {
       const changes = Object.assign(
         {},
         { hasAlreadyLoaded: true, isZoomed: false },
-        this.props.shouldReplaceImage && {
-          image: Object.assign({}, this.state.image, { src })
-        }
+        this.props.shouldReplaceImage && { src }
       )
 
       /**
