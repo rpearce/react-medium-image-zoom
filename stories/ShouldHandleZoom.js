@@ -28,8 +28,9 @@ const ShouldHandleZoom = ({ isEnabled, onToggle }) =>
       shouldHandleZoom prop which should be a function that returns a boolean.
     </p>
     <p>
-      Try it! Click this checkbox to enable zooming and uncheck it to disable
-      the zoom capabilities.
+      Try it! Click this checkbox to enable zooming{' '}
+      <strong>only when the image is clicked </strong>
+      and uncheck it to disable the zoom capabilities altogether.
     </p>
     <p>
       <input
@@ -51,7 +52,7 @@ const ShouldHandleZoom = ({ isEnabled, onToggle }) =>
             width: '300px'
           }
         }}
-        shouldHandleZoom={() => isEnabled}
+        shouldHandleZoom={e => isEnabled && e.type === 'click'}
       />
     </p>
   </div>
