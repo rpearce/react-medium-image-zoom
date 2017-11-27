@@ -94,7 +94,21 @@
       "contributions": [
         "bug",
         "code",
-        "example"
+        "example",
+        "review",
+        "ideas",
+        "doc",
+        "design",
+        "question"
+      ]
+    },
+    {
+      "login": "aswinckr",
+      "name": "Aswin",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/5960217?v=4",
+      "profile": "https://github.com/aswinckr",
+      "contributions": [
+        "question"
       ]
     }
   ]
