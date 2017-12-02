@@ -1,5 +1,9 @@
 # react-medium-image-zoom
-[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors)
+<<<<<<< HEAD
+[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors)
+=======
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors)
+>>>>>>> added alexshelkov for finding a bug
 
 ![](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)
 ![](https://img.shields.io/npm/v/react-medium-image-zoom.svg)
@@ -75,7 +79,7 @@ The reverse is true, as well. If the component is instantiated without an `isZoo
 Currently, this has only been tested on the latest modern browsers. Pull requests are welcome.
 
 ## Development
-The source code is located within the `src` directory. Use `$ npm run build` to build the main file as well as the example during development, and use `$ npm run dev dev` to have it watch for changes to `src/` and `example/src`.
+The source code is located within the `src` directory. Use `$ npm run build` to build the main file as well as the example during development and/or use `$ npm run dev` to have it watch for changes to `src/` and `example/src`.
 
 You can view the built example as a file via `$ open example/build/index.html`, or you can use `$ npm run dev` to start a local dev server and navigate to [http://localhost:3000](http://localhost:3000).
 
@@ -96,7 +100,7 @@ The page should look like this:
 1. Clone your fork
 1. Check out a feature branch (`$ git checkout -b my-feature`)
 1. Make your changes
-1. Run `$ make` to compile your changes and build the example
+1. Run `$ yarn run build` to compile your changes and build the example
 1. Test your example (see the "Development" section above)
 1. Push your branch to your GitHub repo
 1. Create a pull request from your branch to this repo's master branch
@@ -110,7 +114,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 | [<img src="https://avatars1.githubusercontent.com/u/4642599?v=4" width="100px;"/><br /><sub>Cameron Bothner</sub>](https://github.com/cbothner)<br />[💻](https://github.com/rpearce/react-medium-image-zoom/commits?author=cbothner "Code") [📖](https://github.com/rpearce/react-medium-image-zoom/commits?author=cbothner "Documentation") [🐛](https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Acbothner "Bug reports") [💡](#example-cbothner "Examples") [🤔](#ideas-cbothner "Ideas, Planning, & Feedback") [👀](#review-cbothner "Reviewed Pull Requests") [⚠️](https://github.com/rpearce/react-medium-image-zoom/commits?author=cbothner "Tests") | [<img src="https://avatars2.githubusercontent.com/u/12982155?v=4" width="100px;"/><br /><sub>Jeremy Bini</sub>](https://github.com/jeremybini)<br />[💻](https://github.com/rpearce/react-medium-image-zoom/commits?author=jeremybini "Code") [🐛](https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Ajeremybini "Bug reports") | [<img src="https://avatars1.githubusercontent.com/u/7355199?v=4" width="100px;"/><br /><sub>ismay</sub>](https://ismaywolff.nl)<br />[🐛](https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Aismay "Bug reports") [🤔](#ideas-ismay "Ideas, Planning, & Feedback") | [<img src="https://avatars0.githubusercontent.com/u/220647?v=4" width="100px;"/><br /><sub>Rajit Singh</sub>](https://www.qeek.co)<br />[🐛](https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Arajit "Bug reports") | [<img src="https://avatars1.githubusercontent.com/u/16122?v=4" width="100px;"/><br /><sub>Roberto Saccon</sub>](https://github.com/rsaccon)<br />[🐛](https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Arsaccon "Bug reports") | [<img src="https://avatars0.githubusercontent.com/u/6598350?v=4" width="100px;"/><br /><sub>wtfdaemon</sub>](https://github.com/wtfdaemon)<br />[🐛](https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Awtfdaemon "Bug reports") | [<img src="https://avatars2.githubusercontent.com/u/592876?v=4" width="100px;"/><br /><sub>Robert Pearce</sub>](https://robertwpearce.com)<br />[💻](https://github.com/rpearce/react-medium-image-zoom/commits?author=rpearce "Code") [💬](#question-rpearce "Answering Questions") [⚠️](https://github.com/rpearce/react-medium-image-zoom/commits?author=rpearce "Tests") [🐛](https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Arpearce "Bug reports") [💡](#example-rpearce "Examples") [🎨](#design-rpearce "Design") [👀](#review-rpearce "Reviewed Pull Requests") [🤔](#ideas-rpearce "Ideas, Planning, & Feedback") [📖](https://github.com/rpearce/react-medium-image-zoom/commits?author=rpearce "Documentation") |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| [<img src="https://avatars1.githubusercontent.com/u/606159?v=4" width="100px;"/><br /><sub>Josh Sloat</sub>](http://www.joshsloat.com)<br />[🐛](https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Ajoshsloat "Bug reports") [💻](https://github.com/rpearce/react-medium-image-zoom/commits?author=joshsloat "Code") [💡](#example-joshsloat "Examples") [👀](#review-joshsloat "Reviewed Pull Requests") [🤔](#ideas-joshsloat "Ideas, Planning, & Feedback") [📖](https://github.com/rpearce/react-medium-image-zoom/commits?author=joshsloat "Documentation") [🎨](#design-joshsloat "Design") [💬](#question-joshsloat "Answering Questions") | [<img src="https://avatars1.githubusercontent.com/u/5960217?v=4" width="100px;"/><br /><sub>Aswin</sub>](https://github.com/aswinckr)<br />[💬](#question-aswinckr "Answering Questions") |
+| [<img src="https://avatars1.githubusercontent.com/u/606159?v=4" width="100px;"/><br /><sub>Josh Sloat</sub>](http://www.joshsloat.com)<br />[🐛](https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Ajoshsloat "Bug reports") [💻](https://github.com/rpearce/react-medium-image-zoom/commits?author=joshsloat "Code") [💡](#example-joshsloat "Examples") [👀](#review-joshsloat "Reviewed Pull Requests") [🤔](#ideas-joshsloat "Ideas, Planning, & Feedback") [📖](https://github.com/rpearce/react-medium-image-zoom/commits?author=joshsloat "Documentation") [🎨](#design-joshsloat "Design") [💬](#question-joshsloat "Answering Questions") | [<img src="https://avatars1.githubusercontent.com/u/5960217?v=4" width="100px;"/><br /><sub>Aswin</sub>](https://github.com/aswinckr)<br />[💬](#question-aswinckr "Answering Questions") | [<img src="https://avatars3.githubusercontent.com/u/1233347?v=4" width="100px;"/><br /><sub>Alex Shelkovskiy</sub>](https://github.com/alexshelkov)<br />[🐛](https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Aalexshelkov "Bug reports") |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!

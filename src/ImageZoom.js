@@ -18,8 +18,7 @@ export default class ImageZoom extends Component {
     this.state = {
       isMaxDimension: false,
       isZoomed: false,
-      src: props.image.src,
-      hasAlreadyLoaded: false
+      src: props.image.src
     }
 
     this._handleZoom = this._handleZoom.bind(this)
@@ -146,7 +145,6 @@ export default class ImageZoom extends Component {
           <Zoom
             defaultStyles={this.props.defaultStyles}
             image={this.image}
-            hasAlreadyLoaded={this.state.hasAlreadyLoaded}
             shouldRespectMaxDimension={this.props.shouldRespectMaxDimension}
             zoomImage={this.props.zoomImage}
             zoomMargin={this.props.zoomMargin}
@@ -228,8 +226,7 @@ export default class ImageZoom extends Component {
   _handleUnzoom(src, allowRefocus) {
     return () => {
       const changes = Object.assign(
-        {},
-        { hasAlreadyLoaded: true, isZoomed: false },
+        { isZoomed: false },
         this.props.shouldReplaceImage && { src }
       )
 
