@@ -1,9 +1,5 @@
 # react-medium-image-zoom
-<<<<<<< HEAD
 [![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors)
-=======
-[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors)
->>>>>>> added alexshelkov for finding a bug
 
 ![](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)
 ![](https://img.shields.io/npm/v/react-medium-image-zoom.svg)
