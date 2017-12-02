@@ -75,7 +75,7 @@ The reverse is true, as well. If the component is instantiated without an `isZoo
 Currently, this has only been tested on the latest modern browsers. Pull requests are welcome.
 
 ## Development
-The source code is located within the `src` directory. Use `$ npm run build` to build the main file as well as the example during development, and use `$ npm run dev dev` to have it watch for changes to `src/` and `example/src`.
+The source code is located within the `src` directory. Use `$ npm run build` to build the main file as well as the example during development and/or use `$ npm run dev` to have it watch for changes to `src/` and `example/src`.
 
 You can view the built example as a file via `$ open example/build/index.html`, or you can use `$ npm run dev` to start a local dev server and navigate to [http://localhost:3000](http://localhost:3000).
 
@@ -96,7 +96,7 @@ The page should look like this:
 1. Clone your fork
 1. Check out a feature branch (`$ git checkout -b my-feature`)
 1. Make your changes
-1. Run `$ make` to compile your changes and build the example
+1. Run `$ yarn run build` to compile your changes and build the example
 1. Test your example (see the "Development" section above)
 1. Push your branch to your GitHub repo
 1. Create a pull request from your branch to this repo's master branch
