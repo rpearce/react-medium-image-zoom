@@ -26,11 +26,11 @@ export default class Zoom extends Component {
   }
 
   componentDidMount() {
-    const { hasAlreadyLoaded, zoomImage: { src, srcSet } } = this.props
+    const { zoomImage: { src, srcSet } } = this.props
 
     this.setState({ hasLoaded: true })
 
-    if ((src || srcSet) && !hasAlreadyLoaded) {
+    if (src || srcSet) {
       fetchImage(this.props.zoomImage, this._handleImageLoad)
     }
   }
@@ -61,7 +61,7 @@ export default class Zoom extends Component {
   _handleImageLoad(img) {
     // Only set state if component is still mounted
     if (this.state.isZoomed) {
-      this.setState({ hasLoaded: true, src: img.currentSrc || img.src })
+      this.setState({ src: img.currentSrc || img.src })
     }
   }
 
@@ -133,7 +133,6 @@ export default class Zoom extends Component {
 
 Zoom.propTypes = {
   defaultStyles: object.isRequired,
-  hasAlreadyLoaded: bool.isRequired,
   image: object.isRequired,
   shouldRespectMaxDimension: bool,
   zoomImage: shape({
