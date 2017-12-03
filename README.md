@@ -99,8 +99,11 @@ The page should look like this:
 1. Run `$ yarn run build` to compile your changes and build the example
 1. Test your example (see the "Development" section above)
 1. Push your branch to your GitHub repo
-1. Create a pull request from your branch to this repo's master branch
+1. Create a pull request from your branch to this repo's `X-0-stable` branch (where `X` is the correct major version you're targeting)
 1. When all is merged, pull down the upstream changes to your master
+  * `$ git remote add upstream git@github.com:rpearce/react-medium-image-zoom.git`
+  * `$ git fetch upstream`
+  * `$ git merge upstream/master`
 1. Delete your feature branch
 
 ## Contributors
