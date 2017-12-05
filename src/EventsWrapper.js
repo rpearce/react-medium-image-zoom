@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { element, func } from 'prop-types'
 import defaults from './defaults'
-import { isEscapeKey, isEnterOrSpaceBarKey } from './keyboardEvents'
+import { isEnterOrSpaceBarKey, isEscapeKey, isTabKey } from './keyboardEvents'
 
 export default class EventsWrapper extends Component {
   constructor() {
@@ -57,6 +57,11 @@ export default class EventsWrapper extends Component {
   }
 
   _handleKeyDown(e) {
+    if (isTabKey(e)) {
+      e.preventDefault() // prevent in-behind controls from grabbing focus
+      return
+    }
+
     const { allowAccessibilityClose } = this.props
     const unzoomForEnterOrSpace =
       allowAccessibilityClose && isEnterOrSpaceBarKey(e)
