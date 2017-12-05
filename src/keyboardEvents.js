@@ -3,6 +3,11 @@ const enterKey = {
   keyCode: 13
 }
 
+const tabKey = {
+  keys: [ 'Tab' ],
+  keyCode: 9
+}
+
 const spaceBarKey = {
   keys: [ ' ' ],
   keyCode: 32
@@ -36,5 +41,6 @@ const isKey = ({ keyCode, keys }) => e =>
 
 // is<X>Key : KeyboardEvent -> Boolean
 export const isEnterOrSpaceBarKey = e => isKey(enterKey)(e) || isSpaceBarKey(e)
+export const isTabKey = isKey(tabKey)
 export const isSpaceBarKey = isKey(spaceBarKey)
 export const isEscapeKey = isKey(escapeKey)
