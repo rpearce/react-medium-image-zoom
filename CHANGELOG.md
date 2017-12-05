@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.0.7] - 2017-12-05
+
+### Fixed
+- Fixed issue where hitting the tab key on a zoomed imaged would allow
+an element in behind the image to receive focus. Further actions
+could then be taken on the focused element, causing the DOM to end
+up in undesired states.
+
 ## [2.0.6] - 2017-11-02
 
 ### Fixed
