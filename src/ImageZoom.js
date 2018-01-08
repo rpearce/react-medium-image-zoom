@@ -90,10 +90,8 @@ export default class ImageZoom extends Component {
     const isZoomed = isControlled(this.props.isZoomed)
       ? this.props.isZoomed
       : this.state.isZoomed
-    if (prevIsZoomed !== isZoomed) {
-      if (!isZoomed && this.portalInstance) {
-        this.portalInstance.unzoom({ force: true })
-      }
+    if (prevIsZoomed !== isZoomed && !isZoomed && this.portalInstance) {
+      this.portalInstance.unzoom({ force: true })
     }
   }
 
