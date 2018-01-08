@@ -226,8 +226,8 @@ var EventsWrapper = function (_Component) {
       var _this2 = this;
 
       this.pageYOffset = window.pageYOffset;
-      setTimeout(function () {
-        window.addEventListener('scroll', _this2._handleScroll, true);
+      this.loadTimeout = setTimeout(function () {
+        window.addEventListener('scroll', _this2._handleScroll);
         window.addEventListener('keydown', _this2._handleKeyDown);
         window.addEventListener('ontouchstart', _this2._handleTouchStart);
         window.addEventListener('ontouchmove', _this2._handleTouchMove);
@@ -239,7 +239,8 @@ var EventsWrapper = function (_Component) {
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
-      window.removeEventListener('scroll', this._handleScroll, true);
+      clearTimeout(this.loadTimeout);
+      window.removeEventListener('scroll', this._handleScroll);
       window.removeEventListener('keydown', this._handleKeyDown);
       window.removeEventListener('ontouchstart', this._handleTouchStart);
       window.removeEventListener('ontouchmove', this._handleTouchMove);
@@ -485,10 +486,8 @@ var ImageZoom = function (_Component) {
     value: function componentDidUpdate(prevProps, prevState) {
       var prevIsZoomed = isControlled(prevProps.isZoomed) ? prevProps.isZoomed : prevState.isZoomed;
       var isZoomed = isControlled(this.props.isZoomed) ? this.props.isZoomed : this.state.isZoomed;
-      if (prevIsZoomed !== isZoomed) {
-        if (!isZoomed && this.portalInstance) {
-          this.portalInstance.unzoom({ force: true });
-        }
+      if (prevIsZoomed !== isZoomed && !isZoomed && this.portalInstance) {
+        this.portalInstance.unzoom({ force: true });
       }
     }
   }, {
