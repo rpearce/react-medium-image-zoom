@@ -20,8 +20,8 @@ export default class EventsWrapper extends Component {
 
   componentDidMount() {
     this.pageYOffset = window.pageYOffset
-    setTimeout(() => {
-      window.addEventListener('scroll', this._handleScroll, true)
+    this.loadTimeout = setTimeout(() => {
+      window.addEventListener('scroll', this._handleScroll)
       window.addEventListener('keydown', this._handleKeyDown)
       window.addEventListener('ontouchstart', this._handleTouchStart)
       window.addEventListener('ontouchmove', this._handleTouchMove)
@@ -32,7 +32,8 @@ export default class EventsWrapper extends Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this._handleScroll, true)
+    clearTimeout(this.loadTimeout)
+    window.removeEventListener('scroll', this._handleScroll)
     window.removeEventListener('keydown', this._handleKeyDown)
     window.removeEventListener('ontouchstart', this._handleTouchStart)
     window.removeEventListener('ontouchmove', this._handleTouchMove)
