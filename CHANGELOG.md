@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.0.6] - 2018-01-08
+
+### Fixed
+- Fixed issue where quickly, repeatedly triggering the zoom and unzoom actions had some lingering timeout actions that no longer existing on a component, throwing errors in the console (https://github.com/rpearce/react-medium-image-zoom/issues/106)
+
 ## [3.0.5] - 2017-12-05
 
 ### Fixed
