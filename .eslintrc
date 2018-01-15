@@ -7,10 +7,10 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "prettier"
   ],
   "parserOptions": {
     "ecmaFeatures": {
+      "experimentalObjectRestSpread": true,
       "jsx": true
     },
     "sourceType": "module"
