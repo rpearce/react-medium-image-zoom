@@ -5,6 +5,18 @@ import { fetchImage, getMaxDimensionScale, getScale } from './helpers'
 
 import Overlay from './Overlay'
 
+/**
+ * The `tmpSrc` and `TmpImg` code here is a workaround
+ * for a longstanding Firefox issue where replacing the
+ * `src` of an `<img>` tag requires calculations and
+ * results in a "flicker" of sorts.
+ *
+ * See https://github.com/rpearce/react-medium-image-zoom/issues/96
+ * for further details.
+ */
+
+const isFirefox = typeof InstallTrigger !== 'undefined'
+
 export default class Zoom extends Component {
   constructor(props) {
     super(props)
@@ -12,7 +24,8 @@ export default class Zoom extends Component {
     this.state = {
       hasLoaded: false,
       isZoomed: true,
-      src: this.props.image.currentSrc || this.props.image.src
+      src: this.props.image.currentSrc || this.props.image.src,
+      tmpSrc: null
     }
 
     this.unzoom = this.unzoom.bind(this)
@@ -35,18 +48,28 @@ export default class Zoom extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    // If we have a `tmpSrc`, wait and then give it to `src`
+    if (!prevState.tmpSrc && this.state.tmpSrc) {
+      setTimeout(() => {
+        this.setState({ src: this.state.tmpSrc, tmpSrc: null })
+      }, 100)
+    }
+  }
+
   render() {
+    const {
+      props: { defaultStyles, zoomImage },
+      state: { tmpSrc, isZoomed, src }
+    } = this
+
+    const style = this._getZoomImageStyle()
+
     return (
       <div style={this._getZoomContainerStyle()}>
-        <Overlay
-          isVisible={this.state.isZoomed}
-          defaultStyles={this.props.defaultStyles}
-        />
-        <img
-          {...this.props.zoomImage}
-          src={this.state.src}
-          style={this._getZoomImageStyle()}
-        />
+        <Overlay isVisible={isZoomed} defaultStyles={defaultStyles} />
+        <img {...zoomImage} src={src} style={style} />
+        <TmpImg {...zoomImage} src={tmpSrc} style={style} />
       </div>
     )
   }
@@ -61,7 +84,12 @@ export default class Zoom extends Component {
   _handleImageLoad(img) {
     // Only set state if component is still mounted
     if (this.state.isZoomed) {
-      this.setState({ src: img.currentSrc || img.src })
+      const src = img.currentSrc || img.src
+
+      // See comment at top of file for Firefox check information
+      const newState = isFirefox ? { tmpSrc: src } : { src }
+
+      this.setState(newState)
     }
   }
 
@@ -144,3 +172,13 @@ Zoom.propTypes = {
   zoomMargin: number.isRequired,
   onUnzoom: func.isRequired
 }
+
+const TmpImg = ({ src, style, ...props }) =>
+  src ? <img {...props} src={src} style={getTmpStyle(style)} /> : null
+
+const tmpStyle = {
+  position: 'fixed',
+  visibility: 'hidden'
+}
+
+const getTmpStyle = style => Object.assign({}, style, tmpStyle)
