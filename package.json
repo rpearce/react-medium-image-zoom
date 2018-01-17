@@ -5,8 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "build:js": "babel src --out-dir lib",
-    "build:example": "browserify example/src/app.js -o example/build/app.js -t [ babelify ]",
-    "build": "npm run lint && npm run build:js && npm run build:example",
+    "build:docs": "browserify example/src/app.js -o docs/app.js -t [ babelify ]",
+    "build": "npm run lint && npm run build:js && npm run build:docs",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
     "dev": "nodemon",
