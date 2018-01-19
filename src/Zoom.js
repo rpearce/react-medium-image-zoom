@@ -15,8 +15,6 @@ import Overlay from './Overlay'
  * for further details.
  */
 
-const isFirefox = typeof InstallTrigger !== 'undefined'
-
 export default class Zoom extends Component {
   constructor(props) {
     super(props)
@@ -84,12 +82,7 @@ export default class Zoom extends Component {
   _handleImageLoad(img) {
     // Only set state if component is still mounted
     if (this.state.isZoomed) {
-      const src = img.currentSrc || img.src
-
-      // See comment at top of file for Firefox check information
-      const newState = isFirefox ? { tmpSrc: src } : { src }
-
-      this.setState(newState)
+      this.setState({ tmpSrc: img.currentSrc || img.src })
     }
   }
 
