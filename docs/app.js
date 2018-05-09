@@ -522,7 +522,7 @@ var ImageZoom = function (_Component) {
           _this2.image = x;
         },
         onLoad: this._handleLoad
-      }, attrs)), isZoomed || this.isClosing ? _react2.default.createElement(_EventsWrapper2.default, {
+      }, attrs)), this.image && (isZoomed || this.isClosing) ? _react2.default.createElement(_EventsWrapper2.default, {
         key: 'portal',
         ref: function ref(node) {
           _this2.portalInstance = node;
@@ -897,7 +897,7 @@ var Zoom = function (_Component) {
     _this.state = {
       hasLoaded: false,
       isZoomed: true,
-      src: _this.props.image.currentSrc || _this.props.image.src,
+      src: props.image.currentSrc || props.image.src,
       tmpSrc: null
     };
 

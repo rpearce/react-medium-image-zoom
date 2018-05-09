@@ -131,7 +131,7 @@ export default class ImageZoom extends Component {
         onLoad={this._handleLoad}
         {...attrs}
       />,
-      isZoomed || this.isClosing ?
+      this.image && (isZoomed || this.isClosing) ?
         <EventsWrapper
           key="portal"
           ref={node => {
