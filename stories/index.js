@@ -7,10 +7,11 @@ import DefaultStyles from './DefaultStyles'
 import ShouldHandleZoom from './ShouldHandleZoom'
 import ShouldReplaceImage from './ShouldReplaceImage'
 import ShouldRespectMaxDimension from './ShouldRespectMaxDimension'
+import ShouldRespectTabIndex from './ShouldRespectTabIndex'
 import Uncontrolled from './Uncontrolled'
 import Welcome from './Welcome'
 import ZoomImage from './ZoomImage'
-import ShouldRespectTabIndex from './ShouldRespectTabIndex'
+import ZoomOnLoad from './ZoomOnLoad'
 
 storiesOf('react-medium-image-zoom', module)
   .add('README', () => <Welcome />)
@@ -28,3 +29,4 @@ storiesOf('react-medium-image-zoom', module)
     <ShouldRespectMaxDimension />
   )
   .add("Respect image's tab index", () => <ShouldRespectTabIndex />)
+  .add('Zoom on load', () => <ZoomOnLoad />)

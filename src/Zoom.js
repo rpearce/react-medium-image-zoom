@@ -22,7 +22,7 @@ export default class Zoom extends Component {
     this.state = {
       hasLoaded: false,
       isZoomed: true,
-      src: this.props.image.currentSrc || this.props.image.src,
+      src: props.image.currentSrc || props.image.src,
       tmpSrc: null
     }
 
