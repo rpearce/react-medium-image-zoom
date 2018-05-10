@@ -146,6 +146,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "oyeanuj",
+      "name": "Anuj",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/9633371?v=4",
+      "profile": "http://shuffle.do",
+      "contributions": [
+        "bug",
+        "question"
+      ]
     }
   ]
 }
