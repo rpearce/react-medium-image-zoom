@@ -1,7 +1,7 @@
 # react-medium-image-zoom
 [![All Contributors](https://img.shields.io/badge/all_contributors-14-orange.svg?style=flat-square)](#contributors)
 
-[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom)
+[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dt/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom)
 
 This library is a different implementation of [Medium.com's image zoom](https://medium.com/design/image-zoom-on-medium-24d146fc0c20) that allows for a low-res and high-res images to work together for “zooming” effects and works regardless of parent elements that have `overflow: hidden` or [parents with transform properties](https://codepen.io/rpearce/pen/MEyOmb). Versions `>=3.0.0` are compatible with [React.js](https://github.com/facebook/react) `>=16.x`; if you need compatibility with `react@^0.14.0 || ^15.0.0`, please use version `2.x`.
 
