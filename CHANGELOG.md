@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.0.13] - 2018-07-30
+
+### Fixed
+- Resolved issue where we were calculating `imageCenterX` with
+  `window.innerWidth` instead of `document.body.clientWidth`
+  (PR: https://github.com/rpearce/react-medium-image-zoom/pull/133)
+
 ## [3.0.12] - 2018-06-05
 
 ### Changed
