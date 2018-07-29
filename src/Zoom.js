@@ -114,7 +114,7 @@ export default class Zoom extends Component {
     }
 
     // Get the the coords for center of the viewport
-    const viewportX = window.innerWidth / 2
+    const viewportX = document.body.clientWidth / 2
     const viewportY = window.innerHeight / 2
 
     // Get the coords for center of the original image
