@@ -992,7 +992,7 @@ var Zoom = function (_Component) {
       }
 
       // Get the the coords for center of the viewport
-      var viewportX = window.innerWidth / 2;
+      var viewportX = document.body.clientWidth / 2;
       var viewportY = window.innerHeight / 2;
 
       // Get the coords for center of the original image
