@@ -16,15 +16,16 @@ export default class ImageZoom extends Component {
     super(props)
 
     this.state = {
-      isMaxDimension: false,
+      isDisabled: false,
       isZoomed: false,
       src: props.image.src
     }
 
-    this._handleZoom = this._handleZoom.bind(this)
-    this._handleUnzoom = this._handleUnzoom.bind(this)
-    this._handleLoad = this._handleLoad.bind(this)
     this._handleKeyDown = this._handleKeyDown.bind(this)
+    this._handleLoad = this._handleLoad.bind(this)
+    this._handleLoadError = this._handleLoadError.bind(this)
+    this._handleUnzoom = this._handleUnzoom.bind(this)
+    this._handleZoom = this._handleZoom.bind(this)
   }
 
   static get defaultProps() {
@@ -96,8 +97,10 @@ export default class ImageZoom extends Component {
   }
 
   render() {
-    const { image } = this.props
-    const { isMaxDimension, src } = this.state
+    const {
+      props: { image },
+      state: { isDisabled, src }
+    } = this
 
     /**
      * Take whatever attributes you want to pass the image
@@ -109,10 +112,10 @@ export default class ImageZoom extends Component {
      */
     const attrs = Object.assign(
       {},
-      !isMaxDimension && { tabIndex: focusableTabIndex },
+      !isDisabled && { tabIndex: focusableTabIndex },
       image,
       { src, style: this._getImageStyle() },
-      !isMaxDimension && {
+      !isDisabled && {
         onMouseDown: this._preventFocus,
         onClick: this._handleZoom,
         onKeyDown: this._handleKeyDown
@@ -124,12 +127,13 @@ export default class ImageZoom extends Component {
 
     return [
       <img
+        {...attrs}
         key="image"
         ref={x => {
           this.image = x
         }}
         onLoad={this._handleLoad}
-        {...attrs}
+        onError={this._handleLoadError}
       />,
       this.image && (isZoomed || this.isClosing) ?
         <EventsWrapper
@@ -162,26 +166,29 @@ export default class ImageZoom extends Component {
    * resize could be something to consider if necessary.
    */
   _checkShouldDisableComponent() {
-    this.setState({
-      isMaxDimension:
-        this.props.shouldRespectMaxDimension &&
-        !this.props.zoomImage &&
-        isMaxDimension(this.image)
-    })
+    const { shouldRespectMaxDimension, zoomImage } = this.props
+    const isDisabled =
+      shouldRespectMaxDimension && !zoomImage && isMaxDimension(this.image)
+
+    this.setState({ isDisabled })
   }
 
   _getImageStyle() {
-    const isHidden =
-      this.state.isZoomed || this.props.isZoomed || this.isClosing
-    const style = Object.assign({}, isHidden && { visibility: 'hidden' })
+    const {
+      isClosing,
+      props: { defaultStyles, image, isZoomed: isZoomedP },
+      state: { isDisabled, isZoomed: isZoomedSt }
+    } = this
+
+    const isHidden = isZoomedSt || isZoomedP || isClosing
 
     return Object.assign(
       {},
       defaults.styles.image,
-      style,
-      this.props.defaultStyles.image,
-      this.props.image.style,
-      this.state.isMaxDimension && { cursor: 'inherit' }
+      isHidden && { visibility: 'hidden' },
+      defaultStyles.image,
+      image.style,
+      isDisabled && { cursor: 'inherit' }
     )
   }
 
@@ -190,8 +197,18 @@ export default class ImageZoom extends Component {
    * to load before we can do any width/height
    * checks on it.
    */
-  _handleLoad() {
+  _handleLoad(e) {
     this._checkShouldDisableComponent()
+
+    const cb = this.props.image.onLoad || Function.prototype
+    cb(e)
+  }
+
+  _handleLoadError(e) {
+    this.setState({ isDisabled: true })
+
+    const cb = this.props.image.onError || Function.prototype
+    cb(e)
   }
 
   _handleKeyDown(e) {

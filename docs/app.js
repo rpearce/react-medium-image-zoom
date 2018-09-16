@@ -432,15 +432,16 @@ var ImageZoom = function (_Component) {
     var _this = _possibleConstructorReturn(this, (ImageZoom.__proto__ || Object.getPrototypeOf(ImageZoom)).call(this, props));
 
     _this.state = {
-      isMaxDimension: false,
+      isDisabled: false,
       isZoomed: false,
       src: props.image.src
     };
 
-    _this._handleZoom = _this._handleZoom.bind(_this);
-    _this._handleUnzoom = _this._handleUnzoom.bind(_this);
-    _this._handleLoad = _this._handleLoad.bind(_this);
     _this._handleKeyDown = _this._handleKeyDown.bind(_this);
+    _this._handleLoad = _this._handleLoad.bind(_this);
+    _this._handleLoadError = _this._handleLoadError.bind(_this);
+    _this._handleUnzoom = _this._handleUnzoom.bind(_this);
+    _this._handleZoom = _this._handleZoom.bind(_this);
     return _this;
   }
 
@@ -495,9 +496,9 @@ var ImageZoom = function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      var image = this.props.image;
-      var _state = this.state,
-          isMaxDimension = _state.isMaxDimension,
+      var image = this.props.image,
+          _state = this.state,
+          isDisabled = _state.isDisabled,
           src = _state.src;
 
       /**
@@ -509,20 +510,21 @@ var ImageZoom = function (_Component) {
        * already at its maximum dimensions.
        */
 
-      var attrs = _extends({}, !isMaxDimension && { tabIndex: focusableTabIndex }, image, { src: src, style: this._getImageStyle() }, !isMaxDimension && {
+      var attrs = _extends({}, !isDisabled && { tabIndex: focusableTabIndex }, image, { src: src, style: this._getImageStyle() }, !isDisabled && {
         onMouseDown: this._preventFocus,
         onClick: this._handleZoom,
         onKeyDown: this._handleKeyDown
       });
       var isZoomed = isControlled(this.props.isZoomed) ? this.props.isZoomed : this.state.isZoomed;
 
-      return [_react2.default.createElement('img', _extends({
+      return [_react2.default.createElement('img', _extends({}, attrs, {
         key: 'image',
         ref: function ref(x) {
           _this2.image = x;
         },
-        onLoad: this._handleLoad
-      }, attrs)), this.image && (isZoomed || this.isClosing) ? _react2.default.createElement(_EventsWrapper2.default, {
+        onLoad: this._handleLoad,
+        onError: this._handleLoadError
+      })), this.image && (isZoomed || this.isClosing) ? _react2.default.createElement(_EventsWrapper2.default, {
         key: 'portal',
         ref: function ref(node) {
           _this2.portalInstance = node;
@@ -551,17 +553,29 @@ var ImageZoom = function (_Component) {
   }, {
     key: '_checkShouldDisableComponent',
     value: function _checkShouldDisableComponent() {
-      this.setState({
-        isMaxDimension: this.props.shouldRespectMaxDimension && !this.props.zoomImage && (0, _helpers.isMaxDimension)(this.image)
-      });
+      var _props = this.props,
+          shouldRespectMaxDimension = _props.shouldRespectMaxDimension,
+          zoomImage = _props.zoomImage;
+
+      var isDisabled = shouldRespectMaxDimension && !zoomImage && (0, _helpers.isMaxDimension)(this.image);
+
+      this.setState({ isDisabled: isDisabled });
     }
   }, {
     key: '_getImageStyle',
     value: function _getImageStyle() {
-      var isHidden = this.state.isZoomed || this.props.isZoomed || this.isClosing;
-      var style = _extends({}, isHidden && { visibility: 'hidden' });
+      var isClosing = this.isClosing,
+          _props2 = this.props,
+          defaultStyles = _props2.defaultStyles,
+          image = _props2.image,
+          isZoomedP = _props2.isZoomed,
+          _state2 = this.state,
+          isDisabled = _state2.isDisabled,
+          isZoomedSt = _state2.isZoomed;
 
-      return _extends({}, _defaults2.default.styles.image, style, this.props.defaultStyles.image, this.props.image.style, this.state.isMaxDimension && { cursor: 'inherit' });
+      var isHidden = isZoomedSt || isZoomedP || isClosing;
+
+      return _extends({}, _defaults2.default.styles.image, isHidden && { visibility: 'hidden' }, defaultStyles.image, image.style, isDisabled && { cursor: 'inherit' });
     }
 
     /**
@@ -572,8 +586,19 @@ var ImageZoom = function (_Component) {
 
   }, {
     key: '_handleLoad',
-    value: function _handleLoad() {
+    value: function _handleLoad(e) {
       this._checkShouldDisableComponent();
+
+      var cb = this.props.image.onLoad || Function.prototype;
+      cb(e);
+    }
+  }, {
+    key: '_handleLoadError',
+    value: function _handleLoadError(e) {
+      this.setState({ isDisabled: true });
+
+      var cb = this.props.image.onError || Function.prototype;
+      cb(e);
     }
   }, {
     key: '_handleKeyDown',
