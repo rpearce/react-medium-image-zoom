@@ -166,6 +166,16 @@
         "bug",
         "code"
       ]
+    },
+    {
+      "login": "serfgy",
+      "name": "LX",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/20569525?v=4",
+      "profile": "https://github.com/serfgy",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
     }
   ],
   "repoType": "github"
