@@ -4,6 +4,7 @@ import { storiesOf } from '@storybook/react'
 
 import Controlled from './Controlled'
 import DefaultStyles from './DefaultStyles'
+import DisableOnError from './DisableOnError'
 import ShouldHandleZoom from './ShouldHandleZoom'
 import ShouldReplaceImage from './ShouldReplaceImage'
 import ShouldRespectMaxDimension from './ShouldRespectMaxDimension'
@@ -30,3 +31,4 @@ storiesOf('react-medium-image-zoom', module)
   )
   .add("Respect image's tab index", () => <ShouldRespectTabIndex />)
   .add('Zoom on load', () => <ZoomOnLoad />)
+  .add('Deactivate on load error', () => <DisableOnError />)
