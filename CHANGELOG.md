@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.0.14] - 2018-09-17
+
+### Fixed
+- Resolved issue #137 where broken images would continue allowing the component
+  to function
+- Now ensures an `image` prop's `onLoad` callback is adequately sent to the
+  consumer
+
 ## [3.0.13] - 2018-07-30
 
 ### Fixed
