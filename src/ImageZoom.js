@@ -98,8 +98,15 @@ export default class ImageZoom extends Component {
 
   render() {
     const {
-      props: { image },
-      state: { isDisabled, src }
+      props: {
+        defaultStyles,
+        image,
+        isZoomed: propsIsZoomed,
+        shouldRespectMaxDimension,
+        zoomImage,
+        zoomMargin
+      },
+      state: { isDisabled, isZoomed: stateIsZoomed, src }
     } = this
 
     /**
@@ -121,9 +128,7 @@ export default class ImageZoom extends Component {
         onKeyDown: this._handleKeyDown
       }
     )
-    const isZoomed = isControlled(this.props.isZoomed)
-      ? this.props.isZoomed
-      : this.state.isZoomed
+    const isZoomed = isControlled(propsIsZoomed) ? propsIsZoomed : stateIsZoomed
 
     return [
       <img
@@ -145,11 +150,11 @@ export default class ImageZoom extends Component {
           allowAccessibilityClose={this._allowTabNavigation()}
         >
           <Zoom
-            defaultStyles={this.props.defaultStyles}
+            defaultStyles={defaultStyles}
             image={this.image}
-            shouldRespectMaxDimension={this.props.shouldRespectMaxDimension}
-            zoomImage={this.props.zoomImage}
-            zoomMargin={this.props.zoomMargin}
+            shouldRespectMaxDimension={shouldRespectMaxDimension}
+            zoomImage={zoomImage}
+            zoomMargin={Number(zoomMargin)}
             onUnzoom={this._handleUnzoom}
           />
         </EventsWrapper>
