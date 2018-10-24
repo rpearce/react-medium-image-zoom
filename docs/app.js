@@ -496,9 +496,16 @@ var ImageZoom = function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      var image = this.props.image,
+      var _props = this.props,
+          defaultStyles = _props.defaultStyles,
+          image = _props.image,
+          propsIsZoomed = _props.isZoomed,
+          shouldRespectMaxDimension = _props.shouldRespectMaxDimension,
+          zoomImage = _props.zoomImage,
+          zoomMargin = _props.zoomMargin,
           _state = this.state,
           isDisabled = _state.isDisabled,
+          stateIsZoomed = _state.isZoomed,
           src = _state.src;
 
       /**
@@ -515,7 +522,7 @@ var ImageZoom = function (_Component) {
         onClick: this._handleZoom,
         onKeyDown: this._handleKeyDown
       });
-      var isZoomed = isControlled(this.props.isZoomed) ? this.props.isZoomed : this.state.isZoomed;
+      var isZoomed = isControlled(propsIsZoomed) ? propsIsZoomed : stateIsZoomed;
 
       return [_react2.default.createElement('img', _extends({}, attrs, {
         key: 'image',
@@ -532,11 +539,11 @@ var ImageZoom = function (_Component) {
         controlledEventFn: this._getControlledEventFn(),
         allowAccessibilityClose: this._allowTabNavigation()
       }, _react2.default.createElement(_Zoom2.default, {
-        defaultStyles: this.props.defaultStyles,
+        defaultStyles: defaultStyles,
         image: this.image,
-        shouldRespectMaxDimension: this.props.shouldRespectMaxDimension,
-        zoomImage: this.props.zoomImage,
-        zoomMargin: this.props.zoomMargin,
+        shouldRespectMaxDimension: shouldRespectMaxDimension,
+        zoomImage: zoomImage,
+        zoomMargin: Number(zoomMargin),
         onUnzoom: this._handleUnzoom
       })) : null];
     }
@@ -553,9 +560,9 @@ var ImageZoom = function (_Component) {
   }, {
     key: '_checkShouldDisableComponent',
     value: function _checkShouldDisableComponent() {
-      var _props = this.props,
-          shouldRespectMaxDimension = _props.shouldRespectMaxDimension,
-          zoomImage = _props.zoomImage;
+      var _props2 = this.props,
+          shouldRespectMaxDimension = _props2.shouldRespectMaxDimension,
+          zoomImage = _props2.zoomImage;
 
       var isDisabled = shouldRespectMaxDimension && !zoomImage && (0, _helpers.isMaxDimension)(this.image);
 
@@ -565,10 +572,10 @@ var ImageZoom = function (_Component) {
     key: '_getImageStyle',
     value: function _getImageStyle() {
       var isClosing = this.isClosing,
-          _props2 = this.props,
-          defaultStyles = _props2.defaultStyles,
-          image = _props2.image,
-          isZoomedP = _props2.isZoomed,
+          _props3 = this.props,
+          defaultStyles = _props3.defaultStyles,
+          image = _props3.image,
+          isZoomedP = _props3.isZoomed,
           _state2 = this.state,
           isDisabled = _state2.isDisabled,
           isZoomedSt = _state2.isZoomed;
