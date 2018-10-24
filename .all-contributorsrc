@@ -176,6 +176,15 @@
         "bug",
         "ideas"
       ]
+    },
+    {
+      "login": "babyPrince",
+      "name": "Rosen Tomov",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/5452135?v=4",
+      "profile": "http://www.rosentomov.com",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github"
