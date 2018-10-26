@@ -138,7 +138,7 @@ export default class Zoom extends Component {
         : getScale({ width, height, zoomMargin })
 
     const zoomStyle = {
-      transform: `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`
+      transform: `translate3d(0px, ${translateY}px, 0) scale(${scale})`
     }
 
     return Object.assign(
