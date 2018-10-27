@@ -17,7 +17,7 @@ class App extends Component {
           messenger bag flannel craft beer fashion axe bitters. Readymade
           sartorial craft beer, quinoa sustainable butcher Marfa Echo Park Terry
           Richardson gluten-free flannel retro cred mlkshk banjo. Salvia
-          90&apos;s art party Blue Bottle, PBR&amp;B cardigan 8-bit.
+          90&apos;s art  party Blue Bottle, PBR&amp;B cardigan 8-bit.
         </p>
         <p>
           Meggings irony fashion axe, tattooed master cleanse Blue Bottle
