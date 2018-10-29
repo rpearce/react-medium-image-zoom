@@ -12,7 +12,6 @@
     "dev": "nodemon",
     "lint": "eslint src/**/*.js --ext .js",
     "lint:fix": "eslint src/**/*.js --ext .js --fix",
-    "precommit": "lint-staged",
     "prepublishOnly": "npm run build",
     "start": "node index.js",
     "storybook": "start-storybook -p 6006",

@@ -1126,7 +1126,7 @@ var defaults = {
       right: 0,
       bottom: 0,
       left: 0,
-      zIndex: 999
+      zIndex: 900
     },
     overlay: {
       position: 'absolute',
