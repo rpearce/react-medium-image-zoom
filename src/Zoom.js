@@ -23,7 +23,8 @@ export default class Zoom extends Component {
       hasLoaded: false,
       isZoomed: true,
       src: props.image.currentSrc || props.image.src,
-      tmpSrc: null
+      tmpSrc: null,
+      cross: true
     }
 
     this.unzoom = this.unzoom.bind(this)
@@ -39,7 +40,7 @@ export default class Zoom extends Component {
   componentDidMount() {
     const { zoomImage: { src, srcSet } } = this.props
 
-    this.setState({ hasLoaded: true })
+    this.setState({ hasLoaded: true, cross: true })
 
     if (src || srcSet) {
       fetchImage(this.props.zoomImage, this._handleImageLoad)
@@ -65,6 +66,21 @@ export default class Zoom extends Component {
 
     return (
       <div style={this._getZoomContainerStyle()}>
+      { this.state.cross &&
+        <div style={{
+          position: 'absolute',
+          zIndex: '999',
+          top: '10px',
+          right: '10px',
+          overflow: 'hidden',
+          cursor: 'pointer',
+          width: '40px'
+        }}>
+          <svg stroke="black">
+            <path stroke-width="2" d="M 10,10 L 30,30 M 30,10 L 10,30" />
+          </svg>
+        </div>
+      }
         <Overlay isVisible={isZoomed} defaultStyles={defaultStyles} />
         <img {...zoomImage} src={src} style={style} />
         <TmpImg {...zoomImage} src={tmpSrc} style={style} />
@@ -73,6 +89,7 @@ export default class Zoom extends Component {
   }
 
   unzoom(allowRefocus) {
+    this.setState({cross: false})
     const onUnzoom = this.props.onUnzoom(this.state.src, allowRefocus)
     this.setState({ isZoomed: false }, () =>
       setTimeout(onUnzoom, defaults.transitionDuration)

@@ -2,11 +2,11 @@
   "name": "react-medium-image-zoom",
   "version": "3.0.15",
   "description": "Medium.com style image zoom for React",
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "scripts": {
     "build:js": "babel src --out-dir lib",
     "build:docs": "browserify example/src/app.js -o docs/app.js -t [ babelify ]",
-    "build": "npm run lint && npm run build:js && npm run build:docs",
+    "build": "npm run build:js && npm run build:docs",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
     "dev": "nodemon",
