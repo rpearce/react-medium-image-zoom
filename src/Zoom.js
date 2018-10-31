@@ -24,7 +24,7 @@ export default class Zoom extends Component {
       isZoomed: true,
       src: props.image.currentSrc || props.image.src,
       tmpSrc: null,
-      cross: true
+      cross: false
     }
 
     this.unzoom = this.unzoom.bind(this)
@@ -40,7 +40,11 @@ export default class Zoom extends Component {
   componentDidMount() {
     const { zoomImage: { src, srcSet } } = this.props
 
-    this.setState({ hasLoaded: true, cross: true })
+    this.setState({ hasLoaded: true })
+    
+    setTimeout(() => {
+      this.setState({cross: true})
+    }, 200)
 
     if (src || srcSet) {
       fetchImage(this.props.zoomImage, this._handleImageLoad)
@@ -67,14 +71,17 @@ export default class Zoom extends Component {
     return (
       <div style={this._getZoomContainerStyle()}>
       { this.state.cross &&
-        <div style={{
+        <div 
+        style={{
           position: 'absolute',
           zIndex: '999',
           top: '10px',
           right: '10px',
           overflow: 'hidden',
           cursor: 'pointer',
-          width: '40px'
+          width: '40px',
+          opacity: this.state.cross ? 1 : 0,
+          transition: 'opacity 1s ease-in-out'
         }}>
           <svg stroke="black">
             <path stroke-width="2" d="M 10,10 L 30,30 M 30,10 L 10,30" />

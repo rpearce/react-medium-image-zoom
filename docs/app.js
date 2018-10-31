@@ -931,7 +931,7 @@ var Zoom = function (_Component) {
       isZoomed: true,
       src: props.image.currentSrc || props.image.src,
       tmpSrc: null,
-      cross: true
+      cross: false
     };
 
     _this.unzoom = _this.unzoom.bind(_this);
@@ -942,11 +942,17 @@ var Zoom = function (_Component) {
   _createClass(Zoom, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
+      var _this2 = this;
+
       var _props$zoomImage = this.props.zoomImage,
           src = _props$zoomImage.src,
           srcSet = _props$zoomImage.srcSet;
 
-      this.setState({ hasLoaded: true, cross: true });
+      this.setState({ hasLoaded: true });
+
+      setTimeout(function () {
+        _this2.setState({ cross: true });
+      }, 200);
 
       if (src || srcSet) {
         (0, _helpers.fetchImage)(this.props.zoomImage, this._handleImageLoad);
@@ -955,12 +961,12 @@ var Zoom = function (_Component) {
   }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate(prevProps, prevState) {
-      var _this2 = this;
+      var _this3 = this;
 
       // If we have a `tmpSrc`, wait and then give it to `src`
       if (!prevState.tmpSrc && this.state.tmpSrc) {
         setTimeout(function () {
-          _this2.setState({ src: _this2.state.tmpSrc, tmpSrc: null });
+          _this3.setState({ src: _this3.state.tmpSrc, tmpSrc: null });
         }, 100);
       }
     }
@@ -977,14 +983,17 @@ var Zoom = function (_Component) {
 
       var style = this._getZoomImageStyle();
 
-      return _react2.default.createElement('div', { style: this._getZoomContainerStyle() }, this.state.cross && _react2.default.createElement('div', { style: {
+      return _react2.default.createElement('div', { style: this._getZoomContainerStyle() }, this.state.cross && _react2.default.createElement('div', {
+        style: {
           position: 'absolute',
           zIndex: '999',
           top: '10px',
           right: '10px',
           overflow: 'hidden',
           cursor: 'pointer',
-          width: '40px'
+          width: '40px',
+          opacity: this.state.cross ? 1 : 0,
+          transition: 'opacity 1s ease-in-out'
         } }, _react2.default.createElement('svg', { stroke: 'black' }, _react2.default.createElement('path', { 'stroke-width': '2', d: 'M 10,10 L 30,30 M 30,10 L 10,30' }))), _react2.default.createElement(_Overlay2.default, { isVisible: isZoomed, defaultStyles: defaultStyles }), _react2.default.createElement('img', _extends({}, zoomImage, { src: src, style: style })), _react2.default.createElement(TmpImg, _extends({}, zoomImage, { src: tmpSrc, style: style })));
     }
   }, {
