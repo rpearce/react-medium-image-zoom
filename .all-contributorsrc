@@ -1,12 +1,31 @@
 {
   "projectName": "react-medium-image-zoom",
   "projectOwner": "rpearce",
+  "repoType": "github",
+  "repoHost": "https://github.com",
   "files": [
     "README.md"
   ],
   "imageSize": 100,
   "commit": true,
   "contributors": [
+    {
+      "login": "rpearce",
+      "name": "Robert Pearce",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/592876?v=4",
+      "profile": "https://robertwpearce.com",
+      "contributions": [
+        "code",
+        "question",
+        "test",
+        "bug",
+        "example",
+        "design",
+        "review",
+        "ideas",
+        "doc"
+      ]
+    },
     {
       "login": "cbothner",
       "name": "Cameron Bothner",
@@ -67,23 +86,6 @@
       "profile": "https://github.com/wtfdaemon",
       "contributions": [
         "bug"
-      ]
-    },
-    {
-      "login": "rpearce",
-      "name": "Robert Pearce",
-      "avatar_url": "https://avatars2.githubusercontent.com/u/592876?v=4",
-      "profile": "https://robertwpearce.com",
-      "contributions": [
-        "code",
-        "question",
-        "test",
-        "bug",
-        "example",
-        "design",
-        "review",
-        "ideas",
-        "doc"
       ]
     },
     {
@@ -186,6 +188,5 @@
         "bug"
       ]
     }
-  ],
-  "repoType": "github"
+  ]
 }

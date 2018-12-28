@@ -1,8 +1,3 @@
-const serve = require('koa-static')
-const koa = require('koa')
-const app = new koa()
+'use strict'
 
-app.use(serve('docs/.'))
-app.listen(3000)
-
-console.log(`=> A development server is running at http://localhost:3000`)
+module.exports = require('./src')

@@ -1,34 +1,31 @@
 {
   "name": "react-medium-image-zoom",
-  "version": "3.0.15",
-  "description": "Medium.com style image zoom for React",
-  "main": "lib/index.js",
-  "scripts": {
-    "build:js": "babel src --out-dir lib",
-    "build:docs": "browserify example/src/app.js -o docs/app.js -t [ babelify ]",
-    "build": "npm run lint && npm run build:js && npm run build:docs",
-    "contributors:add": "all-contributors add",
-    "contributors:generate": "all-contributors generate",
-    "dev": "nodemon",
-    "lint": "eslint src/**/*.js --ext .js",
-    "lint:fix": "eslint src/**/*.js --ext .js --fix",
-    "precommit": "lint-staged",
-    "prepublishOnly": "npm run build",
-    "start": "node index.js",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
-  },
-  "lint-staged": {
-    "*.js": [
-      "prettier --write",
-      "eslint --fix",
-      "git add"
-    ]
-  },
+  "version": "4.0.0",
+  "description": "Accessible React medium.com style image zoom",
+  "main": "index.js",
+  "files": [
+    "AUTHORS",
+    "LICENSE",
+    "README.md",
+    "src/"
+  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rpearce/react-medium-image-zoom.git"
+    "url": "git@github.com:rpearce/react-medium-image-zoom.git"
   },
+  "homepage": "https://github.com/rpearce/react-medium-image-zoom",
+  "bugs": "https://github.com/rpearce/react-medium-image-zoom/issues",
+  "author": "Robert Pearce <me@robertwpearce.com>",
+  "contributors": [
+    "Robert Pearce <me@robertwpearce.com> (https://robertwpearce.com)",
+    "Cameron Bothner (https://github.com/cbothner)",
+    "ismay <ismay@ismaywolff.nl> (https://www.ismaywolff.nl)",
+    "Jeremy Bini <jeremybini@gmail.com> (https://jbini.com)",
+    "Josh Sloat (http://www.joshsloat.com)",
+    "Kaycee Ingram <kayceeingram33@gmail.com> (https://github.com/HippoDippo)",
+    "Ludwig Frank (https://github.com/ludwigfrank)"
+  ],
+  "license": "ISC",
   "keywords": [
     "react",
     "react-component",
@@ -43,40 +40,56 @@
     "zoom",
     "image"
   ],
-  "author": "Robert Pearce",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/rpearce/react-medium-image-zoom/issues"
+  "scripts": {
+    "build": "npm run build:js && npm run build:docs",
+    "build:docs": "rm docs/app.js && browserify example/app.js -o docs/app.js -t [ babelify ]",
+    "build:js": "rm -rf src && babel source --out-dir src",
+    "contributors:add": "all-contributors add",
+    "contributors:generate": "all-contributors generate",
+    "coverage": "jest --coverage --coverageReporters=text-lcov | coveralls",
+    "lint": "eslint --ext .js .",
+    "prepublishOnly": "npm run lint && npm run build",
+    "test": "npm run lint && npm run build && jest --coverage --no-cache"
   },
-  "homepage": "https://github.com/rpearce/react-medium-image-zoom#readme",
-  "peerDependencies": {
-    "prop-types": "^15.5.8",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+  "jest": {
+    "clearMocks": true,
+    "collectCoverageFrom": [
+      "<rootDir>/source/**/*.js"
+    ],
+    "setupTestFrameworkScriptFile": "<rootDir>/test/setup.js",
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^3.4.8",
-    "@storybook/addon-links": "^3.4.8",
-    "@storybook/react": "^3.4.8",
-    "all-contributors-cli": "^5.3.0",
-    "babel-cli": "^6.26.0",
-    "babel-plugin-transform-object-assign": "^6.22.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "babelify": "^8.0.0",
-    "browserify": "^16.2.2",
-    "eslint": "^5.2.0",
-    "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-prettier": "^2.6.2",
-    "eslint-plugin-react": "^7.10.0",
-    "husky": "^0.14.3",
-    "koa": "^2.3.0",
-    "koa-static": "^4.0.1",
-    "lint-staged": "^7.2.0",
-    "nodemon": "^1.11.0",
-    "prettier": "^1.14.0",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "@babel/preset-react": "^7.0.0",
+    "all-contributors-cli": "^5.4.1",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "babelify": "^10.0.0",
+    "browserify": "^16.2.3",
+    "coveralls": "^3.0.2",
+    "enzyme": "^3.8.0",
+    "enzyme-adapter-react-16": "^1.7.1",
+    "enzyme-to-json": "^3.3.5",
+    "eslint": "^5.11.1",
+    "eslint-plugin-jest": "^22.1.2",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.12.0",
+    "jest": "^23.6.0",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0"
+  },
+  "peerDependencies": {
+    "react": ">= 16.3",
+    "react-dom": ">= 16.3"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.0.0",
+    "@rpearce/simple-uniqueid": "^0.1.0",
+    "react-button-a11y": "^2.0.0"
   }
 }

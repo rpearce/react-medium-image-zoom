@@ -1,9 +1,32 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import ImageZoom from '../../lib'
+import { Controlled as ImageZoom } from '../'
 
 class App extends Component {
+  constructor(...params) {
+    super(...params)
+    this.state = {
+      isBridgeZoomed: false,
+      isMtnZoomed: false,
+      isGazelleZoomed: false
+    }
+  }
+
+  handleZoom() {
+    this.setState({ isZoomed: true })
+  }
+
+  handleUnzoom() {
+    this.setState({ isZoomed: false })
+  }
+
   render() {
+    const {
+      isBridgeZoomed,
+      isMtnZoomed,
+      isGazelleZoomed
+    } = this.state
+
     return (
       <div className="container">
         <h1>Image Zoom</h1>
@@ -34,17 +57,15 @@ class App extends Component {
         </p>
         <div>
           <ImageZoom
-            image={{
-              src: 'bridge.jpg',
-              alt: 'Golden Gate Bridge',
-              className: 'img'
-            }}
-            zoomImage={{
-              src: 'bridge-big.jpg',
-              alt: 'Golden Gate Bridge',
-              className: 'img--zoomed'
-            }}
-          />
+            isZoomed={isBridgeZoomed}
+            label="Click to view larger image of Golden Gate Bridge"
+          >
+            <img
+              alt="Golden Gate Bridge"
+              className="img"
+              src="bridge.jpg"
+            />
+          </ImageZoom>
         </div>
         <p>
           Thundercats freegan Truffaut, four loko twee Austin scenester lo-fi
@@ -58,20 +79,16 @@ class App extends Component {
         </p>
         <div style={{ float: 'left', margin: '0 1.5em 0 0' }}>
           <ImageZoom
-            image={{
-              src: 'nz.jpg',
-              alt: 'Picture of Mt. Cook in New Zealand',
-              className: 'img',
-              style: {
-                width: '20em'
-              }
-            }}
-            zoomImage={{
-              src: 'nz-big.jpg',
-              alt: 'Picture of Mt. Cook in New Zealand',
-              className: 'img--zoomed'
-            }}
-          />
+            isZoomed={isMtnZoomed}
+            label="Click to view larger image of Mt. Cook in New Zealand"
+          >
+            <img
+              alt="Mt. Cook in New Zealand"
+              className="img"
+              src="nz.jpg"
+              style={{ width: '20em' }}
+            />
+          </ImageZoom>
         </div>
         <p>
           Ugh Portland Austin, distillery tattooed typewriter polaroid pug
@@ -101,17 +118,18 @@ class App extends Component {
         </p>
         <div>
           <ImageZoom
-            image={{
-              src: 'gazelle.jpg',
-              alt: 'Gazelle Stomping',
-              title: "Don't exceed original image dimensions...",
-              className: 'img',
-              style: {
-                width: '250px'
-              }
-            }}
-            shouldRespectMaxDimension={true}
-          />
+            isZoomed={isGazelleZoomed}
+            label="Click to view larger image of Gazelle Stomping"
+            shouldRespectMaxDimension
+          >
+            <img
+              alt="Gazelle Stomping"
+              className="img"
+              src="gazelle.jpg"
+              style={{ width: '20em' }}
+              title="Don't exceed original image dimensions..."
+            />
+          </ImageZoom>
         </div>
         <p>
           Scenester chambray slow-carb, trust fund biodiesel ugh bicycle rights

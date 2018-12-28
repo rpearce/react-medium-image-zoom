@@ -1,39 +1,62 @@
 {
   "env": {
     "browser": true,
-    "commonjs": true,
-    "es6": true
+    "es6": true,
+    "jest": true,
+    "node": true
   },
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended",
+    "plugin:react/recommended"
   ],
   "parserOptions": {
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true,
-      "jsx": true
-    },
+    "ecmaVersion": 2018,
     "sourceType": "module"
   },
+  "plugins": [
+    "react"
+  ],
   "rules": {
-    "array-bracket-spacing": ["error", "always"],
-    "camelcase": "error",
-    "global-require": "error",
-    "no-console": "warn",
-    "no-debugger": "warn",
-    "no-duplicate-imports": "error",
-    "no-eq-null": "error",
-    "no-extra-parens": "error",
-    "no-return-assign": "error",
-    "no-template-curly-in-string": "error",
-    "no-trailing-spaces": "error",
-    "no-useless-constructor": "error",
-    "object-curly-spacing": ["error", "always"],
-    "react/display-name": 0,
-    "react/no-deprecated": 0,
-    "react/no-find-dom-node": 0,
-    "react/no-is-mounted": 0,
-    "react/no-string-refs": 0,
-    "react/prop-types": 0
+    "array-bracket-spacing": [ "error", "always" ],
+    "arrow-spacing": [ "error" ],
+    "block-spacing": [ "error" ],
+    "camelcase": [ "error" ],
+    "comma-dangle": [ "error", "never" ],
+    "computed-property-spacing": [ "error", "never" ],
+    "curly": [ "error", "all" ],
+    "eqeqeq": [ "error", "always" ],
+    "eol-last": [ "error", "always" ],
+    "func-call-spacing": [ "error", "never" ],
+    "indent": [ "error", 2 ],
+    "linebreak-style": [ "error", "unix" ],
+    "no-console": "off",
+    "no-else-return": [ "error" ],
+    "no-empty-function": [ "error" ],
+    "no-multiple-empty-lines": [2, { "max": 1, "maxEOF": 1 }],
+    "no-extra-parens": [ "error" ],
+    "no-lone-blocks": [ "error" ],
+    "no-multi-assign": [ "error" ],
+    "no-new": [ "error" ],
+    "no-new-func": [ "error" ],
+    "no-param-reassign": [ "error" ],
+    "no-return-assign": [ "error" ],
+    "no-sequences": [ "error" ],
+    "no-trailing-spaces": [ "error" ],
+    "no-void": [ "error" ],
+    "no-with": [ "error" ],
+    "no-useless-return": [ "error" ],
+    "object-curly-spacing": [ "error", "always" ],
+    "quotes": [ "error", "single" ],
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error",
+    "react/jsx-no-undef": "error",
+    "react/prop-types": 0,
+    "semi": [ "error", "never" ],
+    "yoda": [ "error" ]
+  },
+  "settings": {
+    "react": {
+      "version": "16"
+    }
   }
 }

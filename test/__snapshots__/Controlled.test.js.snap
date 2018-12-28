@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ImageZoom – Controlled component renders, no children 1`] = `
+<StrictMode>
+  <div>
+    Hello, world!
+  </div>
+</StrictMode>
+`;
+
+exports[`ImageZoom – Controlled container renders 1`] = `
+<ImageZoom
+  forwardedRef={null}
+/>
+`;
