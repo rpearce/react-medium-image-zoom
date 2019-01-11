@@ -19,7 +19,7 @@ What actually happened was...
 1. Then this...
 
 ## Link to repository/example of behavior
-[link to example]()
+https://codesandbox.io/s/wwp7n7rr47
 
 BUG REPORT? – REMOVE THIS LINE -->
 
