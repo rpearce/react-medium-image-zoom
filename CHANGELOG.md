@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [3.0.16] - 2019-04-22
 
 ### Fixed
-- Fixes JS error when `_allowTabNavigation` is called before image ref
+- Fixes JS error when `_allowTabNavigation` is called before image ref (PR #150)
 
 ## [3.0.15] - 2018-10-25
 
