@@ -185,6 +185,16 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "tommoor",
+      "name": "Tom Moor",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/380914?v=4",
+      "profile": "http://tommoor.com",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "repoType": "github"
