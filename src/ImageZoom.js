@@ -272,7 +272,7 @@ export default class ImageZoom extends Component {
   }
 
   _allowTabNavigation() {
-    return this.image.tabIndex !== unfocusableTabIndex
+    return this.image && this.image.tabIndex !== unfocusableTabIndex
   }
 }
 

@@ -671,7 +671,7 @@ var ImageZoom = function (_Component) {
   }, {
     key: '_allowTabNavigation',
     value: function _allowTabNavigation() {
-      return this.image.tabIndex !== unfocusableTabIndex;
+      return this.image && this.image.tabIndex !== unfocusableTabIndex;
     }
   }], [{
     key: 'defaultProps',
