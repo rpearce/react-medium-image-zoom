@@ -45,15 +45,22 @@ export default class ImageZoom extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  /**
+   * When the component's state updates, check for changes
+   * and either zoom or start the unzoom procedure.
+   * NOTE: We need to differentiate whether this is a
+   * controlled or uncontrolled component and do the check
+   * based off of that.
+   */
+  componentDidUpdate(prevProps, prevState) {
     if (
-      !isControlled(this.props.isZoomed) &&
-      isControlled(nextProps.isZoomed)
+      !isControlled(prevProps.isZoomed) &&
+      isControlled(this.props.isZoomed)
     ) {
       throw new Error(defaults.errors.uncontrolled)
     } else if (
-      isControlled(this.props.isZoomed) &&
-      !isControlled(nextProps.isZoomed)
+      isControlled(prevProps.isZoomed) &&
+      !isControlled(this.props.isZoomed)
     ) {
       throw new Error(defaults.errors.controlled)
     }
@@ -64,27 +71,18 @@ export default class ImageZoom extends Component {
      * hiding the original image on the page until the
      * unzooming is complete
      */
-    if (this.props.isZoomed && !nextProps.isZoomed) {
+    if (prevProps.isZoomed && !this.props.isZoomed) {
       this.isClosing = true
     }
 
-    const { src } = this.props.image
-    const { src: nextSrc } = nextProps.image
+    const { src } = prevProps.image
+    const { src: nextSrc } = this.props.image
 
     // If the consumer wants to change the image's src, then so be it.
     if (src !== nextSrc) {
       this.setState({ src: nextSrc })
     }
-  }
 
-  /**
-   * When the component's state updates, check for changes
-   * and either zoom or start the unzoom procedure.
-   * NOTE: We need to differentiate whether this is a
-   * controlled or uncontrolled component and do the check
-   * based off of that.
-   */
-  componentDidUpdate(prevProps, prevState) {
     const prevIsZoomed = isControlled(prevProps.isZoomed)
       ? prevProps.isZoomed
       : prevState.isZoomed
