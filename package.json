@@ -51,8 +51,8 @@
   "homepage": "https://github.com/rpearce/react-medium-image-zoom#readme",
   "peerDependencies": {
     "prop-types": "^15.5.8",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^3.4.8",
@@ -76,7 +76,7 @@
     "lint-staged": "^7.2.0",
     "nodemon": "^1.11.0",
     "prettier": "^1.14.0",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0"
   }
 }
