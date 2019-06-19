@@ -1,29 +1,18 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { bool, object } from 'prop-types'
 import defaults from './defaults'
 
-export default class Overlay extends Component {
+export default class Overlay extends PureComponent {
   constructor(props) {
     super(props)
 
     this.state = {
-      isVisible: false
+      isMounted: false
     }
   }
 
   componentDidMount() {
-    this.setState({ isVisible: true })
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.isVisible) this.setState({ isVisible: false })
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return (
-      this.props.isVisible !== nextProps.isVisible ||
-      this.state.isVisible !== nextProps.isVisible
-    )
+    this.setState({ isMounted: true })
   }
 
   render() {
@@ -31,7 +20,8 @@ export default class Overlay extends Component {
   }
 
   _getStyle() {
-    const opacity = this.state.isVisible & 1 // bitwise and; converts bool to 0 or 1
+    const isVisible = this.state.isMounted && this.props.isVisible
+    const opacity = isVisible & 1 // bitwise and; converts bool to 0 or 1
     return Object.assign(
       {},
       defaults.styles.overlay,

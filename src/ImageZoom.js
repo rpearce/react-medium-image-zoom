@@ -18,7 +18,10 @@ export default class ImageZoom extends Component {
     this.state = {
       isDisabled: false,
       isZoomed: false,
-      src: props.image.src
+      wasZoomed: false,
+      src: props.image.src,
+      prevSrc: props.image.src,
+      isClosing: false
     }
 
     this._handleKeyDown = this._handleKeyDown.bind(this)
@@ -45,35 +48,23 @@ export default class ImageZoom extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (
-      !isControlled(this.props.isZoomed) &&
-      isControlled(nextProps.isZoomed)
-    ) {
-      throw new Error(defaults.errors.uncontrolled)
-    } else if (
-      isControlled(this.props.isZoomed) &&
-      !isControlled(nextProps.isZoomed)
-    ) {
-      throw new Error(defaults.errors.controlled)
-    }
-
+  static getDerivedStateFromProps(props, state) {
     /**
      * When component is controlled, we need a flag
      * set when it's about to close in order to keep
      * hiding the original image on the page until the
      * unzooming is complete
      */
-    if (this.props.isZoomed && !nextProps.isZoomed) {
-      this.isClosing = true
-    }
-
-    const { src } = this.props.image
-    const { src: nextSrc } = nextProps.image
-
+    const isClosing = state.wasZoomed && !props.isZoomed || state.isClosing
     // If the consumer wants to change the image's src, then so be it.
-    if (src !== nextSrc) {
-      this.setState({ src: nextSrc })
+    const src = props.image.src !== state.prevSrc ? props.image.src : state.src
+
+    return {
+      src,
+      isClosing,
+      // Keep track of previous props
+      wasZoomed: props.isZoomed,
+      prevSrc: props.image.src
     }
   }
 
@@ -85,6 +76,18 @@ export default class ImageZoom extends Component {
    * based off of that.
    */
   componentDidUpdate(prevProps, prevState) {
+    if (
+      !isControlled(prevProps.isZoomed) &&
+      isControlled(this.props.isZoomed)
+    ) {
+      throw new Error(defaults.errors.uncontrolled)
+    } else if (
+      isControlled(prevProps.isZoomed) &&
+      !isControlled(this.props.isZoomed)
+    ) {
+      throw new Error(defaults.errors.controlled)
+    }
+
     const prevIsZoomed = isControlled(prevProps.isZoomed)
       ? prevProps.isZoomed
       : prevState.isZoomed
@@ -106,7 +109,7 @@ export default class ImageZoom extends Component {
         zoomImage,
         zoomMargin
       },
-      state: { isDisabled, isZoomed: stateIsZoomed, src }
+      state: { isDisabled, isZoomed: stateIsZoomed, src, isClosing }
     } = this
 
     /**
@@ -140,7 +143,7 @@ export default class ImageZoom extends Component {
         onLoad={this._handleLoad}
         onError={this._handleLoadError}
       />,
-      this.image && (isZoomed || this.isClosing) ?
+      this.image && (isZoomed || isClosing) ?
         <EventsWrapper
           key="portal"
           ref={node => {
@@ -180,9 +183,8 @@ export default class ImageZoom extends Component {
 
   _getImageStyle() {
     const {
-      isClosing,
       props: { defaultStyles, image, isZoomed: isZoomedP },
-      state: { isDisabled, isZoomed: isZoomedSt }
+      state: { isDisabled, isZoomed: isZoomedSt, isClosing }
     } = this
 
     const isHidden = isZoomedSt || isZoomedP || isClosing
@@ -246,18 +248,9 @@ export default class ImageZoom extends Component {
   _handleUnzoom(src, allowRefocus) {
     return () => {
       const changes = Object.assign(
-        { isZoomed: false },
+        { isZoomed: false, isClosing: false },
         this.props.shouldReplaceImage && { src }
       )
-
-      /**
-       * Lamentable but necessary right now in order to
-       * remove the portal instance before the next
-       * `componentDidUpdate` check for the portalInstance.
-       * The reasoning is so we can differentiate between an
-       * external `isZoomed` command and an internal one.
-       */
-      delete this.isClosing
 
       this.setState(changes, this.props.onUnzoom)
 
