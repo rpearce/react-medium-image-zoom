@@ -195,6 +195,16 @@
         "code",
         "bug"
       ]
+    },
+    {
+      "login": "jpreynat",
+      "name": "Johan Preynat",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/7927876?v=4",
+      "profile": "https://github.com/jpreynat",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
   ],
   "repoType": "github"
