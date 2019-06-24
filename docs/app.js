@@ -505,7 +505,7 @@ var ImageZoom = function (_Component) {
       });
       var isZoomed = isControlled(propsIsZoomed) ? propsIsZoomed : stateIsZoomed;
 
-      return [_react2.default.createElement('img', _extends({}, attrs, {
+      return _react2.default.createElement(_react.Fragment, null, _react2.default.createElement('img', _extends({}, attrs, {
         key: 'image',
         ref: function ref(x) {
           _this2.image = x;
@@ -526,7 +526,7 @@ var ImageZoom = function (_Component) {
         zoomImage: zoomImage,
         zoomMargin: Number(zoomMargin),
         onUnzoom: this._handleUnzoom
-      })) : null];
+      })) : null);
     }
 
     /**
