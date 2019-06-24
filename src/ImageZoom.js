@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { bool, func, object, shape, string } from 'prop-types'
 import defaults from './defaults'
 import { isMaxDimension } from './helpers'
@@ -133,36 +133,38 @@ export default class ImageZoom extends Component {
     )
     const isZoomed = isControlled(propsIsZoomed) ? propsIsZoomed : stateIsZoomed
 
-    return [
-      <img
-        {...attrs}
-        key="image"
-        ref={x => {
-          this.image = x
-        }}
-        onLoad={this._handleLoad}
-        onError={this._handleLoadError}
-      />,
-      this.image && (isZoomed || isClosing) ?
-        <EventsWrapper
-          key="portal"
-          ref={node => {
-            this.portalInstance = node
+    return (
+      <Fragment>
+        <img
+          {...attrs}
+          key="image"
+          ref={x => {
+            this.image = x
           }}
-          controlledEventFn={this._getControlledEventFn()}
-          allowAccessibilityClose={this._allowTabNavigation()}
-        >
-          <Zoom
-            defaultStyles={defaultStyles}
-            image={this.image}
-            shouldRespectMaxDimension={shouldRespectMaxDimension}
-            zoomImage={zoomImage}
-            zoomMargin={Number(zoomMargin)}
-            onUnzoom={this._handleUnzoom}
-          />
-        </EventsWrapper>
-       : null
-    ]
+          onLoad={this._handleLoad}
+          onError={this._handleLoadError}
+        />
+        {this.image && (isZoomed || isClosing) ?
+          <EventsWrapper
+            key="portal"
+            ref={node => {
+              this.portalInstance = node
+            }}
+            controlledEventFn={this._getControlledEventFn()}
+            allowAccessibilityClose={this._allowTabNavigation()}
+          >
+            <Zoom
+              defaultStyles={defaultStyles}
+              image={this.image}
+              shouldRespectMaxDimension={shouldRespectMaxDimension}
+              zoomImage={zoomImage}
+              zoomMargin={Number(zoomMargin)}
+              onUnzoom={this._handleUnzoom}
+            />
+          </EventsWrapper>
+        : null}
+      </Fragment>
+    );
   }
 
   /**
