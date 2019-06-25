@@ -1,47 +1,33 @@
-import React, { PureComponent, StrictMode, createRef } from 'react'
-import ButtonA11y from 'react-button-a11y'
-import uniqueId from '@rpearce/simple-uniqueid'
+import React, { StrictMode, useCallback, useState } from 'react'
+import { bool, node, string } from 'prop-types'
+import tinygen from 'tinygen'
 
-export class Controlled extends PureComponent {
-  constructor(...params) {
-    super(...params)
-    this.handleClickTrigger = this.handleClickTrigger.bind(this)
-    this.ref = createRef()
-    this.id = uniqueId('rmiz-')
-  }
+const Controlled = ({ children, isActive, label }) => {
+  const [id] = useState(tinygen('rmiz-'))
+  const handleClickTrigger = useCallback(e => {
+    return e
+  }, [])
 
-  componentDidMount() {
-    console.log(this.ref.current)
-  }
+  return (
+    <StrictMode>
+      <button
+        aria-controls={id}
+        aria-expanded={isActive}
+        aria-haspopup={true}
+        aria-label={label}
+        aria-owns={id}
+        onClick={handleClickTrigger}
+      >
+        {children}
+      </button>
+    </StrictMode>
+  )
+}
 
-  handleClickTrigger() {
-    console.log('clicked trigger')
-  }
-
-  render() {
-    const {
-      children,
-      isZoomed,
-      label
-      //shouldRespectMaxDimension
-    } = this.props
-
-    return (
-      <StrictMode>
-        <ButtonA11y
-          aria-controls={this.id}
-          aria-expanded={isZoomed}
-          aria-haspopup={true}
-          aria-label={label}
-          aria-owns={this.id}
-          onClick={this.handleClickTrigger}
-          ref={this.ref}
-        >
-          {children}
-        </ButtonA11y>
-      </StrictMode>
-    )
-  }
+Controlled.propTypes = {
+  children: node.isRequired,
+  isActive: bool.isRequired,
+  label: string.isRequired
 }
 
 export default Controlled

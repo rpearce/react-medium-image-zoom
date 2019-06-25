@@ -1,95 +1,111 @@
 {
   "name": "react-medium-image-zoom",
   "version": "4.0.0",
-  "description": "Accessible React medium.com style image zoom",
-  "main": "index.js",
-  "files": [
-    "AUTHORS",
-    "LICENSE",
-    "README.md",
-    "src/"
-  ],
+  "description": "Accessible medium.com-style image zoom for React",
+  "author": "Robert Pearce <me@robertwpearce.com>",
+  "license": "BSD-3",
   "repository": {
     "type": "git",
     "url": "git@github.com:rpearce/react-medium-image-zoom.git"
   },
   "homepage": "https://github.com/rpearce/react-medium-image-zoom",
   "bugs": "https://github.com/rpearce/react-medium-image-zoom/issues",
-  "author": "Robert Pearce <me@robertwpearce.com>",
-  "contributors": [
-    "Robert Pearce <me@robertwpearce.com> (https://robertwpearce.com)",
-    "Cameron Bothner (https://github.com/cbothner)",
-    "ismay <ismay@ismaywolff.nl> (https://www.ismaywolff.nl)",
-    "Jeremy Bini <jeremybini@gmail.com> (https://jbini.com)",
-    "Josh Sloat (http://www.joshsloat.com)",
-    "Kaycee Ingram <kayceeingram33@gmail.com> (https://github.com/HippoDippo)",
-    "Ludwig Frank (https://github.com/ludwigfrank)"
-  ],
-  "license": "ISC",
   "keywords": [
     "react",
-    "react-component",
     "medium",
+    "modal",
     "zoom",
-    "modal"
+    "image",
+    "react-component"
   ],
   "tags": [
     "react",
     "medium",
     "modal",
     "zoom",
-    "image"
+    "image",
+    "react-component"
+  ],
+  "sideEffects": false,
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "files": [
+    "AUTHORS",
+    "LICENSE",
+    "README.md",
+    "dist/"
   ],
   "scripts": {
-    "build": "npm run build:js && npm run build:docs",
-    "build:docs": "rm docs/app.js && browserify example/app.js -o docs/app.js -t [ babelify ]",
-    "build:js": "rm -rf src && babel source --out-dir src",
+    "build": "cross-env NODE_ENV=production rollup -c ./rollup.config.js",
+    "build:watch": "cross-env NODE_ENV=production ROLLUP_WATCH=true rollup -c ./rollup.config.js -w",
+    "clean": "run-p clean:dist",
+    "clean:dist": "rm -rf ./dist",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
-    "coverage": "jest --coverage --coverageReporters=text-lcov | coveralls",
-    "lint": "eslint --ext .js .",
-    "prepublishOnly": "npm run lint && npm run build",
-    "test": "npm run lint && npm run build && jest --coverage --no-cache"
-  },
-  "jest": {
-    "clearMocks": true,
-    "collectCoverageFrom": [
-      "<rootDir>/source/**/*.js"
-    ],
-    "setupTestFrameworkScriptFile": "<rootDir>/test/setup.js",
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ]
+    "coverage": "npm run test --coverage --coverageReporters=text-lcov | coveralls",
+    "lint": "eslint .",
+    "prepublishOnly": "run-p lint test && npm run build",
+    "start": "run-s build storybook",
+    "storybook": "start-storybook -p 6006",
+    "storybook:build": "build-storybook",
+    "test": "cross-env NODE_ENV=test TZ=UTC jest"
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.2.2",
-    "@babel/preset-env": "^7.2.3",
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
-    "all-contributors-cli": "^5.4.1",
+    "@storybook/addon-a11y": "^5.1.9",
+    "@storybook/addon-actions": "^5.1.9",
+    "@storybook/addon-knobs": "^5.1.9",
+    "@storybook/addon-links": "^5.1.9",
+    "@storybook/react": "^5.1.9",
+    "@testing-library/react": "^8.0.1",
+    "all-contributors-cli": "^6.7.0",
+    "autoprefixer": "^9.6.0",
+    "axe-core": "^3.2.2",
     "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "^23.6.0",
+    "babel-jest": "^24.8.0",
+    "babel-loader": "^8.0.6",
     "babelify": "^10.0.0",
     "browserify": "^16.2.3",
-    "coveralls": "^3.0.2",
-    "enzyme": "^3.8.0",
-    "enzyme-adapter-react-16": "^1.7.1",
-    "enzyme-to-json": "^3.3.5",
-    "eslint": "^5.11.1",
-    "eslint-plugin-jest": "^22.1.2",
-    "eslint-plugin-jsx-a11y": "^6.1.2",
-    "eslint-plugin-react": "^7.12.0",
-    "jest": "^23.6.0",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0"
+    "coveralls": "^3.0.4",
+    "cross-env": "^5.2.0",
+    "eslint": "^6.0.1",
+    "eslint-config-prettier": "^5.1.0",
+    "eslint-plugin-css-modules": "^2.11.0",
+    "eslint-plugin-jest": "^22.7.1",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.2",
+    "eslint-plugin-react-hooks": "^1.6.1",
+    "husky": "^2.5.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^24.8.0",
+    "jest-dom": "^3.5.0",
+    "lint-staged": "^8.2.1",
+    "npm-run-all": "^4.1.5",
+    "postcss-loader": "^3.0.0",
+    "prettier": "^1.18.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "rollup": "^1.16.2",
+    "rollup-plugin-auto-external": "^2.0.0",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.0.0",
+    "rollup-plugin-node-resolve": "^5.1.0",
+    "rollup-plugin-postcss": "^2.0.3",
+    "rollup-plugin-terser": "^5.0.0"
   },
   "peerDependencies": {
-    "react": ">= 16.3",
-    "react-dom": ">= 16.3"
+    "react": ">= 16.8"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.0.0",
-    "@rpearce/simple-uniqueid": "^0.1.0",
-    "react-button-a11y": "^2.0.0"
+    "@babel/runtime-corejs3": "^7.4.5",
+    "core-js": "^3.1.4",
+    "prop-types": "^15.7.2",
+    "regenerator-runtime": "^0.13.2",
+    "tinygen": "^0.2.0"
   }
 }

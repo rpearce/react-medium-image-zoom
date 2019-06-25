@@ -1,1 +1,1 @@
-export { default as Controlled } from './Controlled'
+export { default } from './Controlled'

@@ -1,31 +1,12 @@
 {
   "projectName": "react-medium-image-zoom",
   "projectOwner": "rpearce",
-  "repoType": "github",
-  "repoHost": "https://github.com",
   "files": [
     "README.md"
   ],
   "imageSize": 100,
   "commit": true,
   "contributors": [
-    {
-      "login": "rpearce",
-      "name": "Robert Pearce",
-      "avatar_url": "https://avatars2.githubusercontent.com/u/592876?v=4",
-      "profile": "https://robertwpearce.com",
-      "contributions": [
-        "code",
-        "question",
-        "test",
-        "bug",
-        "example",
-        "design",
-        "review",
-        "ideas",
-        "doc"
-      ]
-    },
     {
       "login": "cbothner",
       "name": "Cameron Bothner",
@@ -86,6 +67,23 @@
       "profile": "https://github.com/wtfdaemon",
       "contributions": [
         "bug"
+      ]
+    },
+    {
+      "login": "rpearce",
+      "name": "Robert Pearce",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/592876?v=4",
+      "profile": "https://robertwpearce.com",
+      "contributions": [
+        "code",
+        "question",
+        "test",
+        "bug",
+        "example",
+        "design",
+        "review",
+        "ideas",
+        "doc"
       ]
     },
     {
@@ -187,6 +185,37 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "tommoor",
+      "name": "Tom Moor",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/380914?v=4",
+      "profile": "http://tommoor.com",
+      "contributions": [
+        "code",
+        "bug"
+      ]
+    },
+    {
+      "login": "jpreynat",
+      "name": "Johan Preynat",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/7927876?v=4",
+      "profile": "https://github.com/jpreynat",
+      "contributions": [
+        "code",
+        "bug"
+      ]
+    },
+    {
+      "login": "rgabs",
+      "name": "Rahul Gaba",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/7898942?v=4",
+      "profile": "http://rahulgaba.com",
+      "contributions": [
+        "code",
+        "bug"
+      ]
     }
-  ]
+  ],
+  "repoType": "github"
 }
