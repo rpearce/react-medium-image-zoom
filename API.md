@@ -8,35 +8,30 @@
 ```js
 $ npm i react-medium-image-zoom
 ```
+or
+```js
+$ yarn add react-medium-image-zoom
+```
 
 ## Usage
 
 ```js
-import ImageZoom from 'react-medium-image-zoom'
+import React, { useState } from 'react'
+import Img from 'react-medium-image-zoom'
 
-export default class App extends Component {
-  constructor(...params) {
-    super(...params)
-    this.handleClose = this.handleClose.bind(this)
-    this.handleOpen = this.handleOpen.bind(this)
-    this.state = { isOpen: false }
-  }
+const MyComponent = () => {
+  const [isActive, setActive] = useState(false)
+  const handleClose = useCallback(() => { setActive(false) }, [setActive])
+  const handleOpen = useCallback(() => { setActive(true) }, [setActive])
 
-  handleClose() {
-    this.setState({ isOpen: false })
-  }
-
-  handleOpen() {
-    this.setState({ isOpen: true })
-  }
-
-  render() {
-    const { isOpen } = this.state
-
-    return (
-      <ImageZoom
-      />
-    )
-  }
+  return (
+    <Img
+      handleClose={handleClose}
+      handleOpen={handleOpen}
+      isActive={isActive}
+    />
+  )
 }
+
+export default MyComponent
 ```
