@@ -20,10 +20,11 @@
     ```
 1. Create a [pull request](https://help.github.com/articles/about-pull-requests/)
    from your branch to this repo's `master` branch
-1. When all is merged, pull down the upstream changes to your master
+1. When all is merged, pull down the upstream changes to your `master`
     ```
+    $ git checkout master
     $ git fetch upstream
-    $ git merge upstream/master
+    $ git rebase upstream/master
     ```
 1. Delete your feature branch (locally and then on GitHub)
     ```
@@ -44,8 +45,9 @@ To test in watch mode:
 $ yarn test --watch
 ```
 
-To update snapshot tests:
+To generate a local coverage report:
 
 ```
-$ yarn test -u
+$ yarn test --coverage
+$ open coverage/lcov-report/index.html
 ```
