@@ -36,18 +36,20 @@
     "dist/"
   ],
   "scripts": {
-    "build": "cross-env NODE_ENV=production rollup -c ./rollup.config.js",
-    "build:watch": "cross-env NODE_ENV=production ROLLUP_WATCH=true rollup -c ./rollup.config.js -w",
-    "clean": "run-p clean:dist",
+    "build": "npm run clean && run-p build:js build:docs",
+    "build:docs": "mkdir -p docs && build-storybook -o docs",
+    "build:js": "cross-env NODE_ENV=production rollup -c ./rollup.config.js",
+    "build:js:watch": "cross-env NODE_ENV=production ROLLUP_WATCH=true rollup -c ./rollup.config.js -w",
+    "clean": "run-p clean:dist clean:docs",
     "clean:dist": "rm -rf ./dist",
+    "clean:docs": "rm -rf ./docs",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
     "coverage": "npm run test --coverage --coverageReporters=text-lcov | coveralls",
     "lint": "eslint .",
     "prepublishOnly": "run-p lint test && npm run build",
-    "start": "run-s build storybook",
+    "start": "run-p build:js:watch storybook",
     "storybook": "start-storybook -p 6006",
-    "storybook:build": "build-storybook",
     "test": "cross-env NODE_ENV=test TZ=UTC jest"
   },
   "devDependencies": {

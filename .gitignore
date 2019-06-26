@@ -60,5 +60,5 @@ typings/
 # next.js build output
 .next
 
-src/
+dist/
 *.tmp
