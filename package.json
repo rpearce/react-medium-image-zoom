@@ -47,7 +47,7 @@
     "contributors:generate": "all-contributors generate",
     "coverage": "npm run test --coverage --coverageReporters=text-lcov | coveralls",
     "lint": "eslint .",
-    "prepublishOnly": "run-p lint test && npm run build",
+    "prepublishOnly": "run-p lint test && npm run build:js",
     "start": "run-p build:js:watch storybook",
     "storybook": "start-storybook -p 6006",
     "test": "cross-env NODE_ENV=test TZ=UTC jest"
@@ -70,8 +70,6 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^24.8.0",
     "babel-loader": "^8.0.6",
-    "babelify": "^10.0.0",
-    "browserify": "^16.2.3",
     "coveralls": "^3.0.4",
     "cross-env": "^5.2.0",
     "eslint": "^6.0.1",
