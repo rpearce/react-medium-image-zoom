@@ -107,9 +107,9 @@ export default class Zoom extends Component {
       return Object.assign(
         {},
         defaults.styles.zoomImage,
+        style,
         this.props.defaultStyles.zoomImage,
-        this.props.style,
-        style
+        this.props.style
       )
     }
 
@@ -144,10 +144,10 @@ export default class Zoom extends Component {
     return Object.assign(
       {},
       defaults.styles.zoomImage,
-      this.props.defaultStyles.zoomImage,
-      this.props.style,
       style,
-      zoomStyle
+      zoomStyle,
+      this.props.defaultStyles.zoomImage,
+      this.props.style
     )
   }
 }
