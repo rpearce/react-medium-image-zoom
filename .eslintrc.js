@@ -26,7 +26,6 @@ module.exports = {
     'indent': ['error', 2, { 'SwitchCase': 1 }],
     'jsx-quotes': ['error', 'prefer-double'],
     'jsx-a11y/no-onchange': 0,
-    'no-console': ['error', { allow: ['error'] }],
     'no-trailing-spaces': 'error',
     'object-curly-spacing': ['error', 'always'],
     'quotes': ['error', 'single', { 'allowTemplateLiterals': true }],
