@@ -1,11 +1,19 @@
-import React, { StrictMode, useCallback, useRef, useState } from 'react'
-import { node } from 'prop-types'
+import React, {
+  StrictMode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from 'react'
+import { node, string } from 'prop-types'
 import tinygen from 'tinygen'
-import { unzoom, zoom } from './helpers'
+import { cleanup, unzoom, zoom } from './helpers'
 import cn from './Uncontrolled.css'
 
-const Uncontrolled = ({ children }) => {
-  const [id] = useState(tinygen('rmiz-'))
+const idBase = 'rmiz-'
+
+const Uncontrolled = ({ children, closeText, containerEl, openText }) => {
+  const [id] = useState(() => idBase.concat(tinygen()))
   const [isActive, setActive] = useState(false)
   const btnEl = useRef(null)
   const handleClickTrigger = useCallback(
@@ -16,15 +24,24 @@ const Uncontrolled = ({ children }) => {
 
       // EFFECT
       if (isActive) {
-        unzoom(el)
+        unzoom(id)
       } else {
-        zoom(el)
+        zoom(containerEl, id, el)
       }
 
       setActive(!isActive)
     },
-    [isActive]
+    [containerEl, id, isActive]
   )
+
+  useEffect(
+    () => () => {
+      cleanup(id)
+    },
+    [id]
+  )
+
+  const label = isActive ? closeText : openText
 
   return (
     <StrictMode>
@@ -32,9 +49,9 @@ const Uncontrolled = ({ children }) => {
         aria-controls={id}
         aria-expanded={isActive}
         aria-haspopup={true}
-        aria-label={'CLICK ME'}
+        aria-label={label}
         aria-owns={id}
-        className={cn.btn}
+        className={cn.btnOpen}
         onClick={handleClickTrigger}
         ref={btnEl}
       >
@@ -45,10 +62,16 @@ const Uncontrolled = ({ children }) => {
 }
 
 Uncontrolled.propTypes = {
-  children: node.isRequired
+  children: node.isRequired,
+  closeText: string.isRequired,
+  containerEl: node.isRequired,
+  openText: string.isRequired
 }
 
-//Uncontrolled.defaultProps = {
-//}
+Uncontrolled.defaultProps = {
+  closeText: 'Unzoom image',
+  containerEl: document && document.body,
+  openText: 'Zoom image'
+}
 
 export default Uncontrolled

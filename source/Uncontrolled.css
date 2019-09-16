@@ -8,3 +8,8 @@
   background: none;
   appearance: none;
 }
+
+.btnOpen {
+  composes: btn;
+  cursor: zoom-in;
+}
