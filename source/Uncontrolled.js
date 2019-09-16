@@ -1,46 +1,29 @@
-import React, {
-  StrictMode,
-  useCallback,
-  useEffect,
-  useRef,
-  useState
-} from 'react'
+import React, { StrictMode, useCallback, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { node, string } from 'prop-types'
 import tinygen from 'tinygen'
-import { cleanup, unzoom, zoom } from './helpers'
 import cn from './Uncontrolled.css'
+import Activated from './Activated'
 
 const idBase = 'rmiz-'
 
 const Uncontrolled = ({ children, closeText, containerEl, openText }) => {
   const [id] = useState(() => idBase.concat(tinygen()))
-  const [isActive, setActive] = useState(false)
+  const [isActive, setIsActive] = useState(false)
   const btnEl = useRef(null)
   const handleClickTrigger = useCallback(
     e => {
-      e.preventDefault()
-
-      const el = btnEl.current.firstChild
-
-      // EFFECT
-      if (isActive) {
-        unzoom(id)
-      } else {
-        zoom(containerEl, id, el)
+      if (!isActive) {
+        e.preventDefault()
+        setIsActive(true)
       }
-
-      setActive(!isActive)
     },
-    [containerEl, id, isActive]
+    [isActive]
   )
-
-  useEffect(
-    () => () => {
-      cleanup(id)
-    },
-    [id]
-  )
-
+  const handleDeactivate = useCallback(e => {
+    e.preventDefault()
+    setIsActive(false)
+  }, [])
   const label = isActive ? closeText : openText
 
   return (
@@ -56,6 +39,18 @@ const Uncontrolled = ({ children, closeText, containerEl, openText }) => {
         ref={btnEl}
       >
         {children}
+        {isActive &&
+          createPortal(
+            <Activated
+              containerEl={containerEl}
+              id={id}
+              isActive={isActive}
+              onDeactivate={handleDeactivate}
+            >
+              {children}
+            </Activated>,
+            containerEl
+          )}
       </button>
     </StrictMode>
   )
@@ -70,7 +65,7 @@ Uncontrolled.propTypes = {
 
 Uncontrolled.defaultProps = {
   closeText: 'Unzoom image',
-  containerEl: document && document.body,
+  containerEl: (document || {}).body,
   openText: 'Zoom image'
 }
 

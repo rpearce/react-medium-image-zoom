@@ -96,7 +96,8 @@
     "rollup-plugin-postcss": "^2.0.3"
   },
   "peerDependencies": {
-    "react": ">= 16.8.0"
+    "react": ">= 16.8.0",
+    "react-dom": ">= 16.8.0"
   },
   "dependencies": {
     "prop-types": "^15.7.2",

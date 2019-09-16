@@ -1,0 +1,16 @@
+.wrap {
+  composes: btn from './Shared.css';
+  cursor: zoom-out;
+  position: fixed;
+  overflow-y: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  z-index: 999;
+}
+.modal {
+  /*position: absolute;*/
+}
