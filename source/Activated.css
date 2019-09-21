@@ -1,16 +1,20 @@
-.wrap {
+.btn {
   composes: btn from './Shared.css';
+  display: flex;
   cursor: zoom-out;
   position: fixed;
-  overflow-y: auto;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #fff;
+  /*background-color: #fff;*/
   z-index: 999;
 }
 .modal {
-  /*position: absolute;*/
+  position: absolute;
+  transition: transform 300ms;
+  transform: translate3d(0, 0, 0) scale(1);
+  transform-origin: center center;
+  willChange: transform, top, left;
 }

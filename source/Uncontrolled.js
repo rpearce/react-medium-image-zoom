@@ -1,6 +1,6 @@
 import React, { StrictMode, useCallback, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { node, string } from 'prop-types'
+import { instanceOf, node, string } from 'prop-types'
 import tinygen from 'tinygen'
 import cn from './Uncontrolled.css'
 import Activated from './Activated'
@@ -24,7 +24,7 @@ const Uncontrolled = ({ children, closeText, containerEl, openText }) => {
     e.preventDefault()
     setIsActive(false)
   }, [])
-  const label = isActive ? closeText : openText
+  const className = isActive ? cn.btnHidden : cn.btn
 
   return (
     <StrictMode>
@@ -32,9 +32,9 @@ const Uncontrolled = ({ children, closeText, containerEl, openText }) => {
         aria-controls={id}
         aria-expanded={isActive}
         aria-haspopup={true}
-        aria-label={label}
+        aria-label={openText}
         aria-owns={id}
-        className={cn.btnOpen}
+        className={className}
         onClick={handleClickTrigger}
         ref={btnEl}
       >
@@ -42,10 +42,12 @@ const Uncontrolled = ({ children, closeText, containerEl, openText }) => {
         {isActive &&
           createPortal(
             <Activated
+              closeText={closeText}
               containerEl={containerEl}
               id={id}
               isActive={isActive}
               onDeactivate={handleDeactivate}
+              forwardedRef={btnEl}
             >
               {children}
             </Activated>,
@@ -59,7 +61,7 @@ const Uncontrolled = ({ children, closeText, containerEl, openText }) => {
 Uncontrolled.propTypes = {
   children: node.isRequired,
   closeText: string.isRequired,
-  containerEl: node.isRequired,
+  containerEl: instanceOf(Element).isRequired,
   openText: string.isRequired
 }
 
