@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { bool, func, node, object, string } from 'prop-types'
 import cn from './Activated.css'
 
@@ -20,10 +20,32 @@ const Activated = ({
   onDeactivate,
   forwardedRef: { current: original } = {}
 }) => {
-  const modalEl = useRef(null)
+  const btnRef = useRef(null)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [isUnloading, setIsUnloading] = useState(false)
+
+  const handleClick = useCallback(e => {
+    e.preventDefault()
+    setIsUnloading(true)
+  }, [])
+
+  useEffect(() => {
+    setIsLoaded(true)
+
+    if (btnRef.current) {
+      btnRef.current.focus()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isUnloading) {
+      setTimeout(onDeactivate, 300) // @TODO: sync with transition duration?
+    }
+  }, [isUnloading, onDeactivate])
 
   const { height, left, top, width } = original.getBoundingClientRect()
+
+  // @TODO: refactor style value setting to function
 
   let style = { height, left, top, width }
 
@@ -52,23 +74,25 @@ const Activated = ({
     ].join(' ')
 
     style = { height, left, top, transform, width }
+
+    if (isUnloading) {
+      style = { height, left, top, transform: 'translate3d(0, 0, 0)', width }
+    }
   }
 
-  useEffect(() => {
-    setIsLoaded(true)
-
-    if (modalEl.current) {
-      modalEl.current.focus()
-    }
-  }, [])
+  const className = isLoaded && !isUnloading ? cn.btnLoaded : cn.btn
 
   return (
-    <button aria-label={closeText} className={cn.btn} onClick={onDeactivate}>
+    <button
+      aria-label={closeText}
+      className={className}
+      onClick={handleClick}
+      ref={btnRef}
+    >
       <div
         aria-modal
         className={cn.modal}
         id={id}
-        ref={modalEl}
         role="dialog"
         tabIndex="-1"
         style={style}

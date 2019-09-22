@@ -10,7 +10,8 @@ const idBase = 'rmiz-'
 const Uncontrolled = ({ children, closeText, portalEl, openText }) => {
   const [id] = useState(() => idBase.concat(tinygen()))
   const [isActive, setIsActive] = useState(false)
-  const btnEl = useRef(null)
+  const btnRef = useRef(null)
+
   const handleClickTrigger = useCallback(
     e => {
       if (!isActive) {
@@ -20,10 +21,15 @@ const Uncontrolled = ({ children, closeText, portalEl, openText }) => {
     },
     [isActive]
   )
-  const handleDeactivate = useCallback(e => {
-    e.preventDefault()
+
+  const handleDeactivate = useCallback(() => {
     setIsActive(false)
+
+    if (btnRef && btnRef.current) {
+      btnRef.current.focus()
+    }
   }, [])
+
   const className = isActive ? cn.btnHidden : cn.btn
 
   return (
@@ -36,7 +42,7 @@ const Uncontrolled = ({ children, closeText, portalEl, openText }) => {
         aria-owns={id}
         className={className}
         onClick={handleClickTrigger}
-        ref={btnEl}
+        ref={btnRef}
       >
         {children}
         {isActive &&
@@ -46,7 +52,7 @@ const Uncontrolled = ({ children, closeText, portalEl, openText }) => {
               id={id}
               isActive={isActive}
               onDeactivate={handleDeactivate}
-              forwardedRef={btnEl}
+              forwardedRef={btnRef}
             >
               {children}
             </Activated>,
