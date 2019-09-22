@@ -23,19 +23,13 @@ const Activated = ({
   const modalEl = useRef(null)
   const [isLoaded, setIsLoaded] = useState(false)
 
-  const {
-    offsetHeight: height,
-    offsetWidth: width,
-    style: { transform: originalTransform }
-  } = original
-
-  const { top, left } = original.getBoundingClientRect()
+  const { height, left, top, width } = original.getBoundingClientRect()
 
   let style = { height, left, top, width }
 
   if (isLoaded) {
     // Get the the coords for center of the viewport
-    const viewportX = document.body.clientWidth / 2
+    const viewportX = window.innerWidth / 2
     const viewportY = window.innerHeight / 2
 
     // Get the coords for center of the original image
@@ -48,6 +42,8 @@ const Activated = ({
 
     // @TODO: accept zoomMargin
     const scale = getScale({ height, width, zoomMargin: 0 })
+
+    const originalTransform = original.style.transform
 
     const transform = [
       ...(originalTransform ? [originalTransform] : []),
