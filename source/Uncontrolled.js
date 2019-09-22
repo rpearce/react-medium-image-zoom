@@ -7,7 +7,7 @@ import Activated from './Activated'
 
 const idBase = 'rmiz-'
 
-const Uncontrolled = ({ children, closeText, containerEl, openText }) => {
+const Uncontrolled = ({ children, closeText, portalEl, openText }) => {
   const [id] = useState(() => idBase.concat(tinygen()))
   const [isActive, setIsActive] = useState(false)
   const btnEl = useRef(null)
@@ -43,7 +43,6 @@ const Uncontrolled = ({ children, closeText, containerEl, openText }) => {
           createPortal(
             <Activated
               closeText={closeText}
-              containerEl={containerEl}
               id={id}
               isActive={isActive}
               onDeactivate={handleDeactivate}
@@ -51,7 +50,7 @@ const Uncontrolled = ({ children, closeText, containerEl, openText }) => {
             >
               {children}
             </Activated>,
-            containerEl
+            portalEl
           )}
       </button>
     </StrictMode>
@@ -61,13 +60,13 @@ const Uncontrolled = ({ children, closeText, containerEl, openText }) => {
 Uncontrolled.propTypes = {
   children: node.isRequired,
   closeText: string.isRequired,
-  containerEl: instanceOf(Element).isRequired,
+  portalEl: instanceOf(Element).isRequired,
   openText: string.isRequired
 }
 
 Uncontrolled.defaultProps = {
   closeText: 'Unzoom image',
-  containerEl: (document || {}).body,
+  portalEl: (document || {}).body,
   openText: 'Zoom image'
 }
 

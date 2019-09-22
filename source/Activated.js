@@ -1,16 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { bool, func, instanceOf, node, object, string } from 'prop-types'
+import { bool, func, node, object, string } from 'prop-types'
 import cn from './Activated.css'
 
-const getScale = ({
-  containerHeight,
-  containerWidth,
-  height,
-  width,
-  zoomMargin
-}) => {
-  const scaleX = containerWidth / (width + zoomMargin)
-  const scaleY = containerHeight / (height + zoomMargin)
+const getScale = ({ height, width, zoomMargin }) => {
+  const scaleX = window.innerWidth / (width + zoomMargin)
+  const scaleY = window.innerHeight / (height + zoomMargin)
   const scale = Math.min(scaleX, scaleY)
   return scale
   //const ratio =
@@ -22,7 +16,6 @@ const getScale = ({
 const Activated = ({
   children,
   closeText,
-  containerEl,
   id,
   onDeactivate,
   forwardedRef: { current: original } = {}
@@ -38,34 +31,23 @@ const Activated = ({
 
   const { top, left } = original.getBoundingClientRect()
 
-  const containerHeight =
-    containerEl === window ? containerEl.innerHeight : containerEl.offsetWidth
-
-  const containerWidth =
-    containerEl === window ? containerEl.innerWidth : containerEl.offsetWidth
-
   let style = { height, left, top, width }
 
   if (isLoaded) {
-    // Get the the coords for center of the container's viewport
-    const containerX = containerEl.offsetWidth / 2
-    const containerY = containerEl.offsetHeight / 2
+    // Get the the coords for center of the viewport
+    const viewportX = document.body.clientWidth / 2
+    const viewportY = window.innerHeight / 2
 
     // Get the coords for center of the original image
     const childCenterX = left + width / 2
     const childCenterY = top + height / 2
 
     // Get offset amounts for image coords to be centered on screen
-    const translateX = containerX - childCenterX
-    const translateY = containerY - childCenterY
+    const translateX = viewportX - childCenterX
+    const translateY = viewportY - childCenterY
 
-    const scale = getScale({
-      containerHeight,
-      containerWidth,
-      height,
-      width,
-      zoomMargin: 0 // @TODO: pull this from options
-    })
+    // @TODO: accept zoomMargin
+    const scale = getScale({ height, width, zoomMargin: 0 })
 
     const transform = [
       ...(originalTransform ? [originalTransform] : []),
@@ -104,7 +86,6 @@ const Activated = ({
 Activated.propTypes = {
   children: node.isRequired,
   closeText: string.isRequired,
-  containerEl: instanceOf(Element).isRequired,
   id: string.isRequired,
   isActive: bool.isRequired,
   onDeactivate: func.isRequired,
