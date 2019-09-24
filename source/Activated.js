@@ -18,6 +18,7 @@ const Activated = ({
   closeText,
   id,
   onDeactivate,
+  onLoad,
   forwardedRef: { current: original } = {}
 }) => {
   const btnRef = useRef(null)
@@ -31,11 +32,12 @@ const Activated = ({
 
   useEffect(() => {
     setIsLoaded(true)
+    onLoad()
 
     if (btnRef.current) {
       btnRef.current.focus()
     }
-  }, [])
+  }, [onLoad])
 
   useEffect(() => {
     if (isUnloading) {
@@ -109,6 +111,7 @@ Activated.propTypes = {
   id: string.isRequired,
   isActive: bool.isRequired,
   onDeactivate: func.isRequired,
+  onLoad: func.isRequired,
   forwardedRef: object
 }
 

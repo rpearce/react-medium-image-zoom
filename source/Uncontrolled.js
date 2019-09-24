@@ -10,6 +10,7 @@ const idBase = 'rmiz-'
 const Uncontrolled = ({ children, closeText, portalEl, openText }) => {
   const [id] = useState(() => idBase.concat(tinygen()))
   const [isActive, setIsActive] = useState(false)
+  const [isChildLoaded, setIsChildLoaded] = useState(false)
   const btnRef = useRef(null)
 
   const handleClickTrigger = useCallback(
@@ -22,6 +23,10 @@ const Uncontrolled = ({ children, closeText, portalEl, openText }) => {
     [isActive]
   )
 
+  const handleChildLoad = useCallback(() => {
+    setIsChildLoaded(true)
+  }, [])
+
   const handleDeactivate = useCallback(() => {
     setIsActive(false)
 
@@ -30,7 +35,7 @@ const Uncontrolled = ({ children, closeText, portalEl, openText }) => {
     }
   }, [])
 
-  const className = isActive ? cn.btnHidden : cn.btn
+  const className = isActive && isChildLoaded ? cn.btnHidden : cn.btn
 
   return (
     <StrictMode>
@@ -52,6 +57,7 @@ const Uncontrolled = ({ children, closeText, portalEl, openText }) => {
               id={id}
               isActive={isActive}
               onDeactivate={handleDeactivate}
+              onLoad={handleChildLoad}
               forwardedRef={btnRef}
             >
               {children}

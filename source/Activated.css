@@ -13,7 +13,7 @@
 }
 .btnLoaded {
   composes: btn;
-  background-color: rgba(255, 255, 255, 1);
+  background-color: rgba(255, 255, 255, 0.95);
 }
 .modal {
   position: absolute;
