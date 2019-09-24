@@ -7,6 +7,9 @@ const getScale = ({ height, width, zoomMargin }) => {
   const scaleY = window.innerHeight / (height + zoomMargin)
   const scale = Math.min(scaleX, scaleY)
   return scale
+
+  // THIS ONLY APPLIES IF IT'S AN IMAGE...
+  // @TODO: COME BACK TO THIS
   //const ratio =
   //  naturalWidth > naturalHeight ? naturalWidth / width : naturalHeight / height
 
@@ -18,7 +21,6 @@ const Activated = ({
   closeText,
   id,
   onDeactivate,
-  onLoad,
   forwardedRef: { current: original } = {}
 }) => {
   const btnRef = useRef(null)
@@ -32,23 +34,24 @@ const Activated = ({
 
   useEffect(() => {
     setIsLoaded(true)
-    onLoad()
 
     if (btnRef.current) {
       btnRef.current.focus()
     }
-  }, [onLoad])
+  }, [])
 
   useEffect(() => {
     if (isUnloading) {
+      // @TODO store and clear timeout
       setTimeout(onDeactivate, 300) // @TODO: sync with transition duration?
     }
   }, [isUnloading, onDeactivate])
 
   const { height, left, top, width } = original.getBoundingClientRect()
 
-  // @TODO: refactor style value setting to function
-
+  // ========================================================
+  // = @TODO: refactor style value setting to pure function =
+  // ========================================================
   let style = { height, left, top, width }
 
   if (isLoaded) {
@@ -78,9 +81,12 @@ const Activated = ({
     style = { height, left, top, transform, width }
 
     if (isUnloading) {
-      style = { height, left, top, transform: 'translate3d(0, 0, 0)', width }
+      style = { height, left, top, transform: originalTransform, width }
     }
   }
+  // ===================
+  // = END STYLE STUFF =
+  // ===================
 
   const className = isLoaded && !isUnloading ? cn.btnLoaded : cn.btn
 
@@ -111,7 +117,6 @@ Activated.propTypes = {
   id: string.isRequired,
   isActive: bool.isRequired,
   onDeactivate: func.isRequired,
-  onLoad: func.isRequired,
   forwardedRef: object
 }
 
