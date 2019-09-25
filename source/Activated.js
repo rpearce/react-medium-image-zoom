@@ -8,8 +8,7 @@ const getScale = ({ height, width, zoomMargin }) => {
   const scale = Math.min(scaleX, scaleY)
   return scale
 
-  // THIS ONLY APPLIES IF IT'S AN IMAGE...
-  // @TODO: COME BACK TO THIS
+  // @TODO: COME BACK TO THIS; THIS ONLY APPLIES IF IT'S AN IMAGE...
   //const ratio =
   //  naturalWidth > naturalHeight ? naturalWidth / width : naturalHeight / height
 
@@ -21,32 +20,48 @@ const Activated = ({
   closeText,
   id,
   onDeactivate,
+  onLoad,
   forwardedRef: { current: original } = {}
 }) => {
   const btnRef = useRef(null)
   const [isLoaded, setIsLoaded] = useState(false)
   const [isUnloading, setIsUnloading] = useState(false)
 
+  // =============================
+  // = ON CLICK, BEGIN UNLOADING =
+  // =============================
   const handleClick = useCallback(e => {
     e.preventDefault()
     setIsUnloading(true)
   }, [])
 
+  // =================================
+  // = SET LOADED ON MOUNT AND FOCUS =
+  // =================================
   useEffect(() => {
     setIsLoaded(true)
+    onLoad()
 
     if (btnRef.current) {
       btnRef.current.focus()
     }
-  }, [])
+  }, [onLoad])
 
+  // ========================================
+  // = TELL PARENT THAT WE'RE ALL DONE HERE =
+  // ========================================
   useEffect(() => {
-    if (isUnloading) {
-      // @TODO store and clear timeout
-      setTimeout(onDeactivate, 300) // @TODO: sync with transition duration?
+    // @TODO: sync with transition duration?
+    const unloadTimeout = isUnloading ? setTimeout(onDeactivate, 300) : null
+
+    return () => {
+      clearTimeout(unloadTimeout)
     }
   }, [isUnloading, onDeactivate])
 
+  // ==================================
+  // = GET ORIGINAL ITEM'S DIMENSIONS =
+  // ==================================
   const { height, left, top, width } = original.getBoundingClientRect()
 
   // ========================================================
@@ -117,6 +132,7 @@ Activated.propTypes = {
   id: string.isRequired,
   isActive: bool.isRequired,
   onDeactivate: func.isRequired,
+  onLoad: func.isRequired,
   forwardedRef: object
 }
 

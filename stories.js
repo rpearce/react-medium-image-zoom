@@ -10,6 +10,8 @@ import nzBeach from './static/rod-long-4dcsLxQxSHY-unsplash.jpg'
 
 const imgNZ = { alt: 'New Zealand Beach', src: nzBeach }
 
+//<div style={{ width: 300, height: 300, borderRadius: '50%', backgroundColor: 'red' }} />
+
 const stories = storiesOf('react-medium-image-zoom', module)
 
 stories.addDecorator(withA11y)
