@@ -28,8 +28,6 @@ const imgTeAraiPoint = {
   src: teAraiPoint
 }
 
-//<div style={{ width: 300, height: 300, borderRadius: '50%', backgroundColor: 'red' }} />
-
 const stories = storiesOf('react-medium-image-zoom', module)
 
 stories.addDecorator(withA11y)
@@ -71,6 +69,22 @@ stories.add('with <figure />', () => (
       </Zoom>
       <figcaption>Hobbiton</figcaption>
     </figure>
+  </ImgStory>
+))
+
+stories.add('with blue circle', () => (
+  <ImgStory>
+    <Zoom>
+      <div
+        aria-label="A blue circle"
+        style={{
+          width: 300,
+          height: 300,
+          borderRadius: '50%',
+          backgroundColor: '#0099ff'
+        }}
+      />
+    </Zoom>
   </ImgStory>
 ))
 
