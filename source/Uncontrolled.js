@@ -36,16 +36,18 @@ const Uncontrolled = ({ children, closeText, portalEl, openText }) => {
     }
   }, [])
 
-  const className = isActive && isChildLoaded ? cn.btnHidden : cn.btn
+  const controlledId = isExpanded ? id : null
+  const isExpanded = isActive && isChildLoaded
+  const className = isExpanded ? cn.btnHidden : cn.btn
 
   return (
     <StrictMode>
       <button
-        aria-controls={id}
-        aria-expanded={isActive}
+        aria-controls={controlledId}
+        aria-expanded={isExpanded}
         aria-haspopup={true}
         aria-label={openText}
-        aria-owns={id}
+        aria-owns={controlledId}
         className={className}
         onClick={handleClickTrigger}
         ref={btnRef}

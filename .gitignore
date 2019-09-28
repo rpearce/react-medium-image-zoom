@@ -62,3 +62,4 @@ typings/
 
 dist/
 *.tmp
+.DS_Store
