@@ -48,7 +48,7 @@
     "coverage": "npm run test --coverage --coverageReporters=text-lcov | coveralls",
     "lint": "eslint .",
     "prepublishOnly": "run-p lint test && npm run build:js",
-    "start": "run-p build:js:watch storybook",
+    "start": "npm run build:js && run-p build:js:watch storybook",
     "storybook": "start-storybook -p 6006",
     "test": "jest"
   },
