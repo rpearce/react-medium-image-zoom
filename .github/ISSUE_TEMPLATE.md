@@ -22,7 +22,7 @@ What actually happened was...
 https://codesandbox.io/s/wwp7n7rr47
 
 ## Link to repository/example of behavior
-[link to example]()
+https://codesandbox.io/s/wwp7n7rr47
 
 BUG REPORT? – REMOVE THIS LINE -->
 
