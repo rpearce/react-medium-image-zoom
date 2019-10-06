@@ -22,8 +22,6 @@ effect and works regardless of parent elements that have `overflow: hidden` or
 You can [view the React.js storybook examples
 here](https://rpearce.github.io/react-medium-image-zoom/).
 
-![demo](https://user-images.githubusercontent.com/592876/30678463-7ef720f0-9ee6-11e7-925d-924da1b58157.gif)
-
 ## Links
 * [`API Documentation`](./API.md)
 * [`Authors`](./AUTHORS.md)
