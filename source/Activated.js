@@ -27,7 +27,7 @@ const Activated = ({
   const btnRef = useRef(null)
   const [isLoaded, setIsLoaded] = useState(false)
   const [isUnloading, setIsUnloading] = useState(false)
-  const windowSize = useWindowSize()
+  const { innerHeight, innerWidth } = useWindowSize()
 
   // =============================
   // = ON CLICK, BEGIN UNLOADING =
@@ -72,8 +72,6 @@ const Activated = ({
   let style = { height, left, top, width }
 
   if (isLoaded) {
-    const { innerHeight, innerWidth } = windowSize
-
     // Get the the coords for center of the viewport
     const viewportX = innerWidth / 2
     const viewportY = innerHeight / 2
