@@ -2,6 +2,9 @@
 The `master` branch currently represents the work-in-progress for version `4.0`.
 It is completely unstable and should not be used by anyone except contributors.
 
+The `v4.0` work is being tracked on the project board:
+https://github.com/rpearce/react-medium-image-zoom/projects/1
+
 The latest stable published version is located on the [v3.x
 branch](https://github.com/rpearce/react-medium-image-zoom/tree/v3.x).
 
