@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { bool, func, node, object, string } from 'prop-types'
+import { useWindowSize } from './helpers'
 import cn from './Activated.css'
 
 const getScale = ({ height, width, zoomMargin }) => {
@@ -26,6 +27,7 @@ const Activated = ({
   const btnRef = useRef(null)
   const [isLoaded, setIsLoaded] = useState(false)
   const [isUnloading, setIsUnloading] = useState(false)
+  const windowSize = useWindowSize()
 
   // =============================
   // = ON CLICK, BEGIN UNLOADING =
@@ -70,9 +72,11 @@ const Activated = ({
   let style = { height, left, top, width }
 
   if (isLoaded) {
+    const { innerHeight, innerWidth } = windowSize
+
     // Get the the coords for center of the viewport
-    const viewportX = window.innerWidth / 2
-    const viewportY = window.innerHeight / 2
+    const viewportX = innerWidth / 2
+    const viewportY = innerHeight / 2
 
     // Get the coords for center of the original image
     const childCenterX = left + width / 2
