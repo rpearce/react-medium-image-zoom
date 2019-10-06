@@ -81,7 +81,7 @@ Uncontrolled.propTypes = {
 
 Uncontrolled.defaultProps = {
   closeText: 'Unzoom image',
-  portalEl: (document || {}).body,
+  portalEl: document.body,
   openText: 'Zoom image'
 }
 
