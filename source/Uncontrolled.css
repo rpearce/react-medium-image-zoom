@@ -1,0 +1,9 @@
+.btn {
+  composes: btn from './Shared.css';
+  cursor: zoom-in;
+  display: inline-flex;
+}
+.btnHidden {
+  composes: btn;
+  visibility: hidden;
+}
