@@ -36,8 +36,8 @@ const Uncontrolled = ({ children, closeText, portalEl, openText }) => {
     }
   }, [])
 
-  const controlledId = isExpanded ? id : null
   const isExpanded = isActive && isChildLoaded
+  const controlledId = isExpanded ? id : null
   const className = isExpanded ? cn.btnHidden : cn.btn
 
   return (
