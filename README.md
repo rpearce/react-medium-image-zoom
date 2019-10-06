@@ -19,11 +19,9 @@ for low-resolution and high-resolution images to work together for a â€œzoomingâ
 effect and works regardless of parent elements that have `overflow: hidden` or
 [parents with transform properties](https://codepen.io/rpearce/pen/MEyOmb).
 
-You can [view the React.js storybook examples
-here](https://rpearce.github.io/react-medium-image-zoom/).
-
 ## Links
 * [`API Documentation`](./API.md)
+* [`Storybook Examples`](https://rpearce.github.io/react-medium-image-zoom/)
 * [`Authors`](./AUTHORS.md)
 * [`Changelog`](./CHANGELOG.md)
 * [`Contributing`](./CONTRIBUTING.md)
