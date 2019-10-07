@@ -35,9 +35,9 @@ const Activated = ({
     setIsUnloading(true)
   }, [])
 
-  const handleEscClick = useCallback(e => {
-    e.preventDefault()
-    if (e.keyCode === 27) {
+  const handleKeydown = useCallback(e => {
+    if (e.key === 'Escape' || e.keyCode === 27) {
+      e.preventDefault()
       setIsUnloading(true)
     }
   }, [])
@@ -62,12 +62,13 @@ const Activated = ({
     // @TODO: sync with transition duration?
     const unloadTimeout = isUnloading ? setTimeout(onDeactivate, 300) : null
 
-    document.addEventListener('keydown', handleEscClick, false)
+    document.addEventListener('keydown', handleKeydown, false)
 
     return () => {
       clearTimeout(unloadTimeout)
+      document.removeEventListener('keydown', handleKeydown, false)
     }
-  }, [handleEscClick, isUnloading, onDeactivate])
+  }, [handleKeydown, isUnloading, onDeactivate])
 
   // ==================================
   // = GET ORIGINAL ITEM'S DIMENSIONS =
