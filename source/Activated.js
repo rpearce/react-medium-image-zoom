@@ -35,6 +35,13 @@ const Activated = ({
     setIsUnloading(true)
   }, [])
 
+  const handleKeydown = useCallback(e => {
+    if (e.key === 'Escape' || e.keyCode === 27) {
+      e.preventDefault()
+      setIsUnloading(true)
+    }
+  }, [])
+
   // =================================
   // = SET LOADED ON MOUNT AND FOCUS =
   // =================================
@@ -50,14 +57,18 @@ const Activated = ({
   // ========================================
   // = TELL PARENT THAT WE'RE ALL DONE HERE =
   // ========================================
+
   useEffect(() => {
     // @TODO: sync with transition duration?
     const unloadTimeout = isUnloading ? setTimeout(onDeactivate, 300) : null
 
+    document.addEventListener('keydown', handleKeydown, false)
+
     return () => {
       clearTimeout(unloadTimeout)
+      document.removeEventListener('keydown', handleKeydown, false)
     }
-  }, [isUnloading, onDeactivate])
+  }, [handleKeydown, isUnloading, onDeactivate])
 
   // ==================================
   // = GET ORIGINAL ITEM'S DIMENSIONS =
