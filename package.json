@@ -101,6 +101,7 @@
   },
   "dependencies": {
     "prop-types": "^15.7.2",
+    "react-use": "^12.2.3",
     "tinygen": "^0.2.0"
   }
 }
