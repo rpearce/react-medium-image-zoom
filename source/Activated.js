@@ -1,5 +1,5 @@
-import { bool, func, node, object, string } from 'prop-types'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { bool, func, node, object, string } from 'prop-types'
 import useWindowSize from 'react-use/lib/useWindowSize'
 import cn from './Activated.css'
 
