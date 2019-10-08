@@ -3,19 +3,6 @@ import { bool, func, node, object, string } from 'prop-types'
 import useWindowSize from 'react-use/lib/useWindowSize'
 import cn from './Activated.css'
 
-const getScale = ({ height, width, zoomMargin }) => {
-  const scaleX = window.innerWidth / (width + zoomMargin)
-  const scaleY = window.innerHeight / (height + zoomMargin)
-  const scale = Math.min(scaleX, scaleY)
-  return scale
-
-  // @TODO: COME BACK TO THIS; THIS ONLY APPLIES IF IT'S AN IMAGE...
-  //const ratio =
-  //  naturalWidth > naturalHeight ? naturalWidth / width : naturalHeight / height
-
-  //return scale > 1 ? ratio : scale * ratio
-}
-
 const Activated = ({
   children,
   closeText,
@@ -37,6 +24,9 @@ const Activated = ({
     setIsUnloading(true)
   }, [])
 
+  // ==============================
+  // = ON ESCAPE, BEGIN UNLOADING =
+  // ==============================
   const handleKeydown = useCallback(e => {
     if (e.key === 'Escape' || e.keyCode === 27) {
       e.preventDefault()
@@ -59,7 +49,6 @@ const Activated = ({
   // ========================================
   // = TELL PARENT THAT WE'RE ALL DONE HERE =
   // ========================================
-
   useEffect(() => {
     // @TODO: sync with transition duration?
     const unloadTimeout = isUnloading ? setTimeout(onDeactivate, 300) : null
@@ -77,44 +66,18 @@ const Activated = ({
   // ==================================
   const { height, left, top, width } = original.getBoundingClientRect()
 
-  // ========================================================
-  // = @TODO: refactor style value setting to pure function =
-  // ========================================================
-  let style = { height, left, top, width }
-
-  if (isLoaded) {
-    // Get the the coords for center of the viewport
-    const viewportX = innerWidth / 2
-    const viewportY = innerHeight / 2
-
-    // Get the coords for center of the original image
-    const childCenterX = left + width / 2
-    const childCenterY = top + height / 2
-
-    // Get offset amounts for image coords to be centered on screen
-    const translateX = viewportX - childCenterX
-    const translateY = viewportY - childCenterY
-
-    // @TODO: accept zoomMargin
-    const scale = getScale({ height, width, zoomMargin: 0 })
-
-    const originalTransform = original.style.transform
-
-    const transform = [
-      ...(originalTransform ? [originalTransform] : []),
-      `translate3d(${translateX}px, ${translateY}px, 0)`,
-      `scale(${scale})`
-    ].join(' ')
-
-    style = { height, left, top, transform, width }
-
-    if (isUnloading) {
-      style = { height, left, top, transform: originalTransform, width }
-    }
-  }
-  // ===================
-  // = END STYLE STUFF =
-  // ===================
+  const style = getStyle({
+    height,
+    isLoaded,
+    innerHeight,
+    innerWidth,
+    isUnloading,
+    left,
+    originalTransform: original.style.transform,
+    top,
+    width,
+    zoomMargin: 0 // @TODO: accept zoomMargin
+  })
 
   const className = isLoaded && !isUnloading ? cn.btnLoaded : cn.btn
 
@@ -137,6 +100,66 @@ const Activated = ({
       </div>
     </button>
   )
+}
+
+const getScale = ({ height, innerHeight, innerWidth, width, zoomMargin }) => {
+  const scaleX = innerWidth / (width + zoomMargin)
+  const scaleY = innerHeight / (height + zoomMargin)
+  const scale = Math.min(scaleX, scaleY)
+
+  return scale
+}
+
+// @TODO: export and test getStyle
+const getStyle = ({
+  height,
+  innerHeight,
+  innerWidth,
+  isLoaded,
+  isUnloading,
+  left,
+  originalTransform,
+  top,
+  width,
+  zoomMargin
+}) => {
+  if (isUnloading) {
+    return { height, left, top, transform: originalTransform, width }
+  }
+
+  if (isLoaded) {
+    // Get the the coords for center of the viewport
+    const viewportX = innerWidth / 2
+    const viewportY = innerHeight / 2
+
+    // Get the coords for center of the original item
+    const childCenterX = left + width / 2
+    const childCenterY = top + height / 2
+
+    // Get offset amounts for item coords to be centered on screen
+    const translateX = viewportX - childCenterX
+    const translateY = viewportY - childCenterY
+
+    // Get amount to scale item
+    const scale = getScale({
+      height,
+      innerWidth,
+      innerHeight,
+      width,
+      zoomMargin
+    })
+
+    // Build transform style, including any original transform
+    const transform = [
+      ...(originalTransform ? [originalTransform] : []),
+      `translate3d(${translateX}px, ${translateY}px, 0)`,
+      `scale(${scale})`
+    ].join(' ')
+
+    return { height, left, top, transform, width }
+  }
+
+  return { height, left, top, width }
 }
 
 Activated.propTypes = {
