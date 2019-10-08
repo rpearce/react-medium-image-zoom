@@ -58,12 +58,12 @@
     "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.6.2",
     "@babel/preset-react": "^7.0.0",
-    "@storybook/addon-a11y": "^5.2.1",
-    "@storybook/addon-actions": "^5.2.1",
-    "@storybook/addon-knobs": "^5.2.1",
-    "@storybook/addon-links": "^5.2.1",
-    "@storybook/react": "^5.2.1",
-    "@testing-library/jest-dom": "^4.1.0",
+    "@storybook/addon-a11y": "^5.2.3",
+    "@storybook/addon-actions": "^5.2.3",
+    "@storybook/addon-knobs": "^5.2.3",
+    "@storybook/addon-links": "^5.2.3",
+    "@storybook/react": "^5.2.3",
+    "@testing-library/jest-dom": "^4.1.1",
     "@testing-library/react": "^9.3.0",
     "all-contributors-cli": "^6.9.1",
     "autoprefixer": "^9.6.4",
@@ -102,7 +102,7 @@
   },
   "dependencies": {
     "prop-types": "^15.7.2",
-    "react-use": "^12.2.3",
+    "react-use": "^12.3.0",
     "tinygen": "^0.2.0"
   }
 }
