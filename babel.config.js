@@ -1,6 +1,4 @@
-const presets = ['@babel/preset-env', '@babel/preset-react']
-
-const testPresets = [
+const presets = [
   [
     '@babel/preset-env',
     {
@@ -10,14 +8,4 @@ const testPresets = [
   '@babel/preset-react'
 ]
 
-module.exports = function(api) {
-  api.cache(true)
-
-  return {
-    env: {
-      development: { presets },
-      production: { presets },
-      test: { presets: testPresets }
-    }
-  }
-}
+module.exports = { presets }
