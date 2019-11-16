@@ -14,7 +14,11 @@ const plugins = [
     runtimeHelpers: true,
     sourceMaps: 'inline'
   }),
-  postcss({ modules: true, minimize: true })
+  postcss({
+    inject: { insertAt: 'top' },
+    minimize: true,
+    modules: true
+  })
 ]
 
 const esm = {

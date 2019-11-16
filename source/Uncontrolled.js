@@ -1,16 +1,12 @@
-import React, { StrictMode, useCallback, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
+import React, { StrictMode, memo, useCallback, useRef, useState } from 'react'
 import { instanceOf, node, string } from 'prop-types'
-import tinygen from 'tinygen'
 import cn from './Uncontrolled.css'
 import Activated from './Activated'
 
-const idBase = 'rmiz-'
-
 const Uncontrolled = ({ children, closeText, portalEl, openText }) => {
-  const [id] = useState(() => idBase.concat(tinygen()))
   const [isActive, setIsActive] = useState(false)
   const [isChildLoaded, setIsChildLoaded] = useState(false)
+  const wrapRef = useRef(null)
   const btnRef = useRef(null)
 
   const handleClickTrigger = useCallback(
@@ -31,43 +27,36 @@ const Uncontrolled = ({ children, closeText, portalEl, openText }) => {
     setIsActive(false)
     setIsChildLoaded(false)
 
-    if (btnRef && btnRef.current) {
+    if (btnRef.current) {
       btnRef.current.focus()
     }
   }, [])
 
   const isExpanded = isActive && isChildLoaded
-  const controlledId = isExpanded ? id : null
-  const className = isExpanded ? cn.btnHidden : cn.btn
+  const className = isExpanded ? cn.wrapHidden : cn.wrap
 
   return (
     <StrictMode>
-      <button
-        aria-controls={controlledId}
-        aria-expanded={isExpanded}
-        aria-haspopup={true}
-        aria-label={openText}
-        aria-owns={controlledId}
-        className={className}
-        onClick={handleClickTrigger}
-        ref={btnRef}
-      >
+      <div className={className} ref={wrapRef}>
         {children}
-        {isActive &&
-          createPortal(
-            <Activated
-              closeText={closeText}
-              id={id}
-              isActive={isActive}
-              onDeactivate={handleDeactivate}
-              onLoad={handleChildLoad}
-              forwardedRef={btnRef}
-            >
-              {children}
-            </Activated>,
-            portalEl
-          )}
-      </button>
+        <button
+          aria-label={openText}
+          className={cn.btn}
+          onClick={handleClickTrigger}
+          ref={btnRef}
+        />
+        {isActive && (
+          <Activated
+            closeText={closeText}
+            forwardedRef={wrapRef}
+            onDeactivate={handleDeactivate}
+            onLoad={handleChildLoad}
+            portalEl={portalEl}
+          >
+            {children}
+          </Activated>
+        )}
+      </div>
     </StrictMode>
   )
 }
@@ -85,4 +74,4 @@ Uncontrolled.defaultProps = {
   openText: 'Zoom image'
 }
 
-export default Uncontrolled
+export default memo(Uncontrolled)

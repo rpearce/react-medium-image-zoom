@@ -1,15 +1,17 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { bool, func, node, object, string } from 'prop-types'
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
+import { func, node, object, string } from 'prop-types'
+import useEvent from 'react-use/lib/useEvent'
 import useWindowSize from 'react-use/lib/useWindowSize'
 import cn from './Activated.css'
 
 const Activated = ({
   children,
   closeText,
-  id,
+  forwardedRef: { current: original } = {},
   onDeactivate,
   onLoad,
-  forwardedRef: { current: original } = {}
+  portalEl
 }) => {
   const btnRef = useRef(null)
   const [isLoaded, setIsLoaded] = useState(false)
@@ -27,9 +29,9 @@ const Activated = ({
   // ==============================
   // = ON ESCAPE, BEGIN UNLOADING =
   // ==============================
-  const handleKeydown = useCallback(e => {
+  const handleKeyDown = useCallback(e => {
     if (e.key === 'Escape' || e.keyCode === 27) {
-      e.preventDefault()
+      e.stopPropagation()
       setIsUnloading(true)
     }
   }, [])
@@ -46,20 +48,22 @@ const Activated = ({
     }
   }, [onLoad])
 
-  // ========================================
-  // = TELL PARENT THAT WE'RE ALL DONE HERE =
-  // ========================================
+  // ================================================================
+  // = IF UNLOADING, TELL PARENT THAT WE'RE ALL DONE HERE AFTER Nms =
+  // ================================================================
   useEffect(() => {
     // @TODO: sync with transition duration?
     const unloadTimeout = isUnloading ? setTimeout(onDeactivate, 300) : null
 
-    document.addEventListener('keydown', handleKeydown, false)
-
     return () => {
       clearTimeout(unloadTimeout)
-      document.removeEventListener('keydown', handleKeydown, false)
     }
-  }, [handleKeydown, isUnloading, onDeactivate])
+  }, [isUnloading, onDeactivate])
+
+  // ======================================
+  // = LISTEN FOR KEYDOWN ON THE DOCUMENT =
+  // ======================================
+  useEvent('keydown', handleKeyDown, document)
 
   // ==================================
   // = GET ORIGINAL ITEM'S DIMENSIONS =
@@ -79,26 +83,21 @@ const Activated = ({
     zoomMargin: 0 // @TODO: accept zoomMargin
   })
 
-  const className = isLoaded && !isUnloading ? cn.btnLoaded : cn.btn
+  const overlayCn = isLoaded && !isUnloading ? cn.overlayLoaded : cn.overlay
 
-  return (
-    <button
-      aria-label={closeText}
-      className={className}
-      onClick={handleClick}
-      ref={btnRef}
-    >
-      <div
-        aria-modal
-        className={cn.modal}
-        id={id}
-        role="dialog"
-        tabIndex="-1"
-        style={style}
-      >
+  return createPortal(
+    <div aria-modal className={overlayCn} role="dialog">
+      <div className={cn.content} style={style}>
         {children}
       </div>
-    </button>
+      <button
+        aria-label={closeText}
+        className={cn.btn}
+        onClick={handleClick}
+        ref={btnRef}
+      />
+    </div>,
+    portalEl
   )
 }
 
@@ -165,11 +164,9 @@ const getStyle = ({
 Activated.propTypes = {
   children: node.isRequired,
   closeText: string.isRequired,
-  id: string.isRequired,
-  isActive: bool.isRequired,
   onDeactivate: func.isRequired,
   onLoad: func.isRequired,
   forwardedRef: object
 }
 
-export default Activated
+export default memo(Activated)
