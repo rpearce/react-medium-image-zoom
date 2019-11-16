@@ -1,9 +1,12 @@
-.btn {
-  composes: btn from './Shared.css';
-  cursor: zoom-in;
+.wrap {
+  position: relative;
   display: inline-flex;
 }
-.btnHidden {
-  composes: btn;
+.wrapHidden {
+  composes: wrap;
   visibility: hidden;
+}
+.btn {
+  composes: trigger from './Shared.scss';
+  cursor: zoom-in;
 }
