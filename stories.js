@@ -3,7 +3,7 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { withA11y } from '@storybook/addon-a11y'
-import { withKnobs } from '@storybook/addon-knobs'
+import { color, number, text, withKnobs } from '@storybook/addon-knobs'
 import './.storybook/base.css'
 import hobbiton from './static/andres-iga-7XKkJVw1d8c-unsplash-smaller.jpg'
 import nzBeach from './static/rod-long-4dcsLxQxSHY-unsplash-smaller.jpg'
@@ -35,7 +35,30 @@ stories.addDecorator(withKnobs)
 
 stories.add('with <img />', () => (
   <ImgStory>
-    <Zoom>
+    <Zoom
+      closeText={text('Unzoom text', 'Unzoom image')}
+      openText={text('Zoom text', 'Zoom image')}
+      overlayBgColorEnd={color(
+        'Overlay bgColor end',
+        'rgba(255, 255, 255, 0.95)'
+      )}
+      overlayBgColorStart={color(
+        'Overlay bgColor start',
+        'rgba(255, 255, 255, 0)'
+      )}
+      transitionDuration={number('Transition duration', 300, {
+        min: 0,
+        max: 5000,
+        range: true,
+        step: 100
+      })}
+      zoomMargin={number('Zoom margin', 0, {
+        min: 0,
+        max: 500,
+        range: true,
+        step: 50
+      })}
+    >
       <img
         alt={imgThatWanakaTree.alt}
         src={imgThatWanakaTree.src}

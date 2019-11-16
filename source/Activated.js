@@ -1,17 +1,23 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { func, node, object, string } from 'prop-types'
+import { func, instanceOf, node, number, object, string } from 'prop-types'
 import useEvent from 'react-use/lib/useEvent'
 import useWindowSize from 'react-use/lib/useWindowSize'
+import getModalContentStyle from './lib/getModalContentStyle'
+import getModalOverlayStyle from './lib/getModalOverlayStyle'
 import cn from './Activated.css'
 
 const Activated = ({
+  overlayBgColorStart,
+  overlayBgColorEnd,
   children,
   closeText,
-  forwardedRef: { current: original } = {},
   onDeactivate,
   onLoad,
-  portalEl
+  parentRef,
+  portalEl,
+  transitionDuration,
+  zoomMargin
 }) => {
   const btnRef = useRef(null)
   const [isLoaded, setIsLoaded] = useState(false)
@@ -53,12 +59,14 @@ const Activated = ({
   // ================================================================
   useEffect(() => {
     // @TODO: sync with transition duration?
-    const unloadTimeout = isUnloading ? setTimeout(onDeactivate, 300) : null
+    const unloadTimeout = isUnloading
+      ? setTimeout(onDeactivate, transitionDuration)
+      : null
 
     return () => {
       clearTimeout(unloadTimeout)
     }
-  }, [isUnloading, onDeactivate])
+  }, [isUnloading, onDeactivate, transitionDuration])
 
   // ======================================
   // = LISTEN FOR KEYDOWN ON THE DOCUMENT =
@@ -66,28 +74,35 @@ const Activated = ({
   useEvent('keydown', handleKeyDown, document)
 
   // ==================================
-  // = GET ORIGINAL ITEM'S DIMENSIONS =
+  // = GET PARENT ITEM'S DIMENSIONS =
   // ==================================
-  const { height, left, top, width } = original.getBoundingClientRect()
+  const { height, left, top, width } = parentRef.current.getBoundingClientRect()
 
-  const style = getStyle({
+  const overlayStyle = getModalOverlayStyle({
+    isLoaded,
+    isUnloading,
+    overlayBgColorEnd,
+    overlayBgColorStart,
+    transitionDuration
+  })
+
+  const contentStyle = getModalContentStyle({
     height,
     isLoaded,
     innerHeight,
     innerWidth,
     isUnloading,
     left,
-    originalTransform: original.style.transform,
+    originalTransform: parentRef.current.style.transform,
     top,
+    transitionDuration,
     width,
-    zoomMargin: 0 // @TODO: accept zoomMargin
+    zoomMargin
   })
 
-  const overlayCn = isLoaded && !isUnloading ? cn.overlayLoaded : cn.overlay
-
   return createPortal(
-    <div aria-modal className={overlayCn} role="dialog">
-      <div className={cn.content} style={style}>
+    <div aria-modal className={cn.overlay} role="dialog" style={overlayStyle}>
+      <div className={cn.content} style={contentStyle}>
         {children}
       </div>
       <button
@@ -101,72 +116,17 @@ const Activated = ({
   )
 }
 
-const getScale = ({ height, innerHeight, innerWidth, width, zoomMargin }) => {
-  const scaleX = innerWidth / (width + zoomMargin)
-  const scaleY = innerHeight / (height + zoomMargin)
-  const scale = Math.min(scaleX, scaleY)
-
-  return scale
-}
-
-// @TODO: export and test getStyle
-const getStyle = ({
-  height,
-  innerHeight,
-  innerWidth,
-  isLoaded,
-  isUnloading,
-  left,
-  originalTransform,
-  top,
-  width,
-  zoomMargin
-}) => {
-  if (isUnloading) {
-    return { height, left, top, transform: originalTransform, width }
-  }
-
-  if (isLoaded) {
-    // Get the the coords for center of the viewport
-    const viewportX = innerWidth / 2
-    const viewportY = innerHeight / 2
-
-    // Get the coords for center of the original item
-    const childCenterX = left + width / 2
-    const childCenterY = top + height / 2
-
-    // Get offset amounts for item coords to be centered on screen
-    const translateX = viewportX - childCenterX
-    const translateY = viewportY - childCenterY
-
-    // Get amount to scale item
-    const scale = getScale({
-      height,
-      innerWidth,
-      innerHeight,
-      width,
-      zoomMargin
-    })
-
-    // Build transform style, including any original transform
-    const transform = [
-      ...(originalTransform ? [originalTransform] : []),
-      `translate3d(${translateX}px, ${translateY}px, 0)`,
-      `scale(${scale})`
-    ].join(' ')
-
-    return { height, left, top, transform, width }
-  }
-
-  return { height, left, top, width }
-}
-
 Activated.propTypes = {
   children: node.isRequired,
   closeText: string.isRequired,
   onDeactivate: func.isRequired,
   onLoad: func.isRequired,
-  forwardedRef: object
+  overlayBgColorEnd: string.isRequired,
+  overlayBgColorStart: string.isRequired,
+  parentRef: object.isRequired,
+  portalEl: instanceOf(Element).isRequired,
+  transitionDuration: number.isRequired,
+  zoomMargin: number.isRequired
 }
 
 export default memo(Activated)

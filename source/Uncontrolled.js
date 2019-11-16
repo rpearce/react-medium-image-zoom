@@ -1,9 +1,18 @@
 import React, { StrictMode, memo, useCallback, useRef, useState } from 'react'
-import { instanceOf, node, string } from 'prop-types'
+import { instanceOf, node, number, string } from 'prop-types'
 import cn from './Uncontrolled.css'
 import Activated from './Activated'
 
-const Uncontrolled = ({ children, closeText, portalEl, openText }) => {
+const Uncontrolled = ({
+  children,
+  closeText,
+  overlayBgColorEnd,
+  overlayBgColorStart,
+  portalEl,
+  openText,
+  transitionDuration,
+  zoomMargin
+}) => {
   const [isActive, setIsActive] = useState(false)
   const [isChildLoaded, setIsChildLoaded] = useState(false)
   const wrapRef = useRef(null)
@@ -48,10 +57,14 @@ const Uncontrolled = ({ children, closeText, portalEl, openText }) => {
         {isActive && (
           <Activated
             closeText={closeText}
-            forwardedRef={wrapRef}
             onDeactivate={handleDeactivate}
             onLoad={handleChildLoad}
+            overlayBgColorEnd={overlayBgColorEnd}
+            overlayBgColorStart={overlayBgColorStart}
+            parentRef={wrapRef}
             portalEl={portalEl}
+            transitionDuration={transitionDuration}
+            zoomMargin={zoomMargin}
           >
             {children}
           </Activated>
@@ -64,14 +77,22 @@ const Uncontrolled = ({ children, closeText, portalEl, openText }) => {
 Uncontrolled.propTypes = {
   children: node.isRequired,
   closeText: string.isRequired,
+  openText: string.isRequired,
+  overlayBgColorEnd: string.isRequired,
+  overlayBgColorStart: string.isRequired,
   portalEl: instanceOf(Element).isRequired,
-  openText: string.isRequired
+  transitionDuration: number.isRequired,
+  zoomMargin: number.isRequired
 }
 
 Uncontrolled.defaultProps = {
   closeText: 'Unzoom image',
+  openText: 'Zoom image',
+  overlayBgColorEnd: 'rgba(255, 255, 255, 0.95)',
+  overlayBgColorStart: 'rgba(255, 255, 255, 0)',
   portalEl: document.body,
-  openText: 'Zoom image'
+  transitionDuration: 300,
+  zoomMargin: 0
 }
 
 export default memo(Uncontrolled)
