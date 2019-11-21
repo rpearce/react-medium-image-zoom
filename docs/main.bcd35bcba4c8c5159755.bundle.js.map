@@ -1,0 +1,1 @@
+{"version":3,"file":"main.bcd35bcba4c8c5159755.bundle.js","sources":["webpack:///../../source/lib/toDurationString.js"],"sourcesContent":["// toDurationString :: Number -> String\nconst toDurationString = duration => `${duration}ms`\n\nexport default toDurationString\n"],"mappings":"AACA","sourceRoot":""}
