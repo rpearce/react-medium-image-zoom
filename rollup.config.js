@@ -6,7 +6,7 @@ import resolve from 'rollup-plugin-node-resolve'
 
 const plugins = [
   external(),
-  resolve({ browser: true }),
+  resolve(),
   commonjs({ include: /node_modules/ }),
   babel({
     configFile: './babel.config.js',
@@ -23,7 +23,7 @@ const plugins = [
 
 const esm = {
   name: 'react-medium-image-zoom',
-  file: './dist/index.esm.js',
+  dir: './dist/esm',
   format: 'esm',
   exports: 'named',
   sourcemap: true
@@ -31,7 +31,7 @@ const esm = {
 
 const cjs = {
   name: 'react-medium-image-zoom',
-  file: './dist/index.cjs.js',
+  dir: './dist/cjs',
   format: 'cjs',
   exports: 'named',
   sourcemap: true
@@ -39,7 +39,7 @@ const cjs = {
 
 const config = [
   {
-    input: './source/index.js',
+    input: ['./source/index.js', './source/Uncontrolled.js'],
     output: [esm, cjs],
     plugins
   }
