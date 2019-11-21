@@ -22,18 +22,18 @@ const plugins = [
 ]
 
 const esm = {
-  name: 'react-medium-image-zoom',
   dir: './dist/esm',
-  format: 'esm',
   exports: 'named',
+  format: 'esm',
+  name: 'react-medium-image-zoom',
   sourcemap: true
 }
 
 const cjs = {
-  name: 'react-medium-image-zoom',
   dir: './dist/cjs',
-  format: 'cjs',
   exports: 'named',
+  format: 'cjs',
+  name: 'react-medium-image-zoom',
   sourcemap: true
 }
 
