@@ -15,9 +15,9 @@ const plugins = [
     sourceMaps: 'inline'
   }),
   postcss({
-    inject: { insertAt: 'top' },
-    minimize: true,
-    modules: true
+    extract: './dist/styles.css',
+    modules: true,
+    sourceMap: true
   })
 ]
 
