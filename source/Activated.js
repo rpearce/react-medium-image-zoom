@@ -6,6 +6,7 @@ import useWindowSize from 'react-use/lib/useWindowSize'
 import getModalContentStyle from './lib/getModalContentStyle'
 import getModalOverlayStyle from './lib/getModalOverlayStyle'
 import cn from './Activated.css'
+import sharedCn from './Shared.css'
 
 const Activated = ({
   overlayBgColorStart,
@@ -100,6 +101,8 @@ const Activated = ({
     zoomMargin
   })
 
+  const btnCn = `${sharedCn.trigger} ${cn.btn}`
+
   return createPortal(
     <div aria-modal className={cn.overlay} role="dialog" style={overlayStyle}>
       <div className={cn.content} style={contentStyle}>
@@ -107,7 +110,7 @@ const Activated = ({
       </div>
       <button
         aria-label={closeText}
-        className={cn.btn}
+        className={btnCn}
         onClick={handleClick}
         ref={btnRef}
       />

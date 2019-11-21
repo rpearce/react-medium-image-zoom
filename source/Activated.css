@@ -10,7 +10,6 @@
   z-index: 999;
 }
 .btn {
-  composes: trigger from './Shared.scss';
   cursor: zoom-out;
 }
 .content {

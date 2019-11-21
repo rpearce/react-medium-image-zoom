@@ -7,6 +7,5 @@
   visibility: hidden;
 }
 .btn {
-  composes: trigger from './Shared.scss';
   cursor: zoom-in;
 }

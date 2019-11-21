@@ -1,6 +1,7 @@
 import React, { StrictMode, memo, useCallback, useRef, useState } from 'react'
 import { instanceOf, node, number, string } from 'prop-types'
 import cn from './Uncontrolled.css'
+import sharedCn from './Shared.css'
 import Activated from './Activated'
 
 const Uncontrolled = ({
@@ -43,6 +44,7 @@ const Uncontrolled = ({
 
   const isExpanded = isActive && isChildLoaded
   const className = isExpanded ? cn.wrapHidden : cn.wrap
+  const btnCn = `${sharedCn.trigger} ${cn.btn}`
 
   return (
     <StrictMode>
@@ -50,7 +52,7 @@ const Uncontrolled = ({
         {children}
         <button
           aria-label={openText}
-          className={cn.btn}
+          className={btnCn}
           onClick={handleClickTrigger}
           ref={btnRef}
         />

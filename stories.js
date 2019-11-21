@@ -9,7 +9,9 @@ import hobbiton from './static/andres-iga-7XKkJVw1d8c-unsplash-smaller.jpg'
 import nzBeach from './static/rod-long-4dcsLxQxSHY-unsplash-smaller.jpg'
 import teAraiPoint from './static/douglas-bagg-wRwa3Z6GtRI-unsplash-smaller.jpg'
 import thatWanakaTree from './static/laura-smetsers-H-TW2CoNtTk-unsplash-smaller.jpg'
-import Zoom from './dist/index.esm'
+
+import './dist/styles.css'
+import Zoom from './dist/esm'
 
 const imgThatWanakaTree = {
   alt: 'That Wanaka Tree, New Zealand',
