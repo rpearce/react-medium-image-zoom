@@ -1,6 +1,14 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { func, instanceOf, node, number, object, string } from 'prop-types'
+import {
+  func,
+  instanceOf,
+  node,
+  number,
+  object,
+  oneOfType,
+  string
+} from 'prop-types'
 import useEvent from 'react-use/lib/useEvent'
 import useWindowSize from 'react-use/lib/useWindowSize'
 import getModalContentStyle from './lib/getModalContentStyle'
@@ -17,10 +25,12 @@ const Activated = ({
   onLoad,
   parentRef,
   portalEl,
+  scrollableEl,
   transitionDuration,
   zoomMargin
 }) => {
   const btnRef = useRef(null)
+  const [, forceUpdate] = useState(0)
   const [isLoaded, setIsLoaded] = useState(false)
   const [isUnloading, setIsUnloading] = useState(false)
   const { width: innerWidth, height: innerHeight } = useWindowSize()
@@ -43,6 +53,24 @@ const Activated = ({
     }
   }, [])
 
+  const handleScroll = useCallback(() => {
+    forceUpdate(n => n + 1)
+
+    if (!isUnloading) {
+      setIsUnloading(true)
+    }
+  }, [isUnloading])
+
+  // ======================================
+  // = LISTEN FOR KEYDOWN ON THE DOCUMENT =
+  // ======================================
+  useEvent('keydown', handleKeyDown, document)
+
+  // ===============================
+  // = LISTEN FOR SCROLL AND CLOSE =
+  // ===============================
+  useEvent('scroll', handleScroll, scrollableEl)
+
   // =================================
   // = SET LOADED ON MOUNT AND FOCUS =
   // =================================
@@ -59,7 +87,6 @@ const Activated = ({
   // = IF UNLOADING, TELL PARENT THAT WE'RE ALL DONE HERE AFTER Nms =
   // ================================================================
   useEffect(() => {
-    // @TODO: sync with transition duration?
     const unloadTimeout = isUnloading
       ? setTimeout(onDeactivate, transitionDuration)
       : null
@@ -68,11 +95,6 @@ const Activated = ({
       clearTimeout(unloadTimeout)
     }
   }, [isUnloading, onDeactivate, transitionDuration])
-
-  // ======================================
-  // = LISTEN FOR KEYDOWN ON THE DOCUMENT =
-  // ======================================
-  useEvent('keydown', handleKeyDown, document)
 
   // ==================================
   // = GET PARENT ITEM'S DIMENSIONS =
@@ -128,6 +150,7 @@ Activated.propTypes = {
   overlayBgColorStart: string.isRequired,
   parentRef: object.isRequired,
   portalEl: instanceOf(Element).isRequired,
+  scrollableEl: oneOfType([instanceOf(Element), instanceOf(Window)]).isRequired,
   transitionDuration: number.isRequired,
   zoomMargin: number.isRequired
 }
