@@ -1,5 +1,5 @@
 import React, { StrictMode, memo, useCallback, useRef, useState } from 'react'
-import { instanceOf, node, number, string } from 'prop-types'
+import { instanceOf, node, number, oneOfType, string } from 'prop-types'
 import cn from './Uncontrolled.css'
 import sharedCn from './Shared.css'
 import Activated from './Activated'
@@ -11,6 +11,7 @@ const Uncontrolled = ({
   overlayBgColorStart,
   portalEl,
   openText,
+  scrollableEl,
   transitionDuration,
   zoomMargin
 }) => {
@@ -65,6 +66,7 @@ const Uncontrolled = ({
             overlayBgColorStart={overlayBgColorStart}
             parentRef={wrapRef}
             portalEl={portalEl}
+            scrollableEl={scrollableEl}
             transitionDuration={transitionDuration}
             zoomMargin={zoomMargin}
           >
@@ -83,6 +85,7 @@ Uncontrolled.propTypes = {
   overlayBgColorEnd: string.isRequired,
   overlayBgColorStart: string.isRequired,
   portalEl: instanceOf(Element).isRequired,
+  scrollableEl: oneOfType([instanceOf(Element), instanceOf(Window)]).isRequired,
   transitionDuration: number.isRequired,
   zoomMargin: number.isRequired
 }
@@ -93,6 +96,7 @@ Uncontrolled.defaultProps = {
   overlayBgColorEnd: 'rgba(255, 255, 255, 0.95)',
   overlayBgColorStart: 'rgba(255, 255, 255, 0)',
   portalEl: document.body,
+  scrollableEl: window,
   transitionDuration: 300,
   zoomMargin: 0
 }

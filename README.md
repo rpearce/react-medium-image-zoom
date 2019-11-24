@@ -20,13 +20,59 @@ for low-resolution and high-resolution images to work together for a â€œzoomingâ
 effect and works regardless of parent elements that have `overflow: hidden` or
 [parents with transform properties](https://codepen.io/rpearce/pen/MEyOmb).
 
+As an added bonus, it will let you zoom _anything_ (see the [`Storybook
+Examples`](https://rpearce.github.io/react-medium-image-zoom/) for more).
+
 ## Links
-* [`API Documentation`](./API.md)
+* [`Installation`](#installation)
+* [`Basic Usage`](#basic-usage)
+* [`API`](#api)
 * [`Storybook Examples`](https://rpearce.github.io/react-medium-image-zoom/)
 * [`Authors`](./AUTHORS.md)
 * [`Changelog`](./CHANGELOG.md)
 * [`Contributing`](./CONTRIBUTING.md)
 * [`Code of Conduct`](./CODE_OF_CONDUCT.md)
+
+## Installation
+```bash
+$ npm i react-medium-image-zoom
+```
+or
+```bash
+$ yarn add react-medium-image-zoom
+```
+
+## Basic Usage
+
+```js
+import React, { useState } from 'react'
+import Zoom from 'react-medium-image-zoom'
+
+const MyComponent = () => (
+  <Zoom>
+    <img
+      alt="that wanaka tree"
+      src="/path/to/thatwanakatree.jpg"
+      width="500"
+    />
+  </Zoom>
+)
+
+export default MyComponent
+```
+
+## API
+
+| Prop | Type | Required | Default  | Details |
+| ---  | --- | ---  | --- | --- |
+| `closeText` | `String` | no | `'Unzoom Image'` | Accessible label text for when you want to unzoom |
+| `openTextText` | `String` | no | `'Zoom Image'` | Accessible label text for when you want to zoom |
+| `overlayBgColorEnd` | `String` | no | `'rgba(255, 255, 255, 0.95)'` | Modal overlay background color at end of zoom |
+| `overlayBgColorStart` | `String` | no | `'rgba(255, 255, 255, 0)'` | Modal overlay background color at start of zoom |
+| `portalEl` | `Element` | no | `document.body` | [DOM Element](https://developer.mozilla.org/en-US/docs/Web/API/element) to which we will append the zoom modal |
+| `scrollableEl` | `Window` | no | `window` | [DOM Element](https://developer.mozilla.org/en-US/docs/Web/API/element) to which we will listen for scroll events to determine if we should unzoom |
+| `transitionDuration` | `Number` | no | `300` | Transition duration in milliseconds for the component to use on zoom and unzoom |
+| `zoomMargin` | `Number` | no | `0` | Offset in pixels the zoomed image should be from the `window`' boundaries |
 
 ## Contributors
 
