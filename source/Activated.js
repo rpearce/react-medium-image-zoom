@@ -150,7 +150,8 @@ Activated.propTypes = {
   overlayBgColorStart: string.isRequired,
   parentRef: object.isRequired,
   portalEl: instanceOf(Element).isRequired,
-  scrollableEl: oneOfType([instanceOf(Element), instanceOf(Window)]).isRequired,
+  scrollableEl: oneOfType([object, instanceOf(Element), instanceOf(Window)])
+    .isRequired,
   transitionDuration: number.isRequired,
   zoomMargin: number.isRequired
 }

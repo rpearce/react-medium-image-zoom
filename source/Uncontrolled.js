@@ -1,5 +1,5 @@
 import React, { StrictMode, memo, useCallback, useRef, useState } from 'react'
-import { instanceOf, node, number, oneOfType, string } from 'prop-types'
+import { instanceOf, node, number, object, oneOfType, string } from 'prop-types'
 import cn from './Uncontrolled.css'
 import sharedCn from './Shared.css'
 import Activated from './Activated'
@@ -85,7 +85,8 @@ Uncontrolled.propTypes = {
   overlayBgColorEnd: string.isRequired,
   overlayBgColorStart: string.isRequired,
   portalEl: instanceOf(Element).isRequired,
-  scrollableEl: oneOfType([instanceOf(Element), instanceOf(Window)]).isRequired,
+  scrollableEl: oneOfType([object, instanceOf(Element), instanceOf(Window)])
+    .isRequired,
   transitionDuration: number.isRequired,
   zoomMargin: number.isRequired
 }
