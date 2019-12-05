@@ -236,6 +236,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "seaneking",
+      "name": "Sean King",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/6374876?v=4",
+      "profile": "http://tomorrowstudio.co",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "repoType": "github",
