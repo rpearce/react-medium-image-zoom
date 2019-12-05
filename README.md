@@ -43,10 +43,13 @@ $ yarn add react-medium-image-zoom
 ```
 
 ## Basic Usage
+Import the component and the component's CSS and then wrap whatever you want to
+be "zoomable" with this component:
 
 ```js
 import React, { useState } from 'react'
 import Zoom from 'react-medium-image-zoom'
+import 'react-medium-image-zoom/dist/styles.css'
 
 const MyComponent = () => (
   <Zoom>
@@ -62,6 +65,7 @@ export default MyComponent
 ```
 
 ## API
+You can pass options to the default `<Zoom>` component (`Controlled.js`):
 
 | Prop | Type | Required | Default  | Details |
 | ---  | --- | ---  | --- | --- |
