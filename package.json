@@ -56,7 +56,7 @@
     "@babel/cli": "^7.7.5",
     "@babel/core": "^7.7.5",
     "@babel/polyfill": "^7.7.0",
-    "@babel/preset-env": "^7.7.5",
+    "@babel/preset-env": "^7.7.6",
     "@babel/preset-react": "^7.7.4",
     "@storybook/addon-a11y": "^5.2.8",
     "@storybook/addon-actions": "^5.2.8",
@@ -65,8 +65,8 @@
     "@storybook/addon-links": "^5.2.8",
     "@storybook/react": "^5.2.8",
     "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "all-contributors-cli": "^6.11.1",
+    "@testing-library/react": "^9.3.3",
+    "all-contributors-cli": "^6.11.2",
     "autoprefixer": "^9.7.3",
     "axe-core": "^3.4.0",
     "babel-core": "^7.0.0-bridge.0",
@@ -89,7 +89,7 @@
     "prettier": "^1.19.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "rollup": "^1.27.8",
+    "rollup": "^1.27.10",
     "rollup-plugin-auto-external": "^3.0.0-alpha.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
@@ -102,6 +102,6 @@
   },
   "dependencies": {
     "prop-types": "^15.7.2",
-    "react-use": "^13.10.2"
+    "react-use": "^13.12.2"
   }
 }
