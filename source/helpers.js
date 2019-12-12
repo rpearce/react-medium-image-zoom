@@ -1,5 +1,26 @@
-import getScale from './getScale'
-import toDurationString from './toDurationString'
+// toDurationString :: Number -> String
+const toDurationString = duration => `${duration}ms`
+
+// @TODO: test
+// getScale :: { height      :: Number
+//             , innerHeight :: Number
+//             , innerWidth  :: Number
+//             , width       :: Number
+//             , zoomMargin  :: Number
+//             }
+export const getScale = ({
+  height,
+  innerHeight,
+  innerWidth,
+  width,
+  zoomMargin
+}) => {
+  const scaleX = innerWidth / (width + zoomMargin)
+  const scaleY = innerHeight / (height + zoomMargin)
+  const scale = Math.min(scaleX, scaleY)
+
+  return scale
+}
 
 // @TODO: test
 // getModalContentStyle :: { height             :: Number
@@ -14,7 +35,7 @@ import toDurationString from './toDurationString'
 //                         , width              :: Number
 //                         , zoomMargin         :: Number
 //                         }
-const getModalContentStyle = ({
+export const getModalContentStyle = ({
   height,
   innerHeight,
   innerWidth,
@@ -88,4 +109,28 @@ const getModalContentStyle = ({
   }
 }
 
-export default getModalContentStyle
+// @TODO: test
+// getModalOverlayStyle :: { isLoaded            :: Bool
+//                         , isUnloading         :: Bool
+//                         , overlayBgColorEnd   :: String
+//                         , overlayBgColorStart :: String
+//                         , transitionDuration  :: Number
+//                         }
+export const getModalOverlayStyle = ({
+  isLoaded,
+  isUnloading,
+  overlayBgColorEnd,
+  overlayBgColorStart,
+  transitionDuration
+}) => {
+  const style = {
+    backgroundColor: overlayBgColorStart,
+    transitionDuration: toDurationString(transitionDuration)
+  }
+
+  if (isLoaded && !isUnloading) {
+    style.backgroundColor = overlayBgColorEnd
+  }
+
+  return style
+}

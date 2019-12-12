@@ -11,18 +11,17 @@ import {
 } from 'prop-types'
 import useEvent from 'react-use/lib/useEvent'
 import useWindowSize from 'react-use/lib/useWindowSize'
-import getModalContentStyle from './lib/getModalContentStyle'
-import getModalOverlayStyle from './lib/getModalOverlayStyle'
+import { getModalContentStyle, getModalOverlayStyle } from './helpers'
 import cn from './Activated.css'
 import sharedCn from './Shared.css'
 
-const Activated = ({
-  overlayBgColorStart,
-  overlayBgColorEnd,
+const UncontrolledActivated = ({
   children,
   closeText,
   onDeactivate,
   onLoad,
+  overlayBgColorEnd,
+  overlayBgColorStart,
   parentRef,
   portalEl,
   scrollableEl,
@@ -141,7 +140,7 @@ const Activated = ({
   )
 }
 
-Activated.propTypes = {
+UncontrolledActivated.propTypes = {
   children: node.isRequired,
   closeText: string.isRequired,
   onDeactivate: func.isRequired,
@@ -156,4 +155,4 @@ Activated.propTypes = {
   zoomMargin: number.isRequired
 }
 
-export default memo(Activated)
+export default memo(UncontrolledActivated)
