@@ -89,7 +89,7 @@
     "prettier": "^1.19.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "rollup": "^1.27.11",
+    "rollup": "^1.27.12",
     "rollup-plugin-auto-external": "^3.0.0-alpha.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
