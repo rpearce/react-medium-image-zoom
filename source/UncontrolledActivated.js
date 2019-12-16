@@ -18,7 +18,7 @@ import sharedCn from './Shared.css'
 const UncontrolledActivated = ({
   children,
   closeText,
-  onDeactivate,
+  onUnload,
   onLoad,
   overlayBgColorEnd,
   overlayBgColorStart,
@@ -34,17 +34,13 @@ const UncontrolledActivated = ({
   const [isUnloading, setIsUnloading] = useState(false)
   const { width: innerWidth, height: innerHeight } = useWindowSize()
 
-  // =============================
-  // = ON CLICK, BEGIN UNLOADING =
-  // =============================
+  // on click, begin unloading
   const handleClick = useCallback(e => {
     e.preventDefault()
     setIsUnloading(true)
   }, [])
 
-  // ==============================
-  // = ON ESCAPE, BEGIN UNLOADING =
-  // ==============================
+  // on escape, begin unloading
   const handleKeyDown = useCallback(e => {
     if (e.key === 'Escape' || e.keyCode === 27) {
       e.stopPropagation()
@@ -60,19 +56,13 @@ const UncontrolledActivated = ({
     }
   }, [isUnloading])
 
-  // ======================================
-  // = LISTEN FOR KEYDOWN ON THE DOCUMENT =
-  // ======================================
+  // listen for keydown on the document
   useEvent('keydown', handleKeyDown, document)
 
-  // ===============================
-  // = LISTEN FOR SCROLL AND CLOSE =
-  // ===============================
+  // listen for scroll and close
   useEvent('scroll', handleScroll, scrollableEl)
 
-  // =================================
-  // = SET LOADED ON MOUNT AND FOCUS =
-  // =================================
+  // set loaded on mount and focus
   useEffect(() => {
     setIsLoaded(true)
     onLoad()
@@ -82,22 +72,18 @@ const UncontrolledActivated = ({
     }
   }, [onLoad])
 
-  // ================================================================
-  // = IF UNLOADING, TELL PARENT THAT WE'RE ALL DONE HERE AFTER Nms =
-  // ================================================================
+  // if unloading, tell parent that we're all done here after Nms
   useEffect(() => {
     const unloadTimeout = isUnloading
-      ? setTimeout(onDeactivate, transitionDuration)
+      ? setTimeout(onUnload, transitionDuration)
       : null
 
     return () => {
       clearTimeout(unloadTimeout)
     }
-  }, [isUnloading, onDeactivate, transitionDuration])
+  }, [isUnloading, onUnload, transitionDuration])
 
-  // ==================================
-  // = GET PARENT ITEM'S DIMENSIONS =
-  // ==================================
+  // get parent item's dimensions
   const { height, left, top, width } = parentRef.current.getBoundingClientRect()
 
   const overlayStyle = getModalOverlayStyle({
@@ -143,7 +129,7 @@ const UncontrolledActivated = ({
 UncontrolledActivated.propTypes = {
   children: node.isRequired,
   closeText: string.isRequired,
-  onDeactivate: func.isRequired,
+  onUnload: func.isRequired,
   onLoad: func.isRequired,
   overlayBgColorEnd: string.isRequired,
   overlayBgColorStart: string.isRequired,

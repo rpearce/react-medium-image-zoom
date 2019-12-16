@@ -34,7 +34,7 @@ const Uncontrolled = ({
     setIsChildLoaded(true)
   }, [])
 
-  const handleDeactivate = useCallback(() => {
+  const handleChildUnload = useCallback(() => {
     setIsActive(false)
     setIsChildLoaded(false)
 
@@ -60,8 +60,8 @@ const Uncontrolled = ({
         {isActive && (
           <UncontrolledActivated
             closeText={closeText}
-            onDeactivate={handleDeactivate}
             onLoad={handleChildLoad}
+            onUnload={handleChildUnload}
             overlayBgColorEnd={overlayBgColorEnd}
             overlayBgColorStart={overlayBgColorStart}
             parentRef={wrapRef}
