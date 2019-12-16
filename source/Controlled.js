@@ -1,21 +1,31 @@
 import React, { StrictMode, memo, useCallback, useRef, useState } from 'react'
-import { instanceOf, node, number, object, oneOfType, string } from 'prop-types'
-import UncontrolledActivated from './UncontrolledActivated'
+import {
+  bool,
+  func,
+  instanceOf,
+  node,
+  number,
+  object,
+  oneOfType,
+  string
+} from 'prop-types'
+import ControlledActivated from './ControlledActivated'
 import cn from './Main.css'
 import sharedCn from './Shared.css'
 
-const Uncontrolled = ({
+const Controlled = ({
   children,
   closeText,
+  isZoomed: isActive,
   overlayBgColorEnd,
   overlayBgColorStart,
   portalEl,
+  onZoomChange,
   openText,
   scrollableEl,
   transitionDuration,
   zoomMargin
 }) => {
-  const [isActive, setIsActive] = useState(false)
   const [isChildLoaded, setIsChildLoaded] = useState(false)
   const wrapRef = useRef(null)
   const btnRef = useRef(null)
@@ -24,10 +34,10 @@ const Uncontrolled = ({
     e => {
       if (!isActive) {
         e.preventDefault()
-        setIsActive(true)
+        onZoomChange(true)
       }
     },
-    [isActive]
+    [isActive, onZoomChange]
   )
 
   const handleChildLoad = useCallback(() => {
@@ -35,7 +45,6 @@ const Uncontrolled = ({
   }, [])
 
   const handleChildUnload = useCallback(() => {
-    setIsActive(false)
     setIsChildLoaded(false)
 
     if (btnRef.current) {
@@ -43,8 +52,7 @@ const Uncontrolled = ({
     }
   }, [])
 
-  const isExpanded = isActive && isChildLoaded
-  const className = isExpanded ? cn.wrapHidden : cn.wrap
+  const className = isChildLoaded ? cn.wrapHidden : cn.wrap
   const btnCn = `${sharedCn.trigger} ${cn.btn}`
 
   return (
@@ -56,31 +64,34 @@ const Uncontrolled = ({
           className={btnCn}
           onClick={handleClickTrigger}
           ref={btnRef}
+          type="button"
         />
-        {isActive && (
-          <UncontrolledActivated
-            closeText={closeText}
-            onLoad={handleChildLoad}
-            onUnload={handleChildUnload}
-            overlayBgColorEnd={overlayBgColorEnd}
-            overlayBgColorStart={overlayBgColorStart}
-            parentRef={wrapRef}
-            portalEl={portalEl}
-            scrollableEl={scrollableEl}
-            transitionDuration={transitionDuration}
-            zoomMargin={zoomMargin}
-          >
-            {children}
-          </UncontrolledActivated>
-        )}
+        <ControlledActivated
+          closeText={closeText}
+          isActive={isActive}
+          onLoad={handleChildLoad}
+          onUnload={handleChildUnload}
+          onZoomChange={onZoomChange}
+          overlayBgColorEnd={overlayBgColorEnd}
+          overlayBgColorStart={overlayBgColorStart}
+          parentRef={wrapRef}
+          portalEl={portalEl}
+          scrollableEl={scrollableEl}
+          transitionDuration={transitionDuration}
+          zoomMargin={zoomMargin}
+        >
+          {children}
+        </ControlledActivated>
       </div>
     </StrictMode>
   )
 }
 
-Uncontrolled.propTypes = {
+Controlled.propTypes = {
   children: node.isRequired,
   closeText: string.isRequired,
+  isZoomed: bool.isRequired,
+  onZoomChange: func.isRequired,
   openText: string.isRequired,
   overlayBgColorEnd: string.isRequired,
   overlayBgColorStart: string.isRequired,
@@ -91,8 +102,10 @@ Uncontrolled.propTypes = {
   zoomMargin: number.isRequired
 }
 
-Uncontrolled.defaultProps = {
+Controlled.defaultProps = {
   closeText: 'Unzoom image',
+  isZoomed: false,
+  onZoomChange: Function.prototype,
   openText: 'Zoom image',
   overlayBgColorEnd: 'rgba(255, 255, 255, 0.95)',
   overlayBgColorStart: 'rgba(255, 255, 255, 0)',
@@ -102,4 +115,4 @@ Uncontrolled.defaultProps = {
   zoomMargin: 0
 }
 
-export default memo(Uncontrolled)
+export default memo(Controlled)

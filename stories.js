@@ -1,6 +1,7 @@
 /* eslint react/prop-types: 0 */
 
-import React from 'react'
+import React, { useCallback, useState } from 'react'
+import useEvent from 'react-use/lib/useEvent'
 import { storiesOf } from '@storybook/react'
 import { withA11y } from '@storybook/addon-a11y'
 import { color, number, text, withKnobs } from '@storybook/addon-knobs'
@@ -11,7 +12,7 @@ import teAraiPoint from './static/douglas-bagg-wRwa3Z6GtRI-unsplash-smaller.jpg'
 import thatWanakaTree from './static/laura-smetsers-H-TW2CoNtTk-unsplash-smaller.jpg'
 
 import './dist/styles.css'
-import Zoom from './dist/esm'
+import Zoom, { Controlled as ControlledZoom } from './dist/esm'
 
 const imgThatWanakaTree = {
   alt: 'That Wanaka Tree, New Zealand',
@@ -36,10 +37,10 @@ stories.addDecorator(withA11y)
 stories.addDecorator(withKnobs)
 
 stories.add('with <img />', () => (
-  <ImgStory>
+  <ImgStory title="Zoom an `img`">
     <Zoom
-      closeText={text('Unzoom text', 'Unzoom image')}
-      openText={text('Zoom text', 'Zoom image')}
+      closeText={text('Unzoom label', 'Unzoom image')}
+      openText={text('Zoom label', 'Zoom image')}
       overlayBgColorEnd={color(
         'Overlay bgColor end',
         'rgba(255, 255, 255, 0.95)'
@@ -71,8 +72,31 @@ stories.add('with <img />', () => (
 ))
 
 stories.add('with <picture />', () => (
-  <ImgStory>
-    <Zoom>
+  <ImgStory title="Zoom a `picture` element with `img` and `source`">
+    <Zoom
+      closeText={text('Unzoom label', 'Unzoom image')}
+      openText={text('Zoom label', 'Zoom image')}
+      overlayBgColorEnd={color(
+        'Overlay bgColor end',
+        'rgba(255, 255, 255, 0.95)'
+      )}
+      overlayBgColorStart={color(
+        'Overlay bgColor start',
+        'rgba(255, 255, 255, 0)'
+      )}
+      transitionDuration={number('Transition duration', 300, {
+        min: 0,
+        max: 5000,
+        range: true,
+        step: 100
+      })}
+      zoomMargin={number('Zoom margin', 0, {
+        min: 0,
+        max: 500,
+        range: true,
+        step: 50
+      })}
+    >
       <picture>
         <source media="(max-width: 800px)" srcSet={imgTeAraiPoint.src} />
         <img
@@ -87,9 +111,32 @@ stories.add('with <picture />', () => (
 ))
 
 stories.add('with <figure />', () => (
-  <ImgStory>
+  <ImgStory title="Zoom a `figure` element">
     <figure>
-      <Zoom>
+      <Zoom
+        closeText={text('Unzoom label', 'Unzoom image')}
+        openText={text('Zoom label', 'Zoom image')}
+        overlayBgColorEnd={color(
+          'Overlay bgColor end',
+          'rgba(255, 255, 255, 0.95)'
+        )}
+        overlayBgColorStart={color(
+          'Overlay bgColor start',
+          'rgba(255, 255, 255, 0)'
+        )}
+        transitionDuration={number('Transition duration', 300, {
+          min: 0,
+          max: 5000,
+          range: true,
+          step: 100
+        })}
+        zoomMargin={number('Zoom margin', 0, {
+          min: 0,
+          max: 500,
+          range: true,
+          step: 50
+        })}
+      >
         <img src={imgHobbiton.src} alt={imgHobbiton.alt} width="500" />
       </Zoom>
       <figcaption>Hobbiton</figcaption>
@@ -98,8 +145,31 @@ stories.add('with <figure />', () => (
 ))
 
 stories.add('with blue circle', () => (
-  <ImgStory>
-    <Zoom>
+  <ImgStory title="Zoom a blue circle `div`, if you want">
+    <Zoom
+      closeText={text('Unzoom label', 'Unzoom image')}
+      openText={text('Zoom label', 'Zoom image')}
+      overlayBgColorEnd={color(
+        'Overlay bgColor end',
+        'rgba(255, 255, 255, 0.95)'
+      )}
+      overlayBgColorStart={color(
+        'Overlay bgColor start',
+        'rgba(255, 255, 255, 0)'
+      )}
+      transitionDuration={number('Transition duration', 300, {
+        min: 0,
+        max: 5000,
+        range: true,
+        step: 100
+      })}
+      zoomMargin={number('Zoom margin', 0, {
+        min: 0,
+        max: 500,
+        range: true,
+        step: 50
+      })}
+    >
       <div
         aria-label="A blue circle"
         style={{
@@ -113,10 +183,127 @@ stories.add('with blue circle', () => (
   </ImgStory>
 ))
 
-const ImgStory = props => {
+//stories.add('with <img /> gallery', () => {
+//})
+
+stories.add('with controlled; zooms when image loads', () => {
+  const [isZoomed, setIsZoomed] = useState(false)
+
+  const handleBtnClick = useCallback(() => {
+    setIsZoomed(true)
+  }, [])
+
+  const handleImgLoad = useCallback(() => {
+    setIsZoomed(true)
+  }, [])
+
+  const handleZoomChange = useCallback(shouldZoom => {
+    setIsZoomed(shouldZoom)
+  }, [])
+
+  return (
+    <ImgStory title="Controlled Component – zooms when image loads">
+      <div>
+        <button onClick={handleBtnClick} type="button">
+          Zoom image
+        </button>
+      </div>
+      <ControlledZoom
+        closeText={text('Unzoom label', 'Unzoom image')}
+        openText={text('Zoom label', 'Zoom image')}
+        overlayBgColorEnd={color(
+          'Overlay bgColor end',
+          'rgba(255, 255, 255, 0.95)'
+        )}
+        overlayBgColorStart={color(
+          'Overlay bgColor start',
+          'rgba(255, 255, 255, 0)'
+        )}
+        transitionDuration={number('Transition duration', 300, {
+          min: 0,
+          max: 5000,
+          range: true,
+          step: 100
+        })}
+        zoomMargin={number('Zoom margin', 0, {
+          min: 0,
+          max: 500,
+          range: true,
+          step: 50
+        })}
+        isZoomed={isZoomed}
+        onZoomChange={handleZoomChange}
+      >
+        <img
+          alt={imgThatWanakaTree.alt}
+          onLoad={handleImgLoad}
+          src={imgThatWanakaTree.src}
+          width="500"
+        />
+      </ControlledZoom>
+    </ImgStory>
+  )
+})
+
+stories.add('with controlled; specific keys', () => {
+  const [isZoomed, setIsZoomed] = useState(false)
+
+  const handleKeyDown = useCallback(e => {
+    if (e.key === 'j' || e.keyCode === 74) {
+      setIsZoomed(true)
+    } else if (e.key === 'k' || e.keyCode === 75) {
+      setIsZoomed(false)
+    }
+  }, [])
+
+  useEvent('keydown', handleKeyDown, document)
+
+  return (
+    <ImgStory
+      desc="Use `j` to open and `k` to close"
+      title="Image zoom using specific keys"
+    >
+      <ControlledZoom
+        closeText={text('Unzoom label', 'Unzoom image')}
+        openText={text('Zoom label', 'Zoom image')}
+        overlayBgColorEnd={color(
+          'Overlay bgColor end',
+          'rgba(255, 255, 255, 0.95)'
+        )}
+        overlayBgColorStart={color(
+          'Overlay bgColor start',
+          'rgba(255, 255, 255, 0)'
+        )}
+        transitionDuration={number('Transition duration', 300, {
+          min: 0,
+          max: 5000,
+          range: true,
+          step: 100
+        })}
+        zoomMargin={number('Zoom margin', 0, {
+          min: 0,
+          max: 500,
+          range: true,
+          step: 50
+        })}
+        isZoomed={isZoomed}
+        onZoomChange={Function.prototype /* do nothing */}
+      >
+        <img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          width="500"
+        />
+      </ControlledZoom>
+    </ImgStory>
+  )
+})
+
+const ImgStory = ({ desc, title, ...props }) => {
   return (
     <div>
-      <h1>react-medium-image-zoom</h1>
+      {title && <h1>{title}</h1>}
+      {desc && <h2>{desc}</h2>}
       <p>
         Trust fund seitan chia, wolf lomo letterpress Bushwick before they sold
         out. Carles kogi fixie, squid twee Tonx readymade cred typewriter
