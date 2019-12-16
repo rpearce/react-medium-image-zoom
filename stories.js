@@ -256,10 +256,6 @@ stories.add('with controlled; specific keys', () => {
     }
   }, [])
 
-  const handleZoomChange = useCallback(shouldZoom => {
-    setIsZoomed(shouldZoom)
-  }, [])
-
   useEvent('keydown', handleKeyDown, document)
 
   return (
@@ -291,7 +287,7 @@ stories.add('with controlled; specific keys', () => {
           step: 50
         })}
         isZoomed={isZoomed}
-        onZoomChange={handleZoomChange}
+        onZoomChange={Function.prototype /* do nothing */}
       >
         <img
           alt={imgThatWanakaTree.alt}
