@@ -46,7 +46,7 @@
     "clean:docs": "rm -rf ./docs",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
-    "coverage": "npm run test --coverage --coverageReporters=text-lcov | coveralls",
+    "coverage": "jest --coverage --coverageReporters=text-lcov | coveralls",
     "lint": "eslint .",
     "prepublishOnly": "run-p lint test && npm run build:js",
     "start": "npm run build:js && run-p build:js:watch storybook",
