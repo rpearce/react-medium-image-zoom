@@ -27,6 +27,7 @@ Examples`](https://rpearce.github.io/react-medium-image-zoom/) for more).
 * [`Installation`](#installation)
 * [`Basic Usage`](#basic-usage)
 * [`API`](#api)
+* [`Contributors`](#contributors)
 * [`Storybook Examples`](https://rpearce.github.io/react-medium-image-zoom/)
 * [`Authors`](./AUTHORS.md)
 * [`Changelog`](./CHANGELOG.md)
@@ -35,16 +36,18 @@ Examples`](https://rpearce.github.io/react-medium-image-zoom/) for more).
 
 ## Installation
 ```bash
-$ npm i react-medium-image-zoom
+$ npm i react-medium-image-zoom@alpha
 ```
 or
 ```bash
-$ yarn add react-medium-image-zoom
+$ yarn add react-medium-image-zoom@alpha
 ```
 
 ## Basic Usage
-Import the component and the component's CSS and then wrap whatever you want to
-be "zoomable" with this component:
+
+### Uncontrolled component (default)
+Import the component and the CSS, wrap whatever you want to be "zoomable" with
+this component and the component will handle it's own state:
 
 ```js
 import React, { useState } from 'react'
@@ -64,8 +67,47 @@ const MyComponent = () => (
 export default MyComponent
 ```
 
+### Controlled component (`Controlled`)
+Import the `Controlled` component and the CSS, wrap whatever you want to
+be "zoomable" with this component and then dictate the zoomed/unzoomed state to
+the component. Here, we will automatically zoom the component once the image has
+loaded:
+
+```js
+import React, { useCallback, useState } from 'react'
+import { Controlled as ControlledZoom } from 'react-medium-image-zoom'
+import 'react-medium-image-zoom/dist/styles.css'
+
+const MyComponent = () => {
+  const [isZoomed, setIsZoomed] = useState(false)
+
+  const handleImgLoad = useCallback(() => {
+    setIsZoomed(true)
+  }, [])
+
+  const handleZoomChange = useCallback(shouldZoom => {
+    setIsZoomed(shouldZoom)
+  }, [])
+
+  return (
+    <ControlledZoom isZoomed={isZoomed} onZoomChange={handleZoomChange}>
+      <img
+        alt="that wanaka tree"
+        onLoad={handleImgLoad}
+        src="/path/to/thatwanakatree.jpg"
+        width="500"
+      />
+    </ControlledZoom>
+  )
+)
+
+export default MyComponent
+```
+
 ## API
-You can pass options to the default `<Zoom>` component (`Controlled.js`):
+
+## Both uncontrolled & controlled components
+You can pass these options to either the default or controlled components.
 
 | Prop | Type | Required | Default  | Details |
 | ---  | --- | ---  | --- | --- |
@@ -77,6 +119,14 @@ You can pass options to the default `<Zoom>` component (`Controlled.js`):
 | `scrollableEl` | `Window` | no | `window` | [DOM Element](https://developer.mozilla.org/en-US/docs/Web/API/element) to which we will listen for scroll events to determine if we should unzoom |
 | `transitionDuration` | `Number` | no | `300` | Transition duration in milliseconds for the component to use on zoom and unzoom |
 | `zoomMargin` | `Number` | no | `0` | Offset in pixels the zoomed image should be from the `window`' boundaries |
+
+## Only the controlled component
+You can pass these options to only the controlled component.
+
+| Prop | Type | Required | Default  | Details |
+| ---  | --- | ---  | --- | --- |
+| `isZoomed` | `bool` | yes | `false` | Tell the component whether or not it should be zoomed |
+| `onZoomChange` | `Function` | no | `Function.prototype` | Listen for hints from the component about when you should zoom (`true` value) or unzoom (`false` value) |
 
 ## Contributors
 
