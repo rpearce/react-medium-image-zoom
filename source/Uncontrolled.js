@@ -13,6 +13,7 @@ const Uncontrolled = ({
   openText,
   scrollableEl,
   transitionDuration,
+  wrapStyle,
   zoomMargin
 }) => {
   const [isActive, setIsActive] = useState(false)
@@ -49,7 +50,7 @@ const Uncontrolled = ({
 
   return (
     <StrictMode>
-      <div className={className} ref={wrapRef}>
+      <div className={className} ref={wrapRef} style={wrapStyle}>
         {children}
         <button
           aria-label={openText}
@@ -88,6 +89,7 @@ Uncontrolled.propTypes = {
   scrollableEl: oneOfType([object, instanceOf(Element), instanceOf(Window)])
     .isRequired,
   transitionDuration: number.isRequired,
+  wrapStyle: object,
   zoomMargin: number.isRequired
 }
 
@@ -99,6 +101,7 @@ Uncontrolled.defaultProps = {
   portalEl: document.body,
   scrollableEl: window,
   transitionDuration: 300,
+  wrapStyle: null,
   zoomMargin: 0
 }
 

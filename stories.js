@@ -183,8 +183,64 @@ stories.add('with blue circle', () => (
   </ImgStory>
 ))
 
-//stories.add('with <img /> gallery', () => {
-//})
+stories.add('with image gallery using divs & background images', () => {
+  const images = [
+    imgThatWanakaTree,
+    imgNzBeach,
+    imgHobbiton,
+    imgHobbiton,
+    imgThatWanakaTree,
+    imgNzBeach,
+    imgNzBeach,
+    imgHobbiton,
+    imgThatWanakaTree
+  ]
+
+  return (
+    <div>
+      <h1>Image gallery using divs & background images</h1>
+      <p>
+        While this is simply an example of using div elements and
+        background-image to accomplish an image gallery, you could easily listen
+        for arrow left/right when an item is zoomed and use the controlled
+        component to make yourself an animated image gallery that zooms &
+        unzooms items appropriately.
+      </p>
+      <ul
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          listStyle: 'none',
+          margin: 0,
+          padding: 0
+        }}
+      >
+        {images.concat(images, images, images).map((img, i) => (
+          <li
+            key={i}
+            style={{ margin: '0 1rem 1rem 0', width: 'calc(33% - 1rem)' }}
+          >
+            <Zoom wrapStyle={{ width: '100%' }}>
+              <div
+                aria-label={img.alt}
+                role="img"
+                style={{
+                  backgroundColor: '#c2c2c2',
+                  backgroundImage: `url(${img.src})`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: 'cover',
+                  height: '0',
+                  paddingBottom: '66%',
+                  width: 'calc(100%)'
+                }}
+              />
+            </Zoom>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+})
 
 stories.add('with controlled; zooms when image loads', () => {
   const [isZoomed, setIsZoomed] = useState(false)

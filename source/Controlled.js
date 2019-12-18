@@ -24,6 +24,7 @@ const Controlled = ({
   openText,
   scrollableEl,
   transitionDuration,
+  wrapStyle,
   zoomMargin
 }) => {
   const [isChildLoaded, setIsChildLoaded] = useState(false)
@@ -57,7 +58,7 @@ const Controlled = ({
 
   return (
     <StrictMode>
-      <div className={className} ref={wrapRef}>
+      <div className={className} ref={wrapRef} style={wrapStyle}>
         {children}
         <button
           aria-label={openText}
@@ -99,6 +100,7 @@ Controlled.propTypes = {
   scrollableEl: oneOfType([object, instanceOf(Element), instanceOf(Window)])
     .isRequired,
   transitionDuration: number.isRequired,
+  wrapStyle: object,
   zoomMargin: number.isRequired
 }
 
@@ -112,6 +114,7 @@ Controlled.defaultProps = {
   portalEl: document.body,
   scrollableEl: window,
   transitionDuration: 300,
+  wrapStyle: null,
   zoomMargin: 0
 }
 
