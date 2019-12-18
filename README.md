@@ -112,7 +112,7 @@ You can pass these options to either the default or controlled components.
 | Prop | Type | Required | Default  | Details |
 | ---  | --- | ---  | --- | --- |
 | `closeText` | `String` | no | `'Unzoom Image'` | Accessible label text for when you want to unzoom |
-| `openTextText` | `String` | no | `'Zoom Image'` | Accessible label text for when you want to zoom |
+| `openText` | `String` | no | `'Zoom Image'` | Accessible label text for when you want to zoom |
 | `overlayBgColorEnd` | `String` | no | `'rgba(255, 255, 255, 0.95)'` | Modal overlay background color at end of zoom |
 | `overlayBgColorStart` | `String` | no | `'rgba(255, 255, 255, 0)'` | Modal overlay background color at start of zoom |
 | `portalEl` | `Element` | no | `document.body` | [DOM Element](https://developer.mozilla.org/en-US/docs/Web/API/element) to which we will append the zoom modal |
