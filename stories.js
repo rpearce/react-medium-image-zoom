@@ -65,6 +65,7 @@ stories.add('with <img />', () => (
       <img
         alt={imgThatWanakaTree.alt}
         src={imgThatWanakaTree.src}
+        style={{ height: '100%', maxWidth: '100%' }}
         width="500"
       />
     </Zoom>
@@ -102,7 +103,7 @@ stories.add('with <picture />', () => (
         <img
           alt={imgNzBeach.alt}
           src={imgNzBeach.src}
-          style={{ maxWidth: '100%' }}
+          style={{ height: '100%', maxWidth: '100%' }}
           width="500"
         />
       </picture>
@@ -137,7 +138,12 @@ stories.add('with <figure />', () => (
           step: 50
         })}
       >
-        <img src={imgHobbiton.src} alt={imgHobbiton.alt} width="500" />
+        <img
+          alt={imgHobbiton.alt}
+          src={imgHobbiton.src}
+          style={{ height: '100%', maxWidth: '100%' }}
+          width="500"
+        />
       </Zoom>
       <figcaption>Hobbiton</figcaption>
     </figure>
@@ -294,6 +300,7 @@ stories.add('with controlled; zooms when image loads', () => {
           alt={imgThatWanakaTree.alt}
           onLoad={handleImgLoad}
           src={imgThatWanakaTree.src}
+          style={{ height: '100%', maxWidth: '100%' }}
           width="500"
         />
       </ControlledZoom>
@@ -348,6 +355,7 @@ stories.add('with controlled; specific keys', () => {
         <img
           alt={imgThatWanakaTree.alt}
           src={imgThatWanakaTree.src}
+          style={{ height: '100%', maxWidth: '100%' }}
           width="500"
         />
       </ControlledZoom>
