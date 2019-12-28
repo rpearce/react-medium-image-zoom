@@ -50,44 +50,10 @@ export const getModalContentStyle = ({
 }) => {
   const transitionDurationString = toDurationString(transitionDuration)
 
-  if (isUnloading) {
-    return {
-      height,
-      left,
-      top,
-      transform: originalTransform,
-      WebkitTransform: originalTransform,
-      transitionDuration: transitionDurationString,
-      width
-    }
-  }
-
-  if (isLoaded) {
-    // Get the the coords for center of the viewport
-    const viewportX = innerWidth / 2
-    const viewportY = innerHeight / 2
-
-    // Get the coords for center of the parent item
-    const childCenterX = left + width / 2
-    const childCenterY = top + height / 2
-
-    // Get amount to scale item
-    const scale = getScale({
-      height,
-      innerWidth,
-      innerHeight,
-      width,
-      zoomMargin
-    })
-
-    // Get offset amounts for item coords to be centered on screen
-    const translateX = (viewportX - childCenterX) / scale
-    const translateY = (viewportY - childCenterY) / scale
-
-    // Build transform style, including any original transform
-    const transform = [
-      `scale(${scale})`,
-      `translate(${translateX}px, ${translateY}px)`,
+  if (!isLoaded || isUnloading) {
+    const initTransform = [
+      `scale(1)`,
+      `translate(0, 0)`,
       ...(originalTransform ? [originalTransform] : [])
     ].join(' ')
 
@@ -95,17 +61,47 @@ export const getModalContentStyle = ({
       height,
       left,
       top,
-      transform,
-      WebkitTransform: transform,
+      transform: initTransform,
+      WebkitTransform: initTransform,
       transitionDuration: transitionDurationString,
       width
     }
   }
 
+  // Get amount to scale item
+  const scale = getScale({
+    height,
+    innerWidth,
+    innerHeight,
+    width,
+    zoomMargin
+  })
+
+  // Get the the coords for center of the viewport
+  const viewportX = innerWidth / 2
+  const viewportY = innerHeight / 2
+
+  // Get the coords for center of the parent item
+  const childCenterX = left + width / 2
+  const childCenterY = top + height / 2
+
+  // Get offset amounts for item coords to be centered on screen
+  const translateX = (viewportX - childCenterX) / scale
+  const translateY = (viewportY - childCenterY) / scale
+
+  // Build transform style, including any original transform
+  const transform = [
+    `scale(${scale})`,
+    `translate(${translateX}px, ${translateY}px)`,
+    ...(originalTransform ? [originalTransform] : [])
+  ].join(' ')
+
   return {
     height,
     left,
     top,
+    transform,
+    WebkitTransform: transform,
     transitionDuration: transitionDurationString,
     width
   }

@@ -15,7 +15,6 @@
 .content {
   position: absolute;
   transition-property: transform;
-  transform: scale(1) translate(0, 0);
   transform-origin: center center;
 }
 /* To fix Safari img blurriness */
