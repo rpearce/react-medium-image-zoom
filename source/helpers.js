@@ -71,10 +71,6 @@ export const getModalContentStyle = ({
     const childCenterX = left + width / 2
     const childCenterY = top + height / 2
 
-    // Get offset amounts for item coords to be centered on screen
-    const translateX = viewportX - childCenterX
-    const translateY = viewportY - childCenterY
-
     // Get amount to scale item
     const scale = getScale({
       height,
@@ -84,11 +80,15 @@ export const getModalContentStyle = ({
       zoomMargin
     })
 
+    // Get offset amounts for item coords to be centered on screen
+    const translateX = (viewportX - childCenterX) / scale
+    const translateY = (viewportY - childCenterY) / scale
+
     // Build transform style, including any original transform
     const transform = [
-      ...(originalTransform ? [originalTransform] : []),
-      `translate3d(${translateX}px, ${translateY}px, 0)`,
-      `scale(${scale})`
+      `scale(${scale})`,
+      `translate(${translateX}px, ${translateY}px)`,
+      ...(originalTransform ? [originalTransform] : [])
     ].join(' ')
 
     return {
