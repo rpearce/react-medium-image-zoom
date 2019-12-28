@@ -3,10 +3,9 @@ import ReactDOM from 'react-dom'
 import propTypes from 'prop-types'
 
 import babel from 'rollup-plugin-babel'
-import commonjs from 'rollup-plugin-commonjs'
-import external from 'rollup-plugin-auto-external'
+import commonjs from '@rollup/plugin-commonjs'
 import postcss from 'rollup-plugin-postcss'
-import resolve from 'rollup-plugin-node-resolve'
+import resolve from '@rollup/plugin-node-resolve'
 import pkg from './package.json'
 
 const plugins = [
@@ -34,8 +33,6 @@ const plugins = [
   })
 ]
 
-const pluginsWithExternal = [external(), ...plugins]
-
 const config = [
   {
     input: [
@@ -60,7 +57,15 @@ const config = [
         sourcemap: true
       }
     ],
-    plugins: pluginsWithExternal
+    plugins,
+    external: [
+      'react',
+      'react-dom',
+      'react-use/lib/useEvent',
+      'react-use/lib/usePrevious',
+      'react-use/lib/useWindowSize',
+      'prop-types'
+    ]
   },
   {
     input: './source/index.js',

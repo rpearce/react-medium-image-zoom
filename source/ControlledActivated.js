@@ -81,7 +81,7 @@ const ControlledActivated = ({
       setIsLoaded(true)
 
       if (btnRef.current) {
-        btnRef.current.focus()
+        btnRef.current.focus({ preventScroll: true })
       }
     }
   }, [isActive, prevIsActive])

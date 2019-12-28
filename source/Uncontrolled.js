@@ -1,8 +1,12 @@
 import React, { StrictMode, memo, useCallback, useRef, useState } from 'react'
 import { instanceOf, node, number, object, oneOfType, string } from 'prop-types'
+import focusOptionsPolyfill from './focus-options-polyfill'
 import UncontrolledActivated from './UncontrolledActivated'
 import cn from './Main.css'
 import sharedCn from './Shared.css'
+
+// there must be a better way than this
+focusOptionsPolyfill()
 
 const Uncontrolled = ({
   children,
@@ -40,7 +44,7 @@ const Uncontrolled = ({
     setIsChildLoaded(false)
 
     if (btnRef.current) {
-      btnRef.current.focus()
+      btnRef.current.focus({ preventScroll: true })
     }
   }, [])
 
