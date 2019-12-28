@@ -9,9 +9,13 @@ import {
   oneOfType,
   string
 } from 'prop-types'
+import focusOptionsPolyfill from './focus-options-polyfill'
 import ControlledActivated from './ControlledActivated'
 import cn from './Main.css'
 import sharedCn from './Shared.css'
+
+// there must be a better way than this
+focusOptionsPolyfill()
 
 const Controlled = ({
   children,
@@ -49,7 +53,7 @@ const Controlled = ({
     setIsChildLoaded(false)
 
     if (btnRef.current) {
-      btnRef.current.focus()
+      btnRef.current.focus({ preventScroll: true })
     }
   }, [])
 

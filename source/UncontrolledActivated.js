@@ -68,7 +68,7 @@ const UncontrolledActivated = ({
     onLoad()
 
     if (btnRef.current) {
-      btnRef.current.focus()
+      btnRef.current.focus({ preventScroll: true })
     }
   }, [onLoad])
 
