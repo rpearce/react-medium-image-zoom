@@ -17,5 +17,9 @@
   transition-property: transform;
   transform: translate3d(0, 0, 0) scale(1);
   transform-origin: center center;
-  willChange: transform, top, left;
+  will-change: transform, top, left;
+}
+/* To fix Safari img blurriness */
+.content img {
+  transform: translateZ(0);
 }
