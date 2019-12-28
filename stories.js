@@ -233,6 +233,7 @@ stories.add('with image gallery using divs & background images', () => {
                 style={{
                   backgroundColor: '#c2c2c2',
                   backgroundImage: `url(${img.src})`,
+                  backgroundPosition: 'center center',
                   backgroundRepeat: 'no-repeat',
                   backgroundSize: 'cover',
                   height: '0',

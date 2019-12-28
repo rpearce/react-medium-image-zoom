@@ -56,6 +56,7 @@ export const getModalContentStyle = ({
       left,
       top,
       transform: originalTransform,
+      WebkitTransform: originalTransform,
       transitionDuration: transitionDurationString,
       width
     }
@@ -95,6 +96,7 @@ export const getModalContentStyle = ({
       left,
       top,
       transform,
+      WebkitTransform: transform,
       transitionDuration: transitionDurationString,
       width
     }
