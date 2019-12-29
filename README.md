@@ -24,15 +24,15 @@ As an added bonus, it will let you zoom _anything_ (see the [`Storybook
 Examples`](https://rpearce.github.io/react-medium-image-zoom/) for more).
 
 ## Links
-* [`Installation`](#installation)
-* [`Basic Usage`](#basic-usage)
-* [`API`](#api)
-* [`Contributors`](#contributors)
-* [`Storybook Examples`](https://rpearce.github.io/react-medium-image-zoom/)
-* [`Authors`](./AUTHORS.md)
-* [`Changelog`](./CHANGELOG.md)
-* [`Contributing`](./CONTRIBUTING.md)
-* [`Code of Conduct`](./CODE_OF_CONDUCT.md)
+* [Installation](#installation)
+* [Basic Usage](#basic-usage)
+* [API](#api)
+* [Contributors](#contributors)
+* [Storybook Examples](https://rpearce.github.io/react-medium-image-zoom/)
+* [Authors](./AUTHORS.md)
+* [Changelog](./CHANGELOG.md)
+* [Contributing](./CONTRIBUTING.md)
+* [Code of Conduct](./CODE_OF_CONDUCT.md)
 
 ## Installation
 ```bash
