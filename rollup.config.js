@@ -1,3 +1,5 @@
+import { dirname } from 'path'
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import propTypes from 'prop-types'
@@ -43,14 +45,14 @@ const config = [
     ],
     output: [
       {
-        dir: './dist/esm',
+        dir: dirname(pkg.module),
         exports: 'named',
         format: 'esm',
         name: 'rmiz-esm',
         sourcemap: true
       },
       {
-        dir: './dist/cjs',
+        dir: dirname(pkg.main),
         exports: 'named',
         format: 'cjs',
         name: 'rmiz-cjs',
