@@ -1,27 +1,15 @@
 import { dirname } from 'path'
-
-import React from 'react'
-import ReactDOM from 'react-dom'
-import propTypes from 'prop-types'
-
 import babel from 'rollup-plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
+import external from 'rollup-plugin-auto-external'
 import postcss from 'rollup-plugin-postcss'
 import resolve from '@rollup/plugin-node-resolve'
 import pkg from './package.json'
 
 const plugins = [
   resolve(),
-  commonjs({
-    include: /node_modules/,
-
-    // https://github.com/rollup/rollup-plugin-commonjs/issues/407#issuecomment-527837831
-    namedExports: {
-      react: Object.keys(React),
-      'react-dom': Object.keys(ReactDOM),
-      'prop-types': Object.keys(propTypes)
-    }
-  }),
+  external(),
+  commonjs({ include: /node_modules/ }),
   babel({
     configFile: './babel.config.js',
     only: ['./source'],
@@ -41,7 +29,9 @@ const config = [
       './source/index.js',
       './source/helpers.js',
       './source/Uncontrolled.js',
-      './source/Controlled.js'
+      './source/UncontrolledActivated.js',
+      './source/Controlled.js',
+      './source/ControlledActivated.js'
     ],
     output: [
       {
@@ -59,15 +49,7 @@ const config = [
         sourcemap: true
       }
     ],
-    plugins,
-    external: [
-      'react',
-      'react-dom',
-      'react-use/lib/useEvent',
-      'react-use/lib/usePrevious',
-      'react-use/lib/useWindowSize',
-      'prop-types'
-    ]
+    plugins
   },
   {
     input: './source/index.js',
@@ -76,6 +58,14 @@ const config = [
         file: pkg.browser,
         exports: 'named',
         format: 'umd',
+        globals: {
+          react: 'React',
+          'react-dom': 'reactDom',
+          'prop-types': 'propTypes',
+          'react-use/lib/useEvent': 'useEvent',
+          'react-use/lib/usePrevious': 'usePrevious',
+          'react-use/lib/useWindowSize': 'useWindowSize'
+        },
         name: 'rmiz-umd',
         sourcemap: true
       }
