@@ -12,7 +12,7 @@ import teAraiPoint from './static/douglas-bagg-wRwa3Z6GtRI-unsplash-smaller.jpg'
 import thatWanakaTree from './static/laura-smetsers-H-TW2CoNtTk-unsplash-smaller.jpg'
 
 import './dist/styles.css'
-import Zoom, { Controlled as ControlledZoom } from './dist/cjs'
+import Zoom, { Controlled as ControlledZoom } from './dist/esm'
 
 const imgThatWanakaTree = {
   alt: 'That Wanaka Tree, New Zealand',
