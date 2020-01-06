@@ -61,6 +61,12 @@ stories.add('with <img />', () => (
         range: true,
         step: 50
       })}
+      zoomZindex={number('Zoom z-index', 2147483647, {
+        min: 0,
+        max: 2147483647,
+        range: true,
+        step: 1
+      })}
     >
       <img
         alt={imgThatWanakaTree.alt}
@@ -96,6 +102,12 @@ stories.add('with <picture />', () => (
         max: 500,
         range: true,
         step: 50
+      })}
+      zoomZindex={number('Zoom z-index', 2147483647, {
+        min: 0,
+        max: 2147483647,
+        range: true,
+        step: 1
       })}
     >
       <picture>
@@ -137,6 +149,12 @@ stories.add('with <figure />', () => (
           range: true,
           step: 50
         })}
+        zoomZindex={number('Zoom z-index', 2147483647, {
+          min: 0,
+          max: 2147483647,
+          range: true,
+          step: 1
+        })}
       >
         <img
           alt={imgHobbiton.alt}
@@ -174,6 +192,12 @@ stories.add('with blue circle', () => (
         max: 500,
         range: true,
         step: 50
+      })}
+      zoomZindex={number('Zoom z-index', 2147483647, {
+        min: 0,
+        max: 2147483647,
+        range: true,
+        step: 1
       })}
     >
       <div
@@ -294,6 +318,12 @@ stories.add('with controlled; zooms when image loads', () => {
           range: true,
           step: 50
         })}
+        zoomZindex={number('Zoom z-index', 2147483647, {
+          min: 0,
+          max: 2147483647,
+          range: true,
+          step: 1
+        })}
         isZoomed={isZoomed}
         onZoomChange={handleZoomChange}
       >
@@ -349,6 +379,12 @@ stories.add('with controlled; specific keys', () => {
           max: 500,
           range: true,
           step: 50
+        })}
+        zoomZindex={number('Zoom z-index', 2147483647, {
+          min: 0,
+          max: 2147483647,
+          range: true,
+          step: 1
         })}
         isZoomed={isZoomed}
         onZoomChange={Function.prototype /* do nothing */}

@@ -120,6 +120,7 @@ You can pass these options to either the default or controlled components.
 | `transitionDuration` | `Number` | no | `300` | Transition duration in milliseconds for the component to use on zoom and unzoom |
 | `wrapStyle` | `Object` | no | `null` | Optional style object to pass to the wrapper `div`. Useful when you want the `<Zoom>` container to be `width: '100%'`, for example |
 | `zoomMargin` | `Number` | no | `0` | Offset in pixels the zoomed image should be from the `window`' boundaries |
+| `zoomZindex` | `Number` | no | `2147483647` | `z-index` value for the zoom overlay |
 
 ## Only the controlled component
 You can pass these options to only the controlled component.

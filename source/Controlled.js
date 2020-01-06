@@ -20,7 +20,8 @@ const Controlled = ({
   scrollableEl,
   transitionDuration,
   wrapStyle,
-  zoomMargin
+  zoomMargin,
+  zoomZindex
 }) => {
   const [isChildLoaded, setIsChildLoaded] = useState(false)
   const wrapRef = useRef(null)
@@ -75,6 +76,7 @@ const Controlled = ({
           scrollableEl={scrollableEl}
           transitionDuration={transitionDuration}
           zoomMargin={zoomMargin}
+          zoomZindex={zoomZindex}
         >
           {children}
         </ControlledActivated>
@@ -95,7 +97,8 @@ Controlled.propTypes = {
   scrollableEl: object.isRequired,
   transitionDuration: number.isRequired,
   wrapStyle: object,
-  zoomMargin: number.isRequired
+  zoomMargin: number.isRequired,
+  zoomZindex: number.isRequired
 }
 
 Controlled.defaultProps = {
@@ -109,7 +112,8 @@ Controlled.defaultProps = {
   scrollableEl: window,
   transitionDuration: 300,
   wrapStyle: null,
-  zoomMargin: 0
+  zoomMargin: 0,
+  zoomZindex: 2147483647
 }
 
 export default memo(Controlled)

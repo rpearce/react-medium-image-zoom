@@ -18,7 +18,8 @@ const Uncontrolled = ({
   scrollableEl,
   transitionDuration,
   wrapStyle,
-  zoomMargin
+  zoomMargin,
+  zoomZindex
 }) => {
   const [isActive, setIsActive] = useState(false)
   const [isChildLoaded, setIsChildLoaded] = useState(false)
@@ -74,6 +75,7 @@ const Uncontrolled = ({
             scrollableEl={scrollableEl}
             transitionDuration={transitionDuration}
             zoomMargin={zoomMargin}
+            zoomZindex={zoomZindex}
           >
             {children}
           </UncontrolledActivated>
@@ -93,7 +95,8 @@ Uncontrolled.propTypes = {
   scrollableEl: object.isRequired,
   transitionDuration: number.isRequired,
   wrapStyle: object,
-  zoomMargin: number.isRequired
+  zoomMargin: number.isRequired,
+  zoomZindex: number.isRequired
 }
 
 Uncontrolled.defaultProps = {
@@ -105,7 +108,8 @@ Uncontrolled.defaultProps = {
   scrollableEl: window,
   transitionDuration: 300,
   wrapStyle: null,
-  zoomMargin: 0
+  zoomMargin: 0,
+  zoomZindex: 2147483647
 }
 
 export default memo(Uncontrolled)

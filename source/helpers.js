@@ -119,11 +119,13 @@ export const getModalOverlayStyle = ({
   isUnloading,
   overlayBgColorEnd,
   overlayBgColorStart,
-  transitionDuration
+  transitionDuration,
+  zoomZindex
 }) => {
   const style = {
     backgroundColor: overlayBgColorStart,
-    transitionDuration: toDurationString(transitionDuration)
+    transitionDuration: toDurationString(transitionDuration),
+    zIndex: zoomZindex
   }
 
   if (isLoaded && !isUnloading) {
