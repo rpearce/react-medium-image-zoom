@@ -245,6 +245,18 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "0x6e6562",
+      "name": "Ben Hood",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/14088?v=4",
+      "profile": "https://github.com/0x6e6562",
+      "contributions": [
+        "ideas",
+        "bug",
+        "example",
+        "review"
+      ]
     }
   ],
   "repoType": "github",
