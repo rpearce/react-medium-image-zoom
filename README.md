@@ -172,6 +172,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
     <td align="center"><a href="http://puthir.in"><img src="https://avatars2.githubusercontent.com/u/45002?v=4" width="100px;" alt=""/><br /><sub><b>Navilan</b></sub></a><br /><a href="#ideas-navilan" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/13806"><img src="https://avatars1.githubusercontent.com/u/31736960?v=4" width="100px;" alt=""/><br /><sub><b>13806</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3A13806" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://www.twitter.com/deadcoder0904"><img src="https://avatars1.githubusercontent.com/u/16436270?v=4" width="100px;" alt=""/><br /><sub><b>Akshay Kadam (A2K)</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Adeadcoder0904" title="Bug reports">🐛</a> <a href="#ideas-deadcoder0904" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/xerona"><img src="https://avatars0.githubusercontent.com/u/8929085?v=4" width="100px;" alt=""/><br /><sub><b>Jake Stewart</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Axerona" title="Bug reports">🐛</a> <a href="#ideas-xerona" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
