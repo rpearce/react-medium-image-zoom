@@ -275,6 +275,16 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "deadcoder0904",
+      "name": "Akshay Kadam (A2K)",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/16436270?v=4",
+      "profile": "https://www.twitter.com/deadcoder0904",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
     }
   ],
   "repoType": "github",
