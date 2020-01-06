@@ -266,6 +266,15 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "13806",
+      "name": "13806",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/31736960?v=4",
+      "profile": "https://github.com/13806",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
