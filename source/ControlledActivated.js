@@ -21,7 +21,8 @@ const ControlledActivated = ({
   portalEl,
   scrollableEl,
   transitionDuration,
-  zoomMargin
+  zoomMargin,
+  zoomZindex
 }) => {
   const btnRef = useRef(null)
   const [, forceUpdate] = useState(0)
@@ -128,7 +129,8 @@ const ControlledActivated = ({
     isUnloading,
     overlayBgColorEnd,
     overlayBgColorStart,
-    transitionDuration
+    transitionDuration,
+    zoomZindex
   })
 
   const contentStyle = getModalContentStyle({
@@ -178,7 +180,8 @@ ControlledActivated.propTypes = {
   portalEl: object.isRequired,
   scrollableEl: object.isRequired,
   transitionDuration: number.isRequired,
-  zoomMargin: number.isRequired
+  zoomMargin: number.isRequired,
+  zoomZindex: number.isRequired
 }
 
 // if parentRef.current is not available yet,

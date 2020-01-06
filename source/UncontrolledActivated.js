@@ -18,7 +18,8 @@ const UncontrolledActivated = ({
   portalEl,
   scrollableEl,
   transitionDuration,
-  zoomMargin
+  zoomMargin,
+  zoomZindex
 }) => {
   const btnRef = useRef(null)
   const [, forceUpdate] = useState(0)
@@ -83,7 +84,8 @@ const UncontrolledActivated = ({
     isUnloading,
     overlayBgColorEnd,
     overlayBgColorStart,
-    transitionDuration
+    transitionDuration,
+    zoomZindex
   })
 
   const contentStyle = getModalContentStyle({
@@ -129,7 +131,8 @@ UncontrolledActivated.propTypes = {
   portalEl: object.isRequired,
   scrollableEl: object.isRequired,
   transitionDuration: number.isRequired,
-  zoomMargin: number.isRequired
+  zoomMargin: number.isRequired,
+  zoomZindex: number.isRequired
 }
 
 export default memo(UncontrolledActivated)
