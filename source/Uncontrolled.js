@@ -1,5 +1,5 @@
 import React, { StrictMode, memo, useCallback, useRef, useState } from 'react'
-import { instanceOf, node, number, object, oneOfType, string } from 'prop-types'
+import { node, number, object, string } from 'prop-types'
 import focusOptionsPolyfill from './focus-options-polyfill'
 import UncontrolledActivated from './UncontrolledActivated'
 import cn from './Main.css'
@@ -89,9 +89,8 @@ Uncontrolled.propTypes = {
   openText: string.isRequired,
   overlayBgColorEnd: string.isRequired,
   overlayBgColorStart: string.isRequired,
-  portalEl: instanceOf(Element).isRequired,
-  scrollableEl: oneOfType([object, instanceOf(Element), instanceOf(Window)])
-    .isRequired,
+  portalEl: object.isRequired,
+  scrollableEl: object.isRequired,
   transitionDuration: number.isRequired,
   wrapStyle: object,
   zoomMargin: number.isRequired
