@@ -1,14 +1,6 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import {
-  func,
-  instanceOf,
-  node,
-  number,
-  object,
-  oneOfType,
-  string
-} from 'prop-types'
+import { func, node, number, object, string } from 'prop-types'
 import useEvent from 'react-use/lib/useEvent'
 import useWindowSize from 'react-use/lib/useWindowSize'
 import { getModalContentStyle, getModalOverlayStyle } from './helpers'
@@ -134,9 +126,8 @@ UncontrolledActivated.propTypes = {
   overlayBgColorEnd: string.isRequired,
   overlayBgColorStart: string.isRequired,
   parentRef: object.isRequired,
-  portalEl: instanceOf(Element).isRequired,
-  scrollableEl: oneOfType([object, instanceOf(Element), instanceOf(Window)])
-    .isRequired,
+  portalEl: object.isRequired,
+  scrollableEl: object.isRequired,
   transitionDuration: number.isRequired,
   zoomMargin: number.isRequired
 }
