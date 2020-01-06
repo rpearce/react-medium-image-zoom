@@ -257,6 +257,15 @@
         "example",
         "review"
       ]
+    },
+    {
+      "login": "navilan",
+      "name": "Navilan",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/45002?v=4",
+      "profile": "http://puthir.in",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "repoType": "github",
