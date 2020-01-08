@@ -60,7 +60,7 @@
     "@babel/preset-env": "^7.7.7",
     "@babel/preset-react": "^7.7.4",
     "@rollup/plugin-commonjs": "^11.0.1",
-    "@rollup/plugin-node-resolve": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^7.0.0",
     "@storybook/addon-a11y": "^5.2.8",
     "@storybook/addon-actions": "^5.2.8",
     "@storybook/addon-docs": "^5.2.8",
@@ -85,7 +85,7 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-react-hooks": "^2.3.0",
-    "husky": "^3.1.0",
+    "husky": "^4.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^25.0.0",
     "lint-staged": "^9.5.0",
@@ -104,6 +104,6 @@
   },
   "dependencies": {
     "prop-types": "^15.7.2",
-    "react-use": "^13.14.0"
+    "react-use": "^13.14.3"
   }
 }

@@ -72,8 +72,8 @@ const Controlled = ({
           overlayBgColorEnd={overlayBgColorEnd}
           overlayBgColorStart={overlayBgColorStart}
           parentRef={wrapRef}
-          portalEl={portalEl}
-          scrollableEl={scrollableEl}
+          portalEl={portalEl || document.body}
+          scrollableEl={scrollableEl || window}
           transitionDuration={transitionDuration}
           zoomMargin={zoomMargin}
           zoomZindex={zoomZindex}
@@ -93,8 +93,8 @@ Controlled.propTypes = {
   openText: string.isRequired,
   overlayBgColorEnd: string.isRequired,
   overlayBgColorStart: string.isRequired,
-  portalEl: object.isRequired,
-  scrollableEl: object.isRequired,
+  portalEl: object,
+  scrollableEl: object,
   transitionDuration: number.isRequired,
   wrapStyle: object,
   zoomMargin: number.isRequired,
@@ -108,8 +108,6 @@ Controlled.defaultProps = {
   openText: 'Zoom image',
   overlayBgColorEnd: 'rgba(255, 255, 255, 0.95)',
   overlayBgColorStart: 'rgba(255, 255, 255, 0)',
-  portalEl: document.body,
-  scrollableEl: window,
   transitionDuration: 300,
   wrapStyle: null,
   zoomMargin: 0,

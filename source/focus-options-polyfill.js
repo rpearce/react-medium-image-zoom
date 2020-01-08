@@ -1,6 +1,14 @@
 /* eslint-disable */
 
 export default function () {
+  if (
+    typeof window === 'undefined' ||
+    typeof document === 'undefined' ||
+    typeof HTMLElement === 'undefined'
+) {
+    return
+  }
+
   // Credit: https://github.com/calvellido/focus-options-polyfill
 
   // focus - focusOptions - preventScroll polyfill
