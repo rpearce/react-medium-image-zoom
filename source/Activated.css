@@ -16,7 +16,3 @@
   transition-property: transform;
   transform-origin: center center;
 }
-/* To fix Safari img blurriness */
-.content img {
-  transform: translateZ(0);
-}
