@@ -6,29 +6,59 @@ import { storiesOf } from '@storybook/react'
 import { withA11y } from '@storybook/addon-a11y'
 import { color, number, text, withKnobs } from '@storybook/addon-knobs'
 import './.storybook/base.css'
+import glenorchyLagoon from './static/glenorchy-lagoon.jpg'
 import hobbiton from './static/andres-iga-7XKkJVw1d8c-unsplash-smaller.jpg'
+import hookerValleyTrack from './static/roell-de-ram-2DM7eOR5iyc-unsplash-smaller.jpg'
+import kea from './static/pablo-heimplatz-PSF2RhUBORs-unsplash-smaller.jpg'
 import nzBeach from './static/rod-long-4dcsLxQxSHY-unsplash-smaller.jpg'
+import queenstown from './static/omer-faruk-bekdemir-5BuxuWIJF1Q-unsplash-smaller.jpg'
 import teAraiPoint from './static/douglas-bagg-wRwa3Z6GtRI-unsplash-smaller.jpg'
+import tekapo from './static/tobias-keller-73F4pKoUkM0-unsplash-smaller.jpg'
 import thatWanakaTree from './static/laura-smetsers-H-TW2CoNtTk-unsplash-smaller.jpg'
+import portWaikato from './static/petr-vysohlid-9fqwGqGLUxc-unsplash-smaller.jpg'
 
 import './dist/styles.css'
 import Zoom, { Controlled as ControlledZoom } from './dist/esm'
 
-const imgThatWanakaTree = {
-  alt: 'That Wanaka Tree, New Zealand',
-  src: thatWanakaTree
-}
-const imgNzBeach = {
-  alt: 'New Zealand Beach',
-  src: nzBeach
+const imgGlenorchyLagoon = {
+  alt: 'Glenorchy lagoon, New Zealand by Robert Pearce',
+  src: glenorchyLagoon
 }
 const imgHobbiton = {
-  alt: 'Hobbiton, Matamata, New Zealand',
+  alt: 'Hobbiton, Matamata, New Zealand by Andres Iga',
   src: hobbiton
 }
+const imgHookerValleyTrack = {
+  alt: 'Hooker Valley Track , New Zealand by Roll de Ram',
+  src: hookerValleyTrack
+}
+const imgKea = {
+  alt: `Kea (alpine parrot) in Arthur's Pass, New Zealand by Pablo Heimplatz`,
+  src: kea
+}
+const imgNzBeach = {
+  alt: 'New Zealand Beach by Rod Long',
+  src: nzBeach
+}
+const imgQueenstown = {
+  alt: 'Queenstown, New Zealand by Omer Faruk',
+  src: queenstown
+}
 const imgTeAraiPoint = {
-  alt: 'Te Arai Point, New Zealand',
+  alt: 'Te Arai Point, New Zealand by Douglas Bagg',
   src: teAraiPoint
+}
+const imgTekapo = {
+  alt: 'Lake Tekapo, New Zealand by Tobias Keller',
+  src: tekapo
+}
+const imgThatWanakaTree = {
+  alt: 'That Wanaka Tree, New Zealand by Laura Smetsers',
+  src: thatWanakaTree
+}
+const imgPortWaikato = {
+  alt: 'Port Waikato, Tuakau, Auckland, New Zealand by Petr Vysohlid',
+  src: portWaikato
 }
 
 const stories = storiesOf('react-medium-image-zoom', module)
@@ -36,7 +66,7 @@ const stories = storiesOf('react-medium-image-zoom', module)
 stories.addDecorator(withA11y)
 stories.addDecorator(withKnobs)
 
-stories.add('with <img />', () => (
+stories.add('<img />', () => (
   <ImgStory title="Zoom an `img`">
     <Zoom
       closeText={text('Unzoom label', 'Unzoom image')}
@@ -78,7 +108,7 @@ stories.add('with <img />', () => (
   </ImgStory>
 ))
 
-stories.add('with <picture />', () => (
+stories.add('<picture />', () => (
   <ImgStory title="Zoom a `picture` element with `img` and `source`">
     <Zoom
       closeText={text('Unzoom label', 'Unzoom image')}
@@ -123,7 +153,7 @@ stories.add('with <picture />', () => (
   </ImgStory>
 ))
 
-stories.add('with <figure />', () => (
+stories.add('<figure />', () => (
   <ImgStory title="Zoom a `figure` element">
     <figure>
       <Zoom
@@ -168,7 +198,7 @@ stories.add('with <figure />', () => (
   </ImgStory>
 ))
 
-stories.add('with blue circle', () => (
+stories.add('blue circle div', () => (
   <ImgStory title="Zoom a blue circle `div`, if you want">
     <Zoom
       closeText={text('Unzoom label', 'Unzoom image')}
@@ -213,29 +243,22 @@ stories.add('with blue circle', () => (
   </ImgStory>
 ))
 
-stories.add('with image gallery using divs & background images', () => {
+stories.add('image gallery using divs & background images', () => {
   const images = [
+    imgGlenorchyLagoon,
     imgThatWanakaTree,
     imgNzBeach,
     imgHobbiton,
-    imgHobbiton,
-    imgThatWanakaTree,
-    imgNzBeach,
-    imgNzBeach,
-    imgHobbiton,
-    imgThatWanakaTree
+    imgHookerValleyTrack,
+    imgQueenstown,
+    imgTekapo,
+    imgPortWaikato,
+    imgKea
   ]
 
   return (
     <div>
       <h1>Image gallery using divs & background images</h1>
-      <p>
-        While this is simply an example of using div elements and
-        background-image to accomplish an image gallery, you could easily listen
-        for arrow left/right when an item is zoomed and use the controlled
-        component to make yourself an animated image gallery that zooms &
-        unzooms items appropriately.
-      </p>
       <ul
         style={{
           display: 'flex',
@@ -245,7 +268,7 @@ stories.add('with image gallery using divs & background images', () => {
           padding: 0
         }}
       >
-        {images.concat(images, images, images).map((img, i) => (
+        {images.map((img, i) => (
           <li
             key={i}
             style={{ margin: '0 1rem 1rem 0', width: 'calc(33% - 1rem)' }}
@@ -273,7 +296,100 @@ stories.add('with image gallery using divs & background images', () => {
   )
 })
 
-stories.add('with controlled; zooms when image loads', () => {
+stories.add('image gallery + slideshow-style images', () => {
+  const images = [
+    imgGlenorchyLagoon,
+    imgThatWanakaTree,
+    imgNzBeach,
+    imgHobbiton,
+    imgHookerValleyTrack,
+    imgQueenstown,
+    imgTekapo,
+    imgPortWaikato,
+    imgKea
+  ]
+  const [activeIndex, setActiveIndex] = useState(null)
+
+  const handleKeyDown = useCallback(
+    e => {
+      if (activeIndex === null) {
+        return
+      }
+
+      if (e.key === 'ArrowLeft' || e.keyCode === 37) {
+        setActiveIndex(Math.max(activeIndex - 1, 0))
+      } else if (e.key === 'ArrowRight' || e.keyCode === 39) {
+        setActiveIndex(Math.min(activeIndex + 1, images.length - 1))
+      }
+    },
+    [activeIndex, images.length]
+  )
+
+  useEvent('keydown', handleKeyDown, document)
+
+  return (
+    <div>
+      <h1>Image gallery and slideshow-style images</h1>
+      <p>
+        Once you click on an image, use the left and right arrows to navigate
+        the images.
+      </p>
+      <ul
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          listStyle: 'none',
+          margin: 0,
+          padding: 0
+        }}
+      >
+        {images.map((img, i) => {
+          const handleZoomChange = useCallback(
+            isZoomed => {
+              if (isZoomed) {
+                setActiveIndex(i)
+                return
+              }
+              setActiveIndex(null)
+            },
+            [i]
+          )
+
+          return (
+            <li
+              key={`${i}-${img.src}`}
+              style={{ margin: '0 1rem 1rem 0', width: 'calc(33% - 1rem)' }}
+            >
+              <ControlledZoom
+                isZoomed={activeIndex === i}
+                onZoomChange={handleZoomChange}
+                transitionDuration={0}
+                wrapStyle={{ width: '100%' }}
+              >
+                <div
+                  aria-label={img.alt}
+                  role="img"
+                  style={{
+                    backgroundColor: '#c2c2c2',
+                    backgroundImage: `url(${img.src})`,
+                    backgroundPosition: 'center center',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
+                    height: '0',
+                    paddingBottom: '66%',
+                    width: 'calc(100%)'
+                  }}
+                />
+              </ControlledZoom>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+})
+
+stories.add('controlled: zooms when image loads', () => {
   const [isZoomed, setIsZoomed] = useState(false)
 
   const handleBtnClick = useCallback(() => {
@@ -339,7 +455,7 @@ stories.add('with controlled; zooms when image loads', () => {
   )
 })
 
-stories.add('with controlled; specific keys', () => {
+stories.add('controlled: specific keys', () => {
   const [isZoomed, setIsZoomed] = useState(false)
 
   const handleKeyDown = useCallback(e => {
