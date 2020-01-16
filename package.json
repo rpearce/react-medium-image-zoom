@@ -61,12 +61,12 @@
     "@babel/preset-react": "^7.8.3",
     "@rollup/plugin-commonjs": "^11.0.1",
     "@rollup/plugin-node-resolve": "^7.0.0",
-    "@storybook/addon-a11y": "^5.3.3",
-    "@storybook/addon-actions": "^5.3.3",
-    "@storybook/addon-docs": "^5.3.3",
-    "@storybook/addon-knobs": "^5.3.3",
-    "@storybook/addon-links": "^5.3.3",
-    "@storybook/react": "^5.3.3",
+    "@storybook/addon-a11y": "^5.3.4",
+    "@storybook/addon-actions": "^5.3.4",
+    "@storybook/addon-docs": "^5.3.4",
+    "@storybook/addon-knobs": "^5.3.4",
+    "@storybook/addon-links": "^5.3.4",
+    "@storybook/react": "^5.3.4",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",
     "all-contributors-cli": "^6.12.0",
@@ -83,9 +83,9 @@
     "eslint-plugin-jest": "^23.6.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.2",
-    "eslint-plugin-react": "^7.17.0",
+    "eslint-plugin-react": "^7.18.0",
     "eslint-plugin-react-hooks": "^2.3.0",
-    "husky": "^4.0.9",
+    "husky": "^4.0.10",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^25.0.0",
     "lint-staged": "^9.5.0",
@@ -104,6 +104,6 @@
   },
   "dependencies": {
     "prop-types": "^15.7.2",
-    "react-use": "^13.17.0"
+    "react-use": "^13.18.0"
   }
 }
