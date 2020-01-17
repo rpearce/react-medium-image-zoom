@@ -1,21 +1,8 @@
 import React from 'react'
-import axe from 'axe-core'
 import { act, fireEvent, render } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
+import testA11y from '../testA11y'
 import Zoom from '../source'
-
-const testA11y = html =>
-  new Promise((resolve, reject) => {
-    axe.run(html, {}, (err, { violations }) => {
-      if (err) {
-        reject(err)
-      }
-      if (violations.length > 0) {
-        reject(violations)
-      }
-      resolve(true)
-    })
-  })
 
 test('is accessible with defaults & <img />', async () => {
   const { getByLabelText } = render(
@@ -55,7 +42,7 @@ test('is accessible with custom open/close text & <img />', async () => {
   expect(await testA11y(document.body)).toEqual(true)
 })
 
-test('with defaults & <img />', () => {
+test('zooms/unzooms with defaults & <img />', () => {
   jest.useFakeTimers()
 
   const { getByLabelText, getByRole } = render(
@@ -83,7 +70,7 @@ test('with defaults & <img />', () => {
   expect(modal).not.toBeInTheDocument()
 })
 
-test('with custom open/close text & <img />', async () => {
+test('zooms/unzooms with custom open/close text & <img />', async () => {
   jest.useFakeTimers()
 
   const { getByLabelText, getByRole } = render(
