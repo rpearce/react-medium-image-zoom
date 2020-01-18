@@ -17,6 +17,9 @@ test('is accessible with defaults & <img />', async () => {
 
   fireEvent.click(openTrigger)
 
+  // should do nothing
+  fireEvent.click(openTrigger)
+
   const closeTrigger = getByLabelText('Unzoom image')
 
   expect(closeTrigger).toBeVisible()
@@ -63,7 +66,7 @@ test('zooms/unzooms with defaults & <img />', () => {
   fireEvent.click(closeTrigger)
 
   act(() => {
-    jest.runAllTimers()
+    jest.advanceTimersByTime(300)
   })
 
   expect(closeTrigger).not.toBeInTheDocument()
@@ -97,4 +100,99 @@ test('zooms/unzooms with custom open/close text & <img />', async () => {
 
   expect(closeTrigger).not.toBeInTheDocument()
   expect(modal).not.toBeInTheDocument()
+})
+
+test('unzooms using ESC key', () => {
+  jest.useFakeTimers()
+
+  const { getByLabelText, getByRole } = render(
+    <Zoom>
+      <img alt="foo" src="foo.jpg" width="500" />
+    </Zoom>
+  )
+  const openTrigger = getByLabelText('Zoom image')
+  expect(openTrigger).toBeVisible()
+
+  fireEvent.click(openTrigger)
+  const modal = getByRole('dialog')
+  expect(modal).toBeVisible()
+
+  // should do nothing
+  fireEvent.keyDown(document, { key: 'ArrowLeft' })
+
+  act(() => {
+    jest.advanceTimersByTime(300)
+  })
+
+  expect(modal).toBeVisible()
+
+  fireEvent.keyDown(document, { key: 'Escape' })
+
+  act(() => {
+    jest.advanceTimersByTime(300)
+  })
+
+  expect(modal).not.toBeInTheDocument()
+
+  fireEvent.click(openTrigger)
+  expect(modal).toBeVisible()
+
+  fireEvent.keyDown(document, { keyCode: 27 })
+
+  act(() => {
+    jest.advanceTimersByTime(300)
+  })
+
+  expect(modal).not.toBeInTheDocument()
+})
+
+test('unzooms on scroll', () => {
+  jest.useFakeTimers()
+
+  const { getByLabelText, getByRole } = render(
+    <Zoom>
+      <img alt="foo" src="foo.jpg" width="500" />
+    </Zoom>
+  )
+  const openTrigger = getByLabelText('Zoom image')
+  expect(openTrigger).toBeVisible()
+
+  fireEvent.click(openTrigger)
+  const modal = getByRole('dialog')
+  expect(modal).toBeVisible()
+
+  act(() => {
+    window.dispatchEvent(new Event('scroll', {}))
+  })
+
+  act(() => {
+    // run scroll again to emulate actual scroll events firing
+    window.dispatchEvent(new Event('scroll', {}))
+    jest.advanceTimersByTime(300)
+  })
+
+  expect(modal).not.toBeInTheDocument()
+})
+
+test('passes on original transform style', () => {
+  jest.useFakeTimers()
+
+  const { getByLabelText, getByRole } = render(
+    <Zoom wrapStyle={{ transform: 'rotate(45deg)' }}>
+      <img alt="foo" src="foo.jpg" width="500" />
+    </Zoom>
+  )
+  const openTrigger = getByLabelText('Zoom image')
+  expect(openTrigger).toBeVisible()
+
+  fireEvent.click(openTrigger)
+  const modal = getByRole('dialog')
+  expect(modal).toBeVisible()
+
+  act(() => {
+    jest.advanceTimersByTime(300)
+  })
+
+  const wrapEl = modal.querySelector('.content')
+  expect(wrapEl.style.transform).toContain('rotate(45deg)')
 })
