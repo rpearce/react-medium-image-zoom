@@ -1,13 +1,3 @@
-# ⚠️  WARNING
-The `master` branch currently represents the work-in-progress for version `4.0`.
-It is completely unstable and should not be used by anyone except contributors.
-
-The `v4.0` work is being tracked on the project board:
-https://github.com/rpearce/react-medium-image-zoom/projects/1
-
-The latest stable published version is located on the [v3.x
-branch](https://github.com/rpearce/react-medium-image-zoom/tree/v3.x).
-
 # react-medium-image-zoom
 
 [![All Contributors](https://img.shields.io/badge/all_contributors-22-orange.svg?style=flat-square)](#contributors-)
@@ -16,41 +6,43 @@ branch](https://github.com/rpearce/react-medium-image-zoom/tree/v3.x).
 This library is a [`React.js`](https://reactjs.org/) implementation of
 [Medium.com's image
 zoom](https://medium.com/design/image-zoom-on-medium-24d146fc0c20) that allows
-for low-resolution and high-resolution images to work together for a “zooming”
-effect and works regardless of parent elements that have `overflow: hidden` or
+for images to work together for a “zooming” effect and works regardless of
+parent elements that have `overflow: hidden` or
 [parents with transform properties](https://codepen.io/rpearce/pen/MEyOmb).
 
 As an added bonus, it will let you zoom _anything_ (see the [`Storybook
 Examples`](https://rpearce.github.io/react-medium-image-zoom/) for more).
 
+[Blog post announcing `v4`](https://robertwpearce.com/announcing-react-medium-image-zoom-v4.html)
+
 ## Links
 * [Installation](#installation)
 * [Basic Usage](#basic-usage)
 * [API](#api)
+* [Migrating From v3 to v4](#migrating-from-v3-to-v4)
 * [Contributors](#contributors)
 * [Storybook Examples](https://rpearce.github.io/react-medium-image-zoom/)
-* [Authors](./AUTHORS.md)
 * [Changelog](./CHANGELOG.md)
 * [Contributing](./CONTRIBUTING.md)
 * [Code of Conduct](./CODE_OF_CONDUCT.md)
 
 ## Installation
 ```bash
-$ npm i react-medium-image-zoom@alpha
+$ npm i react-medium-image-zoom
 ```
 or
 ```bash
-$ yarn add react-medium-image-zoom@alpha
+$ yarn add react-medium-image-zoom
 ```
 
 ## Basic Usage
 
 ### Uncontrolled component (default)
 Import the component and the CSS, wrap whatever you want to be "zoomable" with
-this component and the component will handle it's own state:
+this component, and the component will handle it's own state:
 
 ```js
-import React, { useState } from 'react'
+import React from 'react'
 import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
 
@@ -65,6 +57,48 @@ const MyComponent = () => (
 )
 
 export default MyComponent
+```
+
+You can zoom _anything_, so `<picture>`, `<figure>`, and even `<div>` elements
+are all valid:
+
+```js
+// <picture>
+<Zoom>
+  <picture>
+    <source media="(max-width: 800px)" srcSet="/path/to/teAraiPoint.jpg" />
+    <img
+      alt="that wanaka tree"
+      src="/path/to/thatwanakatree.jpg"
+      width="500"
+    />
+  </picture>
+</Zoom>
+
+// <figure>
+<figure>
+  <Zoom>
+    <img
+      alt="that wanaka tree"
+      src="/path/to/thatwanakatree.jpg"
+      width="500"
+    />
+  </Zoom>
+  <figcaption>That Wanaka Tree</figcaption>
+</figure>
+
+// <div> that looks like a circle
+<Zoom>
+  <div
+    aria-label="A blue circle"
+    style={{
+      width: 300,
+      height: 300,
+      borderRadius: '50%',
+      backgroundColor: '#0099ff'
+    }}
+  />
+</Zoom>
 ```
 
 ### Controlled component (`Controlled`)
@@ -104,6 +138,14 @@ const MyComponent = () => {
 export default MyComponent
 ```
 
+The `onZoomChange` prop accepts a callback that will receive `true` or `false`
+based on events that occur (like click or scroll events) to assist you in
+determining when to zoom and unzoom the component.
+
+There is also an example in [the Storybook
+Examples](https://rpearce.github.io/react-medium-image-zoom/) of how to use a
+`Controlled` component to create a full-screen slideshow gallery.
+
 ## API
 
 ## Both uncontrolled & controlled components
@@ -117,7 +159,7 @@ You can pass these options to either the default or controlled components.
 | `overlayBgColorStart` | `String` | no | `'rgba(255, 255, 255, 0)'` | Modal overlay background color at start of zoom |
 | `portalEl` | `Element` | no | `document.body` | [DOM Element](https://developer.mozilla.org/en-US/docs/Web/API/element) to which we will append the zoom modal |
 | `scrollableEl` | `Window` | no | `window` | [DOM Element](https://developer.mozilla.org/en-US/docs/Web/API/element) to which we will listen for scroll events to determine if we should unzoom |
-| `transitionDuration` | `Number` | no | `300` | Transition duration in milliseconds for the component to use on zoom and unzoom |
+| `transitionDuration` | `Number` | no | `300` | Transition duration in milliseconds for the component to use on zoom and unzoom. Set this to `0` to disable the animation |
 | `wrapStyle` | `Object` | no | `null` | Optional style object to pass to the wrapper `div`. Useful when you want the `<Zoom>` container to be `width: '100%'`, for example |
 | `zoomMargin` | `Number` | no | `0` | Offset in pixels the zoomed image should be from the `window`' boundaries |
 | `zoomZindex` | `Number` | no | `2147483647` | `z-index` value for the zoom overlay |
@@ -129,6 +171,57 @@ You can pass these options to only the controlled component.
 | ---  | --- | ---  | --- | --- |
 | `isZoomed` | `bool` | yes | `false` | Tell the component whether or not it should be zoomed |
 | `onZoomChange` | `Function` | no | `Function.prototype` | Listen for hints from the component about when you should zoom (`true` value) or unzoom (`false` value) |
+
+## Migrating From v3 to v4
+In [v3](https://github.com/rpearce/react-medium-image-zoom/tree/v3.x), you might
+have code like this:
+
+```js
+<ImageZoom
+  image={{
+    src: '/path/to/bridge.jpg',
+    alt: 'Golden Gate Bridge',
+    className: 'img',
+    style: { width: '50em' }
+  }}
+  zoomImage={{
+    src: '/path/to/bridge-big.jpg',
+    alt: 'Golden Gate Bridge'
+  }}
+  zoomMargin={80}
+/>
+```
+
+In `v3`, you would pass properties for your normal `image` that would be zoomed,
+and you would pass an optional `zoomImage` that would be a higher quality image
+that would replace the original image when zoomed.
+
+The problem with `v3` was that it tried to assume too many things about what it
+is you were trying to zoom, and this resulted in overly complex and
+near-unmaintainable code that had a number of bugs.
+
+In `v4`, you can zoom the bridge example above like this:
+
+```js
+<Zoom zoomMargin={40}>
+  <img
+    src="/path/to/bridge.jpg"
+    alt="Golden Gate Bridge"
+    className="img"
+    style={{ width: '50em'}}
+  />
+</Zoom>
+```
+
+We've removed the `zoomImage` functionality ([there is an issue for us
+to consider re-adding something like it](https://github.com/rpearce/react-medium-image-zoom/issues/166)),
+but as it was not a primary use case for many consumers, we opted to ship v4
+without it.
+
+Please see the [Controlled component
+(`Controlled`)](#controlled-component-controlled) section for further
+documentation regarding controlled components that used the `isZoomed`,
+`onZoom`, and `onUnzoom` properties.
 
 ## Contributors
 
