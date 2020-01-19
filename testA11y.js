@@ -5,13 +5,11 @@ const testA11y = html =>
     axe.run(html, {}, (err, { violations }) => {
       if (err) {
         reject(err)
-        return
-      }
-      if (violations.length > 0) {
+      } else if (violations.length > 0) {
         reject(violations)
-        return
+      } else {
+        resolve(true)
       }
-      resolve(true)
     })
   })
 
