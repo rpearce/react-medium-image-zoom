@@ -1,6 +1,6 @@
 {
   "name": "react-medium-image-zoom",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Accessible medium.com-style image zoom for React",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -31,7 +31,9 @@
     "modal",
     "react-component"
   ],
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css"
+  ],
   "files": [
     "AUTHORS",
     "LICENSE",
@@ -63,19 +65,19 @@
     "@babel/preset-react": "^7.8.3",
     "@rollup/plugin-commonjs": "^11.0.1",
     "@rollup/plugin-node-resolve": "^7.0.0",
-    "@storybook/addon-a11y": "^5.3.6",
-    "@storybook/addon-actions": "^5.3.6",
-    "@storybook/addon-docs": "^5.3.6",
-    "@storybook/addon-knobs": "^5.3.6",
-    "@storybook/addon-links": "^5.3.6",
-    "@storybook/react": "^5.3.6",
+    "@storybook/addon-a11y": "^5.3.8",
+    "@storybook/addon-actions": "^5.3.8",
+    "@storybook/addon-docs": "^5.3.8",
+    "@storybook/addon-knobs": "^5.3.8",
+    "@storybook/addon-links": "^5.3.8",
+    "@storybook/react": "^5.3.8",
     "@testing-library/jest-dom": "^5.0.0",
     "@testing-library/react": "^9.4.0",
     "all-contributors-cli": "^6.13.0",
     "autoprefixer": "^9.7.4",
     "axe-core": "^3.4.1",
     "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "^24.9.0",
+    "babel-jest": "^25.1.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "coveralls": "^3.0.9",
@@ -87,15 +89,15 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.18.0",
     "eslint-plugin-react-hooks": "^2.3.0",
-    "husky": "^4.0.10",
+    "husky": "^4.2.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^25.0.0",
-    "lint-staged": "^10.0.0",
+    "lint-staged": "^10.0.2",
     "npm-run-all": "^4.1.5",
     "prettier": "^1.19.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "rollup": "^1.29.0",
+    "rollup": "^1.29.1",
     "rollup-plugin-auto-external": "^3.0.0-alpha.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-postcss": "^2.0.3"
@@ -106,6 +108,6 @@
   },
   "dependencies": {
     "prop-types": "^15.7.2",
-    "react-use": "^13.20.0"
+    "react-use": "^13.21.0"
   }
 }
