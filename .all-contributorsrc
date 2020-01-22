@@ -295,6 +295,24 @@
         "bug",
         "ideas"
       ]
+    },
+    {
+      "login": "henrych4",
+      "name": "hhh",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/19466940?v=4",
+      "profile": "https://github.com/henrych4",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "davalapar",
+      "name": "@davalapar",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/41451953?v=4",
+      "profile": "https://github.com/davalapar",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
