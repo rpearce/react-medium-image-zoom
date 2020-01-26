@@ -65,12 +65,12 @@
     "@babel/preset-react": "^7.8.3",
     "@rollup/plugin-commonjs": "^11.0.1",
     "@rollup/plugin-node-resolve": "^7.0.0",
-    "@storybook/addon-a11y": "^5.3.8",
-    "@storybook/addon-actions": "^5.3.8",
-    "@storybook/addon-docs": "^5.3.8",
-    "@storybook/addon-knobs": "^5.3.8",
-    "@storybook/addon-links": "^5.3.8",
-    "@storybook/react": "^5.3.8",
+    "@storybook/addon-a11y": "^5.3.9",
+    "@storybook/addon-actions": "^5.3.9",
+    "@storybook/addon-docs": "^5.3.9",
+    "@storybook/addon-knobs": "^5.3.9",
+    "@storybook/addon-links": "^5.3.9",
+    "@storybook/react": "^5.3.9",
     "@testing-library/jest-dom": "^5.0.2",
     "@testing-library/react": "^9.4.0",
     "all-contributors-cli": "^6.13.0",
@@ -108,6 +108,6 @@
   },
   "dependencies": {
     "prop-types": "^15.7.2",
-    "react-use": "^13.21.0"
+    "react-use": "^13.22.0"
   }
 }
