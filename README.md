@@ -34,6 +34,11 @@ or
 ```bash
 $ yarn add react-medium-image-zoom
 ```
+or
+```html
+<!-- this build only needs React to be already present -->
+<script src="https://unpkg.com/react-medium-image-zoom"></script>
+```
 
 ## Basic Usage
 
