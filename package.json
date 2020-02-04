@@ -64,14 +64,14 @@
     "@babel/preset-env": "^7.8.4",
     "@babel/preset-react": "^7.8.3",
     "@rollup/plugin-commonjs": "^11.0.2",
-    "@rollup/plugin-node-resolve": "^7.1.0",
+    "@rollup/plugin-node-resolve": "^7.1.1",
     "@storybook/addon-a11y": "^5.3.10",
     "@storybook/addon-actions": "^5.3.10",
     "@storybook/addon-docs": "^5.3.10",
     "@storybook/addon-knobs": "^5.3.10",
     "@storybook/addon-links": "^5.3.10",
     "@storybook/react": "^5.3.10",
-    "@testing-library/jest-dom": "^5.1.0",
+    "@testing-library/jest-dom": "^5.1.1",
     "@testing-library/react": "^9.4.0",
     "all-contributors-cli": "^6.13.0",
     "autoprefixer": "^9.7.4",
@@ -108,6 +108,6 @@
   },
   "dependencies": {
     "prop-types": "^15.7.2",
-    "react-use": "^13.22.4"
+    "react-use": "^13.24.0"
   }
 }
