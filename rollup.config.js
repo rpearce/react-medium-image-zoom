@@ -11,7 +11,7 @@ const plugins = [
   commonjs({
     include: /node_modules/,
     namedExports: {
-      'prop-types': ['bool', 'func', 'node', 'object', 'number', 'string'],
+      'prop-types': ['bool', 'func', 'node', 'number', 'object', 'string'],
       'react-dom': ['createPortal']
     }
   }),
