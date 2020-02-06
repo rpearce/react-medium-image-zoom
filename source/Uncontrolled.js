@@ -1,12 +1,9 @@
 import React, { StrictMode, memo, useCallback, useRef, useState } from 'react'
 import { node, number, object, string } from 'prop-types'
-import focusOptionsPolyfill from './focus-options-polyfill'
+import 'focus-options-polyfill'
 import UncontrolledActivated from './UncontrolledActivated'
 import cn from './Main.css'
 import sharedCn from './Shared.css'
-
-// there must be a better way than this
-focusOptionsPolyfill()
 
 const Uncontrolled = ({
   children,

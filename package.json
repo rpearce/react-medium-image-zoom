@@ -107,6 +107,7 @@
     "react-dom": ">= 16.8.0"
   },
   "dependencies": {
+    "focus-options-polyfill": "^1.2.0",
     "prop-types": "^15.7.2",
     "react-use": "^13.24.0"
   }
