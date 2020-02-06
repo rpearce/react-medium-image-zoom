@@ -1,6 +1,6 @@
 {
   "name": "react-medium-image-zoom",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "description": "Accessible medium.com-style image zoom for React",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -107,6 +107,7 @@
     "react-dom": ">= 16.8.0"
   },
   "dependencies": {
+    "focus-options-polyfill": "^1.2.0",
     "prop-types": "^15.7.2",
     "react-use": "^13.24.0"
   }
