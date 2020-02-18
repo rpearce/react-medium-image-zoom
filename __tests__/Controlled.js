@@ -1,6 +1,5 @@
 import React from 'react'
 import { act, fireEvent, render } from '@testing-library/react'
-import '@testing-library/jest-dom/extend-expect'
 import { Controlled as ControlledZoom } from '../source'
 
 test('when closed and then open', () => {

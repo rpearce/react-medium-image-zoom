@@ -1,14 +1,15 @@
 import React from 'react'
 import { act, fireEvent, render } from '@testing-library/react'
-import '@testing-library/jest-dom/extend-expect'
 import testA11y from '../testA11y'
 import Zoom from '../source'
 
 test('is accessible with defaults & <img />', async () => {
   const { getByLabelText } = render(
-    <Zoom>
-      <img alt="foo" src="foo.jpg" width="500" />
-    </Zoom>
+    <main>
+      <Zoom>
+        <img alt="foo" src="foo.jpg" width="500" />
+      </Zoom>
+    </main>
   )
   const openTrigger = getByLabelText('Zoom image')
 
@@ -28,9 +29,11 @@ test('is accessible with defaults & <img />', async () => {
 
 test('is accessible with custom open/close text & <img />', async () => {
   const { container, getByLabelText } = render(
-    <Zoom closeText="Close me" openText="Open me">
-      <img alt="foo" src="foo.jpg" width="500" />
-    </Zoom>
+    <main>
+      <Zoom closeText="Close me" openText="Open me">
+        <img alt="foo" src="foo.jpg" width="500" />
+      </Zoom>
+    </main>
   )
   const openTrigger = getByLabelText('Open me')
 
