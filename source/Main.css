@@ -8,4 +8,5 @@
 }
 .btn {
   cursor: zoom-in;
+  outline: none;
 }
