@@ -1,7 +1,7 @@
-import React from 'react'
 import { act, fireEvent, render } from '@testing-library/react'
-import testA11y from '../testA11y'
+import React from 'react'
 import Zoom from '../source'
+import testA11y from '../testA11y'
 
 test('is accessible with defaults & <img />', async () => {
   const { getByLabelText } = render(
@@ -196,6 +196,6 @@ test('passes on original transform style', () => {
     jest.advanceTimersByTime(300)
   })
 
-  const wrapEl = modal.querySelector('.content')
+  const wrapEl = modal.querySelector('div')
   expect(wrapEl.style.transform).toContain('rotate(45deg)')
 })

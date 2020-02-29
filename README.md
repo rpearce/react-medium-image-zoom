@@ -43,13 +43,12 @@ or
 ## Basic Usage
 
 ### Uncontrolled component (default)
-Import the component and the CSS, wrap whatever you want to be "zoomable" with
+Import the component, wrap whatever you want to be "zoomable" with
 this component, and the component will handle it's own state:
 
 ```js
 import React from 'react'
 import Zoom from 'react-medium-image-zoom'
-import 'react-medium-image-zoom/dist/styles.css'
 
 const MyComponent = () => (
   <Zoom>
@@ -107,7 +106,7 @@ are all valid:
 ```
 
 ### Controlled component (`Controlled`)
-Import the `Controlled` component and the CSS, wrap whatever you want to
+Import the `Controlled` component, wrap whatever you want to
 be "zoomable" with this component and then dictate the zoomed/unzoomed state to
 the component. Here, we will automatically zoom the component once the image has
 loaded:
@@ -115,7 +114,6 @@ loaded:
 ```js
 import React, { useCallback, useState } from 'react'
 import { Controlled as ControlledZoom } from 'react-medium-image-zoom'
-import 'react-medium-image-zoom/dist/styles.css'
 
 const MyComponent = () => {
   const [isZoomed, setIsZoomed] = useState(false)

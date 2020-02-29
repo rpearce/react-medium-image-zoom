@@ -1,9 +1,8 @@
-import React, { StrictMode, memo, useCallback, useRef, useState } from 'react'
-import { bool, func, node, number, object, string } from 'prop-types'
 import 'focus-options-polyfill'
+import { bool, func, node, number, object, string } from 'prop-types'
+import React, { memo, StrictMode, useCallback, useRef, useState } from 'react'
 import ControlledActivated from './ControlledActivated'
-import cn from './Main.css'
-import sharedCn from './Shared.css'
+import { btn, trigger, wrap, wrapHidden } from './styles'
 
 const Controlled = ({
   children,
@@ -46,16 +45,15 @@ const Controlled = ({
     }
   }, [])
 
-  const className = isChildLoaded ? cn.wrapHidden : cn.wrap
-  const btnCn = `${sharedCn.trigger} ${cn.btn}`
+  const divStyle = isChildLoaded ? wrapHidden : wrap
 
   return (
     <StrictMode>
-      <div className={className} ref={wrapRef} style={wrapStyle}>
+      <div ref={wrapRef} style={{ ...divStyle, ...wrapStyle }}>
         {children}
         <button
           aria-label={openText}
-          className={btnCn}
+          style={{ ...trigger, ...btn }}
           onClick={handleClickTrigger}
           ref={btnRef}
           type="button"

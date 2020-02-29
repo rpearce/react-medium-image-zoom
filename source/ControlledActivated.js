@@ -1,12 +1,11 @@
+import { func, node, number, object, string } from 'prop-types'
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { func, node, number, object, string } from 'prop-types'
 import useEvent from 'react-use/lib/useEvent'
 import usePrevious from 'react-use/lib/usePrevious'
 import useWindowSize from 'react-use/lib/useWindowSize'
 import { getModalContentStyle, getModalOverlayStyle } from './helpers'
-import cn from './Activated.css'
-import sharedCn from './Shared.css'
+import { btnActivated, content, overlay, trigger } from './styles'
 
 const ControlledActivated = ({
   children,
@@ -147,18 +146,14 @@ const ControlledActivated = ({
     zoomMargin
   })
 
-  const btnCn = `${sharedCn.trigger} ${cn.btn}`
-
   return (
     isActive &&
     createPortal(
-      <div aria-modal className={cn.overlay} role="dialog" style={overlayStyle}>
-        <div className={cn.content} style={contentStyle}>
-          {children}
-        </div>
+      <div aria-modal role="dialog" style={{ ...overlayStyle, ...overlay }}>
+        <div style={{ ...contentStyle, ...content }}>{children}</div>
         <button
           aria-label={closeText}
-          className={btnCn}
+          style={{ ...trigger, ...btnActivated }}
           onClick={handleClick}
           ref={btnRef}
           type="button"

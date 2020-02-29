@@ -1,8 +1,7 @@
+import commonjs from '@rollup/plugin-commonjs'
+import resolve from '@rollup/plugin-node-resolve'
 import { dirname } from 'path'
 import babel from 'rollup-plugin-babel'
-import commonjs from '@rollup/plugin-commonjs'
-import postcss from 'rollup-plugin-postcss'
-import resolve from '@rollup/plugin-node-resolve'
 import { terser } from 'rollup-plugin-terser'
 import pkg from './package.json'
 
@@ -20,11 +19,6 @@ const plugins = [
     only: ['./source'],
     runtimeHelpers: true,
     sourceMaps: 'inline'
-  }),
-  postcss({
-    extract: './dist/styles.css',
-    modules: true,
-    sourceMap: true
   })
 ]
 

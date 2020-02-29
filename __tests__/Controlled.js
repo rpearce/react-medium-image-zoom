@@ -1,5 +1,5 @@
-import React from 'react'
 import { act, fireEvent, render } from '@testing-library/react'
+import React from 'react'
 import { Controlled as ControlledZoom } from '../source'
 
 test('when closed and then open', () => {

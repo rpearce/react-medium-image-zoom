@@ -17,7 +17,6 @@ import tekapo from './static/tobias-keller-73F4pKoUkM0-unsplash-smaller.jpg'
 import thatWanakaTree from './static/laura-smetsers-H-TW2CoNtTk-unsplash-smaller.jpg'
 import portWaikato from './static/petr-vysohlid-9fqwGqGLUxc-unsplash-smaller.jpg'
 
-import './dist/styles.css'
 import Zoom, { Controlled as ControlledZoom } from './dist/esm'
 
 const imgGlenorchyLagoon = {
