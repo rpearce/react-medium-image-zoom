@@ -6,6 +6,14 @@ import resolve from '@rollup/plugin-node-resolve'
 import { terser } from 'rollup-plugin-terser'
 import pkg from './package.json'
 
+const getBabelOpts = ({ useESModules = false } = {}) => ({
+  configFile: './babel.config.js',
+  only: ['./source'],
+  plugins: [['@babel/transform-runtime', { useESModules }]],
+  runtimeHelpers: true,
+  sourceMaps: false
+})
+
 const plugins = [
   resolve(),
   commonjs({
@@ -14,12 +22,6 @@ const plugins = [
       'prop-types': ['bool', 'func', 'node', 'number', 'object', 'string'],
       'react-dom': ['createPortal']
     }
-  }),
-  babel({
-    configFile: './babel.config.js',
-    only: ['./source'],
-    runtimeHelpers: true,
-    sourceMaps: false
   }),
   postcss({
     extract: './dist/styles.css',
@@ -47,7 +49,7 @@ const esm = [
       sourcemap: false
     },
     external: isExternal,
-    plugins
+    plugins: plugins.concat(babel(getBabelOpts({ useESModules: true })))
   }
 ]
 
@@ -62,7 +64,7 @@ const cjs = [
       sourcemap: false
     },
     external: isExternal,
-    plugins
+    plugins: plugins.concat(babel(getBabelOpts()))
   },
   {
     input: './source/index.js',
@@ -71,10 +73,10 @@ const cjs = [
       exports: 'named',
       format: 'cjs',
       name: 'rmiz-cjs-min',
-      sourcemap: true
+      sourcemap: false
     },
     external: isExternal,
-    plugins: plugins.concat(terser())
+    plugins: plugins.concat(babel(getBabelOpts()), terser())
   }
 ]
 
@@ -85,12 +87,15 @@ const umd = [
       file: pkg.browser,
       exports: 'named',
       format: 'umd',
-      globals: { react: 'React' },
+      globals: { react: 'React', 'react-dom': 'ReactDOM' },
       name: 'rmiz-umd',
       sourcemap: false
     },
-    external: ['react'],
-    plugins: plugins.concat(terser())
+    external: ['react', 'react-dom'],
+    plugins: plugins.concat(
+      babel(getBabelOpts({ useESModules: true })),
+      terser()
+    )
   }
 ]
 
