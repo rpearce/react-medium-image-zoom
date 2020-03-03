@@ -2,8 +2,7 @@ import React, { StrictMode, memo, useCallback, useRef, useState } from 'react'
 import { node, number, object, string } from 'prop-types'
 import 'focus-options-polyfill'
 import UncontrolledActivated from './UncontrolledActivated'
-import cn from './Main.css'
-import sharedCn from './Shared.css'
+import './styles.css'
 
 const Uncontrolled = ({
   children,
@@ -47,18 +46,17 @@ const Uncontrolled = ({
   }, [])
 
   const isExpanded = isActive && isChildLoaded
-  const className = isExpanded ? cn.wrapHidden : cn.wrap
-  const btnCn = `${sharedCn.trigger} ${cn.btn}`
+  const wrapType = isExpanded ? 'hidden' : 'visible'
   const portalElement = portalEl || (document || {}).body
   const scrollableElement = scrollableEl || window
 
   return (
     <StrictMode>
-      <div className={className} ref={wrapRef} style={wrapStyle}>
+      <div data-rmiz-wrap={wrapType} ref={wrapRef} style={wrapStyle}>
         {children}
         <button
           aria-label={openText}
-          className={btnCn}
+          data-rmiz-btn-open
           onClick={handleClickTrigger}
           ref={btnRef}
         />

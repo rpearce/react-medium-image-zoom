@@ -19,25 +19,22 @@ const plugins = [
     configFile: './babel.config.js',
     only: ['./source'],
     runtimeHelpers: true,
-    sourceMaps: 'inline'
+    sourceMaps: false
   }),
   postcss({
     extract: './dist/styles.css',
-    modules: true,
-    sourceMap: true
+    modules: false,
+    sourceMap: false
   })
 ]
 
 const buildModules = [
   './source/index.js',
-  './source/helpers.js',
-  './source/Uncontrolled.js',
-  './source/UncontrolledActivated.js',
   './source/Controlled.js',
-  './source/ControlledActivated.js'
+  './source/helpers.js'
 ]
 
-const isExternal = id => !id.startsWith('.')
+const isExternal = id => !id.startsWith('.') && !id.startsWith('/')
 
 const esm = [
   {
@@ -47,7 +44,7 @@ const esm = [
       exports: 'named',
       format: 'esm',
       name: 'rmiz-esm',
-      sourcemap: true
+      sourcemap: false
     },
     external: isExternal,
     plugins
@@ -62,7 +59,7 @@ const cjs = [
       exports: 'named',
       format: 'cjs',
       name: 'rmiz-cjs',
-      sourcemap: true
+      sourcemap: false
     },
     external: isExternal,
     plugins
@@ -90,7 +87,7 @@ const umd = [
       format: 'umd',
       globals: { react: 'React' },
       name: 'rmiz-umd',
-      sourcemap: true
+      sourcemap: false
     },
     external: ['react'],
     plugins: plugins.concat(terser())

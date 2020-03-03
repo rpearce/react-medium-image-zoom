@@ -216,7 +216,7 @@ test('passes on original transform style', () => {
     jest.advanceTimersByTime(300)
   })
 
-  const wrapEl = modal.querySelector('.content')
+  const wrapEl = modal.querySelector('[data-rmiz-modal-content]')
   expect(wrapEl.style.transform).toContain('rotate(45deg)')
 
   expect(document.body).toMatchSnapshot()

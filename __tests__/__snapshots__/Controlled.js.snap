@@ -4,7 +4,7 @@ exports[`custom open/close text 1`] = `
 <body>
   <div>
     <div
-      class="wrap"
+      data-rmiz-wrap="visible"
     >
       <img
         alt="foo"
@@ -13,7 +13,7 @@ exports[`custom open/close text 1`] = `
       />
       <button
         aria-label="Open me"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
         type="button"
       />
     </div>
@@ -25,7 +25,7 @@ exports[`custom open/close text 2`] = `
 <body>
   <div>
     <div
-      class="wrapHidden"
+      data-rmiz-wrap="hidden"
     >
       <img
         alt="foo"
@@ -34,19 +34,19 @@ exports[`custom open/close text 2`] = `
       />
       <button
         aria-label="Open me"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
         type="button"
       />
     </div>
   </div>
   <div
     aria-modal="true"
-    class="overlay"
+    data-rmiz-overlay="true"
     role="dialog"
     style="background-color: rgba(255, 255, 255, 0.95); transition-duration: 300ms; z-index: 2147483647;"
   >
     <div
-      class="content"
+      data-rmiz-modal-content="true"
       style="height: 0px; left: 0px; top: 0px; transform: scale(Infinity) translate(0px, 0px); transition-duration: 300ms; width: 0px;"
     >
       <img
@@ -57,7 +57,7 @@ exports[`custom open/close text 2`] = `
     </div>
     <button
       aria-label="Close me"
-      class="trigger btn"
+      data-rmiz-btn-close="true"
       type="button"
     />
   </div>
@@ -67,7 +67,7 @@ exports[`custom open/close text 2`] = `
 exports[`renders without browser environment 1`] = `
 <body>
   <div
-    class="wrap"
+    data-rmiz-wrap="visible"
   >
     <img
       alt="foo"
@@ -76,7 +76,7 @@ exports[`renders without browser environment 1`] = `
     />
     <button
       aria-label="Zoom image"
-      class="trigger btn"
+      data-rmiz-btn-open="true"
       type="button"
     />
   </div>
@@ -87,7 +87,7 @@ exports[`when closed and then open 1`] = `
 <body>
   <div>
     <div
-      class="wrap"
+      data-rmiz-wrap="visible"
     >
       <img
         alt="foo"
@@ -96,7 +96,7 @@ exports[`when closed and then open 1`] = `
       />
       <button
         aria-label="Zoom image"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
         type="button"
       />
     </div>
@@ -108,7 +108,7 @@ exports[`when closed and then open 2`] = `
 <body>
   <div>
     <div
-      class="wrapHidden"
+      data-rmiz-wrap="hidden"
     >
       <img
         alt="foo"
@@ -117,19 +117,19 @@ exports[`when closed and then open 2`] = `
       />
       <button
         aria-label="Zoom image"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
         type="button"
       />
     </div>
   </div>
   <div
     aria-modal="true"
-    class="overlay"
+    data-rmiz-overlay="true"
     role="dialog"
     style="background-color: rgba(255, 255, 255, 0.95); transition-duration: 300ms; z-index: 2147483647;"
   >
     <div
-      class="content"
+      data-rmiz-modal-content="true"
       style="height: 0px; left: 0px; top: 0px; transform: scale(Infinity) translate(0px, 0px); transition-duration: 300ms; width: 0px;"
     >
       <img
@@ -140,7 +140,7 @@ exports[`when closed and then open 2`] = `
     </div>
     <button
       aria-label="Unzoom image"
-      class="trigger btn"
+      data-rmiz-btn-close="true"
       type="button"
     />
   </div>
@@ -151,7 +151,7 @@ exports[`when closed and then open 3`] = `
 <body>
   <div>
     <div
-      class="wrapHidden"
+      data-rmiz-wrap="hidden"
     >
       <img
         alt="foo"
@@ -160,19 +160,19 @@ exports[`when closed and then open 3`] = `
       />
       <button
         aria-label="Zoom image"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
         type="button"
       />
     </div>
   </div>
   <div
     aria-modal="true"
-    class="overlay"
+    data-rmiz-overlay="true"
     role="dialog"
     style="background-color: rgba(255, 255, 255, 0); transition-duration: 300ms; z-index: 2147483647;"
   >
     <div
-      class="content"
+      data-rmiz-modal-content="true"
       style="height: 0px; left: 0px; top: 0px; transform: scale(1) translate(0, 0); transition-duration: 300ms; width: 0px;"
     >
       <img
@@ -183,7 +183,7 @@ exports[`when closed and then open 3`] = `
     </div>
     <button
       aria-label="Unzoom image"
-      class="trigger btn"
+      data-rmiz-btn-close="true"
       type="button"
     />
   </div>
@@ -194,7 +194,7 @@ exports[`when closed and then open 4`] = `
 <body>
   <div>
     <div
-      class="wrap"
+      data-rmiz-wrap="visible"
     >
       <img
         alt="foo"
@@ -203,7 +203,7 @@ exports[`when closed and then open 4`] = `
       />
       <button
         aria-label="Zoom image"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
         type="button"
       />
     </div>
@@ -215,7 +215,7 @@ exports[`when open and then closed 1`] = `
 <body>
   <div>
     <div
-      class="wrapHidden"
+      data-rmiz-wrap="hidden"
     >
       <img
         alt="foo"
@@ -224,19 +224,19 @@ exports[`when open and then closed 1`] = `
       />
       <button
         aria-label="Zoom image"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
         type="button"
       />
     </div>
   </div>
   <div
     aria-modal="true"
-    class="overlay"
+    data-rmiz-overlay="true"
     role="dialog"
     style="background-color: rgba(255, 255, 255, 0); transition-duration: 300ms; z-index: 2147483647;"
   >
     <div
-      class="content"
+      data-rmiz-modal-content="true"
       style="height: 0px; left: 0px; top: 0px; transform: scale(1) translate(0, 0); transition-duration: 300ms; width: 0px;"
     >
       <img
@@ -247,7 +247,7 @@ exports[`when open and then closed 1`] = `
     </div>
     <button
       aria-label="Unzoom image"
-      class="trigger btn"
+      data-rmiz-btn-close="true"
       type="button"
     />
   </div>
@@ -258,7 +258,7 @@ exports[`when open and then closed 2`] = `
 <body>
   <div>
     <div
-      class="wrap"
+      data-rmiz-wrap="visible"
     >
       <img
         alt="foo"
@@ -267,7 +267,7 @@ exports[`when open and then closed 2`] = `
       />
       <button
         aria-label="Zoom image"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
         type="button"
       />
     </div>

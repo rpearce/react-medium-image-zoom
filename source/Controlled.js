@@ -2,8 +2,7 @@ import React, { StrictMode, memo, useCallback, useRef, useState } from 'react'
 import { bool, func, node, number, object, string } from 'prop-types'
 import 'focus-options-polyfill'
 import ControlledActivated from './ControlledActivated'
-import cn from './Main.css'
-import sharedCn from './Shared.css'
+import './styles.css'
 
 const Controlled = ({
   children,
@@ -46,18 +45,17 @@ const Controlled = ({
     }
   }, [])
 
-  const className = isChildLoaded ? cn.wrapHidden : cn.wrap
-  const btnCn = `${sharedCn.trigger} ${cn.btn}`
+  const wrapType = isChildLoaded ? 'hidden' : 'visible'
   const portalElement = portalEl || (document || {}).body
   const scrollableElement = scrollableEl || window
 
   return (
     <StrictMode>
-      <div className={className} ref={wrapRef} style={wrapStyle}>
+      <div data-rmiz-wrap={wrapType} ref={wrapRef} style={wrapStyle}>
         {children}
         <button
           aria-label={openText}
-          className={btnCn}
+          data-rmiz-btn-open
           onClick={handleClickTrigger}
           ref={btnRef}
           type="button"
