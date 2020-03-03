@@ -1,6 +1,7 @@
 .wrap {
   position: relative;
   display: inline-flex;
+  align-items: flex-start;
 }
 .wrapHidden {
   composes: wrap;
