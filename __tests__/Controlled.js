@@ -1,4 +1,5 @@
 import React from 'react'
+import { renderToString } from 'react-dom/server'
 import { act, fireEvent, render } from '@testing-library/react'
 import { Controlled as ControlledZoom } from '../source'
 
@@ -15,6 +16,8 @@ test('when closed and then open', () => {
   const openTrigger = getByLabelText('Zoom image')
   expect(openTrigger).toBeVisible()
 
+  expect(document.body).toMatchSnapshot()
+
   fireEvent.click(openTrigger)
   expect(handleZoomChange).toHaveBeenLastCalledWith(true)
 
@@ -23,6 +26,8 @@ test('when closed and then open', () => {
       <img alt="foo" src="foo.jpg" width="500" />
     </ControlledZoom>
   )
+
+  expect(document.body).toMatchSnapshot()
 
   // nothing should happen
   fireEvent.click(openTrigger)
@@ -40,12 +45,15 @@ test('when closed and then open', () => {
     </ControlledZoom>
   )
 
+  expect(document.body).toMatchSnapshot()
+
   act(() => {
     jest.advanceTimersByTime(300)
   })
 
   expect(closeTrigger).not.toBeInTheDocument()
   expect(modal).not.toBeInTheDocument()
+  expect(document.body).toMatchSnapshot()
 })
 
 test('when open and then closed', () => {
@@ -69,6 +77,8 @@ test('when open and then closed', () => {
     </ControlledZoom>
   )
 
+  expect(document.body).toMatchSnapshot()
+
   act(() => {
     jest.advanceTimersByTime(300)
   })
@@ -78,6 +88,8 @@ test('when open and then closed', () => {
 
   const openTrigger = getByLabelText('Zoom image')
   expect(openTrigger).toBeVisible()
+
+  expect(document.body).toMatchSnapshot()
 })
 
 test('sends unzoom message when ESC key pressed', () => {
@@ -148,6 +160,7 @@ test('custom open/close text', () => {
 
   const openTrigger = getByLabelText('Open me')
   expect(openTrigger).toBeVisible()
+  expect(document.body).toMatchSnapshot()
 
   rerender(
     <ControlledZoom
@@ -162,4 +175,17 @@ test('custom open/close text', () => {
 
   const closeTrigger = getByLabelText('Close me')
   expect(closeTrigger).toBeVisible()
+
+  expect(document.body).toMatchSnapshot()
+})
+
+test('renders without browser environment', () => {
+  const html = renderToString(
+    <ControlledZoom isZoomed={false} onZoomChange={jest.fn()}>
+      <img alt="foo" src="foo.jpg" width="500" />
+    </ControlledZoom>
+  )
+
+  document.body.innerHTML = html
+  expect(document.body).toMatchSnapshot()
 })
