@@ -3,7 +3,11 @@ import { createPortal } from 'react-dom'
 import { func, node, number, object, string } from 'prop-types'
 import useEvent from 'react-use/lib/useEvent'
 import useWindowSize from 'react-use/lib/useWindowSize'
-import { getModalContentStyle, getModalOverlayStyle } from './helpers'
+import {
+  getModalContentStyle,
+  getModalOverlayStyle,
+  pseudoParentEl
+} from './helpers'
 import cn from './Activated.css'
 import sharedCn from './Shared.css'
 
@@ -76,8 +80,11 @@ const UncontrolledActivated = ({
     }
   }, [isUnloading, onUnload, transitionDuration])
 
+  // use parent element or fake one if it's not yet loaded
+  const parentEl = parentRef.current || pseudoParentEl
+
   // get parent item's dimensions
-  const { height, left, top, width } = parentRef.current.getBoundingClientRect()
+  const { height, left, top, width } = parentEl.getBoundingClientRect()
 
   const overlayStyle = getModalOverlayStyle({
     isLoaded,
@@ -95,7 +102,7 @@ const UncontrolledActivated = ({
     innerWidth,
     isUnloading,
     left,
-    originalTransform: parentRef.current.style.transform,
+    originalTransform: parentEl.style.transform,
     top,
     transitionDuration,
     width,
@@ -128,8 +135,8 @@ UncontrolledActivated.propTypes = {
   overlayBgColorEnd: string.isRequired,
   overlayBgColorStart: string.isRequired,
   parentRef: object.isRequired,
-  portalEl: object.isRequired,
-  scrollableEl: object.isRequired,
+  portalEl: object,
+  scrollableEl: object,
   transitionDuration: number.isRequired,
   zoomMargin: number.isRequired,
   zoomZindex: number.isRequired

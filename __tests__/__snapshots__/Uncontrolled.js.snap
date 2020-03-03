@@ -1,0 +1,515 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`is accessible with custom open/close text & <img /> 1`] = `
+<body>
+  <div>
+    <main>
+      <div
+        class="wrapHidden"
+      >
+        <img
+          alt="foo"
+          src="foo.jpg"
+          width="500"
+        />
+        <button
+          aria-label="Open me"
+          class="trigger btn"
+        />
+      </div>
+    </main>
+  </div>
+  <div
+    aria-modal="true"
+    class="overlay"
+    role="dialog"
+    style="background-color: rgba(255, 255, 255, 0.95); transition-duration: 300ms; z-index: 2147483647;"
+  >
+    <div
+      class="content"
+      style="height: 0px; left: 0px; top: 0px; transform: scale(Infinity) translate(0px, 0px); transition-duration: 300ms; width: 0px;"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+    </div>
+    <button
+      aria-label="Close me"
+      class="trigger btn"
+    />
+  </div>
+</body>
+`;
+
+exports[`is accessible with defaults & <img /> 1`] = `
+<body>
+  <div>
+    <main>
+      <div
+        class="wrap"
+      >
+        <img
+          alt="foo"
+          src="foo.jpg"
+          width="500"
+        />
+        <button
+          aria-label="Zoom image"
+          class="trigger btn"
+        />
+      </div>
+    </main>
+  </div>
+</body>
+`;
+
+exports[`is accessible with defaults & <img /> 2`] = `
+<body>
+  <div>
+    <main>
+      <div
+        class="wrapHidden"
+      >
+        <img
+          alt="foo"
+          src="foo.jpg"
+          width="500"
+        />
+        <button
+          aria-label="Zoom image"
+          class="trigger btn"
+        />
+      </div>
+    </main>
+  </div>
+  <div
+    aria-modal="true"
+    class="overlay"
+    role="dialog"
+    style="background-color: rgba(255, 255, 255, 0.95); transition-duration: 300ms; z-index: 2147483647;"
+  >
+    <div
+      class="content"
+      style="height: 0px; left: 0px; top: 0px; transform: scale(Infinity) translate(0px, 0px); transition-duration: 300ms; width: 0px;"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+    </div>
+    <button
+      aria-label="Unzoom image"
+      class="trigger btn"
+    />
+  </div>
+</body>
+`;
+
+exports[`passes on original transform style 1`] = `
+<body>
+  <div>
+    <div
+      class="wrap"
+      style="transform: rotate(45deg);"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+      <button
+        aria-label="Zoom image"
+        class="trigger btn"
+      />
+    </div>
+  </div>
+</body>
+`;
+
+exports[`passes on original transform style 2`] = `
+<body>
+  <div>
+    <div
+      class="wrapHidden"
+      style="transform: rotate(45deg);"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+      <button
+        aria-label="Zoom image"
+        class="trigger btn"
+      />
+    </div>
+  </div>
+  <div
+    aria-modal="true"
+    class="overlay"
+    role="dialog"
+    style="background-color: rgba(255, 255, 255, 0.95); transition-duration: 300ms; z-index: 2147483647;"
+  >
+    <div
+      class="content"
+      style="height: 0px; left: 0px; top: 0px; transform: scale(Infinity) translate(0px, 0px) rotate(45deg); transition-duration: 300ms; width: 0px;"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+    </div>
+    <button
+      aria-label="Unzoom image"
+      class="trigger btn"
+    />
+  </div>
+</body>
+`;
+
+exports[`renders without browser environment 1`] = `
+<body>
+  <div
+    class="wrap"
+  >
+    <img
+      alt="foo"
+      src="foo.jpg"
+      width="500"
+    />
+    <button
+      aria-label="Zoom image"
+      class="trigger btn"
+    />
+  </div>
+</body>
+`;
+
+exports[`unzooms on scroll 1`] = `
+<body>
+  <div>
+    <div
+      class="wrapHidden"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+      <button
+        aria-label="Zoom image"
+        class="trigger btn"
+      />
+    </div>
+  </div>
+  <div
+    aria-modal="true"
+    class="overlay"
+    role="dialog"
+    style="background-color: rgba(255, 255, 255, 0.95); transition-duration: 300ms; z-index: 2147483647;"
+  >
+    <div
+      class="content"
+      style="height: 0px; left: 0px; top: 0px; transform: scale(Infinity) translate(0px, 0px); transition-duration: 300ms; width: 0px;"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+    </div>
+    <button
+      aria-label="Unzoom image"
+      class="trigger btn"
+    />
+  </div>
+</body>
+`;
+
+exports[`unzooms on scroll 2`] = `
+<body>
+  <div>
+    <div
+      class="wrap"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+      <button
+        aria-label="Zoom image"
+        class="trigger btn"
+      />
+    </div>
+  </div>
+</body>
+`;
+
+exports[`unzooms using ESC key 1`] = `
+<body>
+  <div>
+    <div
+      class="wrapHidden"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+      <button
+        aria-label="Zoom image"
+        class="trigger btn"
+      />
+    </div>
+  </div>
+  <div
+    aria-modal="true"
+    class="overlay"
+    role="dialog"
+    style="background-color: rgba(255, 255, 255, 0.95); transition-duration: 300ms; z-index: 2147483647;"
+  >
+    <div
+      class="content"
+      style="height: 0px; left: 0px; top: 0px; transform: scale(Infinity) translate(0px, 0px); transition-duration: 300ms; width: 0px;"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+    </div>
+    <button
+      aria-label="Unzoom image"
+      class="trigger btn"
+    />
+  </div>
+</body>
+`;
+
+exports[`unzooms using ESC key 2`] = `
+<body>
+  <div>
+    <div
+      class="wrapHidden"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+      <button
+        aria-label="Zoom image"
+        class="trigger btn"
+      />
+    </div>
+  </div>
+  <div
+    aria-modal="true"
+    class="overlay"
+    role="dialog"
+    style="background-color: rgba(255, 255, 255, 0.95); transition-duration: 300ms; z-index: 2147483647;"
+  >
+    <div
+      class="content"
+      style="height: 0px; left: 0px; top: 0px; transform: scale(Infinity) translate(0px, 0px); transition-duration: 300ms; width: 0px;"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+    </div>
+    <button
+      aria-label="Unzoom image"
+      class="trigger btn"
+    />
+  </div>
+</body>
+`;
+
+exports[`unzooms using ESC key 3`] = `
+<body>
+  <div>
+    <div
+      class="wrap"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+      <button
+        aria-label="Zoom image"
+        class="trigger btn"
+      />
+    </div>
+  </div>
+</body>
+`;
+
+exports[`unzooms using ESC key 4`] = `
+<body>
+  <div>
+    <div
+      class="wrap"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+      <button
+        aria-label="Zoom image"
+        class="trigger btn"
+      />
+    </div>
+  </div>
+</body>
+`;
+
+exports[`zooms/unzooms with custom open/close text & <img /> 1`] = `
+<body>
+  <div>
+    <div
+      class="wrapHidden"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+      <button
+        aria-label="Open me"
+        class="trigger btn"
+      />
+    </div>
+  </div>
+  <div
+    aria-modal="true"
+    class="overlay"
+    role="dialog"
+    style="background-color: rgba(255, 255, 255, 0.95); transition-duration: 300ms; z-index: 2147483647;"
+  >
+    <div
+      class="content"
+      style="height: 0px; left: 0px; top: 0px; transform: scale(Infinity) translate(0px, 0px); transition-duration: 300ms; width: 0px;"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+    </div>
+    <button
+      aria-label="Close me"
+      class="trigger btn"
+    />
+  </div>
+</body>
+`;
+
+exports[`zooms/unzooms with custom open/close text & <img /> 2`] = `
+<body>
+  <div>
+    <div
+      class="wrap"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+      <button
+        aria-label="Open me"
+        class="trigger btn"
+      />
+    </div>
+  </div>
+</body>
+`;
+
+exports[`zooms/unzooms with defaults & <img /> 1`] = `
+<body>
+  <div>
+    <div
+      class="wrap"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+      <button
+        aria-label="Zoom image"
+        class="trigger btn"
+      />
+    </div>
+  </div>
+</body>
+`;
+
+exports[`zooms/unzooms with defaults & <img /> 2`] = `
+<body>
+  <div>
+    <div
+      class="wrapHidden"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+      <button
+        aria-label="Zoom image"
+        class="trigger btn"
+      />
+    </div>
+  </div>
+  <div
+    aria-modal="true"
+    class="overlay"
+    role="dialog"
+    style="background-color: rgba(255, 255, 255, 0.95); transition-duration: 300ms; z-index: 2147483647;"
+  >
+    <div
+      class="content"
+      style="height: 0px; left: 0px; top: 0px; transform: scale(Infinity) translate(0px, 0px); transition-duration: 300ms; width: 0px;"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+    </div>
+    <button
+      aria-label="Unzoom image"
+      class="trigger btn"
+    />
+  </div>
+</body>
+`;
+
+exports[`zooms/unzooms with defaults & <img /> 3`] = `
+<body>
+  <div>
+    <div
+      class="wrap"
+    >
+      <img
+        alt="foo"
+        src="foo.jpg"
+        width="500"
+      />
+      <button
+        aria-label="Zoom image"
+        class="trigger btn"
+      />
+    </div>
+  </div>
+</body>
+`;

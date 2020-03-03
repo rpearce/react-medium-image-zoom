@@ -48,6 +48,8 @@ const Controlled = ({
 
   const className = isChildLoaded ? cn.wrapHidden : cn.wrap
   const btnCn = `${sharedCn.trigger} ${cn.btn}`
+  const portalElement = portalEl || (document || {}).body
+  const scrollableElement = scrollableEl || window
 
   return (
     <StrictMode>
@@ -60,23 +62,25 @@ const Controlled = ({
           ref={btnRef}
           type="button"
         />
-        <ControlledActivated
-          closeText={closeText}
-          isActive={isActive}
-          onLoad={handleChildLoad}
-          onUnload={handleChildUnload}
-          onZoomChange={onZoomChange}
-          overlayBgColorEnd={overlayBgColorEnd}
-          overlayBgColorStart={overlayBgColorStart}
-          parentRef={wrapRef}
-          portalEl={portalEl || document.body}
-          scrollableEl={scrollableEl || window}
-          transitionDuration={transitionDuration}
-          zoomMargin={zoomMargin}
-          zoomZindex={zoomZindex}
-        >
-          {children}
-        </ControlledActivated>
+        {portalElement && (
+          <ControlledActivated
+            closeText={closeText}
+            isActive={isActive}
+            onLoad={handleChildLoad}
+            onUnload={handleChildUnload}
+            onZoomChange={onZoomChange}
+            overlayBgColorEnd={overlayBgColorEnd}
+            overlayBgColorStart={overlayBgColorStart}
+            parentRef={wrapRef}
+            portalEl={portalElement}
+            scrollableEl={scrollableElement}
+            transitionDuration={transitionDuration}
+            zoomMargin={zoomMargin}
+            zoomZindex={zoomZindex}
+          >
+            {children}
+          </ControlledActivated>
+        )}
       </div>
     </StrictMode>
   )

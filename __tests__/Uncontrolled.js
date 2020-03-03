@@ -1,4 +1,5 @@
 import React from 'react'
+import { renderToString } from 'react-dom/server'
 import { act, fireEvent, render } from '@testing-library/react'
 import testA11y from '../testA11y'
 import Zoom from '../source'
@@ -12,8 +13,9 @@ test('is accessible with defaults & <img />', async () => {
     </main>
   )
   const openTrigger = getByLabelText('Zoom image')
-
   expect(openTrigger).toBeVisible()
+
+  expect(document.body).toMatchSnapshot()
   expect(await testA11y(document.body)).toEqual(true)
 
   fireEvent.click(openTrigger)
@@ -22,8 +24,9 @@ test('is accessible with defaults & <img />', async () => {
   fireEvent.click(openTrigger)
 
   const closeTrigger = getByLabelText('Unzoom image')
-
   expect(closeTrigger).toBeVisible()
+
+  expect(document.body).toMatchSnapshot()
   expect(await testA11y(document.body)).toEqual(true)
 })
 
@@ -43,8 +46,9 @@ test('is accessible with custom open/close text & <img />', async () => {
   fireEvent.click(openTrigger)
 
   const closeTrigger = getByLabelText('Close me')
-
   expect(closeTrigger).toBeVisible()
+
+  expect(document.body).toMatchSnapshot()
   expect(await testA11y(document.body)).toEqual(true)
 })
 
@@ -59,12 +63,15 @@ test('zooms/unzooms with defaults & <img />', () => {
   const openTrigger = getByLabelText('Zoom image')
   expect(openTrigger).toBeVisible()
 
+  expect(document.body).toMatchSnapshot()
+
   fireEvent.click(openTrigger)
 
   const closeTrigger = getByLabelText('Unzoom image')
   const modal = getByRole('dialog')
 
   expect(closeTrigger).toBeVisible()
+  expect(document.body).toMatchSnapshot()
 
   fireEvent.click(closeTrigger)
 
@@ -74,6 +81,7 @@ test('zooms/unzooms with defaults & <img />', () => {
 
   expect(closeTrigger).not.toBeInTheDocument()
   expect(modal).not.toBeInTheDocument()
+  expect(document.body).toMatchSnapshot()
 })
 
 test('zooms/unzooms with custom open/close text & <img />', async () => {
@@ -94,6 +102,7 @@ test('zooms/unzooms with custom open/close text & <img />', async () => {
 
   expect(closeTrigger).toBeVisible()
   expect(modal).toBeVisible()
+  expect(document.body).toMatchSnapshot()
 
   fireEvent.click(closeTrigger)
 
@@ -103,6 +112,7 @@ test('zooms/unzooms with custom open/close text & <img />', async () => {
 
   expect(closeTrigger).not.toBeInTheDocument()
   expect(modal).not.toBeInTheDocument()
+  expect(document.body).toMatchSnapshot()
 })
 
 test('unzooms using ESC key', () => {
@@ -120,6 +130,8 @@ test('unzooms using ESC key', () => {
   const modal = getByRole('dialog')
   expect(modal).toBeVisible()
 
+  expect(document.body).toMatchSnapshot()
+
   // should do nothing
   fireEvent.keyDown(document, { key: 'ArrowLeft' })
 
@@ -128,6 +140,7 @@ test('unzooms using ESC key', () => {
   })
 
   expect(modal).toBeVisible()
+  expect(document.body).toMatchSnapshot()
 
   fireEvent.keyDown(document, { key: 'Escape' })
 
@@ -136,6 +149,7 @@ test('unzooms using ESC key', () => {
   })
 
   expect(modal).not.toBeInTheDocument()
+  expect(document.body).toMatchSnapshot()
 
   fireEvent.click(openTrigger)
   expect(modal).toBeVisible()
@@ -147,6 +161,7 @@ test('unzooms using ESC key', () => {
   })
 
   expect(modal).not.toBeInTheDocument()
+  expect(document.body).toMatchSnapshot()
 })
 
 test('unzooms on scroll', () => {
@@ -164,6 +179,8 @@ test('unzooms on scroll', () => {
   const modal = getByRole('dialog')
   expect(modal).toBeVisible()
 
+  expect(document.body).toMatchSnapshot()
+
   act(() => {
     window.dispatchEvent(new Event('scroll', {}))
   })
@@ -175,6 +192,7 @@ test('unzooms on scroll', () => {
   })
 
   expect(modal).not.toBeInTheDocument()
+  expect(document.body).toMatchSnapshot()
 })
 
 test('passes on original transform style', () => {
@@ -188,6 +206,8 @@ test('passes on original transform style', () => {
   const openTrigger = getByLabelText('Zoom image')
   expect(openTrigger).toBeVisible()
 
+  expect(document.body).toMatchSnapshot()
+
   fireEvent.click(openTrigger)
   const modal = getByRole('dialog')
   expect(modal).toBeVisible()
@@ -198,4 +218,17 @@ test('passes on original transform style', () => {
 
   const wrapEl = modal.querySelector('.content')
   expect(wrapEl.style.transform).toContain('rotate(45deg)')
+
+  expect(document.body).toMatchSnapshot()
+})
+
+test('renders without browser environment', () => {
+  const html = renderToString(
+    <Zoom>
+      <img alt="foo" src="foo.jpg" width="500" />
+    </Zoom>
+  )
+
+  document.body.innerHTML = html
+  expect(document.body).toMatchSnapshot()
 })

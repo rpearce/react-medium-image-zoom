@@ -4,7 +4,11 @@ import { func, node, number, object, string } from 'prop-types'
 import useEvent from 'react-use/lib/useEvent'
 import usePrevious from 'react-use/lib/usePrevious'
 import useWindowSize from 'react-use/lib/useWindowSize'
-import { getModalContentStyle, getModalOverlayStyle } from './helpers'
+import {
+  getModalContentStyle,
+  getModalOverlayStyle,
+  pseudoParentEl
+} from './helpers'
 import cn from './Activated.css'
 import sharedCn from './Shared.css'
 
@@ -177,25 +181,11 @@ ControlledActivated.propTypes = {
   overlayBgColorEnd: string.isRequired,
   overlayBgColorStart: string.isRequired,
   parentRef: object.isRequired,
-  portalEl: object.isRequired,
-  scrollableEl: object.isRequired,
+  portalEl: object,
+  scrollableEl: object,
   transitionDuration: number.isRequired,
   zoomMargin: number.isRequired,
   zoomZindex: number.isRequired
-}
-
-// if parentRef.current is not available yet,
-// we can fall back to these defaults
-const pseudoParentEl = {
-  getBoundingClientRect: () => ({
-    height: 0,
-    left: 0,
-    top: 0,
-    width: 0
-  }),
-  style: {
-    transform: null
-  }
 }
 
 export default memo(ControlledActivated)

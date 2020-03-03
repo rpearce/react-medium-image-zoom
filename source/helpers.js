@@ -134,3 +134,18 @@ export const getModalOverlayStyle = ({
 
   return style
 }
+
+// @TODO: test
+// if parentRef.current is not available yet,
+// we can fall back to these defaults
+export const pseudoParentEl = {
+  getBoundingClientRect: () => ({
+    height: 0,
+    left: 0,
+    top: 0,
+    width: 0
+  }),
+  style: {
+    transform: null
+  }
+}

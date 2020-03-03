@@ -49,6 +49,8 @@ const Uncontrolled = ({
   const isExpanded = isActive && isChildLoaded
   const className = isExpanded ? cn.wrapHidden : cn.wrap
   const btnCn = `${sharedCn.trigger} ${cn.btn}`
+  const portalElement = portalEl || (document || {}).body
+  const scrollableElement = scrollableEl || window
 
   return (
     <StrictMode>
@@ -60,7 +62,7 @@ const Uncontrolled = ({
           onClick={handleClickTrigger}
           ref={btnRef}
         />
-        {isActive && (
+        {portalElement && isActive && (
           <UncontrolledActivated
             closeText={closeText}
             onLoad={handleChildLoad}
@@ -68,8 +70,8 @@ const Uncontrolled = ({
             overlayBgColorEnd={overlayBgColorEnd}
             overlayBgColorStart={overlayBgColorStart}
             parentRef={wrapRef}
-            portalEl={portalEl || document.body}
-            scrollableEl={scrollableEl || window}
+            portalEl={portalElement}
+            scrollableEl={scrollableElement}
             transitionDuration={transitionDuration}
             zoomMargin={zoomMargin}
             zoomZindex={zoomZindex}
