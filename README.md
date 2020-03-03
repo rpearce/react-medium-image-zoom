@@ -275,6 +275,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
   <tr>
     <td align="center"><a href="https://github.com/henrych4"><img src="https://avatars0.githubusercontent.com/u/19466940?v=4" width="100px;" alt=""/><br /><sub><b>hhh</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Ahenrych4" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://github.com/davalapar"><img src="https://avatars0.githubusercontent.com/u/41451953?v=4" width="100px;" alt=""/><br /><sub><b>@davalapar</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Adavalapar" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://sunknudsen.com"><img src="https://avatars3.githubusercontent.com/u/2117655?v=4" width="100px;" alt=""/><br /><sub><b>Sun Knudsen</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Asunknudsen" title="Bug reports">🐛</a> <a href="#ideas-sunknudsen" title="Ideas, Planning, & Feedback">🤔</a> <a href="#example-sunknudsen" title="Examples">💡</a></td>
   </tr>
 </table>
 

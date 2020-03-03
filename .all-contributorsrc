@@ -313,6 +313,17 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "sunknudsen",
+      "name": "Sun Knudsen",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2117655?v=4",
+      "profile": "https://sunknudsen.com",
+      "contributions": [
+        "bug",
+        "ideas",
+        "example"
+      ]
     }
   ],
   "repoType": "github",
