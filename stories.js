@@ -10,12 +10,13 @@ import glenorchyLagoon from './static/glenorchy-lagoon.jpg'
 import hobbiton from './static/andres-iga-7XKkJVw1d8c-unsplash-smaller.jpg'
 import hookerValleyTrack from './static/roell-de-ram-2DM7eOR5iyc-unsplash-smaller.jpg'
 import kea from './static/pablo-heimplatz-PSF2RhUBORs-unsplash-smaller.jpg'
+import nvidiaCard from './static/nvidia-card.jpg'
 import nzBeach from './static/rod-long-4dcsLxQxSHY-unsplash-smaller.jpg'
+import portWaikato from './static/petr-vysohlid-9fqwGqGLUxc-unsplash-smaller.jpg'
 import queenstown from './static/omer-faruk-bekdemir-5BuxuWIJF1Q-unsplash-smaller.jpg'
 import teAraiPoint from './static/douglas-bagg-wRwa3Z6GtRI-unsplash-smaller.jpg'
 import tekapo from './static/tobias-keller-73F4pKoUkM0-unsplash-smaller.jpg'
 import thatWanakaTree from './static/laura-smetsers-H-TW2CoNtTk-unsplash-smaller.jpg'
-import portWaikato from './static/petr-vysohlid-9fqwGqGLUxc-unsplash-smaller.jpg'
 
 import './dist/styles.css'
 import Zoom, { Controlled as ControlledZoom } from './dist/esm'
@@ -35,6 +36,10 @@ const imgHookerValleyTrack = {
 const imgKea = {
   alt: `Kea (alpine parrot) in Arthur's Pass, New Zealand by Pablo Heimplatz`,
   src: kea
+}
+const imgNvidiaCard = {
+  alt: 'NVIDIA Graphics Card',
+  src: nvidiaCard
 }
 const imgNzBeach = {
   alt: 'New Zealand Beach by Rod Long',
@@ -572,3 +577,42 @@ const ImgStory = ({ desc, title, ...props }) => {
     </div>
   )
 }
+
+stories.add('larger image size', () => (
+  <div style={{ width: '720px', margin: '0 auto' }}>
+    <ImgStory title="Larger image size">
+      <Zoom
+        closeText={text('Unzoom label', 'Unzoom image')}
+        openText={text('Zoom label', 'Zoom image')}
+        overlayBgColorEnd={color(
+          'Overlay bgColor end',
+          'rgba(255, 255, 255, 0.95)'
+        )}
+        overlayBgColorStart={color(
+          'Overlay bgColor start',
+          'rgba(255, 255, 255, 0)'
+        )}
+        transitionDuration={number('Transition duration', 300, {
+          min: 0,
+          max: 5000,
+          range: true,
+          step: 100
+        })}
+        zoomMargin={number('Zoom margin', 0, {
+          min: 0,
+          max: 500,
+          range: true,
+          step: 50
+        })}
+        zoomZindex={number('Zoom z-index', 2147483647, {
+          min: 0,
+          max: 2147483647,
+          range: true,
+          step: 1
+        })}
+      >
+        <img alt={imgNvidiaCard.alt} src={imgNvidiaCard.src} width="100%" />
+      </Zoom>
+    </ImgStory>
+  </div>
+))
