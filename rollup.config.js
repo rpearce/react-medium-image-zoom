@@ -1,4 +1,6 @@
 import { dirname } from 'path'
+import React from 'react'
+import reactDom from 'react-dom'
 import babel from 'rollup-plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
 import postcss from 'rollup-plugin-postcss'
@@ -6,7 +8,7 @@ import resolve from '@rollup/plugin-node-resolve'
 import { terser } from 'rollup-plugin-terser'
 import pkg from './package.json'
 
-const getBabelOpts = ({ useESModules = false } = {}) => ({
+const getBabelConfig = ({ useESModules = false } = {}) => ({
   configFile: './babel.config.js',
   only: ['./source'],
   plugins: [['@babel/transform-runtime', { useESModules }]],
@@ -14,21 +16,20 @@ const getBabelOpts = ({ useESModules = false } = {}) => ({
   sourceMaps: false
 })
 
-const plugins = [
-  resolve(),
-  commonjs({
-    include: /node_modules/,
-    namedExports: {
-      'prop-types': ['bool', 'func', 'node', 'number', 'object', 'string'],
-      'react-dom': ['createPortal']
-    }
-  }),
-  postcss({
-    extract: './dist/styles.css',
-    modules: false,
-    sourceMap: false
-  })
-]
+const postCssConfig = {
+  extract: './dist/styles.css',
+  modules: false,
+  sourceMap: false
+}
+
+const cjsConfig = {
+  include: /node_modules/,
+  namedExports: {
+    'prop-types': ['bool', 'func', 'node', 'number', 'object', 'string'],
+    react: Object.keys(React),
+    'react-dom': Object.keys(reactDom)
+  }
+}
 
 const buildModules = [
   './source/index.js',
@@ -49,7 +50,11 @@ const esm = [
       sourcemap: false
     },
     external: isExternal,
-    plugins: plugins.concat(babel(getBabelOpts({ useESModules: true })))
+    plugins: [
+      resolve(),
+      babel(getBabelConfig({ useESModules: true })),
+      postcss(postCssConfig)
+    ]
   }
 ]
 
@@ -60,11 +65,17 @@ const cjs = [
       dir: dirname(pkg.main),
       exports: 'named',
       format: 'cjs',
+      globals: { react: 'React', 'react-dom': 'ReactDOM' },
       name: 'rmiz-cjs',
       sourcemap: false
     },
     external: isExternal,
-    plugins: plugins.concat(babel(getBabelOpts()))
+    plugins: [
+      resolve(),
+      commonjs(cjsConfig),
+      babel(getBabelConfig()),
+      postcss(postCssConfig)
+    ]
   },
   {
     input: './source/index.js',
@@ -76,7 +87,13 @@ const cjs = [
       sourcemap: false
     },
     external: isExternal,
-    plugins: plugins.concat(babel(getBabelOpts()), terser())
+    plugins: [
+      resolve(),
+      commonjs(cjsConfig),
+      babel(getBabelConfig()),
+      postcss(postCssConfig),
+      terser()
+    ]
   }
 ]
 
@@ -92,10 +109,13 @@ const umd = [
       sourcemap: false
     },
     external: ['react', 'react-dom'],
-    plugins: plugins.concat(
-      babel(getBabelOpts({ useESModules: true })),
+    plugins: [
+      resolve(),
+      commonjs(cjsConfig),
+      babel(getBabelConfig({ useESModules: true })),
+      postcss(postCssConfig),
       terser()
-    )
+    ]
   }
 ]
 
