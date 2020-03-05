@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.1.0] - 2020-03-05
+
+### Added
+* now providing both unminified and minified UMD builds
+
+### Fixed
+* _massively_ reduced build size (#226)
+  * [before: `390.7kB` Minified; `118.5kB Minified` + Gzipped](https://bundlephobia.com/result?p=react-medium-image-zoom@4.0.4)
+  * [after `18kB` Minified; `5.6kB` Minified + Gzipped](https://bundlephobia.com/result?p=react-medium-image-zoom@4.1.0-alpha.2)
+* server-side-rendering (#229)
+* webkit 100% width image issue (#222)
+
+### Changed
+* CSS styles are now applied using `data-rmiz-<something>` selectors, allowing
+  the styles to be imported and overridden
+* babel
+  * remove `@babel/cli` because it's not being used
+  * don't use `@babel/polyfill` for anything; replaced with `@babel/plugin-transform-runtime`
+
+### Removed
+* removed `browser` field from package.json b/c bundler confusion
+* not including sourcemaps anymore unless that's a specific desire from users
+
 ## [4.0.4] - 2020-02-17
 
 * lock down dependencies to specific versions
