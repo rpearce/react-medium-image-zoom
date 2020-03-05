@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "module": "es6",
+    "lib": ["es2020", "dom"],
+    "jsx": "react",
+    "target": "es5",
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "declaration": true
+  },
+  "include": ["./source/**/*", "./__test__/**/*"],
+  "exclude": ["node_modules/"]
+}

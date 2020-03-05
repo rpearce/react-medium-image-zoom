@@ -1,5 +1,5 @@
-import React, { createRef } from 'react'
 import { render } from '@testing-library/react'
+import React, { createRef } from 'react'
 import UncontrolledActivated from '../source/UncontrolledActivated'
 
 test('uses pseudo-parent when no parentRef.current', async () => {
@@ -10,7 +10,7 @@ test('uses pseudo-parent when no parentRef.current', async () => {
       onUnload={jest.fn()}
       overlayBgColorEnd="rgba(255, 255, 255, 0.95)"
       overlayBgColorStart="rgba(255, 255, 255, 0)"
-      parentRef={createRef(null)}
+      parentRef={createRef<null>()}
       portalEl={document.body}
       scrollableEl={window}
       transitionDuration={300}

@@ -1,6 +1,12 @@
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
+import React, {
+  memo,
+  SFC,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from 'react'
 import { createPortal } from 'react-dom'
-import { func, node, number, object, string } from 'prop-types'
 import useEvent from 'react-use/lib/useEvent'
 import usePrevious from 'react-use/lib/usePrevious'
 import useWindowSize from 'react-use/lib/useWindowSize'
@@ -11,27 +17,44 @@ import {
 } from './helpers'
 import './styles.css'
 
-const ControlledActivated = ({
+interface Props {
+  children: React.ReactNode
+  closeText?: string
+  isActive: boolean
+  onLoad: () => void
+  onUnload: () => void
+  onZoomChange?: (boolean) => void
+  overlayBgColorEnd?: string
+  overlayBgColorStart?: string
+  parentRef: any
+  portalEl?: any
+  scrollableEl?: any
+  transitionDuration?: number
+  zoomMargin?: number
+  zoomZindex?: number
+}
+
+const ControlledActivated: SFC<Props> = ({
   children,
-  closeText,
+  closeText = 'Unzoom Image',
   isActive: isActiveFromParent,
   onLoad,
   onUnload,
   onZoomChange,
-  overlayBgColorEnd,
-  overlayBgColorStart,
+  overlayBgColorEnd = 'rgba(255, 255, 255, 0.95)',
+  overlayBgColorStart = 'rgba(255, 255, 255, 0)',
   parentRef,
   portalEl,
   scrollableEl,
-  transitionDuration,
-  zoomMargin,
-  zoomZindex
-}) => {
-  const btnRef = useRef(null)
-  const [, forceUpdate] = useState(0)
-  const [isActive, setIsActive] = useState(isActiveFromParent)
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [isUnloading, setIsUnloading] = useState(false)
+  transitionDuration = 300,
+  zoomMargin = 0,
+  zoomZindex = 2147483647
+}: Props) => {
+  const btnRef = useRef<HTMLButtonElement>(null)
+  const [, forceUpdate] = useState<number>(0)
+  const [isActive, setIsActive] = useState<boolean>(isActiveFromParent)
+  const [isLoaded, setIsLoaded] = useState<boolean>(false)
+  const [isUnloading, setIsUnloading] = useState<boolean>(false)
   const prevIsActive = usePrevious(isActive)
   const prevIsActiveFromParent = usePrevious(isActiveFromParent)
   const prevIsLoaded = usePrevious(isLoaded)
@@ -41,7 +64,9 @@ const ControlledActivated = ({
   const handleClick = useCallback(
     e => {
       e.preventDefault()
-      onZoomChange(false)
+      if (onZoomChange) {
+        onZoomChange(false)
+      }
     },
     [onZoomChange]
   )
@@ -51,7 +76,9 @@ const ControlledActivated = ({
     e => {
       if (e.key === 'Escape' || e.keyCode === 27) {
         e.stopPropagation()
-        onZoomChange(false)
+        if (onZoomChange) {
+          onZoomChange(false)
+        }
       }
     },
     [onZoomChange]
@@ -61,7 +88,9 @@ const ControlledActivated = ({
     forceUpdate(n => n + 1)
 
     if (!isUnloading) {
-      onZoomChange(false)
+      if (onZoomChange) {
+        onZoomChange(false)
+      }
     }
   }, [isUnloading, onZoomChange])
 
@@ -106,7 +135,7 @@ const ControlledActivated = ({
       }, transitionDuration)
     }
 
-    return () => {
+    return (): void => {
       clearTimeout(unloadTimeout)
     }
   }, [isUnloading, transitionDuration])
@@ -150,39 +179,23 @@ const ControlledActivated = ({
     zoomMargin
   })
 
-  return (
-    isActive &&
-    createPortal(
-      <div aria-modal data-rmiz-overlay role="dialog" style={overlayStyle}>
-        <div data-rmiz-modal-content style={contentStyle}>
-          {children}
-        </div>
-        <button
-          aria-label={closeText}
-          data-rmiz-btn-close
-          onClick={handleClick}
-          ref={btnRef}
-          type="button"
-        />
-      </div>,
-      portalEl
-    )
-  )
-}
-
-ControlledActivated.propTypes = {
-  children: node.isRequired,
-  closeText: string.isRequired,
-  onLoad: func.isRequired,
-  onUnload: func.isRequired,
-  overlayBgColorEnd: string.isRequired,
-  overlayBgColorStart: string.isRequired,
-  parentRef: object.isRequired,
-  portalEl: object,
-  scrollableEl: object,
-  transitionDuration: number.isRequired,
-  zoomMargin: number.isRequired,
-  zoomZindex: number.isRequired
+  return isActive
+    ? createPortal(
+        <div aria-modal data-rmiz-overlay role="dialog" style={overlayStyle}>
+          <div data-rmiz-modal-content style={contentStyle}>
+            {children}
+          </div>
+          <button
+            aria-label={closeText}
+            data-rmiz-btn-close
+            onClick={handleClick}
+            ref={btnRef}
+            type="button"
+          />
+        </div>,
+        portalEl
+      )
+    : null
 }
 
 export default memo(ControlledActivated)

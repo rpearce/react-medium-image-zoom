@@ -1,8 +1,8 @@
+import { act, fireEvent, render } from '@testing-library/react'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
-import { act, fireEvent, render } from '@testing-library/react'
-import testA11y from '../testA11y'
 import Zoom from '../source'
+import testA11y from '../testA11y'
 
 test('is accessible with defaults & <img />', async () => {
   const { getByLabelText } = render(
@@ -216,8 +216,8 @@ test('passes on original transform style', () => {
     jest.advanceTimersByTime(300)
   })
 
-  const wrapEl = modal.querySelector('[data-rmiz-modal-content]')
-  expect(wrapEl.style.transform).toContain('rotate(45deg)')
+  const wrapEl = modal.querySelector<HTMLElement>('[data-rmiz-modal-content]')
+  expect(wrapEl?.style?.transform).toContain('rotate(45deg)')
 
   expect(document.body).toMatchSnapshot()
 })

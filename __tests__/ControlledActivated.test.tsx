@@ -1,18 +1,18 @@
-import React, { createRef } from 'react'
 import { render } from '@testing-library/react'
-import ControlledActivated from '../source/UncontrolledActivated'
+import React, { createRef } from 'react'
+import ControlledActivated from '../source/ControlledActivated'
 
 test('uses pseudo-parent when no parentRef.current', async () => {
   render(
     <ControlledActivated
       closeText="Unzoom image"
-      isActive={true}
+      isActive
       onLoad={jest.fn()}
       onUnload={jest.fn()}
       onZoomChange={jest.fn()}
       overlayBgColorEnd="rgba(255, 255, 255, 0.95)"
       overlayBgColorStart="rgba(255, 255, 255, 0)"
-      parentRef={createRef(null)}
+      parentRef={createRef()}
       portalEl={document.body}
       scrollableEl={window}
       transitionDuration={300}

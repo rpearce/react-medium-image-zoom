@@ -1,33 +1,57 @@
-import React, { StrictMode, memo, useCallback, useRef, useState } from 'react'
-import { bool, func, node, number, object, string } from 'prop-types'
 import 'focus-options-polyfill'
+import React, {
+  memo,
+  SFC,
+  StrictMode,
+  useCallback,
+  useRef,
+  useState
+} from 'react'
 import ControlledActivated from './ControlledActivated'
 import './styles.css'
 
-const Controlled = ({
+interface Props {
+  children: React.ReactNode
+  closeText?: string
+  isZoomed: boolean
+  onZoomChange?: (boolean) => void
+  openText?: string
+  overlayBgColorEnd?: string
+  overlayBgColorStart?: string
+  portalEl?: any
+  scrollableEl?: any
+  transitionDuration?: number
+  wrapStyle?: React.CSSProperties | undefined
+  zoomMargin?: number
+  zoomZindex?: number
+}
+
+const Controlled: SFC<Props> = ({
   children,
-  closeText,
-  isZoomed: isActive,
-  overlayBgColorEnd,
-  overlayBgColorStart,
+  closeText = 'Unzoom image',
+  isZoomed: isActive = false,
+  overlayBgColorEnd = 'rgba(255, 255, 255, 0.95)',
+  overlayBgColorStart = 'rgba(255, 255, 255, 0)',
   portalEl,
   onZoomChange,
-  openText,
+  openText = 'Zoom image',
   scrollableEl,
-  transitionDuration,
-  wrapStyle,
-  zoomMargin,
-  zoomZindex
-}) => {
-  const [isChildLoaded, setIsChildLoaded] = useState(false)
-  const wrapRef = useRef(null)
-  const btnRef = useRef(null)
+  transitionDuration = 300,
+  wrapStyle = undefined,
+  zoomMargin = 0,
+  zoomZindex = 2147483647
+}: Props) => {
+  const [isChildLoaded, setIsChildLoaded] = useState<boolean>(false)
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const btnRef = useRef<HTMLButtonElement>(null)
 
   const handleClickTrigger = useCallback(
     e => {
       if (!isActive) {
         e.preventDefault()
-        onZoomChange(true)
+        if (onZoomChange) {
+          onZoomChange(true)
+        }
       }
     },
     [isActive, onZoomChange]
@@ -80,35 +104,6 @@ const Controlled = ({
       </div>
     </StrictMode>
   )
-}
-
-Controlled.propTypes = {
-  children: node.isRequired,
-  closeText: string.isRequired,
-  isZoomed: bool.isRequired,
-  onZoomChange: func.isRequired,
-  openText: string.isRequired,
-  overlayBgColorEnd: string.isRequired,
-  overlayBgColorStart: string.isRequired,
-  portalEl: object,
-  scrollableEl: object,
-  transitionDuration: number.isRequired,
-  wrapStyle: object,
-  zoomMargin: number.isRequired,
-  zoomZindex: number.isRequired
-}
-
-Controlled.defaultProps = {
-  closeText: 'Unzoom image',
-  isZoomed: false,
-  onZoomChange: Function.prototype,
-  openText: 'Zoom image',
-  overlayBgColorEnd: 'rgba(255, 255, 255, 0.95)',
-  overlayBgColorStart: 'rgba(255, 255, 255, 0)',
-  transitionDuration: 300,
-  wrapStyle: null,
-  zoomMargin: 0,
-  zoomZindex: 2147483647
 }
 
 export default memo(Controlled)
