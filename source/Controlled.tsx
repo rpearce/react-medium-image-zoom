@@ -29,7 +29,7 @@ interface Props {
 const Controlled: SFC<Props> = ({
   children,
   closeText = 'Unzoom image',
-  isZoomed: isActive = false,
+  isZoomed: isActive,
   overlayBgColorEnd = 'rgba(255, 255, 255, 0.95)',
   overlayBgColorStart = 'rgba(255, 255, 255, 0)',
   portalEl,

@@ -8,7 +8,7 @@ const toDurationString = (duration: number): string => `${duration}ms`
 //             , width       :: Number
 //             , zoomMargin  :: Number
 //             }
-interface GetScaleProps {
+interface GetScale {
   height: number
   innerHeight: number
   innerWidth: number
@@ -22,7 +22,7 @@ export const getScale = ({
   innerWidth,
   width,
   zoomMargin
-}: GetScaleProps): number => {
+}: GetScale): number => {
   const scaleX = innerWidth / (width + zoomMargin)
   const scaleY = innerHeight / (height + zoomMargin)
   const scale = Math.min(scaleX, scaleY)
@@ -43,7 +43,7 @@ export const getScale = ({
 //                         , width              :: Number
 //                         , zoomMargin         :: Number
 //                         }
-interface GetModalContentStyleProps {
+interface GetModalContentStyle {
   height: number
   innerHeight: number
   innerWidth: number
@@ -79,7 +79,7 @@ export const getModalContentStyle = ({
   transitionDuration,
   width,
   zoomMargin
-}: GetModalContentStyleProps): GetModalContentStyleReturnType => {
+}: GetModalContentStyle): GetModalContentStyleReturnType => {
   const transitionDurationString = toDurationString(transitionDuration)
 
   if (!isLoaded || isUnloading) {
@@ -146,7 +146,7 @@ export const getModalContentStyle = ({
 //                         , overlayBgColorStart :: String
 //                         , transitionDuration  :: Number
 //                         }
-interface GetModalOverlayStyleProps {
+interface GetModalOverlayStyle {
   isLoaded: boolean
   isUnloading: boolean
   overlayBgColorEnd: string
@@ -168,7 +168,7 @@ export const getModalOverlayStyle = ({
   overlayBgColorStart,
   transitionDuration,
   zoomZindex
-}: GetModalOverlayStyleProps): GetModalOverlayStyleReturnType => {
+}: GetModalOverlayStyle): GetModalOverlayStyleReturnType => {
   const style = {
     backgroundColor: overlayBgColorStart,
     transitionDuration: toDurationString(transitionDuration),
