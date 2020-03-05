@@ -4,7 +4,6 @@
   "description": "Accessible medium.com-style image zoom for React",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
-  "browser": "dist/umd/react-medium-image-zoom.min.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:rpearce/react-medium-image-zoom.git"

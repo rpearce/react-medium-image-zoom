@@ -46,8 +46,6 @@ const Controlled = ({
   }, [])
 
   const wrapType = isChildLoaded ? 'hidden' : 'visible'
-  const portalElement = portalEl || (document || {}).body
-  const scrollableElement = scrollableEl || window
 
   return (
     <StrictMode>
@@ -60,7 +58,7 @@ const Controlled = ({
           ref={btnRef}
           type="button"
         />
-        {portalElement && (
+        {typeof window !== 'undefined' && (
           <ControlledActivated
             closeText={closeText}
             isActive={isActive}
@@ -70,8 +68,8 @@ const Controlled = ({
             overlayBgColorEnd={overlayBgColorEnd}
             overlayBgColorStart={overlayBgColorStart}
             parentRef={wrapRef}
-            portalEl={portalElement}
-            scrollableEl={scrollableElement}
+            portalEl={portalEl || (document || {}).body}
+            scrollableEl={scrollableEl || window}
             transitionDuration={transitionDuration}
             zoomMargin={zoomMargin}
             zoomZindex={zoomZindex}

@@ -40,6 +40,7 @@ const buildModules = [
 const isExternal = id => !id.startsWith('.') && !id.startsWith('/')
 
 const esm = [
+  // ESModules (esm) build
   {
     input: buildModules,
     output: {
@@ -59,6 +60,7 @@ const esm = [
 ]
 
 const cjs = [
+  // CommonJS (cjs) build
   {
     input: buildModules,
     output: {
@@ -77,6 +79,8 @@ const cjs = [
       postcss(postCssConfig)
     ]
   },
+
+  // Minified cjs build
   {
     input: './source/index.js',
     output: {
@@ -98,10 +102,31 @@ const cjs = [
 ]
 
 const umd = [
+  // Universal module definition (UMD) build
   {
     input: './source/index.js',
     output: {
-      file: pkg.browser,
+      file: './dist/umd/react-medium-image-zoom.js',
+      exports: 'named',
+      format: 'umd',
+      globals: { react: 'React', 'react-dom': 'ReactDOM' },
+      name: 'rmiz-umd',
+      sourcemap: false
+    },
+    external: ['react', 'react-dom'],
+    plugins: [
+      resolve(),
+      commonjs(cjsConfig),
+      babel(getBabelConfig({ useESModules: true })),
+      postcss(postCssConfig)
+    ]
+  },
+
+  // Minified (UMD) build
+  {
+    input: './source/index.js',
+    output: {
+      file: './dist/umd/react-medium-image-zoom.min.js',
       exports: 'named',
       format: 'umd',
       globals: { react: 'React', 'react-dom': 'ReactDOM' },
