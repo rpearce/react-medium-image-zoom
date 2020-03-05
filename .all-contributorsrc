@@ -324,6 +324,17 @@
         "ideas",
         "example"
       ]
+    },
+    {
+      "login": "dougg0k",
+      "name": "Douglas Galdino",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/10801221?v=4",
+      "profile": "http://dougg0k.js.org",
+      "contributions": [
+        "bug",
+        "ideas",
+        "example"
+      ]
     }
   ],
   "repoType": "github",
