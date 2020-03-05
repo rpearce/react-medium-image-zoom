@@ -24,8 +24,8 @@ interface Props {
   overlayBgColorEnd?: string
   overlayBgColorStart?: string
   parentRef?: any
-  portalEl?: any
-  scrollableEl?: any
+  portalEl?: HTMLElement
+  scrollableEl?: HTMLElement | Window
   transitionDuration?: number
   zoomMargin?: number
   zoomZindex?: number
@@ -39,8 +39,8 @@ const UncontrolledActivated: SFC<Props> = ({
   overlayBgColorEnd = 'rgba(255, 255, 255, 0.95)',
   overlayBgColorStart = 'rgba(255, 255, 255, 0)',
   parentRef,
-  portalEl,
-  scrollableEl,
+  portalEl = document.body,
+  scrollableEl = window,
   transitionDuration = 300,
   zoomMargin = 0,
   zoomZindex = 2147483647

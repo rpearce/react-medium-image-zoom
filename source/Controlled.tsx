@@ -18,8 +18,8 @@ interface Props {
   openText?: string
   overlayBgColorEnd?: string
   overlayBgColorStart?: string
-  portalEl?: any
-  scrollableEl?: any
+  portalEl?: HTMLElement
+  scrollableEl?: HTMLElement | Window
   transitionDuration?: number
   wrapStyle?: React.CSSProperties | undefined
   zoomMargin?: number
@@ -92,8 +92,8 @@ const Controlled: SFC<Props> = ({
             overlayBgColorEnd={overlayBgColorEnd}
             overlayBgColorStart={overlayBgColorStart}
             parentRef={wrapRef}
-            portalEl={portalEl || document.body}
-            scrollableEl={scrollableEl || window}
+            portalEl={portalEl}
+            scrollableEl={scrollableEl}
             transitionDuration={transitionDuration}
             zoomMargin={zoomMargin}
             zoomZindex={zoomZindex}
