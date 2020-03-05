@@ -3,19 +3,10 @@ import resolve from '@rollup/plugin-node-resolve'
 import { dirname } from 'path'
 import React from 'react'
 import reactDom from 'react-dom'
-import babel from 'rollup-plugin-babel'
 import postcss from 'rollup-plugin-postcss'
 import { terser } from 'rollup-plugin-terser'
 import typescript from 'rollup-plugin-typescript2'
 import pkg from './package.json'
-
-const getBabelConfig = ({ useESModules = false } = {}) => ({
-  configFile: './babel.config.js',
-  only: ['./source'],
-  plugins: [['@babel/transform-runtime', { useESModules }]],
-  runtimeHelpers: true,
-  sourceMaps: false
-})
 
 const postCssConfig = {
   extract: './dist/styles.css',
@@ -26,7 +17,6 @@ const postCssConfig = {
 const cjsConfig = {
   include: /node_modules/,
   namedExports: {
-    'prop-types': ['bool', 'func', 'node', 'number', 'object', 'string'],
     react: Object.keys(React),
     'react-dom': Object.keys(reactDom)
   }
@@ -52,12 +42,7 @@ const esm = [
       sourcemap: false
     },
     external: isExternal,
-    plugins: [
-      resolve(),
-      babel(getBabelConfig({ useESModules: true })),
-      postcss(postCssConfig),
-      typescript()
-    ]
+    plugins: [resolve(), postcss(postCssConfig), typescript()]
   }
 ]
 
@@ -77,7 +62,6 @@ const cjs = [
     plugins: [
       resolve(),
       commonjs(cjsConfig),
-      babel(getBabelConfig()),
       postcss(postCssConfig),
       typescript()
     ]
@@ -97,7 +81,6 @@ const cjs = [
     plugins: [
       resolve(),
       commonjs(cjsConfig),
-      babel(getBabelConfig()),
       postcss(postCssConfig),
       typescript(),
       terser()
@@ -121,7 +104,6 @@ const umd = [
     plugins: [
       resolve(),
       commonjs(cjsConfig),
-      babel(getBabelConfig({ useESModules: true })),
       typescript(),
       postcss(postCssConfig)
     ]
@@ -142,7 +124,6 @@ const umd = [
     plugins: [
       resolve(),
       commonjs(cjsConfig),
-      babel(getBabelConfig({ useESModules: true })),
       postcss(postCssConfig),
       typescript(),
       terser()
