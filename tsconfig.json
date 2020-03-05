@@ -12,6 +12,6 @@
     "esModuleInterop": true,
     "declaration": true
   },
-  "include": ["./source/**/*", "./__test__/**/*"],
+  "include": ["./source/**/*", "./__tests__/**/*"],
   "exclude": ["node_modules/"]
 }

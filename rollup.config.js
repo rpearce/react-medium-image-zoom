@@ -42,7 +42,11 @@ const esm = [
       sourcemap: false
     },
     external: isExternal,
-    plugins: [resolve(), postcss(postCssConfig), typescript()]
+    plugins: [
+      resolve(),
+      postcss(postCssConfig),
+      typescript({ tsconfig: './tsconfig.build.json' })
+    ]
   }
 ]
 
@@ -63,7 +67,7 @@ const cjs = [
       resolve(),
       commonjs(cjsConfig),
       postcss(postCssConfig),
-      typescript()
+      typescript({ tsconfig: './tsconfig.build.json' })
     ]
   },
 
@@ -82,7 +86,7 @@ const cjs = [
       resolve(),
       commonjs(cjsConfig),
       postcss(postCssConfig),
-      typescript(),
+      typescript({ tsconfig: './tsconfig.build.json' }),
       terser()
     ]
   }
@@ -104,7 +108,7 @@ const umd = [
     plugins: [
       resolve(),
       commonjs(cjsConfig),
-      typescript(),
+      typescript({ tsconfig: './tsconfig.build.json' }),
       postcss(postCssConfig)
     ]
   },
@@ -125,7 +129,7 @@ const umd = [
       resolve(),
       commonjs(cjsConfig),
       postcss(postCssConfig),
-      typescript(),
+      typescript({ tsconfig: './tsconfig.build.json' }),
       terser()
     ]
   }

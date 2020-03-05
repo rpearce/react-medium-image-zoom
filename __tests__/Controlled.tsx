@@ -1,6 +1,6 @@
+import { act, fireEvent, render } from '@testing-library/react'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
-import { act, fireEvent, render } from '@testing-library/react'
 import { Controlled as ControlledZoom } from '../source'
 
 test('when closed and then open', () => {
