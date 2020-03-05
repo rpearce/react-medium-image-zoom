@@ -5,7 +5,7 @@ exports[`is accessible with custom open/close text & <img /> 1`] = `
   <div>
     <main>
       <div
-        class="wrapHidden"
+        data-rmiz-wrap="hidden"
       >
         <img
           alt="foo"
@@ -14,19 +14,19 @@ exports[`is accessible with custom open/close text & <img /> 1`] = `
         />
         <button
           aria-label="Open me"
-          class="trigger btn"
+          data-rmiz-btn-open="true"
         />
       </div>
     </main>
   </div>
   <div
     aria-modal="true"
-    class="overlay"
+    data-rmiz-overlay="true"
     role="dialog"
     style="background-color: rgba(255, 255, 255, 0.95); transition-duration: 300ms; z-index: 2147483647;"
   >
     <div
-      class="content"
+      data-rmiz-modal-content="true"
       style="height: 0px; left: 0px; top: 0px; transform: scale(Infinity) translate(0px, 0px); transition-duration: 300ms; width: 0px;"
     >
       <img
@@ -37,7 +37,7 @@ exports[`is accessible with custom open/close text & <img /> 1`] = `
     </div>
     <button
       aria-label="Close me"
-      class="trigger btn"
+      data-rmiz-btn-close="true"
     />
   </div>
 </body>
@@ -48,7 +48,7 @@ exports[`is accessible with defaults & <img /> 1`] = `
   <div>
     <main>
       <div
-        class="wrap"
+        data-rmiz-wrap="visible"
       >
         <img
           alt="foo"
@@ -57,7 +57,7 @@ exports[`is accessible with defaults & <img /> 1`] = `
         />
         <button
           aria-label="Zoom image"
-          class="trigger btn"
+          data-rmiz-btn-open="true"
         />
       </div>
     </main>
@@ -70,7 +70,7 @@ exports[`is accessible with defaults & <img /> 2`] = `
   <div>
     <main>
       <div
-        class="wrapHidden"
+        data-rmiz-wrap="hidden"
       >
         <img
           alt="foo"
@@ -79,19 +79,19 @@ exports[`is accessible with defaults & <img /> 2`] = `
         />
         <button
           aria-label="Zoom image"
-          class="trigger btn"
+          data-rmiz-btn-open="true"
         />
       </div>
     </main>
   </div>
   <div
     aria-modal="true"
-    class="overlay"
+    data-rmiz-overlay="true"
     role="dialog"
     style="background-color: rgba(255, 255, 255, 0.95); transition-duration: 300ms; z-index: 2147483647;"
   >
     <div
-      class="content"
+      data-rmiz-modal-content="true"
       style="height: 0px; left: 0px; top: 0px; transform: scale(Infinity) translate(0px, 0px); transition-duration: 300ms; width: 0px;"
     >
       <img
@@ -102,7 +102,7 @@ exports[`is accessible with defaults & <img /> 2`] = `
     </div>
     <button
       aria-label="Unzoom image"
-      class="trigger btn"
+      data-rmiz-btn-close="true"
     />
   </div>
 </body>
@@ -112,7 +112,7 @@ exports[`passes on original transform style 1`] = `
 <body>
   <div>
     <div
-      class="wrap"
+      data-rmiz-wrap="visible"
       style="transform: rotate(45deg);"
     >
       <img
@@ -122,7 +122,7 @@ exports[`passes on original transform style 1`] = `
       />
       <button
         aria-label="Zoom image"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
       />
     </div>
   </div>
@@ -133,7 +133,7 @@ exports[`passes on original transform style 2`] = `
 <body>
   <div>
     <div
-      class="wrapHidden"
+      data-rmiz-wrap="hidden"
       style="transform: rotate(45deg);"
     >
       <img
@@ -143,18 +143,18 @@ exports[`passes on original transform style 2`] = `
       />
       <button
         aria-label="Zoom image"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
       />
     </div>
   </div>
   <div
     aria-modal="true"
-    class="overlay"
+    data-rmiz-overlay="true"
     role="dialog"
     style="background-color: rgba(255, 255, 255, 0.95); transition-duration: 300ms; z-index: 2147483647;"
   >
     <div
-      class="content"
+      data-rmiz-modal-content="true"
       style="height: 0px; left: 0px; top: 0px; transform: scale(Infinity) translate(0px, 0px) rotate(45deg); transition-duration: 300ms; width: 0px;"
     >
       <img
@@ -165,7 +165,7 @@ exports[`passes on original transform style 2`] = `
     </div>
     <button
       aria-label="Unzoom image"
-      class="trigger btn"
+      data-rmiz-btn-close="true"
     />
   </div>
 </body>
@@ -174,7 +174,7 @@ exports[`passes on original transform style 2`] = `
 exports[`renders without browser environment 1`] = `
 <body>
   <div
-    class="wrap"
+    data-rmiz-wrap="visible"
   >
     <img
       alt="foo"
@@ -183,7 +183,7 @@ exports[`renders without browser environment 1`] = `
     />
     <button
       aria-label="Zoom image"
-      class="trigger btn"
+      data-rmiz-btn-open="true"
     />
   </div>
 </body>
@@ -193,7 +193,7 @@ exports[`unzooms on scroll 1`] = `
 <body>
   <div>
     <div
-      class="wrapHidden"
+      data-rmiz-wrap="hidden"
     >
       <img
         alt="foo"
@@ -202,18 +202,18 @@ exports[`unzooms on scroll 1`] = `
       />
       <button
         aria-label="Zoom image"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
       />
     </div>
   </div>
   <div
     aria-modal="true"
-    class="overlay"
+    data-rmiz-overlay="true"
     role="dialog"
     style="background-color: rgba(255, 255, 255, 0.95); transition-duration: 300ms; z-index: 2147483647;"
   >
     <div
-      class="content"
+      data-rmiz-modal-content="true"
       style="height: 0px; left: 0px; top: 0px; transform: scale(Infinity) translate(0px, 0px); transition-duration: 300ms; width: 0px;"
     >
       <img
@@ -224,7 +224,7 @@ exports[`unzooms on scroll 1`] = `
     </div>
     <button
       aria-label="Unzoom image"
-      class="trigger btn"
+      data-rmiz-btn-close="true"
     />
   </div>
 </body>
@@ -234,7 +234,7 @@ exports[`unzooms on scroll 2`] = `
 <body>
   <div>
     <div
-      class="wrap"
+      data-rmiz-wrap="visible"
     >
       <img
         alt="foo"
@@ -243,7 +243,7 @@ exports[`unzooms on scroll 2`] = `
       />
       <button
         aria-label="Zoom image"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
       />
     </div>
   </div>
@@ -254,7 +254,7 @@ exports[`unzooms using ESC key 1`] = `
 <body>
   <div>
     <div
-      class="wrapHidden"
+      data-rmiz-wrap="hidden"
     >
       <img
         alt="foo"
@@ -263,18 +263,18 @@ exports[`unzooms using ESC key 1`] = `
       />
       <button
         aria-label="Zoom image"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
       />
     </div>
   </div>
   <div
     aria-modal="true"
-    class="overlay"
+    data-rmiz-overlay="true"
     role="dialog"
     style="background-color: rgba(255, 255, 255, 0.95); transition-duration: 300ms; z-index: 2147483647;"
   >
     <div
-      class="content"
+      data-rmiz-modal-content="true"
       style="height: 0px; left: 0px; top: 0px; transform: scale(Infinity) translate(0px, 0px); transition-duration: 300ms; width: 0px;"
     >
       <img
@@ -285,7 +285,7 @@ exports[`unzooms using ESC key 1`] = `
     </div>
     <button
       aria-label="Unzoom image"
-      class="trigger btn"
+      data-rmiz-btn-close="true"
     />
   </div>
 </body>
@@ -295,7 +295,7 @@ exports[`unzooms using ESC key 2`] = `
 <body>
   <div>
     <div
-      class="wrapHidden"
+      data-rmiz-wrap="hidden"
     >
       <img
         alt="foo"
@@ -304,18 +304,18 @@ exports[`unzooms using ESC key 2`] = `
       />
       <button
         aria-label="Zoom image"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
       />
     </div>
   </div>
   <div
     aria-modal="true"
-    class="overlay"
+    data-rmiz-overlay="true"
     role="dialog"
     style="background-color: rgba(255, 255, 255, 0.95); transition-duration: 300ms; z-index: 2147483647;"
   >
     <div
-      class="content"
+      data-rmiz-modal-content="true"
       style="height: 0px; left: 0px; top: 0px; transform: scale(Infinity) translate(0px, 0px); transition-duration: 300ms; width: 0px;"
     >
       <img
@@ -326,7 +326,7 @@ exports[`unzooms using ESC key 2`] = `
     </div>
     <button
       aria-label="Unzoom image"
-      class="trigger btn"
+      data-rmiz-btn-close="true"
     />
   </div>
 </body>
@@ -336,7 +336,7 @@ exports[`unzooms using ESC key 3`] = `
 <body>
   <div>
     <div
-      class="wrap"
+      data-rmiz-wrap="visible"
     >
       <img
         alt="foo"
@@ -345,7 +345,7 @@ exports[`unzooms using ESC key 3`] = `
       />
       <button
         aria-label="Zoom image"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
       />
     </div>
   </div>
@@ -356,7 +356,7 @@ exports[`unzooms using ESC key 4`] = `
 <body>
   <div>
     <div
-      class="wrap"
+      data-rmiz-wrap="visible"
     >
       <img
         alt="foo"
@@ -365,7 +365,7 @@ exports[`unzooms using ESC key 4`] = `
       />
       <button
         aria-label="Zoom image"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
       />
     </div>
   </div>
@@ -376,7 +376,7 @@ exports[`zooms/unzooms with custom open/close text & <img /> 1`] = `
 <body>
   <div>
     <div
-      class="wrapHidden"
+      data-rmiz-wrap="hidden"
     >
       <img
         alt="foo"
@@ -385,18 +385,18 @@ exports[`zooms/unzooms with custom open/close text & <img /> 1`] = `
       />
       <button
         aria-label="Open me"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
       />
     </div>
   </div>
   <div
     aria-modal="true"
-    class="overlay"
+    data-rmiz-overlay="true"
     role="dialog"
     style="background-color: rgba(255, 255, 255, 0.95); transition-duration: 300ms; z-index: 2147483647;"
   >
     <div
-      class="content"
+      data-rmiz-modal-content="true"
       style="height: 0px; left: 0px; top: 0px; transform: scale(Infinity) translate(0px, 0px); transition-duration: 300ms; width: 0px;"
     >
       <img
@@ -407,7 +407,7 @@ exports[`zooms/unzooms with custom open/close text & <img /> 1`] = `
     </div>
     <button
       aria-label="Close me"
-      class="trigger btn"
+      data-rmiz-btn-close="true"
     />
   </div>
 </body>
@@ -417,7 +417,7 @@ exports[`zooms/unzooms with custom open/close text & <img /> 2`] = `
 <body>
   <div>
     <div
-      class="wrap"
+      data-rmiz-wrap="visible"
     >
       <img
         alt="foo"
@@ -426,7 +426,7 @@ exports[`zooms/unzooms with custom open/close text & <img /> 2`] = `
       />
       <button
         aria-label="Open me"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
       />
     </div>
   </div>
@@ -437,7 +437,7 @@ exports[`zooms/unzooms with defaults & <img /> 1`] = `
 <body>
   <div>
     <div
-      class="wrap"
+      data-rmiz-wrap="visible"
     >
       <img
         alt="foo"
@@ -446,7 +446,7 @@ exports[`zooms/unzooms with defaults & <img /> 1`] = `
       />
       <button
         aria-label="Zoom image"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
       />
     </div>
   </div>
@@ -457,7 +457,7 @@ exports[`zooms/unzooms with defaults & <img /> 2`] = `
 <body>
   <div>
     <div
-      class="wrapHidden"
+      data-rmiz-wrap="hidden"
     >
       <img
         alt="foo"
@@ -466,18 +466,18 @@ exports[`zooms/unzooms with defaults & <img /> 2`] = `
       />
       <button
         aria-label="Zoom image"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
       />
     </div>
   </div>
   <div
     aria-modal="true"
-    class="overlay"
+    data-rmiz-overlay="true"
     role="dialog"
     style="background-color: rgba(255, 255, 255, 0.95); transition-duration: 300ms; z-index: 2147483647;"
   >
     <div
-      class="content"
+      data-rmiz-modal-content="true"
       style="height: 0px; left: 0px; top: 0px; transform: scale(Infinity) translate(0px, 0px); transition-duration: 300ms; width: 0px;"
     >
       <img
@@ -488,7 +488,7 @@ exports[`zooms/unzooms with defaults & <img /> 2`] = `
     </div>
     <button
       aria-label="Unzoom image"
-      class="trigger btn"
+      data-rmiz-btn-close="true"
     />
   </div>
 </body>
@@ -498,7 +498,7 @@ exports[`zooms/unzooms with defaults & <img /> 3`] = `
 <body>
   <div>
     <div
-      class="wrap"
+      data-rmiz-wrap="visible"
     >
       <img
         alt="foo"
@@ -507,7 +507,7 @@ exports[`zooms/unzooms with defaults & <img /> 3`] = `
       />
       <button
         aria-label="Zoom image"
-        class="trigger btn"
+        data-rmiz-btn-open="true"
       />
     </div>
   </div>

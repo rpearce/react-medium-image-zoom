@@ -5,12 +5,12 @@ exports[`uses pseudo-parent when no parentRef.current 1`] = `
   <div />
   <div
     aria-modal="true"
-    class="overlay"
+    data-rmiz-overlay="true"
     role="dialog"
     style="background-color: rgba(255, 255, 255, 0.95); transition-duration: 300ms; z-index: 2147483647;"
   >
     <div
-      class="content"
+      data-rmiz-modal-content="true"
       style="height: 0px; left: 0px; top: 0px; transform: scale(Infinity) translate(0px, 0px); transition-duration: 300ms; width: 0px;"
     >
       <img
@@ -21,7 +21,7 @@ exports[`uses pseudo-parent when no parentRef.current 1`] = `
     </div>
     <button
       aria-label="Unzoom image"
-      class="trigger btn"
+      data-rmiz-btn-close="true"
     />
   </div>
 </body>

@@ -9,8 +9,7 @@ import {
   getModalOverlayStyle,
   pseudoParentEl
 } from './helpers'
-import cn from './Activated.css'
-import sharedCn from './Shared.css'
+import './styles.css'
 
 const ControlledActivated = ({
   children,
@@ -151,18 +150,16 @@ const ControlledActivated = ({
     zoomMargin
   })
 
-  const btnCn = `${sharedCn.trigger} ${cn.btn}`
-
   return (
     isActive &&
     createPortal(
-      <div aria-modal className={cn.overlay} role="dialog" style={overlayStyle}>
-        <div className={cn.content} style={contentStyle}>
+      <div aria-modal data-rmiz-overlay role="dialog" style={overlayStyle}>
+        <div data-rmiz-modal-content style={contentStyle}>
           {children}
         </div>
         <button
           aria-label={closeText}
-          className={btnCn}
+          data-rmiz-btn-close
           onClick={handleClick}
           ref={btnRef}
           type="button"

@@ -1,4 +1,6 @@
 import { dirname } from 'path'
+import React from 'react'
+import reactDom from 'react-dom'
 import babel from 'rollup-plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
 import postcss from 'rollup-plugin-postcss'
@@ -6,40 +8,39 @@ import resolve from '@rollup/plugin-node-resolve'
 import { terser } from 'rollup-plugin-terser'
 import pkg from './package.json'
 
-const plugins = [
-  resolve(),
-  commonjs({
-    include: /node_modules/,
-    namedExports: {
-      'prop-types': ['bool', 'func', 'node', 'number', 'object', 'string'],
-      'react-dom': ['createPortal']
-    }
-  }),
-  babel({
-    configFile: './babel.config.js',
-    only: ['./source'],
-    runtimeHelpers: true,
-    sourceMaps: 'inline'
-  }),
-  postcss({
-    extract: './dist/styles.css',
-    modules: true,
-    sourceMap: true
-  })
-]
+const getBabelConfig = ({ useESModules = false } = {}) => ({
+  configFile: './babel.config.js',
+  only: ['./source'],
+  plugins: [['@babel/transform-runtime', { useESModules }]],
+  runtimeHelpers: true,
+  sourceMaps: false
+})
+
+const postCssConfig = {
+  extract: './dist/styles.css',
+  modules: false,
+  sourceMap: false
+}
+
+const cjsConfig = {
+  include: /node_modules/,
+  namedExports: {
+    'prop-types': ['bool', 'func', 'node', 'number', 'object', 'string'],
+    react: Object.keys(React),
+    'react-dom': Object.keys(reactDom)
+  }
+}
 
 const buildModules = [
   './source/index.js',
-  './source/helpers.js',
-  './source/Uncontrolled.js',
-  './source/UncontrolledActivated.js',
   './source/Controlled.js',
-  './source/ControlledActivated.js'
+  './source/helpers.js'
 ]
 
-const isExternal = id => !id.startsWith('.')
+const isExternal = id => !id.startsWith('.') && !id.startsWith('/')
 
 const esm = [
+  // ESModules (esm) build
   {
     input: buildModules,
     output: {
@@ -47,26 +48,39 @@ const esm = [
       exports: 'named',
       format: 'esm',
       name: 'rmiz-esm',
-      sourcemap: true
+      sourcemap: false
     },
     external: isExternal,
-    plugins
+    plugins: [
+      resolve(),
+      babel(getBabelConfig({ useESModules: true })),
+      postcss(postCssConfig)
+    ]
   }
 ]
 
 const cjs = [
+  // CommonJS (cjs) build
   {
     input: buildModules,
     output: {
       dir: dirname(pkg.main),
       exports: 'named',
       format: 'cjs',
+      globals: { react: 'React', 'react-dom': 'ReactDOM' },
       name: 'rmiz-cjs',
-      sourcemap: true
+      sourcemap: false
     },
     external: isExternal,
-    plugins
+    plugins: [
+      resolve(),
+      commonjs(cjsConfig),
+      babel(getBabelConfig()),
+      postcss(postCssConfig)
+    ]
   },
+
+  // Minified cjs build
   {
     input: './source/index.js',
     output: {
@@ -74,26 +88,59 @@ const cjs = [
       exports: 'named',
       format: 'cjs',
       name: 'rmiz-cjs-min',
-      sourcemap: true
+      sourcemap: false
     },
     external: isExternal,
-    plugins: plugins.concat(terser())
+    plugins: [
+      resolve(),
+      commonjs(cjsConfig),
+      babel(getBabelConfig()),
+      postcss(postCssConfig),
+      terser()
+    ]
   }
 ]
 
 const umd = [
+  // Universal module definition (UMD) build
   {
     input: './source/index.js',
     output: {
-      file: pkg.browser,
+      file: './dist/umd/react-medium-image-zoom.js',
       exports: 'named',
       format: 'umd',
-      globals: { react: 'React' },
+      globals: { react: 'React', 'react-dom': 'ReactDOM' },
       name: 'rmiz-umd',
-      sourcemap: true
+      sourcemap: false
     },
-    external: ['react'],
-    plugins: plugins.concat(terser())
+    external: ['react', 'react-dom'],
+    plugins: [
+      resolve(),
+      commonjs(cjsConfig),
+      babel(getBabelConfig({ useESModules: true })),
+      postcss(postCssConfig)
+    ]
+  },
+
+  // Minified (UMD) build
+  {
+    input: './source/index.js',
+    output: {
+      file: './dist/umd/react-medium-image-zoom.min.js',
+      exports: 'named',
+      format: 'umd',
+      globals: { react: 'React', 'react-dom': 'ReactDOM' },
+      name: 'rmiz-umd',
+      sourcemap: false
+    },
+    external: ['react', 'react-dom'],
+    plugins: [
+      resolve(),
+      commonjs(cjsConfig),
+      babel(getBabelConfig({ useESModules: true })),
+      postcss(postCssConfig),
+      terser()
+    ]
   }
 ]
 

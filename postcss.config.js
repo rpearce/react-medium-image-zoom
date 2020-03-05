@@ -1,6 +1,6 @@
 const autoprefixer = require('autoprefixer')
 
 module.exports = {
-  modules: true,
+  modules: false,
   plugins: [autoprefixer]
 }
