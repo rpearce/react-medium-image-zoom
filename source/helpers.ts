@@ -50,7 +50,7 @@ interface GetModalContentStyle {
   isLoaded: boolean
   isUnloading: boolean
   left: number
-  originalTransform: string
+  originalTransform: string | null
   top: number
   transitionDuration: number
   width: number

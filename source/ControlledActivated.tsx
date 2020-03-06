@@ -1,5 +1,6 @@
 import React, {
   memo,
+  RefObject,
   SFC,
   useCallback,
   useEffect,
@@ -26,7 +27,7 @@ interface Props {
   onZoomChange?: (boolean) => void
   overlayBgColorEnd?: string
   overlayBgColorStart?: string
-  parentRef: any
+  parentRef: RefObject<HTMLElement>
   portalEl?: HTMLElement
   scrollableEl?: HTMLElement | Window
   transitionDuration?: number
@@ -151,7 +152,7 @@ const ControlledActivated: SFC<Props> = ({
   }, [isLoaded, onLoad, onUnload, prevIsLoaded])
 
   // use parent element or fake one if it's not yet loaded
-  const parentEl = parentRef.current || pseudoParentEl
+  const parentEl = parentRef?.current || pseudoParentEl
 
   // get parent element's dimensions
   const { height, left, top, width } = parentEl.getBoundingClientRect()
