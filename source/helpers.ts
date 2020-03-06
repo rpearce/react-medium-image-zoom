@@ -1,13 +1,5 @@
-// toDurationString :: Number -> String
 const toDurationString = (duration: number): string => `${duration}ms`
 
-// @TODO: test
-// getScale :: { height      :: Number
-//             , innerHeight :: Number
-//             , innerWidth  :: Number
-//             , width       :: Number
-//             , zoomMargin  :: Number
-//             }
 interface GetScale {
   height: number
   innerHeight: number
@@ -30,19 +22,6 @@ export const getScale = ({
   return scale
 }
 
-// @TODO: test
-// getModalContentStyle :: { height             :: Number
-//                         , innerHeight        :: Number
-//                         , innerWidth         :: Number
-//                         , isLoaded           :: Bool
-//                         , isUnloading        :: Bool
-//                         , left               :: Number
-//                         , originalTransform  :: String
-//                         , top                :: Number
-//                         , transitionDuration :: Number
-//                         , width              :: Number
-//                         , zoomMargin         :: Number
-//                         }
 interface GetModalContentStyle {
   height: number
   innerHeight: number
@@ -139,13 +118,6 @@ export const getModalContentStyle = ({
   }
 }
 
-// @TODO: test
-// getModalOverlayStyle :: { isLoaded            :: Bool
-//                         , isUnloading         :: Bool
-//                         , overlayBgColorEnd   :: String
-//                         , overlayBgColorStart :: String
-//                         , transitionDuration  :: Number
-//                         }
 interface GetModalOverlayStyle {
   isLoaded: boolean
   isUnloading: boolean
