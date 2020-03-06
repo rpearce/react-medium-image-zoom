@@ -37,7 +37,7 @@ const Controlled: SFC<Props> = ({
   openText = 'Zoom image',
   scrollableEl,
   transitionDuration = 300,
-  wrapStyle = undefined,
+  wrapStyle,
   zoomMargin = 0,
   zoomZindex = 2147483647
 }: Props) => {
