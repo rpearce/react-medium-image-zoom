@@ -23,3 +23,19 @@ test('uses pseudo-parent when no parentRef.current', async () => {
 
   expect(document.body).toMatchSnapshot()
 })
+
+test('render with default props', async () => {
+  render(
+    <UncontrolledActivated
+      onLoad={jest.fn()}
+      onUnload={jest.fn()}
+      parentRef={createRef()}
+      portalEl={document.body}
+      scrollableEl={window}
+    >
+      <img alt="foo" src="foo.jpg" width="500" />
+    </UncontrolledActivated>
+  )
+
+  expect(document.body).toMatchSnapshot()
+})

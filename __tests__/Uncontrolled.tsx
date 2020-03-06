@@ -232,3 +232,20 @@ test('renders without browser environment', () => {
   document.body.innerHTML = html
   expect(document.body).toMatchSnapshot()
 })
+
+test('render with different props', () => {
+  const html = renderToString(
+    <Zoom
+      overlayBgColorEnd="rgba(255, 255, 255, 0.95)"
+      overlayBgColorStart="rgba(255, 255, 255, 0)"
+      transitionDuration={400}
+      zoomMargin={1}
+      zoomZindex={2147483648}
+    >
+      <img alt="foo" src="foo.jpg" width="500" />
+    </Zoom>
+  )
+
+  document.body.innerHTML = html
+  expect(document.body).toMatchSnapshot()
+})

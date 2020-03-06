@@ -171,6 +171,24 @@ exports[`passes on original transform style 2`] = `
 </body>
 `;
 
+exports[`render with different props 1`] = `
+<body>
+  <div
+    data-rmiz-wrap="visible"
+  >
+    <img
+      alt="foo"
+      src="foo.jpg"
+      width="500"
+    />
+    <button
+      aria-label="Zoom image"
+      data-rmiz-btn-open="true"
+    />
+  </div>
+</body>
+`;
+
 exports[`renders without browser environment 1`] = `
 <body>
   <div

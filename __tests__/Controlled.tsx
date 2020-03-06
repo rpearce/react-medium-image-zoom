@@ -189,3 +189,22 @@ test('renders without browser environment', () => {
   document.body.innerHTML = html
   expect(document.body).toMatchSnapshot()
 })
+
+test('renders with different props', () => {
+  const html = renderToString(
+    <ControlledZoom
+      isZoomed={false}
+      onZoomChange={jest.fn()}
+      overlayBgColorEnd="rgba(255, 255, 255, 0.95)"
+      overlayBgColorStart="rgba(255, 255, 255, 0)"
+      transitionDuration={400}
+      zoomMargin={1}
+      zoomZindex={2147483648}
+    >
+      <img alt="foo" src="foo.jpg" width="500" />
+    </ControlledZoom>
+  )
+
+  document.body.innerHTML = html
+  expect(document.body).toMatchSnapshot()
+})
