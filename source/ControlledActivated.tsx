@@ -88,10 +88,8 @@ const ControlledActivated: SFC<Props> = ({
   const handleScroll = useCallback(() => {
     forceUpdate(n => n + 1)
 
-    if (!isUnloading) {
-      if (onZoomChange) {
-        onZoomChange(false)
-      }
+    if (!isUnloading && onZoomChange) {
+      onZoomChange(false)
     }
   }, [isUnloading, onZoomChange])
 

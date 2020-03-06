@@ -47,11 +47,9 @@ const Controlled: SFC<Props> = ({
 
   const handleClickTrigger = useCallback(
     e => {
-      if (!isActive) {
+      if (!isActive && onZoomChange) {
         e.preventDefault()
-        if (onZoomChange) {
-          onZoomChange(true)
-        }
+        onZoomChange(true)
       }
     },
     [isActive, onZoomChange]
