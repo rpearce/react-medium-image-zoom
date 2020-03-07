@@ -1,6 +1,13 @@
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
+import React, {
+  memo,
+  RefObject,
+  SFC,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from 'react'
 import { createPortal } from 'react-dom'
-import { func, node, number, object, string } from 'prop-types'
 import useEvent from 'react-use/lib/useEvent'
 import useWindowSize from 'react-use/lib/useWindowSize'
 import {
@@ -10,24 +17,39 @@ import {
 } from './helpers'
 import './styles.css'
 
-const UncontrolledActivated = ({
+interface Props {
+  children: React.ReactNode
+  closeText?: string
+  onUnload: () => void
+  onLoad: () => void
+  overlayBgColorEnd?: string
+  overlayBgColorStart?: string
+  parentRef: RefObject<HTMLElement>
+  portalEl?: HTMLElement
+  scrollableEl?: HTMLElement | Window
+  transitionDuration?: number
+  zoomMargin?: number
+  zoomZindex?: number
+}
+
+const UncontrolledActivated: SFC<Props> = ({
   children,
-  closeText,
+  closeText = 'Unzoom Image',
   onUnload,
   onLoad,
-  overlayBgColorEnd,
-  overlayBgColorStart,
+  overlayBgColorEnd = 'rgba(255, 255, 255, 0.95)',
+  overlayBgColorStart = 'rgba(255, 255, 255, 0)',
   parentRef,
-  portalEl,
-  scrollableEl,
-  transitionDuration,
-  zoomMargin,
-  zoomZindex
-}) => {
-  const btnRef = useRef(null)
-  const [, forceUpdate] = useState(0)
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [isUnloading, setIsUnloading] = useState(false)
+  portalEl = document.body,
+  scrollableEl = window,
+  transitionDuration = 300,
+  zoomMargin = 0,
+  zoomZindex = 2147483647
+}: Props) => {
+  const btnRef = useRef<HTMLButtonElement>(null)
+  const [, forceUpdate] = useState<number>(0)
+  const [isLoaded, setIsLoaded] = useState<boolean>(false)
+  const [isUnloading, setIsUnloading] = useState<boolean>(false)
   const { width: innerWidth, height: innerHeight } = useWindowSize()
 
   // on click, begin unloading
@@ -74,8 +96,10 @@ const UncontrolledActivated = ({
       ? setTimeout(onUnload, transitionDuration)
       : null
 
-    return () => {
-      clearTimeout(unloadTimeout)
+    return (): void => {
+      if (unloadTimeout) {
+        clearTimeout(unloadTimeout)
+      }
     }
   }, [isUnloading, onUnload, transitionDuration])
 
@@ -122,21 +146,6 @@ const UncontrolledActivated = ({
     </div>,
     portalEl
   )
-}
-
-UncontrolledActivated.propTypes = {
-  children: node.isRequired,
-  closeText: string.isRequired,
-  onUnload: func.isRequired,
-  onLoad: func.isRequired,
-  overlayBgColorEnd: string.isRequired,
-  overlayBgColorStart: string.isRequired,
-  parentRef: object.isRequired,
-  portalEl: object,
-  scrollableEl: object,
-  transitionDuration: number.isRequired,
-  zoomMargin: number.isRequired,
-  zoomZindex: number.isRequired
 }
 
 export default memo(UncontrolledActivated)

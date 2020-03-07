@@ -1,20 +1,12 @@
+import commonjs from '@rollup/plugin-commonjs'
+import resolve from '@rollup/plugin-node-resolve'
 import { dirname } from 'path'
 import React from 'react'
 import reactDom from 'react-dom'
-import babel from 'rollup-plugin-babel'
-import commonjs from '@rollup/plugin-commonjs'
 import postcss from 'rollup-plugin-postcss'
-import resolve from '@rollup/plugin-node-resolve'
 import { terser } from 'rollup-plugin-terser'
+import typescript from 'rollup-plugin-typescript2'
 import pkg from './package.json'
-
-const getBabelConfig = ({ useESModules = false } = {}) => ({
-  configFile: './babel.config.js',
-  only: ['./source'],
-  plugins: [['@babel/transform-runtime', { useESModules }]],
-  runtimeHelpers: true,
-  sourceMaps: false
-})
 
 const postCssConfig = {
   extract: './dist/styles.css',
@@ -25,16 +17,15 @@ const postCssConfig = {
 const cjsConfig = {
   include: /node_modules/,
   namedExports: {
-    'prop-types': ['bool', 'func', 'node', 'number', 'object', 'string'],
     react: Object.keys(React),
     'react-dom': Object.keys(reactDom)
   }
 }
 
 const buildModules = [
-  './source/index.js',
-  './source/Controlled.js',
-  './source/helpers.js'
+  './source/index.ts',
+  './source/Controlled.tsx',
+  './source/helpers.ts'
 ]
 
 const isExternal = id => !id.startsWith('.') && !id.startsWith('/')
@@ -53,8 +44,8 @@ const esm = [
     external: isExternal,
     plugins: [
       resolve(),
-      babel(getBabelConfig({ useESModules: true })),
-      postcss(postCssConfig)
+      postcss(postCssConfig),
+      typescript({ tsconfig: './tsconfig.build.json' })
     ]
   }
 ]
@@ -75,14 +66,14 @@ const cjs = [
     plugins: [
       resolve(),
       commonjs(cjsConfig),
-      babel(getBabelConfig()),
-      postcss(postCssConfig)
+      postcss(postCssConfig),
+      typescript({ tsconfig: './tsconfig.build.json' })
     ]
   },
 
   // Minified cjs build
   {
-    input: './source/index.js',
+    input: './source/index.ts',
     output: {
       file: `${dirname(pkg.main)}/${pkg.name}.min.js`,
       exports: 'named',
@@ -94,8 +85,8 @@ const cjs = [
     plugins: [
       resolve(),
       commonjs(cjsConfig),
-      babel(getBabelConfig()),
       postcss(postCssConfig),
+      typescript({ tsconfig: './tsconfig.build.json' }),
       terser()
     ]
   }
@@ -104,7 +95,7 @@ const cjs = [
 const umd = [
   // Universal module definition (UMD) build
   {
-    input: './source/index.js',
+    input: './source/index.ts',
     output: {
       file: './dist/umd/react-medium-image-zoom.js',
       exports: 'named',
@@ -117,14 +108,14 @@ const umd = [
     plugins: [
       resolve(),
       commonjs(cjsConfig),
-      babel(getBabelConfig({ useESModules: true })),
+      typescript({ tsconfig: './tsconfig.build.json' }),
       postcss(postCssConfig)
     ]
   },
 
   // Minified (UMD) build
   {
-    input: './source/index.js',
+    input: './source/index.ts',
     output: {
       file: './dist/umd/react-medium-image-zoom.min.js',
       exports: 'named',
@@ -137,8 +128,8 @@ const umd = [
     plugins: [
       resolve(),
       commonjs(cjsConfig),
-      babel(getBabelConfig({ useESModules: true })),
       postcss(postCssConfig),
+      typescript({ tsconfig: './tsconfig.build.json' }),
       terser()
     ]
   }

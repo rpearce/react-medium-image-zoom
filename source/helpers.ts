@@ -1,20 +1,20 @@
-// toDurationString :: Number -> String
-const toDurationString = duration => `${duration}ms`
+const toDurationString = (duration: number): string => `${duration}ms`
 
-// @TODO: test
-// getScale :: { height      :: Number
-//             , innerHeight :: Number
-//             , innerWidth  :: Number
-//             , width       :: Number
-//             , zoomMargin  :: Number
-//             }
+interface GetScale {
+  height: number
+  innerHeight: number
+  innerWidth: number
+  width: number
+  zoomMargin: number
+}
+
 export const getScale = ({
   height,
   innerHeight,
   innerWidth,
   width,
   zoomMargin
-}) => {
+}: GetScale): number => {
   const scaleX = innerWidth / (width + zoomMargin)
   const scaleY = innerHeight / (height + zoomMargin)
   const scale = Math.min(scaleX, scaleY)
@@ -22,19 +22,30 @@ export const getScale = ({
   return scale
 }
 
-// @TODO: test
-// getModalContentStyle :: { height             :: Number
-//                         , innerHeight        :: Number
-//                         , innerWidth         :: Number
-//                         , isLoaded           :: Bool
-//                         , isUnloading        :: Bool
-//                         , left               :: Number
-//                         , originalTransform  :: String
-//                         , top                :: Number
-//                         , transitionDuration :: Number
-//                         , width              :: Number
-//                         , zoomMargin         :: Number
-//                         }
+interface GetModalContentStyle {
+  height: number
+  innerHeight: number
+  innerWidth: number
+  isLoaded: boolean
+  isUnloading: boolean
+  left: number
+  originalTransform: string | null
+  top: number
+  transitionDuration: number
+  width: number
+  zoomMargin: number
+}
+
+type GetModalContentStyleReturnType = {
+  height: number
+  left: number
+  top: number
+  transform: string
+  WebkitTransform: string
+  transitionDuration: string
+  width: number
+}
+
 export const getModalContentStyle = ({
   height,
   innerHeight,
@@ -47,7 +58,7 @@ export const getModalContentStyle = ({
   transitionDuration,
   width,
   zoomMargin
-}) => {
+}: GetModalContentStyle): GetModalContentStyleReturnType => {
   const transitionDurationString = toDurationString(transitionDuration)
 
   if (!isLoaded || isUnloading) {
@@ -107,13 +118,21 @@ export const getModalContentStyle = ({
   }
 }
 
-// @TODO: test
-// getModalOverlayStyle :: { isLoaded            :: Bool
-//                         , isUnloading         :: Bool
-//                         , overlayBgColorEnd   :: String
-//                         , overlayBgColorStart :: String
-//                         , transitionDuration  :: Number
-//                         }
+interface GetModalOverlayStyle {
+  isLoaded: boolean
+  isUnloading: boolean
+  overlayBgColorEnd: string
+  overlayBgColorStart: string
+  transitionDuration: number
+  zoomZindex: number
+}
+
+type GetModalOverlayStyleReturnType = {
+  backgroundColor: string
+  transitionDuration: string
+  zIndex: number
+}
+
 export const getModalOverlayStyle = ({
   isLoaded,
   isUnloading,
@@ -121,7 +140,7 @@ export const getModalOverlayStyle = ({
   overlayBgColorStart,
   transitionDuration,
   zoomZindex
-}) => {
+}: GetModalOverlayStyle): GetModalOverlayStyleReturnType => {
   const style = {
     backgroundColor: overlayBgColorStart,
     transitionDuration: toDurationString(transitionDuration),
@@ -138,8 +157,15 @@ export const getModalOverlayStyle = ({
 // @TODO: test
 // if parentRef.current is not available yet,
 // we can fall back to these defaults
+type GetBoundingClientRectReturnType = {
+  height: number
+  left: number
+  top: number
+  width: number
+}
+
 export const pseudoParentEl = {
-  getBoundingClientRect: () => ({
+  getBoundingClientRect: (): GetBoundingClientRectReturnType => ({
     height: 0,
     left: 0,
     top: 0,

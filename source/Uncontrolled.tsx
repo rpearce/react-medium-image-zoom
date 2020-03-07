@@ -1,26 +1,46 @@
-import React, { StrictMode, memo, useCallback, useRef, useState } from 'react'
-import { node, number, object, string } from 'prop-types'
 import 'focus-options-polyfill'
-import UncontrolledActivated from './UncontrolledActivated'
+import React, {
+  memo,
+  SFC,
+  StrictMode,
+  useCallback,
+  useRef,
+  useState
+} from 'react'
 import './styles.css'
+import UncontrolledActivated from './UncontrolledActivated'
 
-const Uncontrolled = ({
+interface Props {
+  children: React.ReactNode
+  closeText?: string
+  openText?: string
+  overlayBgColorEnd?: string
+  overlayBgColorStart?: string
+  portalEl?: HTMLElement
+  scrollableEl?: HTMLElement | Window
+  transitionDuration?: number
+  wrapStyle?: object
+  zoomMargin?: number
+  zoomZindex?: number
+}
+
+const Uncontrolled: SFC<Props> = ({
   children,
-  closeText,
-  overlayBgColorEnd,
-  overlayBgColorStart,
+  closeText = 'Unzoom image',
+  overlayBgColorEnd = 'rgba(255, 255, 255, 0.95)',
+  overlayBgColorStart = 'rgba(255, 255, 255, 0)',
   portalEl,
-  openText,
+  openText = 'Zoom image',
   scrollableEl,
-  transitionDuration,
+  transitionDuration = 300,
   wrapStyle,
-  zoomMargin,
-  zoomZindex
-}) => {
-  const [isActive, setIsActive] = useState(false)
-  const [isChildLoaded, setIsChildLoaded] = useState(false)
+  zoomMargin = 0,
+  zoomZindex = 2147483647
+}: Props) => {
+  const [isActive, setIsActive] = useState<boolean>(false)
+  const [isChildLoaded, setIsChildLoaded] = useState<boolean>(false)
   const wrapRef = useRef(null)
-  const btnRef = useRef(null)
+  const btnRef = useRef<HTMLButtonElement>(null)
 
   const handleClickTrigger = useCallback(
     e => {
@@ -66,8 +86,8 @@ const Uncontrolled = ({
             overlayBgColorEnd={overlayBgColorEnd}
             overlayBgColorStart={overlayBgColorStart}
             parentRef={wrapRef}
-            portalEl={portalEl || document.body}
-            scrollableEl={scrollableEl || window}
+            portalEl={portalEl}
+            scrollableEl={scrollableEl}
             transitionDuration={transitionDuration}
             zoomMargin={zoomMargin}
             zoomZindex={zoomZindex}
@@ -78,31 +98,6 @@ const Uncontrolled = ({
       </div>
     </StrictMode>
   )
-}
-
-Uncontrolled.propTypes = {
-  children: node.isRequired,
-  closeText: string.isRequired,
-  openText: string.isRequired,
-  overlayBgColorEnd: string.isRequired,
-  overlayBgColorStart: string.isRequired,
-  portalEl: object,
-  scrollableEl: object,
-  transitionDuration: number.isRequired,
-  wrapStyle: object,
-  zoomMargin: number.isRequired,
-  zoomZindex: number.isRequired
-}
-
-Uncontrolled.defaultProps = {
-  closeText: 'Unzoom image',
-  openText: 'Zoom image',
-  overlayBgColorEnd: 'rgba(255, 255, 255, 0.95)',
-  overlayBgColorStart: 'rgba(255, 255, 255, 0)',
-  transitionDuration: 300,
-  wrapStyle: null,
-  zoomMargin: 0,
-  zoomZindex: 2147483647
 }
 
 export default memo(Uncontrolled)

@@ -1,6 +1,6 @@
+import { act, fireEvent, render } from '@testing-library/react'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
-import { act, fireEvent, render } from '@testing-library/react'
 import { Controlled as ControlledZoom } from '../source'
 
 test('when closed and then open', () => {
@@ -182,6 +182,24 @@ test('custom open/close text', () => {
 test('renders without browser environment', () => {
   const html = renderToString(
     <ControlledZoom isZoomed={false} onZoomChange={jest.fn()}>
+      <img alt="foo" src="foo.jpg" width="500" />
+    </ControlledZoom>
+  )
+
+  document.body.innerHTML = html
+  expect(document.body).toMatchSnapshot()
+})
+
+test('renders with different props', () => {
+  const html = renderToString(
+    <ControlledZoom
+      isZoomed={false}
+      overlayBgColorEnd="rgba(255, 255, 255, 0.95)"
+      overlayBgColorStart="rgba(255, 255, 255, 0)"
+      transitionDuration={400}
+      zoomMargin={1}
+      zoomZindex={2147483648}
+    >
       <img alt="foo" src="foo.jpg" width="500" />
     </ControlledZoom>
   )

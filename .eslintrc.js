@@ -6,17 +6,25 @@ module.exports = {
     node: true
   },
   extends: [
-    'eslint:recommended',
-    'plugin:css-modules/recommended',
-    'plugin:jsx-a11y/recommended',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'prettier/@typescript-eslint',
     'plugin:prettier/recommended',
-    'plugin:react/recommended'
+    'plugin:css-modules/recommended',
+    'plugin:jsx-a11y/recommended'
   ],
   parserOptions: {
-    ecmaVersion: 2019,
+    ecmaVersion: 2020,
     sourceType: 'module'
   },
-  plugins: ['css-modules', 'jsx-a11y', 'react', 'react-hooks'],
+  parser: '@typescript-eslint/parser',
+  plugins: [
+    'css-modules',
+    'jsx-a11y',
+    'react',
+    'react-hooks',
+    '@typescript-eslint'
+  ],
   rules: {
     //indent: ['error', 2, { SwitchCase: 1 }],
     'jsx-quotes': ['error', 'prefer-double'],
@@ -30,7 +38,16 @@ module.exports = {
   },
   settings: {
     react: {
-      version: '16'
+      version: 'detect'
     }
-  }
+  },
+  overrides: [
+    {
+      files: ['*.js', '*.jsx'],
+      rules: {
+        '@typescript-eslint/explicit-function-return-type': 'off',
+        '@typescript-eslint/no-var-requires': 'off'
+      }
+    }
+  ]
 }
