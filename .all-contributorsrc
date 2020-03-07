@@ -320,9 +320,12 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/2117655?v=4",
       "profile": "https://sunknudsen.com",
       "contributions": [
+        "code",
         "bug",
         "ideas",
-        "example"
+        "example",
+        "review",
+        "test"
       ]
     },
     {
@@ -331,9 +334,13 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/10801221?v=4",
       "profile": "http://dougg0k.js.org",
       "contributions": [
+        "code",
+        "doc",
         "bug",
         "ideas",
-        "example"
+        "example",
+        "review",
+        "test"
       ]
     },
     {
