@@ -1,18 +1,18 @@
 {
   "compilerOptions": {
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "jsx": "react",
+    "lib": ["es2020", "dom"],
+    "module": "es6",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
     "outDir": "./dist/",
     "sourceMap": true,
-    "module": "es6",
-    "lib": ["es2020", "dom"],
-    "jsx": "react",
-    "target": "es5",
-    "moduleResolution": "node",
-    "allowJs": false,
     "strict": true,
-    "noImplicitAny": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "declaration": true
+    "target": "es5"
   },
   "include": ["./source/**/*", "./__tests__/**/*"],
   "exclude": ["node_modules/"]
