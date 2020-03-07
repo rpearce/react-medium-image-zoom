@@ -2,12 +2,14 @@
   "compilerOptions": {
     "outDir": "./dist/",
     "sourceMap": true,
-    "strictNullChecks": true,
     "module": "es6",
     "lib": ["es2020", "dom"],
     "jsx": "react",
     "target": "es5",
+    "moduleResolution": "node",
     "allowJs": false,
+    "strict": true,
+    "noImplicitAny": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "declaration": true

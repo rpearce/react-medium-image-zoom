@@ -24,7 +24,7 @@ interface Props {
   onLoad: () => void
   overlayBgColorEnd?: string
   overlayBgColorStart?: string
-  parentRef?: RefObject<HTMLElement>
+  parentRef: RefObject<HTMLElement>
   portalEl?: HTMLElement
   scrollableEl?: HTMLElement | Window
   transitionDuration?: number
@@ -104,7 +104,7 @@ const UncontrolledActivated: SFC<Props> = ({
   }, [isUnloading, onUnload, transitionDuration])
 
   // use parent element or fake one if it's not yet loaded
-  const parentEl = parentRef?.current || pseudoParentEl
+  const parentEl = parentRef.current || pseudoParentEl
 
   // get parent item's dimensions
   const { height, left, top, width } = parentEl.getBoundingClientRect()

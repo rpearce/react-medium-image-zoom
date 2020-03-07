@@ -24,7 +24,7 @@ interface Props {
   isActive: boolean
   onLoad: () => void
   onUnload: () => void
-  onZoomChange?: (boolean) => void
+  onZoomChange?: (value: boolean) => void
   overlayBgColorEnd?: string
   overlayBgColorStart?: string
   parentRef: RefObject<HTMLElement>
@@ -124,7 +124,7 @@ const ControlledActivated: SFC<Props> = ({
 
   // if unloading, tell parent that we're all done here after Nms
   useEffect(() => {
-    let unloadTimeout
+    let unloadTimeout: NodeJS.Timeout
 
     if (isUnloading) {
       unloadTimeout = setTimeout(() => {
@@ -150,7 +150,7 @@ const ControlledActivated: SFC<Props> = ({
   }, [isLoaded, onLoad, onUnload, prevIsLoaded])
 
   // use parent element or fake one if it's not yet loaded
-  const parentEl = parentRef?.current || pseudoParentEl
+  const parentEl = parentRef.current || pseudoParentEl
 
   // get parent element's dimensions
   const { height, left, top, width } = parentEl.getBoundingClientRect()

@@ -32,7 +32,6 @@ test('render with default props', async () => {
       isActive
       onLoad={jest.fn()}
       onUnload={jest.fn()}
-      onZoomChange={jest.fn()}
       parentRef={createRef()}
       portalEl={document.body}
       scrollableEl={window}

@@ -14,14 +14,17 @@ module.exports = {
     'plugin:jsx-a11y/recommended'
   ],
   parserOptions: {
-    ecmaVersion: 2019,
+    ecmaVersion: 2020,
     sourceType: 'module'
   },
-  ecmaFeatures: {
-    jsx: true
-  },
   parser: '@typescript-eslint/parser',
-  plugins: ['css-modules', 'jsx-a11y', 'react', 'react-hooks'],
+  plugins: [
+    'css-modules',
+    'jsx-a11y',
+    'react',
+    'react-hooks',
+    '@typescript-eslint'
+  ],
   rules: {
     //indent: ['error', 2, { SwitchCase: 1 }],
     'jsx-quotes': ['error', 'prefer-double'],
@@ -37,5 +40,14 @@ module.exports = {
     react: {
       version: 'detect'
     }
-  }
+  },
+  overrides: [
+    {
+      files: ['*.js', '*.jsx'],
+      rules: {
+        '@typescript-eslint/explicit-function-return-type': 'off',
+        '@typescript-eslint/no-var-requires': 'off'
+      }
+    }
+  ]
 }

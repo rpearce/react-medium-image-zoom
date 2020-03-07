@@ -14,7 +14,7 @@ interface Props {
   children: React.ReactNode
   closeText?: string
   isZoomed: boolean
-  onZoomChange?: (boolean) => void
+  onZoomChange?: (value: boolean) => void
   openText?: string
   overlayBgColorEnd?: string
   overlayBgColorStart?: string

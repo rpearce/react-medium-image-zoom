@@ -194,7 +194,6 @@ test('renders with different props', () => {
   const html = renderToString(
     <ControlledZoom
       isZoomed={false}
-      onZoomChange={jest.fn()}
       overlayBgColorEnd="rgba(255, 255, 255, 0.95)"
       overlayBgColorStart="rgba(255, 255, 255, 0)"
       transitionDuration={400}
