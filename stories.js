@@ -90,6 +90,7 @@ stories.add('<img />', () => (
         range: true,
         step: 100
       })}
+      wrapElement={text('Wrapper element', 'div')}
       zoomMargin={number('Zoom margin', 0, {
         min: 0,
         max: 500,
@@ -132,6 +133,7 @@ stories.add('<picture />', () => (
         range: true,
         step: 100
       })}
+      wrapElement={text('Wrapper element', 'div')}
       zoomMargin={number('Zoom margin', 0, {
         min: 0,
         max: 500,
@@ -178,6 +180,7 @@ stories.add('<figure />', () => (
           range: true,
           step: 100
         })}
+        wrapElement={text('Wrapper element', 'div')}
         zoomMargin={number('Zoom margin', 0, {
           min: 0,
           max: 500,
@@ -222,6 +225,7 @@ stories.add('blue circle div', () => (
         range: true,
         step: 100
       })}
+      wrapElement={text('Wrapper element', 'div')}
       zoomMargin={number('Zoom margin', 0, {
         min: 0,
         max: 500,
@@ -278,7 +282,7 @@ stories.add('image gallery using divs & background images', () => {
             key={i}
             style={{ margin: '0 1rem 1rem 0', width: 'calc(33% - 1rem)' }}
           >
-            <Zoom wrapStyle={{ width: '100%' }}>
+            <Zoom wrapElement="div" wrapStyle={{ width: '100%' }}>
               <div
                 aria-label={img.alt}
                 role="img"
@@ -369,6 +373,7 @@ stories.add('image gallery + slideshow-style images', () => {
                 isZoomed={activeIndex === i}
                 onZoomChange={handleZoomChange}
                 transitionDuration={0}
+                wrapElement="span"
                 wrapStyle={{ width: '100%' }}
               >
                 <div
@@ -433,6 +438,7 @@ stories.add('controlled: zooms when image loads', () => {
           range: true,
           step: 100
         })}
+        wrapElement="div"
         zoomMargin={number('Zoom margin', 0, {
           min: 0,
           max: 500,
@@ -495,6 +501,7 @@ stories.add('controlled: specific keys', () => {
           range: true,
           step: 100
         })}
+        wrapElement="span"
         zoomMargin={number('Zoom margin', 0, {
           min: 0,
           max: 500,
@@ -598,6 +605,7 @@ stories.add('larger image size', () => (
           range: true,
           step: 100
         })}
+        wrapElement="div"
         zoomMargin={number('Zoom margin', 0, {
           min: 0,
           max: 500,
