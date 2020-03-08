@@ -19,6 +19,7 @@ interface Props {
   portalEl?: HTMLElement
   scrollableEl?: HTMLElement | Window
   transitionDuration?: number
+  wrapElement?: 'div' | 'span'
   wrapStyle?: object
   zoomMargin?: number
   zoomZindex?: number
@@ -33,13 +34,14 @@ const Uncontrolled: SFC<Props> = ({
   openText = 'Zoom image',
   scrollableEl,
   transitionDuration = 300,
+  wrapElement = 'div',
   wrapStyle,
   zoomMargin = 0,
   zoomZindex = 2147483647
 }: Props) => {
   const [isActive, setIsActive] = useState<boolean>(false)
   const [isChildLoaded, setIsChildLoaded] = useState<boolean>(false)
-  const wrapRef = useRef(null)
+  const wrapRef = useRef<HTMLDivElement | HTMLSpanElement>(null)
   const btnRef = useRef<HTMLButtonElement>(null)
 
   const handleClickTrigger = useCallback(
@@ -68,36 +70,59 @@ const Uncontrolled: SFC<Props> = ({
   const isExpanded = isActive && isChildLoaded
   const wrapType = isExpanded ? 'hidden' : 'visible'
 
-  return (
-    <StrictMode>
-      <div data-rmiz-wrap={wrapType} ref={wrapRef} style={wrapStyle}>
-        {children}
-        <button
-          aria-label={openText}
-          data-rmiz-btn-open
-          onClick={handleClickTrigger}
-          ref={btnRef}
-        />
-        {typeof window !== 'undefined' && isActive && (
-          <UncontrolledActivated
-            closeText={closeText}
-            onLoad={handleChildLoad}
-            onUnload={handleChildUnload}
-            overlayBgColorEnd={overlayBgColorEnd}
-            overlayBgColorStart={overlayBgColorStart}
-            parentRef={wrapRef}
-            portalEl={portalEl}
-            scrollableEl={scrollableEl}
-            transitionDuration={transitionDuration}
-            zoomMargin={zoomMargin}
-            zoomZindex={zoomZindex}
-          >
-            {children}
-          </UncontrolledActivated>
-        )}
-      </div>
-    </StrictMode>
+  const content = (
+    <React.Fragment>
+      {children}
+      <button
+        aria-label={openText}
+        data-rmiz-btn-open
+        onClick={handleClickTrigger}
+        ref={btnRef}
+      />
+      {typeof window !== 'undefined' && isActive && (
+        <UncontrolledActivated
+          closeText={closeText}
+          onLoad={handleChildLoad}
+          onUnload={handleChildUnload}
+          overlayBgColorEnd={overlayBgColorEnd}
+          overlayBgColorStart={overlayBgColorStart}
+          parentRef={wrapRef}
+          portalEl={portalEl}
+          scrollableEl={scrollableEl}
+          transitionDuration={transitionDuration}
+          zoomMargin={zoomMargin}
+          zoomZindex={zoomZindex}
+        >
+          {children}
+        </UncontrolledActivated>
+      )}
+    </React.Fragment>
   )
+
+  let wrap: React.ReactNode
+  if (wrapElement === 'span') {
+    wrap = (
+      <span
+        data-rmiz-wrap={wrapType}
+        ref={wrapRef as React.RefObject<HTMLSpanElement>}
+        style={wrapStyle}
+      >
+        {content}
+      </span>
+    )
+  } else {
+    wrap = (
+      <div
+        data-rmiz-wrap={wrapType}
+        ref={wrapRef as React.RefObject<HTMLDivElement>}
+        style={wrapStyle}
+      >
+        {content}
+      </div>
+    )
+  }
+
+  return <StrictMode>{wrap}</StrictMode>
 }
 
 export default memo(Uncontrolled)
