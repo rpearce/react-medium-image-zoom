@@ -1,7 +1,7 @@
 import React, {
   memo,
   RefObject,
-  SFC,
+  FC,
   useCallback,
   useEffect,
   useRef,
@@ -32,7 +32,7 @@ interface Props {
   zoomZindex?: number
 }
 
-const UncontrolledActivated: SFC<Props> = ({
+const UncontrolledActivated: FC<Props> = ({
   children,
   closeText = 'Unzoom Image',
   onUnload,

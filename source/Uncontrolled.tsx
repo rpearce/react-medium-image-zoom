@@ -1,7 +1,7 @@
 import 'focus-options-polyfill'
 import React, {
   memo,
-  SFC,
+  FC,
   StrictMode,
   useCallback,
   useRef,
@@ -24,7 +24,7 @@ interface Props {
   zoomZindex?: number
 }
 
-const Uncontrolled: SFC<Props> = ({
+const Uncontrolled: FC<Props> = ({
   children,
   closeText = 'Unzoom image',
   overlayBgColorEnd = 'rgba(255, 255, 255, 0.95)',
