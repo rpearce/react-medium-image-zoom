@@ -51,7 +51,7 @@
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
     "coverage": "jest --coverage --coverageReporters=text-lcov | coveralls",
-    "lint": "eslint .",
+    "lint": "eslint . --ext .js,.ts,.tsx",
     "prepublishOnly": "run-p lint test && yarn build:js",
     "start": "BUILD_ENV=esm run-s clean build:js && run-p build:js:watch storybook",
     "storybook": "start-storybook -p 6006",

@@ -33,6 +33,7 @@ module.exports = {
     quotes: ['error', 'single', { allowTemplateLiterals: true }],
     'react-hooks/exhaustive-deps': 'error',
     'react-hooks/rules-of-hooks': 'error',
+    'react/prop-types': 0,
     semi: ['error', 'never']
   },
   settings: {

@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 
 Object.defineProperty(window, 'scroll', {
-  value: () => { return },
+  value: () => undefined,
   writable: true
 })
