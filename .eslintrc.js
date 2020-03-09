@@ -26,13 +26,12 @@ module.exports = {
     '@typescript-eslint'
   ],
   rules: {
-    //indent: ['error', 2, { SwitchCase: 1 }],
     'jsx-quotes': ['error', 'prefer-double'],
     'jsx-a11y/no-onchange': 0,
     'no-trailing-spaces': 'error',
     'object-curly-spacing': ['error', 'always'],
     quotes: ['error', 'single', { allowTemplateLiterals: true }],
-    'react-hooks/exhaustive-deps': 'warn',
+    'react-hooks/exhaustive-deps': 'error',
     'react-hooks/rules-of-hooks': 'error',
     semi: ['error', 'never']
   },
