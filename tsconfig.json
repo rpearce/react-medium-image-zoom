@@ -14,6 +14,6 @@
     "strict": true,
     "target": "es5"
   },
-  "include": ["./source/**/*", "./__tests__/**/*"],
-  "exclude": ["node_modules/"]
+  "exclude": ["node_modules/"],
+  "include": ["./source/**/*", "./__tests__/**/*"]
 }
