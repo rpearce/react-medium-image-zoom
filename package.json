@@ -44,6 +44,7 @@
     "build:docs": "mkdir -p docs && build-storybook -o docs",
     "build:js": "rollup -c ./rollup.config.js",
     "build:js:watch": "npm run build:js -- -w",
+    "ci": "run-p lint build test",
     "clean": "run-p clean:dist clean:docs",
     "clean:dist": "rm -rf ./dist",
     "clean:docs": "rm -rf ./docs",
