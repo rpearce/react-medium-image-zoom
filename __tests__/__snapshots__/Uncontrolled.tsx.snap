@@ -173,7 +173,7 @@ exports[`passes on original transform style 2`] = `
 
 exports[`render with different props 1`] = `
 <body>
-  <div
+  <span
     data-rmiz-wrap="visible"
   >
     <img
@@ -185,7 +185,7 @@ exports[`render with different props 1`] = `
       aria-label="Zoom image"
       data-rmiz-btn-open="true"
     />
-  </div>
+  </span>
 </body>
 `;
 

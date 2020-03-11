@@ -1,7 +1,10 @@
 import 'focus-options-polyfill'
 import React, {
+  CSSProperties,
   FC,
   ReactNode,
+  ReactType,
+  RefObject,
   StrictMode,
   memo,
   useCallback,
@@ -20,7 +23,8 @@ interface Props {
   portalEl?: HTMLElement
   scrollableEl?: HTMLElement | Window
   transitionDuration?: number
-  wrapStyle?: object
+  wrapElement?: ReactType
+  wrapStyle?: CSSProperties
   zoomMargin?: number
   zoomZindex?: number
 }
@@ -34,13 +38,14 @@ const Uncontrolled: FC<Props> = ({
   openText = 'Zoom image',
   scrollableEl,
   transitionDuration = 300,
+  wrapElement: WrapElement = 'div',
   wrapStyle,
   zoomMargin = 0,
   zoomZindex = 2147483647
 }: Props) => {
   const [isActive, setIsActive] = useState<boolean>(false)
   const [isChildLoaded, setIsChildLoaded] = useState<boolean>(false)
-  const wrapRef = useRef(null)
+  const wrapRef = useRef<HTMLElement>(null)
   const btnRef = useRef<HTMLButtonElement>(null)
 
   const handleClickTrigger = useCallback(
@@ -71,7 +76,11 @@ const Uncontrolled: FC<Props> = ({
 
   return (
     <StrictMode>
-      <div data-rmiz-wrap={wrapType} ref={wrapRef} style={wrapStyle}>
+      <WrapElement
+        data-rmiz-wrap={wrapType}
+        ref={wrapRef as RefObject<HTMLElement>}
+        style={wrapStyle}
+      >
         {children}
         <button
           aria-label={openText}
@@ -96,7 +105,7 @@ const Uncontrolled: FC<Props> = ({
             {children}
           </UncontrolledActivated>
         )}
-      </div>
+      </WrapElement>
     </StrictMode>
   )
 }

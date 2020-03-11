@@ -3,6 +3,8 @@ import React, {
   CSSProperties,
   FC,
   ReactNode,
+  ReactType,
+  RefObject,
   StrictMode,
   memo,
   useCallback,
@@ -23,7 +25,8 @@ interface Props {
   portalEl?: HTMLElement
   scrollableEl?: HTMLElement | Window
   transitionDuration?: number
-  wrapStyle?: CSSProperties | undefined
+  wrapElement?: ReactType
+  wrapStyle?: CSSProperties
   zoomMargin?: number
   zoomZindex?: number
 }
@@ -39,12 +42,13 @@ const Controlled: FC<Props> = ({
   openText = 'Zoom image',
   scrollableEl,
   transitionDuration = 300,
+  wrapElement: WrapElement = 'div',
   wrapStyle,
   zoomMargin = 0,
   zoomZindex = 2147483647
 }: Props) => {
   const [isChildLoaded, setIsChildLoaded] = useState<boolean>(false)
-  const wrapRef = useRef<HTMLDivElement>(null)
+  const wrapRef = useRef<HTMLElement>(null)
   const btnRef = useRef<HTMLButtonElement>(null)
 
   const handleClickTrigger = useCallback(
@@ -73,7 +77,11 @@ const Controlled: FC<Props> = ({
 
   return (
     <StrictMode>
-      <div data-rmiz-wrap={wrapType} ref={wrapRef} style={wrapStyle}>
+      <WrapElement
+        data-rmiz-wrap={wrapType}
+        ref={wrapRef as RefObject<HTMLElement>}
+        style={wrapStyle}
+      >
         {children}
         <button
           aria-label={openText}
@@ -101,7 +109,7 @@ const Controlled: FC<Props> = ({
             {children}
           </ControlledActivated>
         )}
-      </div>
+      </WrapElement>
     </StrictMode>
   )
 }

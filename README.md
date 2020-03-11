@@ -165,7 +165,8 @@ You can pass these options to either the default or controlled components.
 | `portalEl` | `Element` | no | `document.body` | [DOM Element](https://developer.mozilla.org/en-US/docs/Web/API/element) to which we will append the zoom modal |
 | `scrollableEl` | `Window` | no | `window` | [DOM Element](https://developer.mozilla.org/en-US/docs/Web/API/element) to which we will listen for scroll events to determine if we should unzoom |
 | `transitionDuration` | `Number` | no | `300` | Transition duration in milliseconds for the component to use on zoom and unzoom. Set this to `0` to disable the animation |
-| `wrapStyle` | `Object` | no | `null` | Optional style object to pass to the wrapper `div`. Useful when you want the `<Zoom>` container to be `width: '100%'`, for example |
+| `wrapElement` | `String` | no | `'div'` | Wrapper element |
+| `wrapStyle` | `Object` | no | `null` | Optional style object to pass to the wrapper element. Useful when you want the `<Zoom>` container to be `width: '100%'`, for example |
 | `zoomMargin` | `Number` | no | `0` | Offset in pixels the zoomed image should be from the `window`' boundaries |
 | `zoomZindex` | `Number` | no | `2147483647` | `z-index` value for the zoom overlay |
 

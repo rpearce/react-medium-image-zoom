@@ -88,6 +88,7 @@ stories.add('<img />', () => (
         range: true,
         step: 100
       })}
+      wrapElement={text('Wrapper element', 'div')}
       zoomMargin={number('Zoom margin', 0, {
         min: 0,
         max: 500,
@@ -130,6 +131,7 @@ stories.add('<picture />', () => (
         range: true,
         step: 100
       })}
+      wrapElement={text('Wrapper element', 'div')}
       zoomMargin={number('Zoom margin', 0, {
         min: 0,
         max: 500,
@@ -176,6 +178,7 @@ stories.add('<figure />', () => (
           range: true,
           step: 100
         })}
+        wrapElement={text('Wrapper element', 'div')}
         zoomMargin={number('Zoom margin', 0, {
           min: 0,
           max: 500,
@@ -220,6 +223,7 @@ stories.add('blue circle div', () => (
         range: true,
         step: 100
       })}
+      wrapElement={text('Wrapper element', 'div')}
       zoomMargin={number('Zoom margin', 0, {
         min: 0,
         max: 500,
@@ -431,6 +435,7 @@ stories.add('controlled: zooms when image loads', () => {
           range: true,
           step: 100
         })}
+        wrapElement={text('Wrapper element', 'div')}
         zoomMargin={number('Zoom margin', 0, {
           min: 0,
           max: 500,
@@ -493,6 +498,7 @@ stories.add('controlled: specific keys', () => {
           range: true,
           step: 100
         })}
+        wrapElement={text('Wrapper element', 'div')}
         zoomMargin={number('Zoom margin', 0, {
           min: 0,
           max: 500,
@@ -596,6 +602,7 @@ stories.add('larger image size', () => (
           range: true,
           step: 100
         })}
+        wrapElement={text('Wrapper element', 'div')}
         zoomMargin={number('Zoom margin', 0, {
           min: 0,
           max: 500,
