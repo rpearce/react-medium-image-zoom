@@ -1,8 +1,10 @@
 import 'focus-options-polyfill'
 import React, {
-  memo,
+  CSSProperties,
   FC,
+  ReactNode,
   StrictMode,
+  memo,
   useCallback,
   useRef,
   useState
@@ -11,7 +13,7 @@ import ControlledActivated from './ControlledActivated'
 import './styles.css'
 
 interface Props {
-  children: React.ReactNode
+  children: ReactNode
   closeText?: string
   isZoomed: boolean
   onZoomChange?: (value: boolean) => void
@@ -21,7 +23,7 @@ interface Props {
   portalEl?: HTMLElement
   scrollableEl?: HTMLElement | Window
   transitionDuration?: number
-  wrapStyle?: React.CSSProperties | undefined
+  wrapStyle?: CSSProperties | undefined
   zoomMargin?: number
   zoomZindex?: number
 }
