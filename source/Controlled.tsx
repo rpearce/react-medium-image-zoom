@@ -1,8 +1,9 @@
 import 'focus-options-polyfill'
 import React, {
-  memo,
-  SFC,
+  FC,
+  ReactNode,
   StrictMode,
+  memo,
   useCallback,
   useRef,
   useState,
@@ -12,7 +13,7 @@ import ControlledActivated from './ControlledActivated'
 import './styles.css'
 
 interface Props {
-  children: React.ReactNode
+  children: ReactNode
   closeText?: string
   isZoomed: boolean
   onZoomChange?: (value: boolean) => void
@@ -28,7 +29,7 @@ interface Props {
   zoomZindex?: number
 }
 
-const Controlled: SFC<Props> = ({
+const Controlled: FC<Props> = ({
   children,
   closeText = 'Unzoom image',
   isZoomed: isActive,

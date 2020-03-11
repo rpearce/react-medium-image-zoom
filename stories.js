@@ -1,5 +1,3 @@
-/* eslint react/prop-types: 0 */
-
 import React, { useCallback, useState } from 'react'
 import useEvent from 'react-use/lib/useEvent'
 import { storiesOf } from '@storybook/react'

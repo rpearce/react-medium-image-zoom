@@ -1,7 +1,8 @@
 import React, {
-  memo,
+  FC,
+  ReactNode,
   RefObject,
-  SFC,
+  memo,
   useCallback,
   useEffect,
   useRef,
@@ -19,7 +20,7 @@ import {
 import './styles.css'
 
 interface Props {
-  children: React.ReactNode
+  children: ReactNode
   closeText?: string
   isActive: boolean
   onLoad: () => void
@@ -35,7 +36,7 @@ interface Props {
   zoomZindex?: number
 }
 
-const ControlledActivated: SFC<Props> = ({
+const ControlledActivated: FC<Props> = ({
   children,
   closeText = 'Unzoom Image',
   isActive: isActiveFromParent,
