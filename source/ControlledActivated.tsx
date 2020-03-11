@@ -1,7 +1,8 @@
 import React, {
-  memo,
-  RefObject,
   FC,
+  ReactNode,
+  RefObject,
+  memo,
   useCallback,
   useEffect,
   useRef,
@@ -19,7 +20,7 @@ import {
 import './styles.css'
 
 interface Props {
-  children: React.ReactNode
+  children: ReactNode
   closeText?: string
   isActive: boolean
   onLoad: () => void

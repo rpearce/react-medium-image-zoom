@@ -1,8 +1,9 @@
 import 'focus-options-polyfill'
 import React, {
-  memo,
   FC,
+  ReactNode,
   StrictMode,
+  memo,
   useCallback,
   useRef,
   useState
@@ -11,7 +12,7 @@ import './styles.css'
 import UncontrolledActivated from './UncontrolledActivated'
 
 interface Props {
-  children: React.ReactNode
+  children: ReactNode
   closeText?: string
   openText?: string
   overlayBgColorEnd?: string
