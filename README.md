@@ -10,38 +10,31 @@ for images to work together for a “zooming” effect and works regardless of
 parent elements that have `overflow: hidden` or
 [parents with transform properties](https://codepen.io/rpearce/pen/MEyOmb).
 
-As an added bonus, it will let you zoom _anything_ (see the [`Storybook Examples`](https://rpearce.github.io/react-medium-image-zoom/) for more).
+As an added bonus, it will let you zoom _anything_ (see the [`Storybook
+Examples`](https://rpearce.github.io/react-medium-image-zoom/) for more).
 
 [Blog post announcing `v4`](https://robertwpearce.com/announcing-react-medium-image-zoom-v4.html)
 
 ## Links
-
-- [react-medium-image-zoom](#react-medium-image-zoom)
-  - [Links](#links)
-  - [Installation](#installation)
-  - [Basic Usage](#basic-usage)
-    - [Uncontrolled component (default)](#uncontrolled-component-default)
-    - [Controlled component (`Controlled`)](#controlled-component-controlled)
-  - [API](#api)
-  - [Both uncontrolled & controlled components](#both-uncontrolled--controlled-components)
-  - [Only the controlled component](#only-the-controlled-component)
-  - [Migrating From v3 to v4](#migrating-from-v3-to-v4)
-  - [Contributors](#contributors)
+* [Installation](#installation)
+* [Basic Usage](#basic-usage)
+* [API](#api)
+* [Migrating From v3 to v4](#migrating-from-v3-to-v4)
+* [Contributors](#contributors)
+* [Storybook Examples](https://rpearce.github.io/react-medium-image-zoom/)
+* [Changelog](./CHANGELOG.md)
+* [Contributing](./CONTRIBUTING.md)
+* [Code of Conduct](./CODE_OF_CONDUCT.md)
 
 ## Installation
-
 ```bash
 $ npm i react-medium-image-zoom
 ```
-
 or
-
 ```bash
 $ yarn add react-medium-image-zoom
 ```
-
 or
-
 ```html
 <!-- this build only needs React to be already present -->
 <script src="https://unpkg.com/react-medium-image-zoom"></script>
@@ -50,7 +43,6 @@ or
 ## Basic Usage
 
 ### Uncontrolled component (default)
-
 Import the component and the CSS, wrap whatever you want to be "zoomable" with
 this component, and the component will handle it's own state:
 
@@ -61,7 +53,11 @@ import 'react-medium-image-zoom/dist/styles.css'
 
 const MyComponent = () => (
   <Zoom>
-    <img alt="that wanaka tree" src="/path/to/thatwanakatree.jpg" width="500" />
+    <img
+      alt="that wanaka tree"
+      src="/path/to/thatwanakatree.jpg"
+      width="500"
+    />
   </Zoom>
 )
 
@@ -111,7 +107,6 @@ are all valid:
 ```
 
 ### Controlled component (`Controlled`)
-
 Import the `Controlled` component and the CSS, wrap whatever you want to
 be "zoomable" with this component and then dictate the zoomed/unzoomed state to
 the component. Here, we will automatically zoom the component once the image has
@@ -159,34 +154,31 @@ Examples](https://rpearce.github.io/react-medium-image-zoom/) of how to use a
 ## API
 
 ## Both uncontrolled & controlled components
-
 You can pass these options to either the default or controlled components.
 
-| Prop                  | Type      | Required | Default                       | Details                                                                                                                                            |
-| --------------------- | --------- | -------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `closeText`           | `String`  | no       | `'Unzoom Image'`              | Accessible label text for when you want to unzoom                                                                                                  |
-| `openText`            | `String`  | no       | `'Zoom Image'`                | Accessible label text for when you want to zoom                                                                                                    |
-| `overlayBgColorEnd`   | `String`  | no       | `'rgba(255, 255, 255, 0.95)'` | Modal overlay background color at end of zoom                                                                                                      |
-| `overlayBgColorStart` | `String`  | no       | `'rgba(255, 255, 255, 0)'`    | Modal overlay background color at start of zoom                                                                                                    |
-| `portalEl`            | `Element` | no       | `document.body`               | [DOM Element](https://developer.mozilla.org/en-US/docs/Web/API/element) to which we will append the zoom modal                                     |
-| `scrollableEl`        | `Window`  | no       | `window`                      | [DOM Element](https://developer.mozilla.org/en-US/docs/Web/API/element) to which we will listen for scroll events to determine if we should unzoom |
-| `transitionDuration`  | `Number`  | no       | `300`                         | Transition duration in milliseconds for the component to use on zoom and unzoom. Set this to `0` to disable the animation                          |
-| `wrapElement`         | `String`  | no       | `'div'`                       | Wrapper element. Can be either `div` or `span`.                                                                                                    |
-| `wrapStyle`           | `Object`  | no       | `null`                        | Optional style object to pass to the wrapper element. Useful when you want the `<Zoom>` container to be `width: '100%'`, for example               |
-| `zoomMargin`          | `Number`  | no       | `0`                           | Offset in pixels the zoomed image should be from the `window`' boundaries                                                                          |
-| `zoomZindex`          | `Number`  | no       | `2147483647`                  | `z-index` value for the zoom overlay                                                                                                               |
+| Prop | Type | Required | Default  | Details |
+| ---  | --- | ---  | --- | --- |
+| `closeText` | `String` | no | `'Unzoom Image'` | Accessible label text for when you want to unzoom |
+| `openText` | `String` | no | `'Zoom Image'` | Accessible label text for when you want to zoom |
+| `overlayBgColorEnd` | `String` | no | `'rgba(255, 255, 255, 0.95)'` | Modal overlay background color at end of zoom |
+| `overlayBgColorStart` | `String` | no | `'rgba(255, 255, 255, 0)'` | Modal overlay background color at start of zoom |
+| `portalEl` | `Element` | no | `document.body` | [DOM Element](https://developer.mozilla.org/en-US/docs/Web/API/element) to which we will append the zoom modal |
+| `scrollableEl` | `Window` | no | `window` | [DOM Element](https://developer.mozilla.org/en-US/docs/Web/API/element) to which we will listen for scroll events to determine if we should unzoom |
+| `transitionDuration` | `Number` | no | `300` | Transition duration in milliseconds for the component to use on zoom and unzoom. Set this to `0` to disable the animation |
+| `wrapElement` | `String` | no | `'div'` | Wrapper element |
+| `wrapStyle` | `Object` | no | `null` | Optional style object to pass to the wrapper element. Useful when you want the `<Zoom>` container to be `width: '100%'`, for example |
+| `zoomMargin` | `Number` | no | `0` | Offset in pixels the zoomed image should be from the `window`' boundaries |
+| `zoomZindex` | `Number` | no | `2147483647` | `z-index` value for the zoom overlay |
 
 ## Only the controlled component
-
 You can pass these options to only the controlled component.
 
-| Prop           | Type       | Required | Default              | Details                                                                                                 |
-| -------------- | ---------- | -------- | -------------------- | ------------------------------------------------------------------------------------------------------- |
-| `isZoomed`     | `bool`     | yes      | `false`              | Tell the component whether or not it should be zoomed                                                   |
-| `onZoomChange` | `Function` | no       | `Function.prototype` | Listen for hints from the component about when you should zoom (`true` value) or unzoom (`false` value) |
+| Prop | Type | Required | Default  | Details |
+| ---  | --- | ---  | --- | --- |
+| `isZoomed` | `bool` | yes | `false` | Tell the component whether or not it should be zoomed |
+| `onZoomChange` | `Function` | no | `Function.prototype` | Listen for hints from the component about when you should zoom (`true` value) or unzoom (`false` value) |
 
 ## Migrating From v3 to v4
-
 In [v3](https://github.com/rpearce/react-medium-image-zoom/tree/v3.x), you might
 have code like this:
 
@@ -222,7 +214,7 @@ In `v4`, you can zoom the bridge example above like this:
     src="/path/to/bridge.jpg"
     alt="Golden Gate Bridge"
     className="img"
-    style={{ width: '50em' }}
+    style={{ width: '50em'}}
   />
 </Zoom>
 ```
@@ -292,7 +284,6 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!

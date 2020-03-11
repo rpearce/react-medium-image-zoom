@@ -66,7 +66,7 @@ exports[`custom open/close text 2`] = `
 
 exports[`renders with different props 1`] = `
 <body>
-  <div
+  <span
     data-rmiz-wrap="visible"
   >
     <img
@@ -79,7 +79,7 @@ exports[`renders with different props 1`] = `
       data-rmiz-btn-open="true"
       type="button"
     />
-  </div>
+  </span>
 </body>
 `;
 

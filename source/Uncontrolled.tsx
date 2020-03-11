@@ -5,7 +5,8 @@ import React, {
   StrictMode,
   useCallback,
   useRef,
-  useState
+  useState,
+  ReactType
 } from 'react'
 import './styles.css'
 import UncontrolledActivated from './UncontrolledActivated'
@@ -19,7 +20,7 @@ interface Props {
   portalEl?: HTMLElement
   scrollableEl?: HTMLElement | Window
   transitionDuration?: number
-  wrapElement?: 'div' | 'span'
+  wrapElement?: ReactType
   wrapStyle?: object
   zoomMargin?: number
   zoomZindex?: number
@@ -34,7 +35,7 @@ const Uncontrolled: SFC<Props> = ({
   openText = 'Zoom image',
   scrollableEl,
   transitionDuration = 300,
-  wrapElement = 'div',
+  wrapElement: WrapElement = 'div',
   wrapStyle,
   zoomMargin = 0,
   zoomZindex = 2147483647
@@ -70,59 +71,40 @@ const Uncontrolled: SFC<Props> = ({
   const isExpanded = isActive && isChildLoaded
   const wrapType = isExpanded ? 'hidden' : 'visible'
 
-  const content = (
-    <React.Fragment>
-      {children}
-      <button
-        aria-label={openText}
-        data-rmiz-btn-open
-        onClick={handleClickTrigger}
-        ref={btnRef}
-      />
-      {typeof window !== 'undefined' && isActive && (
-        <UncontrolledActivated
-          closeText={closeText}
-          onLoad={handleChildLoad}
-          onUnload={handleChildUnload}
-          overlayBgColorEnd={overlayBgColorEnd}
-          overlayBgColorStart={overlayBgColorStart}
-          parentRef={wrapRef}
-          portalEl={portalEl}
-          scrollableEl={scrollableEl}
-          transitionDuration={transitionDuration}
-          zoomMargin={zoomMargin}
-          zoomZindex={zoomZindex}
-        >
-          {children}
-        </UncontrolledActivated>
-      )}
-    </React.Fragment>
-  )
-
-  let wrap: React.ReactNode
-  if (wrapElement === 'span') {
-    wrap = (
-      <span
-        data-rmiz-wrap={wrapType}
-        ref={wrapRef as React.RefObject<HTMLSpanElement>}
-        style={wrapStyle}
-      >
-        {content}
-      </span>
-    )
-  } else {
-    wrap = (
-      <div
+  return (
+    <StrictMode>
+      <WrapElement
         data-rmiz-wrap={wrapType}
         ref={wrapRef as React.RefObject<HTMLDivElement>}
         style={wrapStyle}
       >
-        {content}
-      </div>
-    )
-  }
-
-  return <StrictMode>{wrap}</StrictMode>
+        {children}
+        <button
+          aria-label={openText}
+          data-rmiz-btn-open
+          onClick={handleClickTrigger}
+          ref={btnRef}
+        />
+        {typeof window !== 'undefined' && isActive && (
+          <UncontrolledActivated
+            closeText={closeText}
+            onLoad={handleChildLoad}
+            onUnload={handleChildUnload}
+            overlayBgColorEnd={overlayBgColorEnd}
+            overlayBgColorStart={overlayBgColorStart}
+            parentRef={wrapRef}
+            portalEl={portalEl}
+            scrollableEl={scrollableEl}
+            transitionDuration={transitionDuration}
+            zoomMargin={zoomMargin}
+            zoomZindex={zoomZindex}
+          >
+            {children}
+          </UncontrolledActivated>
+        )}
+      </WrapElement>
+    </StrictMode>
+  )
 }
 
 export default memo(Uncontrolled)
