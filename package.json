@@ -40,7 +40,7 @@
     "dist/"
   ],
   "scripts": {
-    "build": "yarn clean && run-p build:js build:docs",
+    "build": "run-s clean build:js build:docs",
     "build:docs": "mkdir -p docs && build-storybook -o docs",
     "build:js": "rollup -c ./rollup.config.js",
     "build:js:watch": "yarn build:js -- -w",
@@ -68,7 +68,7 @@
     "@storybook/react": "5.3.14",
     "@testing-library/jest-dom": "5.1.1",
     "@testing-library/react": "9.5.0",
-    "@types/axe-core": "^2.0.7",
+    "@types/axe-core": "2.0.7",
     "@types/jest": "25.1.4",
     "@types/node": "13.9.0",
     "@types/react": "16.9.23",
