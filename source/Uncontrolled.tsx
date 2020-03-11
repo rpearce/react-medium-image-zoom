@@ -21,7 +21,7 @@ interface Props {
   scrollableEl?: HTMLElement | Window
   transitionDuration?: number
   wrapElement?: ReactType
-  wrapStyle?: object
+  wrapStyle?: React.CSSProperties
   zoomMargin?: number
   zoomZindex?: number
 }

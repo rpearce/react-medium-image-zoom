@@ -23,7 +23,7 @@ interface Props {
   scrollableEl?: HTMLElement | Window
   transitionDuration?: number
   wrapElement?: ReactType
-  wrapStyle?: React.CSSProperties | undefined
+  wrapStyle?: React.CSSProperties
   zoomMargin?: number
   zoomZindex?: number
 }
