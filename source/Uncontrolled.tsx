@@ -1,13 +1,15 @@
 import 'focus-options-polyfill'
 import React, {
+  CSSProperties,
   FC,
   ReactNode,
+  ReactType,
+  RefObject,
   StrictMode,
   memo,
   useCallback,
   useRef,
-  useState,
-  ReactType
+  useState
 } from 'react'
 import './styles.css'
 import UncontrolledActivated from './UncontrolledActivated'
@@ -22,7 +24,7 @@ interface Props {
   scrollableEl?: HTMLElement | Window
   transitionDuration?: number
   wrapElement?: ReactType
-  wrapStyle?: React.CSSProperties
+  wrapStyle?: CSSProperties
   zoomMargin?: number
   zoomZindex?: number
 }
@@ -43,7 +45,7 @@ const Uncontrolled: FC<Props> = ({
 }: Props) => {
   const [isActive, setIsActive] = useState<boolean>(false)
   const [isChildLoaded, setIsChildLoaded] = useState<boolean>(false)
-  const wrapRef = useRef<HTMLDivElement | HTMLSpanElement>(null)
+  const wrapRef = useRef<HTMLElement>(null)
   const btnRef = useRef<HTMLButtonElement>(null)
 
   const handleClickTrigger = useCallback(
@@ -76,7 +78,7 @@ const Uncontrolled: FC<Props> = ({
     <StrictMode>
       <WrapElement
         data-rmiz-wrap={wrapType}
-        ref={wrapRef as React.RefObject<HTMLDivElement>}
+        ref={wrapRef as RefObject<HTMLElement>}
         style={wrapStyle}
       >
         {children}
