@@ -26,6 +26,7 @@ module.exports = {
     '@typescript-eslint'
   ],
   rules: {
+    '@typescript-eslint/no-unused-vars': 'error',
     'jsx-quotes': ['error', 'prefer-double'],
     'jsx-a11y/no-onchange': 0,
     'no-trailing-spaces': 'error',
