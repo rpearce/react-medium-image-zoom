@@ -9,10 +9,9 @@ import React, {
   memo,
   useCallback,
   useRef,
-  useState
+  useState,
 } from 'react'
-import './styles.css'
-import UncontrolledActivated from './UncontrolledActivated'
+import UncontrolledActivated from '../UncontrolledActivated'
 
 interface Props {
   children: ReactNode
@@ -41,7 +40,7 @@ const Uncontrolled: FC<Props> = ({
   wrapElement: WrapElement = 'div',
   wrapStyle,
   zoomMargin = 0,
-  zoomZindex = 2147483647
+  zoomZindex = 2147483647,
 }: Props) => {
   const [isActive, setIsActive] = useState<boolean>(false)
   const [isChildLoaded, setIsChildLoaded] = useState<boolean>(false)
@@ -49,7 +48,7 @@ const Uncontrolled: FC<Props> = ({
   const btnRef = useRef<HTMLButtonElement>(null)
 
   const handleClickTrigger = useCallback(
-    e => {
+    (e) => {
       if (!isActive) {
         e.preventDefault()
         setIsActive(true)

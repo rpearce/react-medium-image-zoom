@@ -6,7 +6,7 @@ import React, {
   useCallback,
   useEffect,
   useRef,
-  useState
+  useState,
 } from 'react'
 import { createPortal } from 'react-dom'
 import useEvent from 'react-use/lib/useEvent'
@@ -14,9 +14,8 @@ import useWindowSize from 'react-use/lib/useWindowSize'
 import {
   getModalContentStyle,
   getModalOverlayStyle,
-  pseudoParentEl
-} from './helpers'
-import './styles.css'
+  pseudoParentEl,
+} from '../helpers'
 
 interface Props {
   children: ReactNode
@@ -45,7 +44,7 @@ const UncontrolledActivated: FC<Props> = ({
   scrollableEl = window,
   transitionDuration = 300,
   zoomMargin = 0,
-  zoomZindex = 2147483647
+  zoomZindex = 2147483647,
 }: Props) => {
   const btnRef = useRef<HTMLButtonElement>(null)
   const [, forceUpdate] = useState<number>(0)
@@ -54,13 +53,13 @@ const UncontrolledActivated: FC<Props> = ({
   const { width: innerWidth, height: innerHeight } = useWindowSize()
 
   // on click, begin unloading
-  const handleClick = useCallback(e => {
+  const handleClick = useCallback((e) => {
     e.preventDefault()
     setIsUnloading(true)
   }, [])
 
   // on escape, begin unloading
-  const handleKeyDown = useCallback(e => {
+  const handleKeyDown = useCallback((e) => {
     if (e.key === 'Escape' || e.keyCode === 27) {
       e.stopPropagation()
       setIsUnloading(true)
@@ -68,7 +67,7 @@ const UncontrolledActivated: FC<Props> = ({
   }, [])
 
   const handleScroll = useCallback(() => {
-    forceUpdate(n => n + 1)
+    forceUpdate((n) => n + 1)
 
     if (!isUnloading) {
       setIsUnloading(true)
@@ -93,9 +92,11 @@ const UncontrolledActivated: FC<Props> = ({
 
   // if unloading, tell parent that we're all done here after Nms
   useEffect(() => {
-    const unloadTimeout = isUnloading
-      ? setTimeout(onUnload, transitionDuration)
-      : null
+    let unloadTimeout: number
+
+    if (isUnloading) {
+      unloadTimeout = window.setTimeout(onUnload, transitionDuration)
+    }
 
     return (): void => {
       if (unloadTimeout) {
@@ -116,7 +117,7 @@ const UncontrolledActivated: FC<Props> = ({
     overlayBgColorEnd,
     overlayBgColorStart,
     transitionDuration,
-    zoomZindex
+    zoomZindex,
   })
 
   const contentStyle = getModalContentStyle({
@@ -130,7 +131,7 @@ const UncontrolledActivated: FC<Props> = ({
     top,
     transitionDuration,
     width,
-    zoomMargin
+    zoomMargin,
   })
 
   return createPortal(

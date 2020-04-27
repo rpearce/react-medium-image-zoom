@@ -1,5 +1,5 @@
 module.exports = {
   hooks: {
-    'pre-push': 'lint-staged'
-  }
+    'pre-push': 'lint-staged',
+  },
 }

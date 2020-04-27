@@ -1,19 +1,4 @@
 {
-  "compilerOptions": {
-    "allowJs": false,
-    "allowSyntheticDefaultImports": true,
-    "declaration": true,
-    "esModuleInterop": true,
-    "jsx": "react",
-    "lib": ["es2020", "dom"],
-    "module": "es6",
-    "moduleResolution": "node",
-    "noImplicitAny": true,
-    "outDir": "./dist/",
-    "sourceMap": true,
-    "strict": true,
-    "target": "es5"
-  },
-  "exclude": ["node_modules/"],
-  "include": ["./source/**/*", "./__tests__/**/*"]
+  "extends": "./tsconfig.base.json",
+  "include": ["source/**/*"]
 }

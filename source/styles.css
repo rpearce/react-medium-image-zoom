@@ -1,8 +1,12 @@
 [data-rmiz-wrap="visible"],
 [data-rmiz-wrap="hidden"] {
   position: relative;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
   display: inline-flex;
-  align-items: flex-start;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
 }
 [data-rmiz-wrap="hidden"] {
   visibility: hidden;
@@ -15,6 +19,8 @@
   left: 0;
   width: 100%;
   height: 100%;
+  -webkit-transition-property: background-color;
+  -o-transition-property: background-color;
   transition-property: background-color;
 }
 [data-rmiz-btn-open],
@@ -35,16 +41,26 @@
   font: inherit;
   color: inherit;
   background: none;
-  appearance: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
 }
 [data-rmiz-btn-open] {
+  cursor: -webkit-zoom-in;
   cursor: zoom-in;
 }
 [data-rmiz-btn-close] {
+  cursor: -webkit-zoom-out;
   cursor: zoom-out;
 }
 [data-rmiz-modal-content] {
   position: absolute;
+  -webkit-transition-property: -webkit-transform;
+  transition-property: -webkit-transform;
+  -o-transition-property: transform;
   transition-property: transform;
-  transform-origin: center center;
+  transition-property: transform, -webkit-transform;
+  -webkit-transform-origin: center center;
+      -ms-transform-origin: center center;
+          transform-origin: center center;
 }

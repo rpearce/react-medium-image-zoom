@@ -1,8 +1,8 @@
 import { act, fireEvent, render } from '@testing-library/react'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
-import Zoom from '../source'
-import testA11y from '../testA11y'
+import Zoom from '../'
+import testA11y from '../../testA11y'
 
 test('is accessible with defaults & <img />', async () => {
   const { getByLabelText } = render(

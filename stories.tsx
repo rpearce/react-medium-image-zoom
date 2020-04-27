@@ -3,7 +3,6 @@ import useEvent from 'react-use/lib/useEvent'
 import { storiesOf } from '@storybook/react'
 import { withA11y } from '@storybook/addon-a11y'
 import { color, number, text, withKnobs } from '@storybook/addon-knobs'
-import './.storybook/base.css'
 import glenorchyLagoon from './static/glenorchy-lagoon.jpg'
 import hobbiton from './static/andres-iga-7XKkJVw1d8c-unsplash-smaller.jpg'
 import hookerValleyTrack from './static/roell-de-ram-2DM7eOR5iyc-unsplash-smaller.jpg'
@@ -15,53 +14,53 @@ import queenstown from './static/omer-faruk-bekdemir-5BuxuWIJF1Q-unsplash-smalle
 import teAraiPoint from './static/douglas-bagg-wRwa3Z6GtRI-unsplash-smaller.jpg'
 import tekapo from './static/tobias-keller-73F4pKoUkM0-unsplash-smaller.jpg'
 import thatWanakaTree from './static/laura-smetsers-H-TW2CoNtTk-unsplash-smaller.jpg'
-
+import './.storybook/base.css'
 import './dist/styles.css'
 import Zoom, { Controlled as ControlledZoom } from './dist/esm'
 
 const imgGlenorchyLagoon = {
   alt: 'Glenorchy lagoon, New Zealand by Robert Pearce',
-  src: glenorchyLagoon
+  src: glenorchyLagoon,
 }
 const imgHobbiton = {
   alt: 'Hobbiton, Matamata, New Zealand by Andres Iga',
-  src: hobbiton
+  src: hobbiton,
 }
 const imgHookerValleyTrack = {
   alt: 'Hooker Valley Track , New Zealand by Roll de Ram',
-  src: hookerValleyTrack
+  src: hookerValleyTrack,
 }
 const imgKea = {
   alt: `Kea (alpine parrot) in Arthur's Pass, New Zealand by Pablo Heimplatz`,
-  src: kea
+  src: kea,
 }
 const imgNvidiaCard = {
   alt: 'NVIDIA Graphics Card',
-  src: nvidiaCard
+  src: nvidiaCard,
 }
 const imgNzBeach = {
   alt: 'New Zealand Beach by Rod Long',
-  src: nzBeach
+  src: nzBeach,
 }
 const imgQueenstown = {
   alt: 'Queenstown, New Zealand by Omer Faruk',
-  src: queenstown
+  src: queenstown,
 }
 const imgTeAraiPoint = {
   alt: 'Te Arai Point, New Zealand by Douglas Bagg',
-  src: teAraiPoint
+  src: teAraiPoint,
 }
 const imgTekapo = {
   alt: 'Lake Tekapo, New Zealand by Tobias Keller',
-  src: tekapo
+  src: tekapo,
 }
 const imgThatWanakaTree = {
   alt: 'That Wanaka Tree, New Zealand by Laura Smetsers',
-  src: thatWanakaTree
+  src: thatWanakaTree,
 }
 const imgPortWaikato = {
   alt: 'Port Waikato, Tuakau, Auckland, New Zealand by Petr Vysohlid',
-  src: portWaikato
+  src: portWaikato,
 }
 
 const stories = storiesOf('react-medium-image-zoom', module)
@@ -86,20 +85,20 @@ stories.add('<img />', () => (
         min: 0,
         max: 5000,
         range: true,
-        step: 100
+        step: 100,
       })}
       wrapElement={text('Wrapper element', 'div')}
       zoomMargin={number('Zoom margin', 0, {
         min: 0,
         max: 500,
         range: true,
-        step: 50
+        step: 50,
       })}
       zoomZindex={number('Zoom z-index', 2147483647, {
         min: 0,
         max: 2147483647,
         range: true,
-        step: 1
+        step: 1,
       })}
     >
       <img
@@ -129,20 +128,20 @@ stories.add('<picture />', () => (
         min: 0,
         max: 5000,
         range: true,
-        step: 100
+        step: 100,
       })}
       wrapElement={text('Wrapper element', 'div')}
       zoomMargin={number('Zoom margin', 0, {
         min: 0,
         max: 500,
         range: true,
-        step: 50
+        step: 50,
       })}
       zoomZindex={number('Zoom z-index', 2147483647, {
         min: 0,
         max: 2147483647,
         range: true,
-        step: 1
+        step: 1,
       })}
     >
       <picture>
@@ -176,20 +175,20 @@ stories.add('<figure />', () => (
           min: 0,
           max: 5000,
           range: true,
-          step: 100
+          step: 100,
         })}
         wrapElement={text('Wrapper element', 'div')}
         zoomMargin={number('Zoom margin', 0, {
           min: 0,
           max: 500,
           range: true,
-          step: 50
+          step: 50,
         })}
         zoomZindex={number('Zoom z-index', 2147483647, {
           min: 0,
           max: 2147483647,
           range: true,
-          step: 1
+          step: 1,
         })}
       >
         <img
@@ -221,20 +220,20 @@ stories.add('blue circle div', () => (
         min: 0,
         max: 5000,
         range: true,
-        step: 100
+        step: 100,
       })}
       wrapElement={text('Wrapper element', 'div')}
       zoomMargin={number('Zoom margin', 0, {
         min: 0,
         max: 500,
         range: true,
-        step: 50
+        step: 50,
       })}
       zoomZindex={number('Zoom z-index', 2147483647, {
         min: 0,
         max: 2147483647,
         range: true,
-        step: 1
+        step: 1,
       })}
     >
       <div
@@ -243,7 +242,7 @@ stories.add('blue circle div', () => (
           width: 300,
           height: 300,
           borderRadius: '50%',
-          backgroundColor: '#0099ff'
+          backgroundColor: '#0099ff',
         }}
       />
     </Zoom>
@@ -260,7 +259,7 @@ stories.add('image gallery using divs & background images', () => {
     imgQueenstown,
     imgTekapo,
     imgPortWaikato,
-    imgKea
+    imgKea,
   ]
 
   return (
@@ -272,7 +271,7 @@ stories.add('image gallery using divs & background images', () => {
           flexWrap: 'wrap',
           listStyle: 'none',
           margin: 0,
-          padding: 0
+          padding: 0,
         }}
       >
         {images.map((img, i) => (
@@ -292,7 +291,7 @@ stories.add('image gallery using divs & background images', () => {
                   backgroundSize: 'cover',
                   height: '0',
                   paddingBottom: '66%',
-                  width: 'calc(100%)'
+                  width: 'calc(100%)',
                 }}
               />
             </Zoom>
@@ -313,12 +312,12 @@ stories.add('image gallery + slideshow-style images', () => {
     imgQueenstown,
     imgTekapo,
     imgPortWaikato,
-    imgKea
+    imgKea,
   ]
   const [activeIndex, setActiveIndex] = useState(null)
 
   const handleKeyDown = useCallback(
-    e => {
+    (e) => {
       if (activeIndex === null) {
         return
       }
@@ -347,12 +346,12 @@ stories.add('image gallery + slideshow-style images', () => {
           flexWrap: 'wrap',
           listStyle: 'none',
           margin: 0,
-          padding: 0
+          padding: 0,
         }}
       >
         {images.map((img, i) => {
           const handleZoomChange = useCallback(
-            isZoomed => {
+            (isZoomed) => {
               if (isZoomed) {
                 setActiveIndex(i)
                 return
@@ -384,7 +383,7 @@ stories.add('image gallery + slideshow-style images', () => {
                     backgroundSize: 'cover',
                     height: '0',
                     paddingBottom: '66%',
-                    width: 'calc(100%)'
+                    width: 'calc(100%)',
                   }}
                 />
               </ControlledZoom>
@@ -407,7 +406,7 @@ stories.add('controlled: zooms when image loads', () => {
     setIsZoomed(true)
   }, [])
 
-  const handleZoomChange = useCallback(shouldZoom => {
+  const handleZoomChange = useCallback((shouldZoom) => {
     setIsZoomed(shouldZoom)
   }, [])
 
@@ -433,20 +432,20 @@ stories.add('controlled: zooms when image loads', () => {
           min: 0,
           max: 5000,
           range: true,
-          step: 100
+          step: 100,
         })}
         wrapElement={text('Wrapper element', 'div')}
         zoomMargin={number('Zoom margin', 0, {
           min: 0,
           max: 500,
           range: true,
-          step: 50
+          step: 50,
         })}
         zoomZindex={number('Zoom z-index', 2147483647, {
           min: 0,
           max: 2147483647,
           range: true,
-          step: 1
+          step: 1,
         })}
         isZoomed={isZoomed}
         onZoomChange={handleZoomChange}
@@ -466,7 +465,7 @@ stories.add('controlled: zooms when image loads', () => {
 stories.add('controlled: specific keys', () => {
   const [isZoomed, setIsZoomed] = useState(false)
 
-  const handleKeyDown = useCallback(e => {
+  const handleKeyDown = useCallback((e) => {
     if (e.key === 'j' || e.keyCode === 74) {
       setIsZoomed(true)
     } else if (e.key === 'k' || e.keyCode === 75) {
@@ -496,20 +495,20 @@ stories.add('controlled: specific keys', () => {
           min: 0,
           max: 5000,
           range: true,
-          step: 100
+          step: 100,
         })}
         wrapElement={text('Wrapper element', 'div')}
         zoomMargin={number('Zoom margin', 0, {
           min: 0,
           max: 500,
           range: true,
-          step: 50
+          step: 50,
         })}
         zoomZindex={number('Zoom z-index', 2147483647, {
           min: 0,
           max: 2147483647,
           range: true,
-          step: 1
+          step: 1,
         })}
         isZoomed={isZoomed}
         onZoomChange={Function.prototype /* do nothing */}
@@ -600,20 +599,20 @@ stories.add('larger image size', () => (
           min: 0,
           max: 5000,
           range: true,
-          step: 100
+          step: 100,
         })}
         wrapElement={text('Wrapper element', 'div')}
         zoomMargin={number('Zoom margin', 0, {
           min: 0,
           max: 500,
           range: true,
-          step: 50
+          step: 50,
         })}
         zoomZindex={number('Zoom z-index', 2147483647, {
           min: 0,
           max: 2147483647,
           range: true,
-          step: 1
+          step: 1,
         })}
       >
         <img alt={imgNvidiaCard.alt} src={imgNvidiaCard.src} width="100%" />

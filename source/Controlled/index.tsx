@@ -9,10 +9,9 @@ import React, {
   memo,
   useCallback,
   useRef,
-  useState
+  useState,
 } from 'react'
-import ControlledActivated from './ControlledActivated'
-import './styles.css'
+import ControlledActivated from '../ControlledActivated'
 
 interface Props {
   children: ReactNode
@@ -45,14 +44,14 @@ const Controlled: FC<Props> = ({
   wrapElement: WrapElement = 'div',
   wrapStyle,
   zoomMargin = 0,
-  zoomZindex = 2147483647
+  zoomZindex = 2147483647,
 }: Props) => {
   const [isChildLoaded, setIsChildLoaded] = useState<boolean>(false)
   const wrapRef = useRef<HTMLElement>(null)
   const btnRef = useRef<HTMLButtonElement>(null)
 
   const handleClickTrigger = useCallback(
-    e => {
+    (e) => {
       if (!isActive && onZoomChange) {
         e.preventDefault()
         onZoomChange(true)

@@ -13,7 +13,7 @@ export const getScale = ({
   innerHeight,
   innerWidth,
   width,
-  zoomMargin
+  zoomMargin,
 }: GetScale): number => {
   const scaleX = innerWidth / (width + zoomMargin)
   const scaleY = innerHeight / (height + zoomMargin)
@@ -57,7 +57,7 @@ export const getModalContentStyle = ({
   top,
   transitionDuration,
   width,
-  zoomMargin
+  zoomMargin,
 }: GetModalContentStyle): GetModalContentStyleReturnType => {
   const transitionDurationString = toDurationString(transitionDuration)
 
@@ -65,7 +65,7 @@ export const getModalContentStyle = ({
     const initTransform = [
       `scale(1)`,
       `translate(0, 0)`,
-      ...(originalTransform ? [originalTransform] : [])
+      ...(originalTransform ? [originalTransform] : []),
     ].join(' ')
 
     return {
@@ -75,7 +75,7 @@ export const getModalContentStyle = ({
       transform: initTransform,
       WebkitTransform: initTransform,
       transitionDuration: transitionDurationString,
-      width
+      width,
     }
   }
 
@@ -85,7 +85,7 @@ export const getModalContentStyle = ({
     innerWidth,
     innerHeight,
     width,
-    zoomMargin
+    zoomMargin,
   })
 
   // Get the the coords for center of the viewport
@@ -104,7 +104,7 @@ export const getModalContentStyle = ({
   const transform = [
     `scale(${scale})`,
     `translate(${translateX}px, ${translateY}px)`,
-    ...(originalTransform ? [originalTransform] : [])
+    ...(originalTransform ? [originalTransform] : []),
   ].join(' ')
 
   return {
@@ -114,7 +114,7 @@ export const getModalContentStyle = ({
     transform,
     WebkitTransform: transform,
     transitionDuration: transitionDurationString,
-    width
+    width,
   }
 }
 
@@ -139,12 +139,12 @@ export const getModalOverlayStyle = ({
   overlayBgColorEnd,
   overlayBgColorStart,
   transitionDuration,
-  zoomZindex
+  zoomZindex,
 }: GetModalOverlayStyle): GetModalOverlayStyleReturnType => {
   const style = {
     backgroundColor: overlayBgColorStart,
     transitionDuration: toDurationString(transitionDuration),
-    zIndex: zoomZindex
+    zIndex: zoomZindex,
   }
 
   if (isLoaded && !isUnloading) {
@@ -169,9 +169,9 @@ export const pseudoParentEl = {
     height: 0,
     left: 0,
     top: 0,
-    width: 0
+    width: 0,
   }),
   style: {
-    transform: null
-  }
+    transform: null,
+  },
 }

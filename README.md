@@ -6,8 +6,8 @@
 This library is a [`React.js`](https://reactjs.org/) implementation of
 [Medium.com's image
 zoom](https://medium.com/design/image-zoom-on-medium-24d146fc0c20) that allows
-for images to work together for a “zooming” effect and works regardless of
-parent elements that have `overflow: hidden` or
+for images to work together for a “zooming” effect, is keyboard accessible, and
+works regardless of parent elements that have `overflow: hidden` or
 [parents with transform properties](https://codepen.io/rpearce/pen/MEyOmb).
 
 As an added bonus, it will let you zoom _anything_ (see the [`Storybook
@@ -28,16 +28,7 @@ Examples`](https://rpearce.github.io/react-medium-image-zoom/) for more).
 
 ## Installation
 ```bash
-$ npm i react-medium-image-zoom
-```
-or
-```bash
-$ yarn add react-medium-image-zoom
-```
-or
-```html
-<!-- this build only needs React to be already present -->
-<script src="https://unpkg.com/react-medium-image-zoom"></script>
+$ npm i --save-exact react-medium-image-zoom
 ```
 
 ## Basic Usage
