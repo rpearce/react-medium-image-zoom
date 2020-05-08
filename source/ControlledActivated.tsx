@@ -76,14 +76,14 @@ const ControlledActivated: FC<Props> = ({
   // on escape, tell caller it should unzoom
   const handleKeyDown = useCallback(
     e => {
-      if (e.key === 'Escape' || e.keyCode === 27) {
+      if (isActive && (e.key === 'Escape' || e.keyCode === 27)) {
         e.stopPropagation()
         if (onZoomChange) {
           onZoomChange(false)
         }
       }
     },
-    [onZoomChange]
+    [isActive, onZoomChange]
   )
 
   const handleScroll = useCallback(() => {
