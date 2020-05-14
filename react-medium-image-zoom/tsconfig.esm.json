@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "module": "esNext",
+    "outDir": "dist/esm",
+    "resolveJsonModule": true
+  },
+  "include": [
+    "source/index.ts"
+  ]
+}

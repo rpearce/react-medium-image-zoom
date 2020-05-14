@@ -1,0 +1,17 @@
+{
+  "command": {
+    "publish": {
+      "ignoreChanges": [
+        "*.md",
+        "rollup.config.*",
+        "test.ts",
+        "tsconfig.*"
+      ]
+    }
+  },
+  "npmClient": "npm",
+  "packages": [
+    "packages/*"
+  ],
+  "version": "independent"
+}

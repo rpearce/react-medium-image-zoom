@@ -1,0 +1,52 @@
+{
+  "name": "react-medium-image-zoom",
+  "version": "4.3.0",
+  "description": "Accessible medium.com-style image zoom for React",
+  "author": "Robert Pearce <me@robertwpearce.com>",
+  "license": "BSD-3-Clause",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": [
+    "dist/**/*.css"
+  ],
+  "files": [
+    "AUTHORS",
+    "LICENSE",
+    "dist/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:rpearce/image-zoom.git"
+  },
+  "homepage": "https://github.com/rpearce/image-zoom/packages/react-medium-image-zoom",
+  "bugs": "https://github.com/rpearce/image-zoom/issues",
+  "keywords": [
+    "react",
+    "medium",
+    "image",
+    "zoom",
+    "image-zoom",
+    "modal",
+    "react-component"
+  ],
+  "tags": [
+    "react",
+    "medium",
+    "image",
+    "zoom",
+    "image-zoom",
+    "modal",
+    "react-component"
+  ],
+  "peerDependencies": {
+    "react": ">= 16.8.0",
+    "react-dom": ">= 16.8.0"
+  },
+  "dependencies": {
+    "@rpearce/image-zoom": "file:../image-zoom",
+    "tslib": "2.0.0"
+  }
+}

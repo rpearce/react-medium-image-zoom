@@ -1,19 +1,380 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><title>Storybook</title><meta name="viewport" content="width=device-width,initial-scale=1"/><style>html, body {
-    overflow: hidden;
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }</style><script>/* globals window */
-  /* eslint-disable no-underscore-dangle */
-  try {
-    if (window.top !== window) {
-      window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.top.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>image-zoom examples</title>
+    <style>
+    .l-constrained {
+      margin-left: 2rem;
+      margin-right: 2rem;
     }
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.warn('unable to connect to top frame for connecting dev tools');
-  }</script><style>#root[hidden],
-      #docs-root[hidden] {
-        display: none !important;
-      }</style></head><body><div id="root"></div><div id="docs-root"></div><script>window['DOCS_MODE'] = false;</script><script src="runtime~main.a70cae47b0d915ec6f24.bundle.js"></script><script src="vendors~main.471bd6f67b87bffd51c8.bundle.js"></script><script src="main.056e9c8c08f81be55299.bundle.js"></script></body></html>
+    .l-constrained-fw-sm {
+      margin-left: 2rem;
+      margin-right: 2rem;
+    }
+    .l-separator {
+      border-top: 5px solid #686de0;
+      margin-top: 3em;
+      padding-top: 1em;
+    }
+    @media (max-width: 400px) {
+      .l-constrained-fw-sm {
+        margin-left: 0;
+        margin-right: 0;
+      }
+      .l-constrained-fw-sm > img {
+        width: 100%;
+      }
+    }
+    .grid {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .grid-item {
+      margin: 0 1rem 1rem 0;
+      width: calc(33% - 1rem);
+    }
+    .grid-img {
+      background-color: #c2c2c2;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      height: 0;
+      padding-bottom: 66%;
+      width: 100%;
+    }
+    .txt-zoom {
+      max-width: 20em;
+      padding: 1em;
+      border: 3px dashed;
+      background-color: #fff;
+    }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header class="l-constrained">
+        <h1>image-zoom examples</h1>
+        <div>Accessible, progressive zooming for images.</div>
+        <a href="https://github.com/rpearce/image-zoom">
+          https://github.com/rpearce/image-zoom
+        </a>
+        <p>
+          All of these examples can be seen by viewing this page's HTML source.
+        </p>
+      </header>
+
+      <section class="l-constrained">
+        <h2>About the Examples</h2>
+        <p>
+          These examples showcase different ways to use the image-zoom library,
+          and there are some things to know about these examples due to how the
+          library works:
+        </p>
+        <ul>
+          <li>they are screen reader accessible</li>
+          <li>they are keyboard accessible</li>
+          <li>they work great on all screen sizes</li>
+          <li>
+            they will not zoom an image larger than its maximum actual size
+            and will stop zooming once one of the <code>window</code> boundaries
+            are reached
+          </li>
+          <li>
+            they make use of the <code>srcset</code> and <code>sizes</code>
+            image attributes (if provided)
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="l-constrained">
+          Example: Vanilla JavaScript Image Zooming
+        </h2>
+        <div  class="l-constrained">
+          <p>
+            This example initializes each image with different options.
+          </p>
+          <div>Notes:</div>
+          <ul>
+            <li>
+              at 600px window width, the image switches to the 500px-wide image,
+              and since that is the maximum size that image can be, the zooming
+              is disabled
+            </li>
+            <li>
+              at 400px window width, the image switches to full-width, and it is
+              also disabled, since it already takes up the full width of the
+              screen
+            </li>
+          </ul>
+        </div>
+        <div class="l-constrained-fw-sm">
+          <figure>
+            <img
+              alt="A lone tree in the water near the shore with mountains in the background on a mostly sunny day."
+              data-uncontrolled
+              src="/laura-smetsers-H-TW2CoNtTk-unsplash-500w.jpg"
+              srcSet="/laura-smetsers-H-TW2CoNtTk-unsplash-500w.jpg 500w,
+                      /laura-smetsers-H-TW2CoNtTk-unsplash-1600w.jpg 1600w,
+                      /laura-smetsers-H-TW2CoNtTk-unsplash-2507w.jpg 2507w"
+              sizes="(max-width: 600px) 500px,
+                     (min-width: 601px) 1600px,
+                     (min-width: 2000px) 2507px"
+              style="max-width:100%;"
+              width="500"
+            />
+            <figcaption>
+              That Wanaka Tree, New Zealand by Laura Smetsers
+              <a href="https://unsplash.com/photos/H-TW2CoNtTk">Source</a>
+            </figcaption>
+          </figure>
+        </div>
+        <div class="l-constrained-fw-sm">
+          <figure>
+            <img
+              alt="A woman sitting on a bench amongst trees at the end of a boardwalk leading to a pond with mountains in the background"
+              data-uncontrolled
+              src="/robert-pearce-UwHN0jU_YqQ-unsplash-800w.jpg"
+              srcSet="/robert-pearce-UwHN0jU_YqQ-unsplash-800w.jpg 800w,
+                      /robert-pearce-UwHN0jU_YqQ-unsplash-1600w.jpg 1600w,
+                      /robert-pearce-UwHN0jU_YqQ-unsplash-2500w.jpg 2500w
+                      /robert-pearce-UwHN0jU_YqQ-unsplash-4928w.jpg 4928w"
+              sizes="(max-width: 600px) 800px,
+                     (min-width: 601px) 1600px,
+                     (min-width: 2000px) 2500px,
+                     (min-width: 2501px) 4928px"
+              style="max-width:100%;"
+              width="500"
+            />
+            <figcaption>
+              Lagoon in Glenorchy, New Zealand by Robert Pearce
+              <a href="https://unsplash.com/photos/UwHN0jU_YqQ">Source</a>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="l-constrained">
+          Example: Controlling the Zoom State Yourself
+        </h2>
+        <div  class="l-constrained">
+          <p>
+            This example's zoom state is manually controlled by the
+            the <code>onZoomChange</code> callback which calls the
+            <code>update</code> function.
+          </p>
+        </div>
+        <div class="l-constrained-fw-sm">
+          <figure>
+            <img
+              alt="A lake reflecting the snowy mountains behind it with brown hills and flatland in the foreground"
+              data-cb
+              src="/tobias-keller-73F4pKoUkM0-unsplash-800w.jpg"
+              srcSet="/tobias-keller-73F4pKoUkM0-unsplash-1600w.jpg 1600w,
+                      /tobias-keller-73F4pKoUkM0-unsplash-2500w.jpg 2500w,
+                      /tobias-keller-73F4pKoUkM0-unsplash-5164w.jpg 5000w"
+              sizes="(max-width: 600px) 800px,
+                     (min-width: 601px) 1600px,
+                     (min-width: 2000px) 2500px,
+                     (min-width: 2501px) 5164px"
+              style="max-width:100%;"
+              width="500"
+            />
+            <figcaption>
+              Lake Tekapo, New Zealand by Pablo Heimplatz
+              <a href="https://unsplash.com/photos/73F4pKoUkM0">Source</a>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="l-constrained">
+          Example: Controlling the Zoom State With <code>j</code> (open) and
+          <code>k</code>
+        </h2>
+        <div  class="l-constrained">
+          <p>
+            While this is not exactly recommended usage, this example's zoom state is manually controlled by the
+            <code>j</code> (open) and <code>k</code> (close) keys.
+          </p>
+        </div>
+        <div class="l-constrained-fw-sm">
+          <figure>
+            <img
+              alt="A kea (alpine parrot) perched atop a mountaintop"
+              data-jk
+              src="/pablo-heimplatz-PSF2RhUBORs-unsplash-800w.jpg"
+              srcSet="/pablo-heimplatz-PSF2RhUBORs-unsplash-1600w.jpg 1600w,
+                      /pablo-heimplatz-PSF2RhUBORs-unsplash-2500w.jpg 2500w,
+                      /pablo-heimplatz-PSF2RhUBORs-unsplash-5000w.jpg 5000w"
+              sizes="(max-width: 600px) 800px,
+                     (min-width: 601px) 1600px,
+                     (min-width: 2000px) 2500px,
+                     (min-width: 2501px) 5000px"
+              style="max-width:100%;cursor:not-allowed !important;"
+              width="500"
+            />
+            <figcaption>
+              Kea in Arthur's Pass, New Zealand by Pablo Heimplatz
+              <a href="https://unsplash.com/photos/PSF2RhUBORs">Source</a>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="l-constrained">
+          Example: <code>div</code>s with <code>background-image</code>s
+        </h2>
+        <div  class="l-constrained">
+          <p>
+            This example includes a grid of <code>div</code>s elements with
+            <code>background-image</code>s.
+          </p>
+          <ul class="grid" role="list">
+            <li class="grid-item" role="listitem">
+              <div
+                aria-label="Hobbit home in a grassy hill with a blue door and flowers outside on a sunny day"
+                class="grid-img"
+                data-uncontrolled
+                role="img"
+                style="background-image: url('/andres-iga-7XKkJVw1d8c-unsplash-1600w.jpg')"
+              ></div>
+            </li>
+            <li class="grid-item" role="listitem">
+              <div
+                aria-label="Boardwalk leading through a small, grassy valley and near a stream amidst snow-capped mountains"
+                class="grid-img"
+                data-uncontrolled
+                role="img"
+                style="background-image: url('/roell-de-ram-2DM7eOR5iyc-unsplash-1600w.jpg')"
+              ></div>
+            </li>
+            <li class="grid-item" role="listitem">
+              <div
+                aria-label="View from a mountain of a lake, a small town on the water, and mountains rising up from the lake on all sides"
+                class="grid-img"
+                data-uncontrolled
+                role="img"
+                style="background-image: url('/omer-faruk-bekdemir-5BuxuWIJF1Q-unsplash-1600w.jpg')"
+              ></div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="l-constrained">
+          Example: SVG
+        </h2>
+        <div  class="l-constrained">
+          <p>
+            This example is of a zoomable SVG (scalable vector graphic).
+          </p>
+          <div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 187.14 186.64"
+              width="200"
+              data-uncontrolled
+            >
+              <title>Pearce Software, LLC logo</title>
+              <desc>The letter P with multi-colored, horizontal lines in the middle that form an S shape</desc>
+              <path fill="#282c34" d="M88.28 0c61.79 0 98.87 33.54 98.87 84s-37.08 84-98.87 84H73.8v13.7c0 2.47-2.47 4.94-5.65 4.94H4.94A5.32 5.32 0 010 181.7V5.3A5.38 5.38 0 014.94 0z"/>
+              <path fill="#a26cc2" d="M143.57 109h-60a5 5 0 110-10h60a5 5 0 110 10z"/>
+              <path fill="#5ea6e1" d="M128.57 49h-70a5 5 0 010-10h70a5 5 0 010 10z"/>
+              <path fill="#d6b175" d="M133.57 89h-80a5 5 0 010-10h80a5 5 0 010 10z"/>
+              <path fill="#b76470" d="M128.57 129h-70a5 5 0 010-10h70a5 5 0 110 10z"/>
+              <path fill="#8fb16c" d="M103.57 69h-60a5 5 0 010-10h60a5 5 0 010 10z"/>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="l-constrained">
+          Example: Zooming Text (not that you should...)
+        </h2>
+        <div class="l-constrained">
+          <p>
+            This example demonstrates zooming a paragraph with text in it. It
+            should be noted that this is not what the library is intended to
+            zoom, but you can do so, nonetheless.
+          </p>
+          <div class="txt-zoom" data-uncontrolled>
+            This is a paragraph that you can zoom because my author wanted to
+            demonstrate that it is possible (though it would be a bit weird for
+            you to do so).
+          </div>
+        </div>
+        <div>
+      </section>
+
+      <section>
+        <div class="l-constrained l-separator">
+          <p style="margin-bottom: 800px">
+            The whitespace below exists to aid you in testing the close on
+            scroll functionality (click on the image and then scroll).
+          </p>
+          <p>This is the bottom...</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="/image-zoom.min.js"></script>
+    <script>
+      //
+      // UNCONTROLLED
+      //
+      var uncontrolleds = document.querySelectorAll('[data-uncontrolled]');
+      var i;
+
+      for (i = 0; i < uncontrolleds.length; i++) {
+        ImageZoom({}, uncontrolleds[i])
+      }
+
+      //
+      // CONTROLLED - j & k triggers
+      //
+      var controlledJk = document.querySelector('[data-jk]');
+      var controlledJkWithOpts = ImageZoom(
+        {
+          isControlled: true,
+          closeText: 'Press k to unzoom',
+          openText: 'Press j to zoom',
+        },
+        controlledJk
+      );
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'j' || e.keyCode === 74) {
+          controlledJkWithOpts.update({ isZoomed: true });
+        } else if (e.key === 'k' || e.keyCode === 75) {
+          controlledJkWithOpts.update({ isZoomed: false });
+        }
+      })
+
+      //
+      // CONTROLLED - onZoomChange callback
+      //
+      var controlledCb = document.querySelector('[data-cb]');
+      var controlledCbWithOpts = ImageZoom(
+        {
+          isControlled: true,
+          onZoomChange: function onZoomChange(isZoomed) {
+            controlledCbWithOpts.update({ isZoomed: isZoomed });
+          },
+        },
+        controlledCb
+      );
+    </script>
+  </body>
+</html>

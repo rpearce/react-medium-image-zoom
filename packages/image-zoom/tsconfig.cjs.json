@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "outDir": "dist/cjs",
+    "resolveJsonModule": true
+  },
+  "include": [
+    "source/index.ts"
+  ]
+}

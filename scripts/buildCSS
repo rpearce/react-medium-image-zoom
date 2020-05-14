@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-cp source/styles.css dist/

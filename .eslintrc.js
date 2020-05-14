@@ -17,9 +17,16 @@ module.exports = {
     sourceType: 'module',
   },
   parser: '@typescript-eslint/parser',
-  plugins: ['jsx-a11y', 'react', 'react-hooks', '@typescript-eslint'],
+  plugins: [
+    'jsx-a11y',
+    'prettier',
+    'react',
+    'react-hooks',
+    '@typescript-eslint',
+  ],
   rules: {
     '@typescript-eslint/no-unused-vars': 'error',
+    '@typescript-eslint/no-use-before-define': 'off',
     'jsx-quotes': ['error', 'prefer-double'],
     'jsx-a11y/no-onchange': 'off', // https://github.com/evcohen/eslint-plugin-jsx-a11y/issues/398
     'no-trailing-spaces': 'error',

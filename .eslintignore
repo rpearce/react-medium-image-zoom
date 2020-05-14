@@ -1,6 +1,5 @@
 !.eslintrc.js
 !.prettierrc.js
-!.storybook/
-dist/
-docs/
-examples/
+dist
+docs
+examples

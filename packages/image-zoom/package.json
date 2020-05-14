@@ -1,0 +1,39 @@
+{
+  "name": "@rpearce/image-zoom",
+  "version": "0.0.0-alpha.0",
+  "description": "Accessible, progressive zooming for images",
+  "author": "Robert Pearce <me@robertwpearce.com>",
+  "license": "BSD-3-Clause",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "files": [
+    "LICENSE",
+    "dist/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:rpearce/image-zoom.git"
+  },
+  "homepage": "https://github.com/rpearce/image-zoom/packages/image-zoom",
+  "bugs": "https://github.com/rpearce/image-zoom/issues",
+  "keywords": [
+    "image",
+    "zoom",
+    "image-zoom",
+    "modal"
+  ],
+  "tags": [
+    "image",
+    "zoom",
+    "image-zoom",
+    "modal"
+  ],
+  "dependencies": {
+    "focus-options-polyfill": "1.2.0",
+    "tslib": "2.0.0"
+  }
+}
