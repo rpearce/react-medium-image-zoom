@@ -365,6 +365,15 @@
         "code",
         "bug"
       ]
+    },
+    {
+      "login": "nandhae",
+      "name": "Nandhagopal Ezhilmaran",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/11366094?v=4",
+      "profile": "http://nandhae.me",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
