@@ -2,6 +2,7 @@
 *.tgz
 *.tmp
 .DS_Store
+.cache
 .env
 .eslintcache
 .node_repl_history
@@ -12,5 +13,6 @@ dist
 logs
 node_modules/
 npm-debug.log*
+public
 typings
 yarn.lock

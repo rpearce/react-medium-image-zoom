@@ -16,6 +16,7 @@ import { useImageZoom } from 'react-medium-image-zoom'
 
 const Image = () => {
   const { ref } = useImageZoom()
+
   const data = useStaticQuery(graphql`
     query {
       placeholderImage: file(relativePath: { eq: "gatsby-astronaut.png" }) {
@@ -28,7 +29,11 @@ const Image = () => {
     }
   `)
 
-  return <Img fluid={data.placeholderImage.childImageSharp.fluid} ref={ref} />
+  return (
+    <div ref={ref}>
+      <Img fluid={data.placeholderImage.childImageSharp.fluid} />
+    </div>
+  )
 }
 
 export default Image
