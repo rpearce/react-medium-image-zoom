@@ -5,9 +5,7 @@ import { terser } from 'rollup-plugin-terser'
 import typescript from 'rollup-plugin-typescript2'
 import pkg from './package.json'
 
-const cjsConfig = {
-  include: /node_modules/,
-}
+const cjsConfig = { include: /node_modules/ }
 
 const buildModules = ['./source/index.ts']
 
@@ -97,7 +95,7 @@ const umd = [
       exports: 'named',
       format: 'umd',
       globals: {},
-      name: 'miz-umd',
+      name: 'iz-umd',
       sourcemap: false,
     },
     external: [],

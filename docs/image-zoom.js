@@ -105,7 +105,6 @@ var ImageZoom = (function () {
           initMotionPref();
           initDescriptions();
           if (isImg && !targetEl.complete) {
-              console.log(targetEl, targetEl.getBoundingClientRect(), 'NOT COMPLETE');
               targetEl.addEventListener(LOAD, function () {
                   window.setTimeout(function () {
                       initImg();
@@ -113,7 +112,6 @@ var ImageZoom = (function () {
               });
           }
           else {
-              console.log(targetEl, 'IM FINE');
               initImg();
           }
       };
@@ -130,7 +128,6 @@ var ImageZoom = (function () {
       var initImg = function () {
           if (!targetEl || state !== State.UNLOADED)
               return;
-          console.log(targetEl, targetEl.getBoundingClientRect(), 'IN HERE NOW...');
           var _a = targetEl.getBoundingClientRect(), height = _a.height, width = _a.width;
           var currentScale = isImg
               ? getMaxDimensionScale(height, width, zoomMargin, targetEl.naturalHeight, targetEl.naturalWidth)
@@ -560,7 +557,6 @@ var ImageZoom = (function () {
           return getZoomImgStyleStr(0, 0, 0, 0, 'none', '0ms');
       }
       var _a = targetEl.getBoundingClientRect(), height = _a.height, left = _a.left, top = _a.top, width = _a.width;
-      console.log(targetEl, { height: height, left: left, top: top, width: width });
       var originalTransform = targetEl.style.transform;
       if (state !== State.LOADED) {
           var initTransform = 'scale(1) translate(0,0)' +

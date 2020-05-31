@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`useImageZoom is true 1`] = `
+<DocumentFragment>
+  <img
+    alt="Descriptive text"
+    sizes="(max-width: 600px) 500px, (min-width: 601px) 1600px"
+    src="path/to/img-500w.jpg"
+    srcset="path/to/img-500w.jpg 500w, path/to/img-1600w.jpg 1600w"
+    style="height: 100%; max-width: 100%;"
+    width="500"
+  />
+</DocumentFragment>
+`;

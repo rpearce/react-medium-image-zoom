@@ -107,14 +107,12 @@ const ImageZoom = (
     initDescriptions()
 
     if (isImg && !(targetEl as HTMLImageElement).complete) {
-      console.log(targetEl, targetEl.getBoundingClientRect(), 'NOT COMPLETE')
       targetEl.addEventListener(LOAD, () => {
         window.setTimeout(() => {
           initImg()
         }, 500)
       })
     } else {
-      console.log(targetEl, 'IM FINE')
       initImg()
     }
   }
@@ -135,7 +133,6 @@ const ImageZoom = (
   const initImg = (): void => {
     if (!targetEl || state !== State.UNLOADED) return
 
-    console.log(targetEl, targetEl.getBoundingClientRect(), 'IN HERE NOW...')
 
     const { height, width } = targetEl.getBoundingClientRect()
     const currentScale = isImg
@@ -728,7 +725,6 @@ const getZoomImgStyle: GetZoomImgStyle = (
   }
 
   const { height, left, top, width } = targetEl.getBoundingClientRect()
-  console.log(targetEl, { height, left, top, width })
   const originalTransform = targetEl.style.transform
 
   if (state !== State.LOADED) {

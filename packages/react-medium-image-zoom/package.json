@@ -9,11 +9,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "sideEffects": [
-    "dist/**/*.css"
-  ],
+  "sideEffects": false,
   "files": [
-    "AUTHORS",
     "LICENSE",
     "dist/"
   ],
@@ -42,11 +39,10 @@
     "react-component"
   ],
   "peerDependencies": {
-    "react": ">= 16.8.0",
-    "react-dom": ">= 16.8.0"
+    "react": ">= 16.8.0"
   },
   "dependencies": {
-    "@rpearce/image-zoom": "file:../image-zoom",
+    "@rpearce/image-zoom": "^0.1.0-alpha.0",
     "tslib": "2.0.0"
   }
 }
