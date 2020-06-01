@@ -4,7 +4,7 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
-  const { ref } = useImageZoom()
+  const { ref } = useImageZoom({ overlayBgColorEnd: '#000' })
 
   return (
     <div className="App">
