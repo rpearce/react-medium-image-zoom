@@ -10,6 +10,8 @@
 .yarn-integrity
 coverage
 dist
+examples/*/build
+examples/*/public
 logs
 node_modules/
 npm-debug.log*
