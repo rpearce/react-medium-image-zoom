@@ -1,6 +1,6 @@
 {
   "name": "react-medium-image-zoom",
-  "version": "5.0.0-alpha.0",
+  "version": "5.0.0-alpha.1",
   "description": "Accessible medium.com-style image zoom for React",
   "author": "Robert Pearce <me@robertwpearce.com>",
   "license": "BSD-3-Clause",
@@ -42,7 +42,7 @@
     "react": ">= 16.8.0"
   },
   "dependencies": {
-    "@rpearce/image-zoom": "^0.1.0-alpha.1",
+    "@rpearce/image-zoom": "^0.1.0-alpha.2",
     "tslib": "2.0.0"
   }
 }
