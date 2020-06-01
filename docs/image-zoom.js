@@ -129,8 +129,9 @@ var ImageZoom = (function () {
           if (!targetEl || state !== State.UNLOADED)
               return;
           var _a = targetEl.getBoundingClientRect(), height = _a.height, width = _a.width;
-          var currentScale = isImg
-              ? getMaxDimensionScale(height, width, zoomMargin, targetEl.naturalHeight, targetEl.naturalWidth)
+          var _b = targetEl, naturalHeight = _b.naturalHeight, naturalWidth = _b.naturalWidth;
+          var currentScale = isImg && naturalHeight && naturalWidth
+              ? getMaxDimensionScale(height, width, zoomMargin, naturalHeight, naturalWidth)
               : getScale(height, width, zoomMargin);
           if (currentScale > 1) {
               setAttribute(ARIA_DESCRIBEDBY, openDescId, targetEl);
@@ -563,9 +564,10 @@ var ImageZoom = (function () {
               (originalTransform ? " " + originalTransform : '');
           return getZoomImgStyleStr(height, width, left, top, initTransform, transitionDuration);
       }
+      var _b = targetEl, naturalHeight = _b.naturalHeight, naturalWidth = _b.naturalWidth;
       // Get amount to scale item
-      var scale = isImg
-          ? getMaxDimensionScale(height, width, zoomMargin, targetEl.naturalHeight, targetEl.naturalWidth)
+      var scale = isImg && naturalHeight && naturalWidth
+          ? getMaxDimensionScale(height, width, zoomMargin, naturalHeight, naturalWidth)
           : getScale(height, width, zoomMargin);
       // Get the the coords for center of the viewport
       var viewportX = window.innerWidth / 2;

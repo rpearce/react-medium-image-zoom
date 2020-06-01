@@ -133,17 +133,18 @@ const ImageZoom = (
   const initImg = (): void => {
     if (!targetEl || state !== State.UNLOADED) return
 
-
     const { height, width } = targetEl.getBoundingClientRect()
-    const currentScale = isImg
-      ? getMaxDimensionScale(
-          height,
-          width,
-          zoomMargin,
-          (targetEl as HTMLImageElement).naturalHeight,
-          (targetEl as HTMLImageElement).naturalWidth
-        )
-      : getScale(height, width, zoomMargin)
+    const { naturalHeight, naturalWidth } = targetEl as HTMLImageElement
+    const currentScale =
+      isImg && naturalHeight && naturalWidth
+        ? getMaxDimensionScale(
+            height,
+            width,
+            zoomMargin,
+            naturalHeight,
+            naturalWidth
+          )
+        : getScale(height, width, zoomMargin)
 
     if (currentScale > 1) {
       setAttribute(ARIA_DESCRIBEDBY, openDescId, targetEl)
@@ -742,16 +743,19 @@ const getZoomImgStyle: GetZoomImgStyle = (
     )
   }
 
+  const { naturalHeight, naturalWidth } = targetEl as HTMLImageElement
+
   // Get amount to scale item
-  const scale = isImg
-    ? getMaxDimensionScale(
-        height,
-        width,
-        zoomMargin,
-        (targetEl as HTMLImageElement).naturalHeight,
-        (targetEl as HTMLImageElement).naturalWidth
-      )
-    : getScale(height, width, zoomMargin)
+  const scale =
+    isImg && naturalHeight && naturalWidth
+      ? getMaxDimensionScale(
+          height,
+          width,
+          zoomMargin,
+          naturalHeight,
+          naturalWidth
+        )
+      : getScale(height, width, zoomMargin)
 
   // Get the the coords for center of the viewport
   const viewportX = window.innerWidth / 2
