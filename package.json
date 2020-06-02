@@ -1,18 +1,21 @@
 {
+  "private": true,
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
     "build": "run-s clean:dist build:pkgs build:docs && echo 'Build complete'",
+    "build:ci": "run-p lint build test",
     "build:docs": "cp packages/image-zoom/dist/iife/image-zoom.* docs",
     "build:pkgs": "lerna exec -- rollup -c rollup.config.js",
-    "ci": "run-p lint build test",
     "clean:dist": "rm -rf packages/*/dist/",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
     "coverage": "jest --coverage --coverageReporters=text-lcov | coveralls",
+    "lerna:bootstrap": "lerna bootstrap --hoist",
+    "lerna:changed": "lerna changed --loglevel=silly",
+    "lerna:publish": "lerna publish",
     "lint": "eslint .",
-    "postinstall": "lerna bootstrap --hoist",
     "prepublishOnly": "run-p lint test && npm run build",
     "serve:docs": "serve docs",
     "start": "npm run build && run-p watch serve:docs",
