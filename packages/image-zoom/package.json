@@ -1,6 +1,6 @@
 {
   "name": "@rpearce/image-zoom",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.3",
   "description": "Accessible, progressive zooming for images",
   "author": "Robert Pearce <me@robertwpearce.com>",
   "license": "BSD-3-Clause",
