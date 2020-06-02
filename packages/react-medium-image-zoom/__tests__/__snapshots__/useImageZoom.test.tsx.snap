@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`useImageZoom is true 1`] = `
+exports[`useImageZoom renders 1`] = `
 <DocumentFragment>
   <img
     alt="Descriptive text"

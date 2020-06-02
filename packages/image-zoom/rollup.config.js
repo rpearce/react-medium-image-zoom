@@ -51,7 +51,7 @@ const cjs = [
   {
     input: './source/index.ts',
     output: {
-      file: `${dirname(pkg.main)}/${pkg.name}.min.js`,
+      file: `${dirname(pkg.main)}/image-zoom.min.js`,
       exports: 'named',
       format: 'cjs',
       name: 'iz-cjs-min',

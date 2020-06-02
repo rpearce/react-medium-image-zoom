@@ -51,7 +51,7 @@ const cjs = [
   {
     input: './source/index.ts',
     output: {
-      file: `${dirname(pkg.main)}/${pkg.name}.min.js`,
+      file: `${dirname(pkg.main)}/react-medium-image-zoom.min.js`,
       exports: 'named',
       format: 'cjs',
       name: 'rmiz-cjs-min',

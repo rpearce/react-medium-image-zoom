@@ -3,9 +3,7 @@
     "publish": {
       "ignoreChanges": [
         "*.md",
-        "**/__tests__/**",
-        "rollup.config.*",
-        "tsconfig.*"
+        "**/__tests__/**"
       ]
     }
   },
