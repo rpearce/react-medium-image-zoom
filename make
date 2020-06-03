@@ -6,9 +6,9 @@ set -o nounset
 set -eou pipefail
 
 pname="./make"
-bin="$PWD/node_modules/.bin"
-izPath="$PWD/packages/image-zoom"
-rmizPath="$PWD/packages/react-medium-image-zoom"
+#bin="$PWD/node_modules/.bin"
+#izPath="$PWD/packages/image-zoom"
+#rmizPath="$PWD/packages/react-medium-image-zoom"
 
 function usage {
   cat <<EOF
@@ -35,57 +35,58 @@ function unknown-cmd {
   return 1
 }
 
-function clean {
-  clean_pkgs
-  clean_lerna
-  return 0
-}
+#function clean {
+#  clean_pkgs
+#  clean_lerna
+#  return 0
+#}
 
-function clean_pkgs {
-  rm -rf $PWD/packages/*/dist/
-  return 0
-}
+#function clean_pkgs {
+#  rm -rf $PWD/packages/*/dist/
+#  return 0
+#}
 
-function clean_lerna {
-  $bin/lerna clean -y
-  return 0
-}
+#function clean_lerna {
+#  $bin/lerna clean -y
+#  return 0
+#}
 
-function docs {
-  return 0
-}
+#function docs {
+#  return 0
+#}
 
-function watch {
-  $bin/chokidar "packages/*/source/**/*" -c "./make pkgs"
-}
+#function watch {
+#  $bin/chokidar "packages/*/source/**/*" -c "./make pkgs"
+#}
 
-function build_pkg {
-  local pkg="$1"
-  local simple="${2-}"
+#function build_pkg {
+#  local pkg="$1"
+#  local simple="${2-}"
 
-  echo "Building $pkg"
+#  echo "Building $pkg"
 
-  echo "Compiling $pkg/tsconfig.esm.json"
-  $bin/tsc -p $pkg/tsconfig.esm.json
+#  echo "Compiling $pkg/tsconfig.esm.json"
+#  $bin/tsc -p $pkg/tsconfig.esm.json
 
-  echo "Compiling $pkg/tsconfig.cjs.json"
-  $bin/tsc -p $pkg/tsconfig.cjs.json
+#  echo "Compiling $pkg/tsconfig.cjs.json"
+#  $bin/tsc -p $pkg/tsconfig.cjs.json
 
-  echo "Compiling $pkg/tsconfig.umd.json"
-  $bin/tsc -p $pkg/tsconfig.umd.json
+#  echo "Compiling $pkg/tsconfig.umd.json"
+#  $bin/tsc -p $pkg/tsconfig.umd.json
 
-  echo "Done building $pkg"
+#  echo "Done building $pkg"
 
-  return 0
-}
+#  return 0
+#}
 
 function pkgs {
-  echo "Cleaning..."
+  #echo "Cleaning..."
 
-  clean_pkgs
+  #clean_pkgs
 
-  build_pkg "$izPath"
-  build_pkg "$rmizPath"
+  yarn workspaces foreach run build
+  #build_pkg "$izPath"
+  #build_pkg "$rmizPath"
 
   #find $PWD/packages \
   #  -maxdepth 1 \
@@ -98,15 +99,15 @@ function pkgs {
 
 function build {
   pkgs
-  docs
+  #docs
   return 0
 }
 
-function init {
-  npm i
-  build
-  return 0
-}
+#function init {
+#  npm i
+#  build
+#  return 0
+#}
 
 # Check if no command is provided
 
@@ -116,12 +117,12 @@ function init {
 
 case "$1" in
   build         ) build;;
-  clean         ) clean;;
-  clean_pkgs    ) clean_pkgs;;
-  clean_lerna   ) clean_lerna;;
-  docs          ) docs;;
+  #clean         ) clean;;
+  #clean_pkgs    ) clean_pkgs;;
+  #clean_lerna   ) clean_lerna;;
+  #docs          ) docs;;
   help|-h|--help) usage;;
-  init          ) init;;
+  #init          ) init;;
   pkgs          ) pkgs;;
   watch         ) watch;;
                *) unknown-cmd;;

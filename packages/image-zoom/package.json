@@ -1,6 +1,6 @@
 {
   "name": "@rpearce/image-zoom",
-  "version": "0.1.0-alpha.3",
+  "version": "0.1.0-alpha.4",
   "description": "Accessible, progressive zooming for images",
   "author": "Robert Pearce <me@robertwpearce.com>",
   "license": "BSD-3-Clause",
@@ -32,6 +32,31 @@
     "image-zoom",
     "modal"
   ],
+  "scripts": {
+    "build": "run-s clean build:pkg",
+    "build:ci": "run-p build test",
+    "build:pkg": "rollup -c rollup.config.js",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "yarn run test && yarn run build",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "13.0.0",
+    "@rollup/plugin-node-resolve": "8.0.1",
+    "@testing-library/jest-dom": "5.10.0",
+    "@types/jest": "26.0.0",
+    "@types/node": "14.0.13",
+    "axe-core": "3.5.4",
+    "jest": "26.0.1",
+    "npm-run-all": "4.1.5",
+    "rollup": "2.13.1",
+    "rollup-plugin-terser": "6.1.0",
+    "rollup-plugin-typescript2": "0.27.1",
+    "terser": "4.7.0",
+    "ts-jest": "26.1.0",
+    "ts-loader": "7.0.5",
+    "typescript": "3.9.5"
+  },
   "dependencies": {
     "focus-options-polyfill": "1.2.0",
     "tslib": "2.0.0"

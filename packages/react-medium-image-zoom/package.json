@@ -38,11 +38,41 @@
     "modal",
     "react-component"
   ],
+  "scripts": {
+    "build": "run-s clean build:pkg",
+    "build:ci": "run-p build test",
+    "build:pkg": "rollup -c rollup.config.js",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "yarn run test && yarn run build",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "13.0.0",
+    "@rollup/plugin-node-resolve": "8.0.1",
+    "@testing-library/jest-dom": "5.10.0",
+    "@testing-library/react": "10.2.1",
+    "@types/jest": "26.0.0",
+    "@types/node": "14.0.13",
+    "@types/react": "16.9.36",
+    "@types/react-dom": "16.9.8",
+    "axe-core": "3.5.4",
+    "jest": "26.0.1",
+    "npm-run-all": "4.1.5",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "rollup": "2.13.1",
+    "rollup-plugin-terser": "6.1.0",
+    "rollup-plugin-typescript2": "0.27.1",
+    "terser": "4.7.0",
+    "ts-jest": "26.1.0",
+    "ts-loader": "7.0.5",
+    "typescript": "3.9.5"
+  },
   "peerDependencies": {
     "react": ">= 16.8.0"
   },
   "dependencies": {
-    "@rpearce/image-zoom": "^0.1.0-alpha.3",
+    "@rpearce/image-zoom": "0.1.0-alpha.4",
     "tslib": "2.0.0"
   }
 }
