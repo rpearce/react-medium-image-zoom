@@ -1,13 +1,20 @@
 language: node_js
+
 node_js:
   - "14"
+
 cache: yarn
+
 before_install:
-  - npm i -g yarn@2.0.0-rc.27
+  - npm i -g yarn@berry
   - yarn set version berry
+  - yarn set version latest
+
 install:
   - yarn install --immutable
+
 script:
-  - yarn run build:ci
+  - yarn run test && yarn run build
+
 after_success:
   - yarn run coverage

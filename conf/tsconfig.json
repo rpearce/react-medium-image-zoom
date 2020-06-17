@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "importHelpers": true,
+    "jsx": "react",
+    "lib": ["es2020", "dom"],
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "sourceMap": false,
+    "strict": true,
+    "target": "es5"
+  }
+}

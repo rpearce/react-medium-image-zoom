@@ -13,7 +13,7 @@ dist
 examples/*/build
 examples/*/public
 logs
-node_modules/
+node_modules
 npm-debug.log*
 public
 typings
