@@ -1,4 +1,5 @@
 !.eslintrc.js
-!.prettierrc.js
+.yarn
+coverage
 dist
 examples

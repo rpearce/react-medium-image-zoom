@@ -608,43 +608,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rpearce/eslint-config-iz@workspace:*, @rpearce/eslint-config-iz@workspace:packages/eslint-config-iz":
-  version: 0.0.0-use.local
-  resolution: "@rpearce/eslint-config-iz@workspace:packages/eslint-config-iz"
-  dependencies:
-    "@typescript-eslint/eslint-plugin": 3.3.0
-    "@typescript-eslint/parser": 3.3.0
-    eslint: 7.2.0
-    eslint-config-prettier: 6.11.0
-    eslint-plugin-jest: 23.13.2
-    eslint-plugin-prettier: 3.1.4
-    prettier: 2.0.5
-    typescript: 3.9.5
-  languageName: unknown
-  linkType: soft
-
 "@rpearce/image-zoom@workspace:packages/image-zoom":
   version: 0.0.0-use.local
   resolution: "@rpearce/image-zoom@workspace:packages/image-zoom"
   dependencies:
-    "@rpearce/eslint-config-iz": "workspace:*"
-    "@testing-library/jest-dom": 5.10.1
-    "@types/jest": 26.0.0
-    "@types/node": 14.0.13
-    "@typescript-eslint/eslint-plugin": 3.3.0
-    "@typescript-eslint/parser": 3.3.0
-    axe-core: 3.5.5
-    eslint: 7.2.0
-    eslint-config-prettier: 6.11.0
-    eslint-plugin-jest: 23.13.2
-    eslint-plugin-prettier: 3.1.4
     focus-options-polyfill: 1.2.0
-    jest: 26.0.1
-    npm-run-all: 4.1.5
-    prettier: 2.0.5
-    ts-jest: 26.1.0
     tslib: 2.0.0
-    typescript: 3.9.5
   languageName: unknown
   linkType: soft
 
@@ -852,13 +821,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:16.9.36":
+"@types/react@npm:*":
   version: 16.9.36
   resolution: "@types/react@npm:16.9.36"
   dependencies:
     "@types/prop-types": "*"
     csstype: ^2.2.0
   checksum: 63731d81fcd0407ea17f265aa042bbf01f208798ca773e1a158ccb721798cffb4b398cc1c098fe8a71ff053601a51171bb607c3ff2ba14e1ff063aefe94f08cd
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:16.9.38":
+  version: 16.9.38
+  resolution: "@types/react@npm:16.9.38"
+  dependencies:
+    "@types/prop-types": "*"
+    csstype: ^2.2.0
+  checksum: fa07e07d5b6028f36c5fa6a79ed8c36bb4418d06131cd69ae12d7e64e572364c721f9d20caa09ffb62a31389e56916ed5b4c751642f44c6b1e871bdcfdf9df51
   languageName: node
   linkType: hard
 
@@ -1119,6 +1098,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ansi-colors@npm:^3.2.1":
+  version: 3.2.4
+  resolution: "ansi-colors@npm:3.2.4"
+  checksum: 86ec4a476ae8661237c0da58c0b4c48ea57719fdd80eed00132db09ee88d69f5caa5889e13ccd07489e710bf3b9fd85123729e0660384d4373e92ef6125c1fad
+  languageName: node
+  linkType: hard
+
 "ansi-escapes@npm:^4.2.1":
   version: 4.3.1
   resolution: "ansi-escapes@npm:4.3.1"
@@ -1245,13 +1231,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aria-query@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "aria-query@npm:4.2.0"
+"aria-query@npm:^4.2.2":
+  version: 4.2.2
+  resolution: "aria-query@npm:4.2.2"
   dependencies:
     "@babel/runtime": ^7.10.2
     "@babel/runtime-corejs3": ^7.10.2
-  checksum: 19629f68c2bbf2b8813c8a11ef374c0b86cab477b9e9882a71fd1b1b79e28e253214a6aa0849009a792567f6a7700413622a061f875f4d751f777cf70ddff6f5
+  checksum: dc7631b6f9aee453aee3587f1b4e998e2fca89909a7d2587d91694165d161850a8b64c433348efde78297e35473df6d79deb7abea8571f82485dad9b5401c390
   languageName: node
   linkType: hard
 
@@ -2315,6 +2301,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"enquirer@npm:^2.3.5":
+  version: 2.3.5
+  resolution: "enquirer@npm:2.3.5"
+  dependencies:
+    ansi-colors: ^3.2.1
+  checksum: 1745db4e9d40624abe89301ada7ab79771a8e8ad500d27e6d01b811ca43095b894b9c2b1cb82a4d441a338c5ad19e03cdf31c8a5a573f14013feaecc2c2f1073
+  languageName: node
+  linkType: hard
+
 "env-paths@npm:^2.2.0":
   version: 2.2.0
   resolution: "env-paths@npm:2.2.0"
@@ -2407,23 +2402,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jest@npm:23.13.2":
-  version: 23.13.2
-  resolution: "eslint-plugin-jest@npm:23.13.2"
+"eslint-plugin-jest@npm:23.16.0":
+  version: 23.16.0
+  resolution: "eslint-plugin-jest@npm:23.16.0"
   dependencies:
     "@typescript-eslint/experimental-utils": ^2.5.0
   peerDependencies:
     eslint: ">=5"
-  checksum: 8b081a20dc86d655156b577125bf8923558462331fd9c99a9f7944e892c45ee31d74600a049362bef851eb03041a61df12590e8aa0da5687d95da3ada9a5f4db
+  checksum: 8340fd1089b38719fd78f4f3d12fc0b51eb81074ee227fd47cdb1e111b6bc9340eb800148dea7d923c74306abf69e9cc6d51206f6ed6336960c31d982843dc8f
   languageName: node
   linkType: hard
 
-"eslint-plugin-jsx-a11y@npm:6.3.0":
-  version: 6.3.0
-  resolution: "eslint-plugin-jsx-a11y@npm:6.3.0"
+"eslint-plugin-jsx-a11y@npm:6.3.1":
+  version: 6.3.1
+  resolution: "eslint-plugin-jsx-a11y@npm:6.3.1"
   dependencies:
     "@babel/runtime": ^7.10.2
-    aria-query: ^4.2.0
+    aria-query: ^4.2.2
     array-includes: ^3.1.1
     ast-types-flow: ^0.0.7
     axe-core: ^3.5.4
@@ -2435,7 +2430,7 @@ __metadata:
     language-tags: ^1.0.5
   peerDependencies:
     eslint: ^3 || ^4 || ^5 || ^6 || ^7
-  checksum: 44223fb8c741fbb84875281991430666308af1e65009316f0b16e3fd393767075abdb8f1de55b334909edd87cb335a8e4c3b37d36388ba7acbac03474f7091ad
+  checksum: 3261972201e011625b373b9e924f8f05cd1c420d3157689a6b91e5864f42c812ef2d723673ddfac36171d91ee40bc5a1041018ad69b4b0aff0c1967333ff9302
   languageName: node
   linkType: hard
 
@@ -2507,9 +2502,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:7.2.0":
-  version: 7.2.0
-  resolution: "eslint@npm:7.2.0"
+"eslint@npm:7.3.0":
+  version: 7.3.0
+  resolution: "eslint@npm:7.3.0"
   dependencies:
     "@babel/code-frame": ^7.0.0
     ajv: ^6.10.0
@@ -2517,6 +2512,7 @@ __metadata:
     cross-spawn: ^7.0.2
     debug: ^4.0.1
     doctrine: ^3.0.0
+    enquirer: ^2.3.5
     eslint-scope: ^5.1.0
     eslint-utils: ^2.0.0
     eslint-visitor-keys: ^1.2.0
@@ -2530,7 +2526,6 @@ __metadata:
     ignore: ^4.0.6
     import-fresh: ^3.0.0
     imurmurhash: ^0.1.4
-    inquirer: ^7.0.0
     is-glob: ^4.0.0
     js-yaml: ^3.13.1
     json-stable-stringify-without-jsonify: ^1.0.1
@@ -2549,7 +2544,7 @@ __metadata:
     v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: 37cb498f61fe6b2d98b77104377c1db207649e82e06f76dd4243db09c60424b705036b7cc81c8201eb47b028d576a0ebe9c293b0bc4a5747185e5dc5bc423041
+  checksum: a9551aaa81bc22dc948f058da82d2698119b12c767f2bfa1f992126f3bbf4c8cfc03aec5614e57727f8520bda10ddb868fb83b07a4fb30fee0a25b319cd3fde0
   languageName: node
   linkType: hard
 
@@ -3344,7 +3339,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"inquirer@npm:^7.0.0, inquirer@npm:^7.0.4":
+"inquirer@npm:^7.0.4":
   version: 7.2.0
   resolution: "inquirer@npm:7.2.0"
   dependencies:
@@ -5548,32 +5543,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "react-medium-image-zoom@workspace:packages/react-medium-image-zoom"
   dependencies:
-    "@rpearce/eslint-config-iz": "workspace:*"
     "@rpearce/image-zoom": "workspace:packages/image-zoom"
-    "@testing-library/jest-dom": 5.10.1
-    "@testing-library/react": 10.3.0
-    "@types/jest": 26.0.0
-    "@types/node": 14.0.13
-    "@types/react": 16.9.36
-    "@types/react-dom": 16.9.8
-    "@typescript-eslint/eslint-plugin": 3.3.0
-    "@typescript-eslint/parser": 3.3.0
-    axe-core: 3.5.5
-    eslint: 7.2.0
-    eslint-config-prettier: 6.11.0
-    eslint-plugin-jest: 23.13.2
-    eslint-plugin-jsx-a11y: 6.3.0
-    eslint-plugin-prettier: 3.1.4
-    eslint-plugin-react: 7.20.0
-    eslint-plugin-react-hooks: 4.0.4
-    jest: 26.0.1
-    npm-run-all: 4.1.5
-    prettier: 2.0.5
-    react: 16.13.1
-    react-dom: 16.13.1
-    ts-jest: 26.1.0
+    "@types/react": 16.9.38
     tslib: 2.0.0
-    typescript: 3.9.5
   peerDependencies:
     react: ">= 16.8.0"
   languageName: unknown
@@ -5889,11 +5861,33 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
+    "@testing-library/jest-dom": 5.10.1
+    "@testing-library/react": 10.3.0
+    "@types/jest": 26.0.0
+    "@types/node": 14.0.13
+    "@types/react": 16.9.38
+    "@types/react-dom": 16.9.8
+    "@typescript-eslint/eslint-plugin": 3.3.0
+    "@typescript-eslint/parser": 3.3.0
     all-contributors-cli: 6.16.0
+    axe-core: 3.5.5
     chokidar-cli: 2.1.0
     coveralls: 3.1.0
+    eslint: 7.3.0
+    eslint-config-prettier: 6.11.0
+    eslint-plugin-jest: 23.16.0
+    eslint-plugin-jsx-a11y: 6.3.1
+    eslint-plugin-prettier: 3.1.4
+    eslint-plugin-react: 7.20.0
+    eslint-plugin-react-hooks: 4.0.4
+    jest: 26.0.1
     npm-run-all: 4.1.5
+    prettier: 2.0.5
+    react: 16.13.1
+    react-dom: 16.13.1
     serve: 11.3.2
+    ts-jest: 26.1.0
+    typescript: 3.9.5
   languageName: unknown
   linkType: soft
 
