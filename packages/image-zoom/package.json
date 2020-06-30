@@ -34,6 +34,6 @@
   ],
   "dependencies": {
     "focus-options-polyfill": "1.2.0",
-    "tslib": "2.0.0"
+    "tslib": "^2.0.0"
   }
 }
