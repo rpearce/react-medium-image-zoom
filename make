@@ -82,19 +82,25 @@ function clean_pkgs {
   return 0
 }
 
+function clearscreen {
+  printf '\033c'
+  return 0
+}
+
 function contrib {
   yarn all-contributors --config $PWD/conf/.all-contributorsrc "$@"
 }
 
 function dev {
+  clearscreen
   echo "Starting dev environment..."
 
-  #build
-  #watch & WATCH_PID=$!
-  #serve & SERVE_PID=$!
+  build
+  watch & WATCH_PID=$!
+  serve docs & SERVE_PID=$!
 
-  #wait $WATCH_PID
-  #wait $SERVE_PID
+  wait $WATCH_PID
+  wait $SERVE_PID
 
   return 0
 }
@@ -164,7 +170,7 @@ function unknown-cmd {
 }
 
 function watch {
-  $bin/chokidar "packages/*/source/**/*" -c "./make pkgs"
+  yarn chokidar "packages/*/source/**/*" -c "./make pkgs"
 }
 
 # Check if no command is provided

@@ -9,7 +9,7 @@
     "coverage": "./make coverage",
     "lint": "./make lint",
     "serve:docs": "serve docs",
-    "start": "yarn run build && run-p watch serve:docs",
+    "start": "./make dev",
     "test": "./make test",
     "watch": "./make watch"
   },
