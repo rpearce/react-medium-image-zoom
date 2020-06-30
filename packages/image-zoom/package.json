@@ -13,6 +13,16 @@
   },
   "homepage": "https://github.com/rpearce/image-zoom/packages/react-medium-image-zoom",
   "bugs": "https://github.com/rpearce/image-zoom/issues",
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/rpearce"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/image-zoom"
+    }
+  ],
   "keywords": [
     "image",
     "zoom",
