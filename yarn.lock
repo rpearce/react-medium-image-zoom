@@ -2495,12 +2495,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react-hooks@npm:4.0.4":
-  version: 4.0.4
-  resolution: "eslint-plugin-react-hooks@npm:4.0.4"
+"eslint-plugin-react-hooks@npm:4.0.5":
+  version: 4.0.5
+  resolution: "eslint-plugin-react-hooks@npm:4.0.5"
   peerDependencies:
     eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
-  checksum: 756138d0175b769a82db93a1ebdb67171135561be559e66e1bcbe9d2aad1caf16f8b86a778cee731e5cb1ff7a28e8b022c210877959a8bf1f1386b6e3dc37034
+  checksum: 2a84a814963f1e829eaa097638219a85971cbb7ff6e73bcba75d7dde77796717a9a4454b82aa8616a8fd8d8a89537efaa034a7146dfac3fe371c8e91f63deeda
   languageName: node
   linkType: hard
 
@@ -5594,7 +5594,7 @@ __metadata:
   dependencies:
     "@rpearce/image-zoom": "workspace:packages/image-zoom"
     "@types/react": 16.9.41
-    tslib: 2.0.0
+    tslib: ^2.0.0
   peerDependencies:
     react: ">= 16.8.0"
   languageName: unknown
@@ -5928,7 +5928,7 @@ __metadata:
     eslint-plugin-jsx-a11y: 6.3.1
     eslint-plugin-prettier: 3.1.4
     eslint-plugin-react: 7.20.2
-    eslint-plugin-react-hooks: 4.0.4
+    eslint-plugin-react-hooks: 4.0.5
     jest: 26.1.0
     npm-run-all: 4.1.5
     prettier: 2.0.5
@@ -6805,17 +6805,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:2.0.0, tslib@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "tslib@npm:2.0.0"
-  checksum: a7369a224f12e223fb42f2a720389601a24a1e1c96c55bf0d8d4b60c131e574c175ae23578b8d1bd3f4ec790c7e0a82b43733f022f866d48a23aeadd3910755d
-  languageName: node
-  linkType: hard
-
 "tslib@npm:^1.8.1, tslib@npm:^1.9.0":
   version: 1.13.0
   resolution: "tslib@npm:1.13.0"
   checksum: 5dc3bdaea3b67c76ef4a14c28fcb2171da7bcf292fd9c59a260098729626b1ce766c52b588f08e324ed9a0c52ea8a93a815920f980d75981abc9d850fbf310fb
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "tslib@npm:2.0.0"
+  checksum: a7369a224f12e223fb42f2a720389601a24a1e1c96c55bf0d8d4b60c131e574c175ae23578b8d1bd3f4ec790c7e0a82b43733f022f866d48a23aeadd3910755d
   languageName: node
   linkType: hard
 

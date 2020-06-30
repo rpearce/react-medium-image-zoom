@@ -58,6 +58,6 @@
   },
   "dependencies": {
     "@rpearce/image-zoom": "workspace:packages/image-zoom",
-    "tslib": "2.0.0"
+    "tslib": "^2.0.0"
   }
 }
