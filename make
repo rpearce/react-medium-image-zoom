@@ -8,22 +8,21 @@ set -eou pipefail
 pname="./make"
 izPath="$PWD/packages/image-zoom"
 rmizPath="$PWD/packages/react-medium-image-zoom"
+docsPath="$PWD/docs"
 
 function usage {
   cat <<EOF
 Usage: $pname <COMMAND>
 
-  build                  Build the project
+  build                  Build the project and documentation
   clean                  Run all clean commands
-  clean_pkgs             Remove build directories
   contrib                Use the all-contributors CLI
   dev                    Watch for changes and run the docs server
-  docs                   Build the example documentation
   help, -h, --help       See this help information
   init                   Initialize and build the project
   lint                   Run the linter
-  pkgs                   Build the packages
   test                   Run the tests
+  test_cov_ci            Generate test coverage for CI
   watch                  Watch for changes and rebuild output
 EOF
 
@@ -31,19 +30,44 @@ EOF
 }
 
 function build {
-  pkgs
-  docs
+  clean
+  build_pkgs
+  build_docs
 
   return 0
 }
 
-function build_pkg {
-  local pkg="$1"
+function build_docs {
+  echo -n "Building docs... "
+
+  cp $izPath/dist/iife/image-zoom.js $docsPath
+  cp $izPath/dist/iife/image-zoom.min.js $docsPath
+
+  echo "Done"
+
+  return 0
+}
+
+function build_iz {
+  local pkg="$izPath"
 
   echo -n "Building $(basename $pkg)... "
-  #spin & SPIN_PID=$!
 
-  #cd "$pkg"
+  cd "$pkg"
+
+  yarn rollup -c "$pkg/rollup.config.js"
+
+  echo "Done"
+
+  return 0
+}
+
+function build_rmiz {
+  local pkg="$rmizPath"
+
+  echo -n "Building $(basename $pkg)... "
+
+  cd "$pkg"
 
   yarn tsc -p $pkg/tsconfig.cjs.json & CJS_PID=$!
   yarn tsc -p $pkg/tsconfig.esm.json & ESM_PID=$!
@@ -53,30 +77,41 @@ function build_pkg {
   wait $ESM_PID
   wait $UMD_PID
 
-  # @TODO: kill if error before
-  #kill -PIPE $SPIN_PID
   echo "Done"
 
   return 0
 }
 
-export -f build_pkg
+function build_pkgs {
+  build_iz
+  build_rmiz
 
+  return 0
+}
 
 function clean {
+  clean_docs
   clean_pkgs
+
+  return 0
+}
+
+function clean_docs {
+  echo -n "Cleaning docs... "
+
+  rm -f $docsPath/image-zoom.js
+  rm -f $docsPath/image-zoom.min.js
+
+  echo "Done"
 
   return 0
 }
 
 function clean_pkgs {
   echo -n "Cleaning packages... "
-  #spin & SPIN_PID=$!
 
   rm -rf $PWD/packages/*/dist/
 
-  # @TODO: kill if error before
-  #kill -PIPE $SPIN_PID
   echo "Done"
 
   return 0
@@ -92,29 +127,19 @@ function contrib {
 }
 
 function dev {
-  clearscreen
-  echo "Starting dev environment..."
+  echo "Not yet implemented"
 
-  build
-  watch & WATCH_PID=$!
-  serve docs & SERVE_PID=$!
+  #clearscreen
+  #echo "Starting dev environment..."
 
-  wait $WATCH_PID
-  wait $SERVE_PID
+  #build
+  #watch & WATCH_PID=$!
+  #yarn serve docs & SERVE_PID=$!
 
-  return 0
-}
+  #wait $WATCH_PID
+  #wait $SERVE_PID
 
-function docs {
-  echo -n "Building docs... "
-  spin & SPIN_PID=$!
-
-  #cp packages/image-zoom/dist/iife/image-zoom.* docs
-
-  kill -PIPE $SPIN_PID
-  echo "Done"
-
-  return 0
+  #return 0
 }
 
 function init {
@@ -130,33 +155,32 @@ function init {
 }
 
 function lint {
-  yarn eslint . -c $PWD/conf/.eslintrc.js
+  yarn eslint . \
+    -c $PWD/conf/.eslintrc.js \
+    --ignore-path $PWD/conf/.eslintignore \
+    "$@"
 }
 
-function pkgs {
-  build_pkg "$izPath"
-  build_pkg "$rmizPath"
+#function spin {
+#  #spin & SPIN_PID=$!
+#  #kill -PIPE $SPIN_PID
 
-  return 0
-}
+#  local spinner=( ⣾ ⣽ ⣻ ⢿ ⡿ ⣟ ⣯ ⣷ )
 
-function spin {
-  local spinner=( ⣾ ⣽ ⣻ ⢿ ⡿ ⣟ ⣯ ⣷ )
+#  while :; do
+#    for i in "${spinner[@]}"; do
+#      echo -ne "$i"
+#      echo -en "\033[1D"
+#      sleep 0.1
+#    done
+#  done
+#}
 
-  while :; do
-    for i in "${spinner[@]}"; do
-      echo -ne "$i"
-      echo -en "\033[1D"
-      sleep 0.1
-    done
-  done
-}
-
-function tests {
+function test {
   yarn jest $PWD/packages
 }
 
-function tests_cov {
+function test_cov_ci {
   yarn jest $PWD/packages --coverage --coverageReporters=text-lcov | \
     yarn coveralls
 }
@@ -170,7 +194,7 @@ function unknown-cmd {
 }
 
 function watch {
-  yarn chokidar "packages/*/source/**/*" -c "./make pkgs"
+  yarn chokidar "packages/*/source/**/*" -c "./make build"
 }
 
 # Check if no command is provided
@@ -185,15 +209,13 @@ shift
 case "$cmd" in
   build         ) build;;
   clean         ) clean;;
-  clean_pkgs    ) clean_pkgs;;
   contrib       ) contrib "$@";;
   dev           ) dev;;
-  docs          ) docs;;
   help|-h|--help) usage;;
   init          ) init;;
-  lint          ) lint;;
-  pkgs          ) pkgs;;
-  test          ) tests;;
+  lint          ) lint "$@";;
+  test          ) test;;
+  test_cov_ci   ) test_cov_ci;;
   watch         ) watch;;
                *) unknown-cmd;;
 esac

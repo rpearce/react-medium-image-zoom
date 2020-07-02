@@ -37,15 +37,53 @@ var ImageZoom = (function () {
     ) {
       HTMLElement.prototype.nativeFocus = HTMLElement.prototype.focus;
 
+      var calcScrollableElements = function(element) {
+        var parent = element.parentNode;
+        var scrollableElements = [];
+        var rootScrollingElement =
+          document.scrollingElement || document.documentElement;
+
+        while (parent && parent !== rootScrollingElement) {
+          if (
+            parent.offsetHeight < parent.scrollHeight ||
+            parent.offsetWidth < parent.scrollWidth
+          ) {
+            scrollableElements.push([
+              parent,
+              parent.scrollTop,
+              parent.scrollLeft
+            ]);
+          }
+          parent = parent.parentNode;
+        }
+        parent = rootScrollingElement;
+        scrollableElements.push([parent, parent.scrollTop, parent.scrollLeft]);
+
+        return scrollableElements;
+      };
+
+      var restoreScrollPosition = function(scrollableElements) {
+        for (var i = 0; i < scrollableElements.length; i++) {
+          scrollableElements[i][0].scrollTop = scrollableElements[i][1];
+          scrollableElements[i][0].scrollLeft = scrollableElements[i][2];
+        }
+        scrollableElements = [];
+      };
+
       var patchedFocus = function(args) {
-        var actualPosition = window.scrollY || window.pageYOffset;
-        this.nativeFocus();
         if (args && args.preventScroll) {
-          // Hijacking the event loop order, since the focus() will trigger
-          // internally an scroll that goes to the event loop
-          setTimeout(function() {
-            window.scroll(window.scrollX || window.pageXOffset, actualPosition);
-          }, 0);
+          var evScrollableElements = calcScrollableElements(this);
+          this.nativeFocus();
+          if (typeof setTimeout === 'function') {
+            setTimeout(function () {
+              restoreScrollPosition(evScrollableElements);
+            }, 0);
+          } else {
+            restoreScrollPosition(evScrollableElements);          
+          }
+        }
+        else {
+          this.nativeFocus();
         }
       };
 
@@ -89,7 +127,9 @@ var ImageZoom = (function () {
       var originalRole = getAttribute(ROLE, targetEl);
       var originalStyle = getAttribute(STYLE, targetEl);
       var originalTabIndex = getAttribute(TABINDEX, targetEl);
-      var isImg = targetEl.tagName === 'IMG';
+      var isImgEl = targetEl.tagName === 'IMG';
+      var isSvgSrc = isImgEl && SVG_REGEX.test(targetEl.currentSrc);
+      var isImg = !isSvgSrc && isImgEl;
       var documentBody = document.body;
       var closeDescEl;
       var modalEl;
@@ -601,6 +641,7 @@ var ImageZoom = (function () {
       var ratio = naturalWidth > naturalHeight ? naturalWidth / width : naturalHeight / height;
       return scale > 1 ? ratio : scale * ratio;
   };
+  var SVG_REGEX = /\.svg$/i;
   var appendChild = function (child, parent) { return parent.appendChild(child); };
   var removeChild = function (child, parent) { return parent.removeChild(child); };
   var createDiv = function () { return document.createElement('div'); };

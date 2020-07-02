@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "declaration": false
+    "declaration": false,
+    "outDir": "./dist/iife"
   }
 }

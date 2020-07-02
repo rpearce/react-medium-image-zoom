@@ -8,23 +8,27 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'prettier/@typescript-eslint',
-    //'plugin:prettier/recommended',
   ],
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: 'module',
   },
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint', 'prettier'],
+  plugins: ['@typescript-eslint'],
   rules: {
     '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/no-use-before-define': 'off',
-    'jsx-quotes': ['error', 'prefer-double'],
-    'jsx-a11y/no-onchange': 'off', // https://github.com/evcohen/eslint-plugin-jsx-a11y/issues/398
+    'max-len': [
+      'error',
+      {
+        code: 80,
+        ignoreComments: true,
+        ignoreTemplateLiterals: true,
+        ignoreStrings: true,
+      }
+    ],
     'no-trailing-spaces': 'error',
     'object-curly-spacing': ['error', 'always'],
-    'prettier/prettier': ['error', { semi: false, singleQuote: true }],
     quotes: ['error', 'single', { allowTemplateLiterals: true }],
     semi: ['error', 'never'],
   },
@@ -45,6 +49,8 @@ module.exports = {
       ],
       plugins: ['react', 'react-hooks'],
       rules: {
+        'jsx-a11y/no-onchange': 'off', // https://github.com/evcohen/eslint-plugin-jsx-a11y/issues/398
+        'jsx-quotes': ['error', 'prefer-double'],
         'react-hooks/exhaustive-deps': 'error',
         'react-hooks/rules-of-hooks': 'error',
         'react/prop-types': 'off',

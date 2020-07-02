@@ -87,7 +87,11 @@ const ImageZoom = (
   const originalRole = getAttribute(ROLE, targetEl)
   const originalStyle = getAttribute(STYLE, targetEl)
   const originalTabIndex = getAttribute(TABINDEX, targetEl)
-  const isImg = targetEl.tagName === 'IMG'
+  const isImgEl = targetEl.tagName === 'IMG'
+  const isSvgSrc = isImgEl && SVG_REGEX.test(
+    (targetEl as HTMLImageElement).currentSrc
+  )
+  const isImg = !isSvgSrc && isImgEl
   const documentBody = document.body
 
   let closeDescEl: DescEl
@@ -135,16 +139,16 @@ const ImageZoom = (
 
     const { height, width } = targetEl.getBoundingClientRect()
     const { naturalHeight, naturalWidth } = targetEl as HTMLImageElement
-    const currentScale =
-      isImg && naturalHeight && naturalWidth
-        ? getMaxDimensionScale(
-            height,
-            width,
-            zoomMargin,
-            naturalHeight,
-            naturalWidth
-          )
-        : getScale(height, width, zoomMargin)
+
+    const currentScale = isImg && naturalHeight && naturalWidth
+      ? getMaxDimensionScale(
+          height,
+          width,
+          zoomMargin,
+          naturalHeight,
+          naturalWidth
+        )
+      : getScale(height, width, zoomMargin)
 
     if (currentScale > 1) {
       setAttribute(ARIA_DESCRIBEDBY, openDescId, targetEl)
@@ -839,6 +843,8 @@ const getMaxDimensionScale: GetMaxDimensionScale = (
 
   return scale > 1 ? ratio : scale * ratio
 }
+
+const SVG_REGEX = /\.svg$/i
 
 //
 // DOM

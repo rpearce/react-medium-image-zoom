@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "umd",
-    "outDir": "dist/umd"
+    "module": "esNext",
+    "outDir": "./dist/umd"
   }
 }

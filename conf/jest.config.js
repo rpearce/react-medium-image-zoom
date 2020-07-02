@@ -5,7 +5,7 @@ module.exports = {
   coveragePathIgnorePatterns: ['/node_modules/'],
   moduleNameMapper: {},
   preset: 'ts-jest',
-  projects: ["<rootDir>/packages/*"]
+  projects: ['<rootDir>/packages/*'],
   setupFilesAfterEnv: ['<rootDir>/conf/testSetup.ts'],
   testPathIgnorePatterns: ['dist/'],
   verbose: true,

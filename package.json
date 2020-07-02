@@ -6,10 +6,11 @@
   "scripts": {
     "build": "./make build",
     "clean": "./make clean",
-    "coverage": "./make coverage",
+    "coverage": "./make test_cov_ci",
+    "init": "./make init",
     "lint": "./make lint",
     "serve:docs": "serve docs",
-    "start": "./make dev",
+    "start": "./make build && run-p watch serve:docs",
     "test": "./make test",
     "watch": "./make watch"
   },
@@ -27,19 +28,16 @@
     "chokidar-cli": "2.1.0",
     "coveralls": "3.1.0",
     "eslint": "7.3.1",
-    "eslint-config-prettier": "6.11.0",
     "eslint-plugin-jest": "23.17.1",
     "eslint-plugin-jsx-a11y": "6.3.1",
-    "eslint-plugin-prettier": "3.1.4",
-    "eslint-plugin-react": "7.20.2",
+    "eslint-plugin-react": "7.20.3",
     "eslint-plugin-react-hooks": "4.0.5",
     "jest": "26.1.0",
     "npm-run-all": "4.1.5",
-    "prettier": "2.0.5",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "serve": "11.3.2",
     "ts-jest": "26.1.1",
-    "typescript": "3.9.5"
+    "typescript": "3.9.6"
   }
 }

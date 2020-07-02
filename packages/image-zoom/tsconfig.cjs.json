@@ -1,8 +1,8 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "commonjs",
-    "outDir": "dist/cjs",
+    "module": "esNext",
+    "outDir": "./dist/cjs",
     "resolveJsonModule": true
   }
 }
