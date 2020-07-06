@@ -1,11 +1,11 @@
 {
-  "projectName": "react-medium-image-zoom",
+  "projectName": "image-zoom",
   "projectOwner": "rpearce",
   "files": [
     "README.md"
   ],
   "imageSize": 100,
-  "commit": true,
+  "commit": false,
   "contributors": [
     {
       "login": "cbothner",
@@ -363,6 +363,42 @@
       "profile": "http://rokoroku.github.io",
       "contributions": [
         "code",
+        "bug"
+      ]
+    },
+    {
+      "login": "danielbyun",
+      "name": "Daniel Byun",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/23326866?v=4",
+      "profile": "https://danielbyun.github.io/",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "nandhae",
+      "name": "Nandhagopal Ezhilmaran",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/11366094?v=4",
+      "profile": "https://github.com/nandhae",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "leverglowh",
+      "name": "leverglowh",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/9482667?v=4",
+      "profile": "https://github.com/leverglowh",
+      "contributions": [
+        "question"
+      ]
+    },
+    {
+      "login": "slorber",
+      "name": "Sébastien Lorber",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/749374?v=4",
+      "profile": "https://sebastienlorber.com/",
+      "contributions": [
         "bug"
       ]
     }

@@ -156,8 +156,8 @@ function init {
 
 function lint {
   yarn eslint . \
-    -c $PWD/conf/.eslintrc.js \
-    --ignore-path $PWD/conf/.eslintignore \
+    -c $PWD/.eslintrc.js \
+    --ignore-path $PWD/.eslintignore \
     "$@"
 }
 

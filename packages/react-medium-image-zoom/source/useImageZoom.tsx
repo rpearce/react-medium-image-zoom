@@ -1,16 +1,16 @@
 import { Ref, useEffect, useRef } from 'react'
 import ImageZoom, {
-  ImageZoomOpts,
   ImageZoomReturnType,
+  ImageZoomUpdateOpts,
 } from '@rpearce/image-zoom'
 
-interface UseImageZoom extends ImageZoomOpts {
-  (opts?: ImageZoomOpts): { ref: Ref<HTMLImageElement> }
+interface UseImageZoom {
+  (opts?: ImageZoomUpdateOpts): { ref: Ref<HTMLImageElement> }
 }
 
 const useImageZoom: UseImageZoom = (opts) => {
   const ref = useRef<HTMLImageElement>(null)
-  const savedOpts = useRef<ImageZoomOpts | undefined>(opts)
+  const savedOpts = useRef<ImageZoomUpdateOpts | undefined>(opts)
   const imgZoom = useRef<ImageZoomReturnType>()
 
   useEffect(() => {
@@ -25,6 +25,10 @@ const useImageZoom: UseImageZoom = (opts) => {
     if (!el) return
 
     imgZoom.current = ImageZoom(savedOpts.current, el)
+
+    if (savedOpts.current?.isZoomed) {
+      imgZoom.current?.update(savedOpts.current)
+    }
 
     return (): void => {
       imgZoom.current?.cleanup()
