@@ -662,7 +662,7 @@ __metadata:
     "@rollup/plugin-commonjs": 13.0.0
     "@rollup/plugin-node-resolve": 8.1.0
     focus-options-polyfill: 1.5.0
-    rollup: 2.19.0
+    rollup: 2.20.0
     rollup-plugin-terser: 6.1.0
     rollup-plugin-typescript2: 0.27.1
     terser: 4.8.0
@@ -6071,9 +6071,9 @@ resolve@1.15.1:
   languageName: node
   linkType: hard
 
-"rollup@npm:2.19.0":
-  version: 2.19.0
-  resolution: "rollup@npm:2.19.0"
+"rollup@npm:2.20.0":
+  version: 2.20.0
+  resolution: "rollup@npm:2.20.0"
   dependencies:
     fsevents: ~2.1.2
   dependenciesMeta:
@@ -6081,7 +6081,7 @@ resolve@1.15.1:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 3ac742e913cddea4ba26712d89af2b726f6b4a3df689ab8fb7b82e09e93ec1b51a930fdc306919129163d77f2c05c9d35947726748388148b60d7cbf21d619ea
+  checksum: 33c55681e2cb4e1a27ab7eab859a5e38da012d7ca9fe886531e36a6bd6f220d806c0ee9db6f8dbff88deb43cee9df0594cb25b0ba7c9d58a2165d81f44086fdc
   languageName: node
   linkType: hard
 
