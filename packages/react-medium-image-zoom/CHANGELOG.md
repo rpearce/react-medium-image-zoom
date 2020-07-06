@@ -10,6 +10,11 @@ Complete rewrite with breaking changes so we can move forward with the project.
 
 Please see the [README.md](./README.md) for the new API.
 
+## [4.3.1] - 2020-05-26
+
+### Fixed
+* `tslib` was listed as dev dependency when it's actually a dependency
+
 ## [4.3.0] - 2020-03-11
 
 ### Added
