@@ -7,6 +7,7 @@ enum State {
 }
 
 type DescEl = HTMLDivElement | undefined
+type DescWrapEl = HTMLDivElement | null | undefined
 type ModalEl = HTMLDivElement | undefined
 type PortalEl = HTMLElement
 type ScrollableEl = HTMLElement | Window
@@ -20,6 +21,7 @@ const ARIA_MODAL = 'aria-modal'
 const BUTTON = 'button'
 const CLICK = 'click'
 const DATA_RMIZ_DESC = 'data-rmiz-desc'
+const DATA_RMIZ_DESC_WRAP = 'data-rmiz-desc-wrap'
 const DATA_RMIZ_OVERLAY = 'data-rmiz-overlay'
 const DATA_RMIZ_ZOOMED = 'data-rmiz-zoomed'
 const DIALOG = 'dialog'
@@ -95,14 +97,15 @@ const ImageZoom = (
   const documentBody = document.body
 
   let closeDescEl: DescEl
+  let descWrapEl: DescWrapEl
   let modalEl: ModalEl
+  let motionPref: MediaQueryList | undefined
   let openDescEl: DescEl
   let portalEl: PortalEl = _portalEl || documentBody
   let scrollableEl: ScrollableEl = _scrollableEl || window
   let state: State = State.UNLOADED
   let zoomEl: ZoomEl
   let zoomImgEl: ZoomImgEl
-  let motionPref: MediaQueryList | undefined
 
   const init = (): void => {
     addEventListener(RESIZE, handleResize, window)
@@ -127,11 +130,19 @@ const ImageZoom = (
   }
 
   const initDescriptions = (): void => {
+    descWrapEl = documentBody.querySelector(`[${DATA_RMIZ_DESC_WRAP}]`) as DescWrapEl
+
+    if (!descWrapEl) {
+      descWrapEl = createDiv()
+      setAttribute(DATA_RMIZ_DESC_WRAP, '', descWrapEl)
+      appendChild(descWrapEl, documentBody)
+    }
+
     openDescEl = createDescEl(openDescId, openText)
     closeDescEl = createDescEl(closeDescId, closeText)
 
-    appendChild(openDescEl, documentBody)
-    appendChild(closeDescEl, documentBody)
+    appendChild(openDescEl, descWrapEl)
+    appendChild(closeDescEl, descWrapEl)
   }
 
   const initImg = (): void => {

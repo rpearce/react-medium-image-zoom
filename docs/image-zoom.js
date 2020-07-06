@@ -104,6 +104,7 @@ var ImageZoom = (function () {
   var BUTTON = 'button';
   var CLICK = 'click';
   var DATA_RMIZ_DESC = 'data-rmiz-desc';
+  var DATA_RMIZ_DESC_WRAP = 'data-rmiz-desc-wrap';
   var DATA_RMIZ_OVERLAY = 'data-rmiz-overlay';
   var DATA_RMIZ_ZOOMED = 'data-rmiz-zoomed';
   var DIALOG = 'dialog';
@@ -132,14 +133,15 @@ var ImageZoom = (function () {
       var isImg = !isSvgSrc && isImgEl;
       var documentBody = document.body;
       var closeDescEl;
+      var descWrapEl;
       var modalEl;
+      var motionPref;
       var openDescEl;
       var portalEl = _portalEl || documentBody;
       var scrollableEl = _scrollableEl || window;
       var state = State.UNLOADED;
       var zoomEl;
       var zoomImgEl;
-      var motionPref;
       var init = function () {
           addEventListener(RESIZE, handleResize, window);
           initMotionPref();
@@ -160,10 +162,16 @@ var ImageZoom = (function () {
           motionPref.addListener(handleMotionPref); // NOT addEventListener b/c compatibility
       };
       var initDescriptions = function () {
+          descWrapEl = documentBody.querySelector("[" + DATA_RMIZ_DESC_WRAP + "]");
+          if (!descWrapEl) {
+              descWrapEl = createDiv();
+              setAttribute(DATA_RMIZ_DESC_WRAP, '', descWrapEl);
+              appendChild(descWrapEl, documentBody);
+          }
           openDescEl = createDescEl(openDescId, openText);
           closeDescEl = createDescEl(closeDescId, closeText);
-          appendChild(openDescEl, documentBody);
-          appendChild(closeDescEl, documentBody);
+          appendChild(openDescEl, descWrapEl);
+          appendChild(closeDescEl, descWrapEl);
       };
       var initImg = function () {
           if (!targetEl || state !== State.UNLOADED)
