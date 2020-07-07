@@ -652,6 +652,7 @@ const getStyleOverlay: GetStyleOverlay = (
   'transition-property:background-color;' +
   `background-color:${backgroundColor};` +
   `transition-duration:${transitionDuration};` +
+  'transition-timing-function:ease;' +
   `z-index:${zIndex};`
 
 const styleVisibilityHidden = 'visibility:hidden;'
@@ -699,7 +700,8 @@ const getZoomImgStyleStr: GetZoomImgStyleStr = (
   `-webkit-transform:${transform};` +
   `transform:${transform};` +
   `-webkit-transition-duration:${transitionDuration};` +
-  `transition-duration:${transitionDuration};`
+  `transition-duration:${transitionDuration};` +
+  'transition-timing-function:ease;'
 
 interface CombineStyles {
   (x: string | null, y: string): string

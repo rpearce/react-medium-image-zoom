@@ -564,6 +564,7 @@ var ImageZoom = (function () {
           'transition-property:background-color;' +
           ("background-color:" + backgroundColor + ";") +
           ("transition-duration:" + transitionDuration + ";") +
+          'transition-timing-function:ease;' +
           ("z-index:" + zIndex + ";");
   };
   var styleVisibilityHidden = 'visibility:hidden;';
@@ -588,7 +589,8 @@ var ImageZoom = (function () {
           ("-webkit-transform:" + transform + ";") +
           ("transform:" + transform + ";") +
           ("-webkit-transition-duration:" + transitionDuration + ";") +
-          ("transition-duration:" + transitionDuration + ";");
+          ("transition-duration:" + transitionDuration + ";") +
+          'transition-timing-function:ease;';
   };
   var combineStyles = function (x, y) {
       var safeX = (x || '').trim();
