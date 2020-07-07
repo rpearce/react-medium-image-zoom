@@ -239,13 +239,8 @@ const ImageZoom = (
     const openEl = document.getElementById(openDescId)
     const closeEl = document.getElementById(closeDescId)
 
-    if (openEl) {
-      removeChild(openEl, documentBody)
-    }
-
-    if (closeEl) {
-      removeChild(closeEl, documentBody)
-    }
+    removeChild(openEl, documentBody)
+    removeChild(closeEl, documentBody)
   }
 
   const cleanupImg = (): void => {
@@ -289,9 +284,7 @@ const ImageZoom = (
       removeEventListener(KEYDOWN, handleZoomImgKeyDown, el)
       removeEventListener(LOAD, handleZoomImgLoad, el)
 
-      if (modalEl && modalEl.firstChild === el) {
-        removeChild(el, modalEl)
-      }
+      removeChild(el, modalEl)
     }
 
     zoomImgEl = undefined
@@ -868,10 +861,17 @@ interface AppendChild {
 const appendChild: AppendChild = (child, parent) => parent.appendChild(child)
 
 interface RemoveChild {
-  (child: HTMLElement, parent: HTMLElement): void
+  (
+    child: HTMLElement | null | undefined,
+    parent: HTMLElement | null | undefined
+  ): void
 }
 
-const removeChild: RemoveChild = (child, parent) => parent.removeChild(child)
+const removeChild: RemoveChild = (child, parent) => {
+  if (child && parent && parent.contains(child)) {
+    parent.removeChild(child)
+  }
+}
 
 interface CreateDiv {
   (): HTMLDivElement

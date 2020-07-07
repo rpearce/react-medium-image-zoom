@@ -252,12 +252,8 @@ var ImageZoom = (function () {
       var cleanupDescriptions = function () {
           var openEl = document.getElementById(openDescId);
           var closeEl = document.getElementById(closeDescId);
-          if (openEl) {
-              removeChild(openEl, documentBody);
-          }
-          if (closeEl) {
-              removeChild(closeEl, documentBody);
-          }
+          removeChild(openEl, documentBody);
+          removeChild(closeEl, documentBody);
       };
       var cleanupImg = function () {
           if (!targetEl)
@@ -297,9 +293,7 @@ var ImageZoom = (function () {
               removeEventListener(CLICK, handleZoomImgClick, el);
               removeEventListener(KEYDOWN, handleZoomImgKeyDown, el);
               removeEventListener(LOAD, handleZoomImgLoad, el);
-              if (modalEl && modalEl.firstChild === el) {
-                  removeChild(el, modalEl);
-              }
+              removeChild(el, modalEl);
           }
           zoomImgEl = undefined;
           zoomEl = undefined;
@@ -651,7 +645,11 @@ var ImageZoom = (function () {
   };
   var SVG_REGEX = /\.svg$/i;
   var appendChild = function (child, parent) { return parent.appendChild(child); };
-  var removeChild = function (child, parent) { return parent.removeChild(child); };
+  var removeChild = function (child, parent) {
+      if (child && parent && parent.contains(child)) {
+          parent.removeChild(child);
+      }
+  };
   var createDiv = function () { return document.createElement('div'); };
   var createDescEl = function (id, text) {
       var el = createDiv();

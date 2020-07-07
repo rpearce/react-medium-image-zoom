@@ -845,13 +845,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*, @types/jest@npm:26.0.3":
+"@types/jest@npm:*":
   version: 26.0.3
   resolution: "@types/jest@npm:26.0.3"
   dependencies:
     jest-diff: ^25.2.1
     pretty-format: ^25.2.1
   checksum: 8a8a98865cce9d454bc0b5332e9caa5d7cfb3f9f608dfb355c12a5e5eb14ce0626854329d5046015098dcb5fb022cf9fe18c5ad72d7b4563ad3f44ad1ab84050
+  languageName: node
+  linkType: hard
+
+"@types/jest@npm:26.0.4":
+  version: 26.0.4
+  resolution: "@types/jest@npm:26.0.4"
+  dependencies:
+    jest-diff: ^25.2.1
+    pretty-format: ^25.2.1
+  checksum: f815792ecc2191410bf541740b834bafb608b9a5be0b77b21770d8728e87b2bdd55843999bc9236ebd027e11a4cabbec90da7612fb9a620cf8bd858ae3774bd2
   languageName: node
   linkType: hard
 
@@ -862,10 +872,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:14.0.14":
+"@types/node@npm:*":
   version: 14.0.14
   resolution: "@types/node@npm:14.0.14"
   checksum: 0a2072aa7de32e6535ce6bc7383965fc0a4b7bbf6d76f69027db72e86381921c820a8a2173f75fa210d9fb3286c707079d3804ef33c76a065bcb890858e50ee9
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:14.0.18":
+  version: 14.0.18
+  resolution: "@types/node@npm:14.0.18"
+  checksum: c82eecd0bb3a0653a03f4b72d1a838c2e54b4c8ae31b14ef8ce12e7da718e6437a934344348df3fab96d563defcbee91935a0eeeb0b304698135c90f5ec41962
   languageName: node
   linkType: hard
 
@@ -6091,8 +6108,8 @@ resolve@1.15.1:
   dependencies:
     "@testing-library/jest-dom": 5.11.0
     "@testing-library/react": 10.4.4
-    "@types/jest": 26.0.3
-    "@types/node": 14.0.14
+    "@types/jest": 26.0.4
+    "@types/node": 14.0.18
     "@types/react": 16.9.41
     "@types/react-dom": 16.9.8
     "@typescript-eslint/eslint-plugin": 3.6.0
