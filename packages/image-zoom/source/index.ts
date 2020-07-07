@@ -239,8 +239,8 @@ const ImageZoom = (
     const openEl = document.getElementById(openDescId)
     const closeEl = document.getElementById(closeDescId)
 
-    removeChild(openEl, documentBody)
-    removeChild(closeEl, documentBody)
+    removeChild(openEl, descWrapEl)
+    removeChild(closeEl, descWrapEl)
   }
 
   const cleanupImg = (): void => {
@@ -868,7 +868,7 @@ interface RemoveChild {
 }
 
 const removeChild: RemoveChild = (child, parent) => {
-  if (child && parent && parent.contains(child)) {
+  if (child && parent) {
     parent.removeChild(child)
   }
 }

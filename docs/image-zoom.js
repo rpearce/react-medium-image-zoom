@@ -252,8 +252,8 @@ var ImageZoom = (function () {
       var cleanupDescriptions = function () {
           var openEl = document.getElementById(openDescId);
           var closeEl = document.getElementById(closeDescId);
-          removeChild(openEl, documentBody);
-          removeChild(closeEl, documentBody);
+          removeChild(openEl, descWrapEl);
+          removeChild(closeEl, descWrapEl);
       };
       var cleanupImg = function () {
           if (!targetEl)
@@ -646,7 +646,7 @@ var ImageZoom = (function () {
   var SVG_REGEX = /\.svg$/i;
   var appendChild = function (child, parent) { return parent.appendChild(child); };
   var removeChild = function (child, parent) {
-      if (child && parent && parent.contains(child)) {
+      if (child && parent) {
           parent.removeChild(child);
       }
   };
