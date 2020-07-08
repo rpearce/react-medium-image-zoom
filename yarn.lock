@@ -720,9 +720,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:10.4.4":
-  version: 10.4.4
-  resolution: "@testing-library/react@npm:10.4.4"
+"@testing-library/react@npm:10.4.5":
+  version: 10.4.5
+  resolution: "@testing-library/react@npm:10.4.5"
   dependencies:
     "@babel/runtime": ^7.10.3
     "@testing-library/dom": ^7.17.1
@@ -730,7 +730,7 @@ __metadata:
   peerDependencies:
     react: "*"
     react-dom: "*"
-  checksum: c7517d5a4f6901e08d5ff30a1268d50d9ad30e9ca2e6caa29f6983e34f3c2508d7d0011f4e8a8627136dca61fe2dc2fbbdd6410eb2336d0020ed8f7659aae9dc
+  checksum: d18a50337d068d6005171b631452fee97d9742408c36365889c0e16d3334f10789181e76117a208dd1382a9e780963cf2c7b99a404950b3ff7a2e764e68d7cf2
   languageName: node
   linkType: hard
 
@@ -879,10 +879,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:14.0.19":
-  version: 14.0.19
-  resolution: "@types/node@npm:14.0.19"
-  checksum: a744f848984b947032acd53161bf33da3df6db60c108b0316b15b7349e14be95d80e281cedd3af4fd3a2679bcab8a77d003241aa24e6e0b745c07223fb9817fa
+"@types/node@npm:14.0.20":
+  version: 14.0.20
+  resolution: "@types/node@npm:14.0.20"
+  checksum: a5a13825cdd5d10a0f841216325023bb6924a56c468d86943fae9f3d6c350b9e41746960006cf71cb427df662cdeff205ea1b25827738859e5de747147c00bef
   languageName: node
   linkType: hard
 
@@ -6107,9 +6107,9 @@ resolve@1.15.1:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@testing-library/jest-dom": 5.11.0
-    "@testing-library/react": 10.4.4
+    "@testing-library/react": 10.4.5
     "@types/jest": 26.0.4
-    "@types/node": 14.0.19
+    "@types/node": 14.0.20
     "@types/react": 16.9.41
     "@types/react-dom": 16.9.8
     "@typescript-eslint/eslint-plugin": 3.6.0
