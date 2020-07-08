@@ -65,6 +65,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
     <td align="center"><a href="https://github.com/nandhae"><img src="https://avatars1.githubusercontent.com/u/11366094?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Nandhagopal Ezhilmaran</b></sub></a><br /><a href="https://github.com/rpearce/image-zoom/issues?q=author%3Anandhae" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://github.com/leverglowh"><img src="https://avatars2.githubusercontent.com/u/9482667?v=4?s=100" width="100px;" alt=""/><br /><sub><b>leverglowh</b></sub></a><br /><a href="#question-leverglowh" title="Answering Questions">💬</a></td>
     <td align="center"><a href="https://sebastienlorber.com/"><img src="https://avatars0.githubusercontent.com/u/749374?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sébastien Lorber</b></sub></a><br /><a href="https://github.com/rpearce/image-zoom/issues?q=author%3Aslorber" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/igreulich"><img src="https://avatars3.githubusercontent.com/u/144287?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ian Greulich</b></sub></a><br /><a href="https://github.com/rpearce/image-zoom/pulls?q=is%3Apr+reviewed-by%3Aigreulich" title="Reviewed Pull Requests">👀</a></td>
   </tr>
 </table>
 
