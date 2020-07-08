@@ -539,7 +539,6 @@ const ImageZoom = (
     addEventListener(KEYDOWN, handleZoomImgKeyDown, zoomEl)
     setAttribute(ARIA_DESCRIBEDBY, closeDescId, zoomEl)
     setAttribute(DATA_RMIZ_ZOOMED, '', zoomEl)
-    setAttribute(ID, 'abc', zoomEl)
     setAttribute(ROLE, BUTTON, zoomEl)
     setAttribute(STYLE, styleZoomStart, zoomEl)
     setAttribute(TABINDEX, ZERO_STR, zoomEl)

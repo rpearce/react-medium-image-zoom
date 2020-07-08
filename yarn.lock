@@ -662,7 +662,7 @@ __metadata:
     "@rollup/plugin-commonjs": 13.0.0
     "@rollup/plugin-node-resolve": 8.1.0
     focus-options-polyfill: 1.5.0
-    rollup: 2.20.0
+    rollup: 2.21.0
     rollup-plugin-terser: 6.1.0
     rollup-plugin-typescript2: 0.27.1
     terser: 4.8.0
@@ -879,10 +879,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:14.0.18":
-  version: 14.0.18
-  resolution: "@types/node@npm:14.0.18"
-  checksum: c82eecd0bb3a0653a03f4b72d1a838c2e54b4c8ae31b14ef8ce12e7da718e6437a934344348df3fab96d563defcbee91935a0eeeb0b304698135c90f5ec41962
+"@types/node@npm:14.0.19":
+  version: 14.0.19
+  resolution: "@types/node@npm:14.0.19"
+  checksum: a744f848984b947032acd53161bf33da3df6db60c108b0316b15b7349e14be95d80e281cedd3af4fd3a2679bcab8a77d003241aa24e6e0b745c07223fb9817fa
   languageName: node
   linkType: hard
 
@@ -2574,12 +2574,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react-hooks@npm:4.0.5":
-  version: 4.0.5
-  resolution: "eslint-plugin-react-hooks@npm:4.0.5"
+"eslint-plugin-react-hooks@npm:4.0.6":
+  version: 4.0.6
+  resolution: "eslint-plugin-react-hooks@npm:4.0.6"
   peerDependencies:
     eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
-  checksum: 2a84a814963f1e829eaa097638219a85971cbb7ff6e73bcba75d7dde77796717a9a4454b82aa8616a8fd8d8a89537efaa034a7146dfac3fe371c8e91f63deeda
+  checksum: bd240d6e1a82884c9386e190dc3a7157bcfdb660543624bf57d73261cc47c8814e6cc5f5886eaad4e414d7138602a08dcc08eacee8a3b8cfba2418280c8a3a60
   languageName: node
   linkType: hard
 
@@ -6088,9 +6088,9 @@ resolve@1.15.1:
   languageName: node
   linkType: hard
 
-"rollup@npm:2.20.0":
-  version: 2.20.0
-  resolution: "rollup@npm:2.20.0"
+"rollup@npm:2.21.0":
+  version: 2.21.0
+  resolution: "rollup@npm:2.21.0"
   dependencies:
     fsevents: ~2.1.2
   dependenciesMeta:
@@ -6098,7 +6098,7 @@ resolve@1.15.1:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 33c55681e2cb4e1a27ab7eab859a5e38da012d7ca9fe886531e36a6bd6f220d806c0ee9db6f8dbff88deb43cee9df0594cb25b0ba7c9d58a2165d81f44086fdc
+  checksum: 09412c93f79d409c2376575749e6c0caa84c14df4939084590ca431b7aec9a48e0bad5199368587fe37191c96cf77c4b3d7d60065ab7228461c915104ad71980
   languageName: node
   linkType: hard
 
@@ -6109,7 +6109,7 @@ resolve@1.15.1:
     "@testing-library/jest-dom": 5.11.0
     "@testing-library/react": 10.4.4
     "@types/jest": 26.0.4
-    "@types/node": 14.0.18
+    "@types/node": 14.0.19
     "@types/react": 16.9.41
     "@types/react-dom": 16.9.8
     "@typescript-eslint/eslint-plugin": 3.6.0
@@ -6122,7 +6122,7 @@ resolve@1.15.1:
     eslint-plugin-jest: 23.18.0
     eslint-plugin-jsx-a11y: 6.3.1
     eslint-plugin-react: 7.20.3
-    eslint-plugin-react-hooks: 4.0.5
+    eslint-plugin-react-hooks: 4.0.6
     jest: 26.1.0
     npm-run-all: 4.1.5
     react: 16.13.1
