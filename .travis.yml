@@ -14,8 +14,8 @@ install:
   - yarn install --immutable
 
 script:
-  - ./make test
-  - ./make build
+  - yarn test
+  - yarn build
 
 after_success:
-  - ./make coverage
+  - yarn coverage
