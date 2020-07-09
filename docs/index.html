@@ -349,52 +349,64 @@
       </section>
     </main>
 
-    <script src="/image-zoom.min.js"></script>
     <script>
-      //
-      // UNCONTROLLED
-      //
-      var uncontrolleds = document.querySelectorAll('[data-uncontrolled]');
-      var i;
+    ;(function () {
+      window.addEventListener('load', addIZ);
 
-      for (i = 0; i < uncontrolleds.length; i++) {
-        ImageZoom({}, uncontrolleds[i])
+      function addIZ() {
+        var script = document.createElement('script');
+        script.onload = izOnload;
+        script.src = '/image-zoom.min.js';
+        document.body.appendChild(script);
       }
 
-      //
-      // CONTROLLED - j & k triggers
-      //
-      var controlledJk = document.querySelector('[data-jk]');
-      var controlledJkWithOpts = ImageZoom(
-        {
-          isControlled: true,
-          closeText: 'Press k to unzoom',
-          openText: 'Press j to zoom',
-        },
-        controlledJk
-      );
+      function izOnload () {
+        //
+        // UNCONTROLLED
+        //
+        var uncontrolleds = document.querySelectorAll('[data-uncontrolled]');
+        var i;
 
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'j' || e.keyCode === 74) {
-          controlledJkWithOpts.update({ isZoomed: true });
-        } else if (e.key === 'k' || e.keyCode === 75) {
-          controlledJkWithOpts.update({ isZoomed: false });
+        for (i = 0; i < uncontrolleds.length; i++) {
+          ImageZoom({}, uncontrolleds[i]);
         }
-      })
 
-      //
-      // CONTROLLED - onZoomChange callback
-      //
-      var controlledCb = document.querySelector('[data-cb]');
-      var controlledCbWithOpts = ImageZoom(
-        {
-          isControlled: true,
-          onZoomChange: function onZoomChange(isZoomed) {
-            controlledCbWithOpts.update({ isZoomed: isZoomed });
+        //
+        // CONTROLLED - j & k triggers
+        //
+        var controlledJk = document.querySelector('[data-jk]');
+        var controlledJkWithOpts = ImageZoom(
+          {
+            isControlled: true,
+            closeText: 'Press k to unzoom',
+            openText: 'Press j to zoom',
           },
-        },
-        controlledCb
-      );
+          controlledJk
+        );
+
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'j' || e.keyCode === 74) {
+            controlledJkWithOpts.update({ isZoomed: true });
+          } else if (e.key === 'k' || e.keyCode === 75) {
+            controlledJkWithOpts.update({ isZoomed: false });
+          }
+        })
+
+        //
+        // CONTROLLED - onZoomChange callback
+        //
+        var controlledCb = document.querySelector('[data-cb]');
+        var controlledCbWithOpts = ImageZoom(
+          {
+            isControlled: true,
+            onZoomChange: function onZoomChange(isZoomed) {
+              controlledCbWithOpts.update({ isZoomed: isZoomed });
+            },
+          },
+          controlledCb
+        );
+      }
+    })();
     </script>
   </body>
 </html>
