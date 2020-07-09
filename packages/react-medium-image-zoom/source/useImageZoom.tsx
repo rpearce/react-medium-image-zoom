@@ -1,4 +1,4 @@
-import { Ref, useEffect, useRef } from 'react'
+import { Ref, useCallback, useEffect, useRef } from 'react'
 import ImageZoom, {
   ImageZoomReturnType,
   ImageZoomUpdateOpts,
@@ -13,13 +13,7 @@ const useImageZoom: UseImageZoom = (opts) => {
   const savedOpts = useRef<ImageZoomUpdateOpts | undefined>(opts)
   const imgZoom = useRef<ImageZoomReturnType>()
 
-  useEffect(() => {
-    savedOpts.current = opts
-
-    imgZoom.current?.update(savedOpts.current)
-  }, [opts])
-
-  useEffect(() => {
+  const setup = useCallback(() => {
     const el = ref.current
 
     if (!el) return
@@ -29,11 +23,35 @@ const useImageZoom: UseImageZoom = (opts) => {
     if (savedOpts.current?.isZoomed) {
       imgZoom.current?.update(savedOpts.current)
     }
+  }, [])
+
+  const cleanup = useCallback(() => {
+    imgZoom.current?.cleanup()
+    imgZoom.current = undefined
+  }, [])
+
+  useEffect(() => {
+    savedOpts.current = opts
+    imgZoom.current?.update(savedOpts.current)
+  }, [opts])
+
+  useEffect(() => {
+    setup()
 
     return (): void => {
-      imgZoom.current?.cleanup()
+      cleanup()
     }
   }, [])
+
+  useEffect(() => {
+    if (ref.current) {
+      if (!imgZoom.current) {
+        setup()
+      }
+    } else {
+      cleanup()
+    }
+  })
 
   return { ref }
 }
