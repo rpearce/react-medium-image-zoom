@@ -879,10 +879,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:14.0.21":
-  version: 14.0.21
-  resolution: "@types/node@npm:14.0.21"
-  checksum: 208ee4c22ddce26a1b33d88cc04294e0a685d58973d1887185fdb90483ef5f2db8ac7b8261cd415fa03d81f89c1124c01cf0519abfc2f02948d2822c44961628
+"@types/node@npm:14.0.22":
+  version: 14.0.22
+  resolution: "@types/node@npm:14.0.22"
+  checksum: 3b3f6cbd442504f5e921931281b77c3fc436365cf1e2af1432a47b9e96dbe9ce2fec9a128da33eabe23fdd2c2a71b1fbdaef80988dbf7935188a45e91f74f8e2
   languageName: node
   linkType: hard
 
@@ -916,13 +916,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:16.9.41":
+"@types/react@npm:*":
   version: 16.9.41
   resolution: "@types/react@npm:16.9.41"
   dependencies:
     "@types/prop-types": "*"
     csstype: ^2.2.0
   checksum: d9fc63c96f926a246a2f1e3f0fa42895f0047fef1e8f5f7c1e68ce043792b72502c73478ba473e2371e9c4771b25b3910969d959d43e9ee4e7809950be62d4e2
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:16.9.42":
+  version: 16.9.42
+  resolution: "@types/react@npm:16.9.42"
+  dependencies:
+    "@types/prop-types": "*"
+    csstype: ^2.2.0
+  checksum: bd7a99e07166cb6ba7ed7da1def35d1b662c6dee84eb4bcfed37f4390c13bd000acbcff43f09f8ffe99dce6076beb5703ef8528909c540c66afcf58ea726f453
   languageName: node
   linkType: hard
 
@@ -2574,12 +2584,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react-hooks@npm:4.0.6":
-  version: 4.0.6
-  resolution: "eslint-plugin-react-hooks@npm:4.0.6"
+"eslint-plugin-react-hooks@npm:4.0.7":
+  version: 4.0.7
+  resolution: "eslint-plugin-react-hooks@npm:4.0.7"
   peerDependencies:
     eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
-  checksum: bd240d6e1a82884c9386e190dc3a7157bcfdb660543624bf57d73261cc47c8814e6cc5f5886eaad4e414d7138602a08dcc08eacee8a3b8cfba2418280c8a3a60
+  checksum: ecf5f24ac7a485ecd7417f93e3c00e124d6bf43e78beb9aecdaa7bae1d9d4871de5bc190d4a5d6e46a55ddfe7f1135794666afbdf79c35f695e8931e863c880f
   languageName: node
   linkType: hard
 
@@ -5715,7 +5725,7 @@ __metadata:
   resolution: "react-medium-image-zoom@workspace:packages/react-medium-image-zoom"
   dependencies:
     "@rpearce/image-zoom": "workspace:packages/image-zoom"
-    "@types/react": 16.9.41
+    "@types/react": 16.9.42
     tslib: ^2.0.0
     typescript: 3.9.6
   peerDependencies:
@@ -6109,8 +6119,8 @@ resolve@1.15.1:
     "@testing-library/jest-dom": 5.11.0
     "@testing-library/react": 10.4.5
     "@types/jest": 26.0.4
-    "@types/node": 14.0.21
-    "@types/react": 16.9.41
+    "@types/node": 14.0.22
+    "@types/react": 16.9.42
     "@types/react-dom": 16.9.8
     "@typescript-eslint/eslint-plugin": 3.6.0
     "@typescript-eslint/parser": 3.6.0
@@ -6122,7 +6132,7 @@ resolve@1.15.1:
     eslint-plugin-jest: 23.18.0
     eslint-plugin-jsx-a11y: 6.3.1
     eslint-plugin-react: 7.20.3
-    eslint-plugin-react-hooks: 4.0.6
+    eslint-plugin-react-hooks: 4.0.7
     jest: 26.1.0
     npm-run-all: 4.1.5
     react: 16.13.1
