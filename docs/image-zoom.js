@@ -104,8 +104,8 @@ var ImageZoom = (function () {
   var BUTTON = 'button';
   var CLICK = 'click';
   var DATA_RMIZ_DESC = 'data-rmiz-desc';
-  var DATA_RMIZ_DESC_WRAP = 'data-rmiz-desc-wrap';
   var DATA_RMIZ_OVERLAY = 'data-rmiz-overlay';
+  var DATA_RMIZ_WRAP = 'data-rmiz-wrap';
   var DATA_RMIZ_ZOOMED = 'data-rmiz-zoomed';
   var DIALOG = 'dialog';
   var ID = 'id';
@@ -132,18 +132,20 @@ var ImageZoom = (function () {
       var isSvgSrc = isImgEl && SVG_REGEX.test(targetEl.currentSrc);
       var isImg = !isSvgSrc && isImgEl;
       var documentBody = document.body;
+      //let ariaHiddenSiblings: [HTMLElement, string]
       var closeDescEl;
-      var descWrapEl;
       var modalEl;
       var motionPref;
       var openDescEl;
       var portalEl = _portalEl || documentBody;
       var scrollableEl = _scrollableEl || window;
       var state = State.UNLOADED;
+      var wrapEl;
       var zoomEl;
       var zoomImgEl;
       var init = function () {
           addEventListener(RESIZE, handleResize, window);
+          initWrap();
           initMotionPref();
           initDescriptions();
           if (isImg && !targetEl.complete) {
@@ -157,21 +159,26 @@ var ImageZoom = (function () {
               initImg();
           }
       };
+      var initWrap = function () {
+          var foundWrapEl = portalEl.querySelector("[" + DATA_RMIZ_WRAP + "]");
+          if (foundWrapEl) {
+              wrapEl = foundWrapEl;
+          }
+          else {
+              wrapEl = createDiv();
+              setAttribute(DATA_RMIZ_WRAP, '', wrapEl);
+              appendChild(wrapEl, portalEl);
+          }
+      };
       var initMotionPref = function () {
           motionPref = window.matchMedia('(prefers-reduced-motion:reduce)');
           motionPref.addListener(handleMotionPref); // NOT addEventListener b/c compatibility
       };
       var initDescriptions = function () {
-          descWrapEl = documentBody.querySelector("[" + DATA_RMIZ_DESC_WRAP + "]");
-          if (!descWrapEl) {
-              descWrapEl = createDiv();
-              setAttribute(DATA_RMIZ_DESC_WRAP, '', descWrapEl);
-              appendChild(descWrapEl, documentBody);
-          }
           openDescEl = createDescEl(openDescId, openText);
           closeDescEl = createDescEl(closeDescId, closeText);
-          appendChild(openDescEl, descWrapEl);
-          appendChild(closeDescEl, descWrapEl);
+          appendChild(openDescEl, wrapEl);
+          appendChild(closeDescEl, wrapEl);
       };
       var initImg = function () {
           if (!targetEl || state !== State.UNLOADED)
@@ -250,10 +257,10 @@ var ImageZoom = (function () {
           removeEventListener(RESIZE, handleResize, window);
       };
       var cleanupDescriptions = function () {
-          var openEl = document.getElementById(openDescId);
-          var closeEl = document.getElementById(closeDescId);
-          removeChild(openEl, descWrapEl);
-          removeChild(closeEl, descWrapEl);
+          var openEl = getElementById(openDescId);
+          var closeEl = getElementById(closeDescId);
+          removeChild(openEl, wrapEl);
+          removeChild(closeEl, wrapEl);
       };
       var cleanupImg = function () {
           if (!targetEl)
@@ -304,7 +311,7 @@ var ImageZoom = (function () {
           if (!modalEl)
               return;
           removeEventListener(CLICK, handleModalClick, modalEl);
-          removeChild(modalEl, portalEl);
+          removeChild(modalEl, wrapEl);
           modalEl = undefined;
       };
       var handleMotionPref = function () {
@@ -477,9 +484,10 @@ var ImageZoom = (function () {
           }
           modalEl = createModal();
           appendChild(zoomImgEl, modalEl);
-          appendChild(modalEl, portalEl);
+          appendChild(modalEl, wrapEl);
           addEventListener(KEYDOWN, handleDocumentKeyDown, document);
           addEventListener(SCROLL, handleScroll, scrollableEl);
+          //forEachSibling()
       };
       var zoomNonImg = function () {
           if (!targetEl || state !== State.UNLOADED)
@@ -511,7 +519,7 @@ var ImageZoom = (function () {
           appendChild(cloneEl, zoomEl);
           modalEl = createModal();
           appendChild(zoomEl, modalEl);
-          appendChild(modalEl, portalEl);
+          appendChild(modalEl, wrapEl);
           addEventListener(KEYDOWN, handleDocumentKeyDown, document);
           addEventListener(SCROLL, handleScroll, scrollableEl);
           handleZoomImgLoad();
@@ -669,6 +677,7 @@ var ImageZoom = (function () {
   var removeEventListener = function (type, handler, el) {
       el.removeEventListener(type, handler);
   };
+  var getElementById = function (id) { return document.getElementById(id); };
   var getAttribute = function (attr, el) { return el.getAttribute(attr); };
   var removeAttribute = function (attr, el) { return el.removeAttribute(attr); };
   var setAttribute = function (attr, value, el) {

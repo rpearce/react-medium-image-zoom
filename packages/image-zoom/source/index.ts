@@ -7,10 +7,10 @@ enum State {
 }
 
 type DescEl = HTMLDivElement | undefined
-type DescWrapEl = HTMLDivElement | null | undefined
 type ModalEl = HTMLDivElement | undefined
 type PortalEl = HTMLElement
 type ScrollableEl = HTMLElement | Window
+type WrapEl = HTMLDivElement
 type ZoomEl = HTMLDivElement | undefined
 type ZoomImgEl = HTMLImageElement | undefined
 
@@ -21,8 +21,8 @@ const ARIA_MODAL = 'aria-modal'
 const BUTTON = 'button'
 const CLICK = 'click'
 const DATA_RMIZ_DESC = 'data-rmiz-desc'
-const DATA_RMIZ_DESC_WRAP = 'data-rmiz-desc-wrap'
 const DATA_RMIZ_OVERLAY = 'data-rmiz-overlay'
+const DATA_RMIZ_WRAP = 'data-rmiz-wrap'
 const DATA_RMIZ_ZOOMED = 'data-rmiz-zoomed'
 const DIALOG = 'dialog'
 const ID = 'id'
@@ -96,20 +96,22 @@ const ImageZoom = (
   const isImg = !isSvgSrc && isImgEl
   const documentBody = document.body
 
+  //let ariaHiddenSiblings: [HTMLElement, string]
   let closeDescEl: DescEl
-  let descWrapEl: DescWrapEl
   let modalEl: ModalEl
   let motionPref: MediaQueryList | undefined
   let openDescEl: DescEl
   let portalEl: PortalEl = _portalEl || documentBody
   let scrollableEl: ScrollableEl = _scrollableEl || window
   let state: State = State.UNLOADED
+  let wrapEl: WrapEl
   let zoomEl: ZoomEl
   let zoomImgEl: ZoomImgEl
 
   const init = (): void => {
     addEventListener(RESIZE, handleResize, window)
 
+    initWrap()
     initMotionPref()
     initDescriptions()
 
@@ -124,25 +126,29 @@ const ImageZoom = (
     }
   }
 
+  const initWrap = (): void => {
+    const foundWrapEl = portalEl.querySelector(`[${DATA_RMIZ_WRAP}]`) as HTMLElement
+
+    if (foundWrapEl) {
+      wrapEl = foundWrapEl as WrapEl
+    } else {
+      wrapEl = createDiv()
+      setAttribute(DATA_RMIZ_WRAP, '', wrapEl)
+      appendChild(wrapEl, portalEl)
+    }
+  }
+
   const initMotionPref = (): void => {
     motionPref = window.matchMedia('(prefers-reduced-motion:reduce)')
     motionPref.addListener(handleMotionPref) // NOT addEventListener b/c compatibility
   }
 
   const initDescriptions = (): void => {
-    descWrapEl = documentBody.querySelector(`[${DATA_RMIZ_DESC_WRAP}]`) as DescWrapEl
-
-    if (!descWrapEl) {
-      descWrapEl = createDiv()
-      setAttribute(DATA_RMIZ_DESC_WRAP, '', descWrapEl)
-      appendChild(descWrapEl, documentBody)
-    }
-
     openDescEl = createDescEl(openDescId, openText)
     closeDescEl = createDescEl(closeDescId, closeText)
 
-    appendChild(openDescEl, descWrapEl)
-    appendChild(closeDescEl, descWrapEl)
+    appendChild(openDescEl, wrapEl)
+    appendChild(closeDescEl, wrapEl)
   }
 
   const initImg = (): void => {
@@ -236,11 +242,11 @@ const ImageZoom = (
   }
 
   const cleanupDescriptions = (): void => {
-    const openEl = document.getElementById(openDescId)
-    const closeEl = document.getElementById(closeDescId)
+    const openEl = getElementById(openDescId)
+    const closeEl = getElementById(closeDescId)
 
-    removeChild(openEl, descWrapEl)
-    removeChild(closeEl, descWrapEl)
+    removeChild(openEl, wrapEl)
+    removeChild(closeEl, wrapEl)
   }
 
   const cleanupImg = (): void => {
@@ -299,7 +305,7 @@ const ImageZoom = (
 
     removeEventListener(CLICK, handleModalClick, modalEl)
 
-    removeChild(modalEl, portalEl)
+    removeChild(modalEl, wrapEl)
 
     modalEl = undefined
   }
@@ -525,10 +531,12 @@ const ImageZoom = (
     modalEl = createModal()
 
     appendChild(zoomImgEl, modalEl)
-    appendChild(modalEl, portalEl)
+    appendChild(modalEl, wrapEl)
 
     addEventListener(KEYDOWN, handleDocumentKeyDown, document)
     addEventListener(SCROLL, handleScroll, scrollableEl)
+
+    //forEachSibling()
   }
 
   const zoomNonImg = (): void => {
@@ -562,7 +570,7 @@ const ImageZoom = (
     modalEl = createModal()
 
     appendChild(zoomEl, modalEl)
-    appendChild(modalEl, portalEl)
+    appendChild(modalEl, wrapEl)
 
     addEventListener(KEYDOWN, handleDocumentKeyDown, document)
     addEventListener(SCROLL, handleScroll, scrollableEl)
@@ -903,6 +911,33 @@ const focus: Focus = (el) => {
   el.focus({ preventScroll: true })
 }
 
+//interface ForEachSibling {
+//  (handler: (el: HTMLElement) => void, target: HTMLElement): void
+//}
+
+//const forEachSibling: ForEachSibling = (handler, target) => {
+//  const nodes = target.parentNode?.children || []
+
+//  for (let i = 0; i < nodes.length; i++) {
+//    const el = nodes[i] as HTMLElement
+
+//    if (!el) return
+
+//    const { tagName } = el
+
+//    if (
+//      tagName === 'SCRIPT' ||
+//      tagName === 'NOSCRIPT' ||
+//      tagName === 'STYLE' ||
+//      el === target
+//    ) {
+//      return
+//    }
+
+//    handler(el)
+//  }
+//}
+
 interface AddEventListener {
   <A extends EventTarget, E extends Event>(
     type: string,
@@ -926,6 +961,12 @@ interface RemoveEventListener {
 const removeEventListener: RemoveEventListener = (type, handler, el) => {
   el.removeEventListener(type, handler as (e: Event) => void)
 }
+
+interface GetElementById {
+  (id: string): HTMLElement | null
+}
+
+const getElementById: GetElementById = (id) => document.getElementById(id)
 
 interface GetAttribute {
   (attr: string, el: HTMLElement): string | null

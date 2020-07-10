@@ -355,6 +355,7 @@
 
       function addIZ() {
         var script = document.createElement('script');
+        script.setAttribute('async', 'true')
         script.onload = izOnload;
         script.src = '/image-zoom.min.js';
         document.body.appendChild(script);

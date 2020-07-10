@@ -47,6 +47,7 @@ Add the following HTML before the closing `</body>` tag on your web page.
 
   function addIZ() {
     var script = document.createElement('script');
+    script.setAttribute('async', 'true')
     script.onload = izOnload
     script.src = 'https://unpkg.com/@rpearce/image-zoom';
     document.body.appendChild(script);
