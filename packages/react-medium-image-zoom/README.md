@@ -43,7 +43,6 @@ interface ImageZoomOpts {
   openText?: string
   overlayBgColorEnd?: string
   overlayBgColorStart?: string
-  portalEl?: HTMLElement
   scrollableEl?: HTMLElement | Window
   transitionDuration?: string
   zoomMargin?: number
@@ -77,9 +76,6 @@ interface ImageZoomOpts {
 * `overlayBgColorStart`
   * modal dialog overlay starting background color
   * default: `rgba(255, 255, 255, 0)`
-* `portalEl`
-  * `HTMLElement` to be used for the react portal
-  * default: `document.body`
 * `scrollableEl`
   * `HTMLElement | Window` to be used for the scrolling listener
   * default: `window`

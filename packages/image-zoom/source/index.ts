@@ -6,9 +6,9 @@ enum State {
   UNLOADING = 'UNLOADING',
 }
 
+type AriaHiddenSiblingsTuple = [HTMLElement, string][]
 type DescEl = HTMLDivElement | undefined
 type ModalEl = HTMLDivElement | undefined
-type PortalEl = HTMLElement
 type ScrollableEl = HTMLElement | Window
 type WrapEl = HTMLDivElement
 type ZoomEl = HTMLDivElement | undefined
@@ -46,7 +46,6 @@ export interface ImageZoomOpts {
   openText?: string
   overlayBgColorEnd?: string
   overlayBgColorStart?: string
-  portalEl?: PortalEl
   scrollableEl?: ScrollableEl
   transitionDuration?: string
   zoomMargin?: number
@@ -75,7 +74,6 @@ const ImageZoom = (
     openText = 'Press to zoom image',
     overlayBgColorEnd = 'rgba(255,255,255,0.95)',
     overlayBgColorStart = 'rgba(255,255,255,0)',
-    portalEl: _portalEl,
     scrollableEl: _scrollableEl,
     transitionDuration = '300ms',
     zoomMargin = 0,
@@ -96,12 +94,12 @@ const ImageZoom = (
   const isImg = !isSvgSrc && isImgEl
   const documentBody = document.body
 
-  //let ariaHiddenSiblings: [HTMLElement, string]
+
+  let ariaHiddenSiblings: AriaHiddenSiblingsTuple = []
   let closeDescEl: DescEl
   let modalEl: ModalEl
   let motionPref: MediaQueryList | undefined
   let openDescEl: DescEl
-  let portalEl: PortalEl = _portalEl || documentBody
   let scrollableEl: ScrollableEl = _scrollableEl || window
   let state: State = State.UNLOADED
   let wrapEl: WrapEl
@@ -127,14 +125,14 @@ const ImageZoom = (
   }
 
   const initWrap = (): void => {
-    const foundWrapEl = portalEl.querySelector(`[${DATA_RMIZ_WRAP}]`) as HTMLElement
+    const foundWrapEl = documentBody.querySelector(`[${DATA_RMIZ_WRAP}]`) as HTMLElement
 
     if (foundWrapEl) {
       wrapEl = foundWrapEl as WrapEl
     } else {
       wrapEl = createDiv()
       setAttribute(DATA_RMIZ_WRAP, '', wrapEl)
-      appendChild(wrapEl, portalEl)
+      appendChild(wrapEl, documentBody)
     }
   }
 
@@ -206,9 +204,6 @@ const ImageZoom = (
     }
 
     if (state === State.UNLOADED) {
-      if (opts.portalEl) {
-        portalEl = opts.portalEl
-      }
       if (opts.scrollableEl) {
         scrollableEl = opts.scrollableEl
       }
@@ -497,6 +492,8 @@ const ImageZoom = (
     } else {
       zoomNonImg()
     }
+
+    ariaHideOtherContent()
   }
 
   const zoomImg = (): void => {
@@ -535,8 +532,6 @@ const ImageZoom = (
 
     addEventListener(KEYDOWN, handleDocumentKeyDown, document)
     addEventListener(SCROLL, handleScroll, scrollableEl)
-
-    //forEachSibling()
   }
 
   const zoomNonImg = (): void => {
@@ -603,6 +598,30 @@ const ImageZoom = (
     return el
   }
 
+  const ariaHideOtherContent = (): void => {
+    forEachSibling((el) => {
+      const ariaHiddenValue = el.getAttribute('aria-hidden')
+
+      if (ariaHiddenValue) {
+        ariaHiddenSiblings.push([el, ariaHiddenValue])
+      }
+
+      el.setAttribute('aria-hidden', 'true')
+    }, wrapEl)
+  }
+
+  const ariaResetOtherContent = (): void => {
+    forEachSibling((el) => {
+      el.removeAttribute('aria-hidden')
+    }, wrapEl)
+
+    ariaHiddenSiblings.forEach(([el, ariaHiddenValue]) => {
+      el?.setAttribute('aria-hidden', ariaHiddenValue)
+    })
+
+    ariaHiddenSiblings = []
+  }
+
   const unzoom = (): void => {
     if (state === State.LOADED) {
       const el = isImg ? zoomImgEl : zoomEl
@@ -620,6 +639,8 @@ const ImageZoom = (
     if (state !== State.UNLOADED) {
       setState(State.UNLOADING)
     }
+
+    ariaResetOtherContent()
   }
 
   init()
@@ -911,32 +932,32 @@ const focus: Focus = (el) => {
   el.focus({ preventScroll: true })
 }
 
-//interface ForEachSibling {
-//  (handler: (el: HTMLElement) => void, target: HTMLElement): void
-//}
+interface ForEachSibling {
+  (handler: (el: HTMLElement) => void, target: HTMLElement): void
+}
 
-//const forEachSibling: ForEachSibling = (handler, target) => {
-//  const nodes = target.parentNode?.children || []
+const forEachSibling: ForEachSibling = (handler, target) => {
+  const nodes = target.parentNode?.children || []
 
-//  for (let i = 0; i < nodes.length; i++) {
-//    const el = nodes[i] as HTMLElement
+  for (let i = 0; i < nodes.length; i++) {
+    const el = nodes[i] as HTMLElement
 
-//    if (!el) return
+    if (!el) return
 
-//    const { tagName } = el
+    const { tagName } = el
 
-//    if (
-//      tagName === 'SCRIPT' ||
-//      tagName === 'NOSCRIPT' ||
-//      tagName === 'STYLE' ||
-//      el === target
-//    ) {
-//      return
-//    }
+    if (
+      tagName === 'SCRIPT' ||
+      tagName === 'NOSCRIPT' ||
+      tagName === 'STYLE' ||
+      el === target
+    ) {
+      return
+    }
 
-//    handler(el)
-//  }
-//}
+    handler(el)
+  }
+}
 
 interface AddEventListener {
   <A extends EventTarget, E extends Event>(

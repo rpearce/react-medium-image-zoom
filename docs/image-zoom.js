@@ -121,7 +121,7 @@ var ImageZoom = (function () {
   var ZERO_STR = '0';
   var ZERO_MS = ZERO_STR + 'ms';
   var ImageZoom = function (_a, targetEl) {
-      var _b = _a === void 0 ? {} : _a, _c = _b.closeText, closeText = _c === void 0 ? 'Press to unzoom image' : _c, _d = _b.isControlled, isControlled = _d === void 0 ? false : _d, _e = _b.modalText, modalText = _e === void 0 ? 'Zoomed item' : _e, onZoomChange = _b.onZoomChange, _f = _b.openText, openText = _f === void 0 ? 'Press to zoom image' : _f, _g = _b.overlayBgColorEnd, overlayBgColorEnd = _g === void 0 ? 'rgba(255,255,255,0.95)' : _g, _h = _b.overlayBgColorStart, overlayBgColorStart = _h === void 0 ? 'rgba(255,255,255,0)' : _h, _portalEl = _b.portalEl, _scrollableEl = _b.scrollableEl, _j = _b.transitionDuration, transitionDuration = _j === void 0 ? '300ms' : _j, _k = _b.zoomMargin, zoomMargin = _k === void 0 ? 0 : _k, _l = _b.zoomZindex, zoomZindex = _l === void 0 ? 2147483647 : _l;
+      var _b = _a === void 0 ? {} : _a, _c = _b.closeText, closeText = _c === void 0 ? 'Press to unzoom image' : _c, _d = _b.isControlled, isControlled = _d === void 0 ? false : _d, _e = _b.modalText, modalText = _e === void 0 ? 'Zoomed item' : _e, onZoomChange = _b.onZoomChange, _f = _b.openText, openText = _f === void 0 ? 'Press to zoom image' : _f, _g = _b.overlayBgColorEnd, overlayBgColorEnd = _g === void 0 ? 'rgba(255,255,255,0.95)' : _g, _h = _b.overlayBgColorStart, overlayBgColorStart = _h === void 0 ? 'rgba(255,255,255,0)' : _h, _scrollableEl = _b.scrollableEl, _j = _b.transitionDuration, transitionDuration = _j === void 0 ? '300ms' : _j, _k = _b.zoomMargin, zoomMargin = _k === void 0 ? 0 : _k, _l = _b.zoomZindex, zoomZindex = _l === void 0 ? 2147483647 : _l;
       var closeDescId = uniqueId('rmiz-close-');
       var openDescId = uniqueId('rmiz-open-');
       var originalAriaDescribedBy = getAttribute(ARIA_DESCRIBEDBY, targetEl);
@@ -132,12 +132,11 @@ var ImageZoom = (function () {
       var isSvgSrc = isImgEl && SVG_REGEX.test(targetEl.currentSrc);
       var isImg = !isSvgSrc && isImgEl;
       var documentBody = document.body;
-      //let ariaHiddenSiblings: [HTMLElement, string]
+      var ariaHiddenSiblings = [];
       var closeDescEl;
       var modalEl;
       var motionPref;
       var openDescEl;
-      var portalEl = _portalEl || documentBody;
       var scrollableEl = _scrollableEl || window;
       var state = State.UNLOADED;
       var wrapEl;
@@ -160,14 +159,14 @@ var ImageZoom = (function () {
           }
       };
       var initWrap = function () {
-          var foundWrapEl = portalEl.querySelector("[" + DATA_RMIZ_WRAP + "]");
+          var foundWrapEl = documentBody.querySelector("[" + DATA_RMIZ_WRAP + "]");
           if (foundWrapEl) {
               wrapEl = foundWrapEl;
           }
           else {
               wrapEl = createDiv();
               setAttribute(DATA_RMIZ_WRAP, '', wrapEl);
-              appendChild(wrapEl, portalEl);
+              appendChild(wrapEl, documentBody);
           }
       };
       var initMotionPref = function () {
@@ -227,9 +226,6 @@ var ImageZoom = (function () {
               }
           }
           if (state === State.UNLOADED) {
-              if (opts.portalEl) {
-                  portalEl = opts.portalEl;
-              }
               if (opts.scrollableEl) {
                   scrollableEl = opts.scrollableEl;
               }
@@ -450,6 +446,7 @@ var ImageZoom = (function () {
           else {
               zoomNonImg();
           }
+          ariaHideOtherContent();
       };
       var zoomImg = function () {
           if (!targetEl || state !== State.UNLOADED)
@@ -487,7 +484,6 @@ var ImageZoom = (function () {
           appendChild(modalEl, wrapEl);
           addEventListener(KEYDOWN, handleDocumentKeyDown, document);
           addEventListener(SCROLL, handleScroll, scrollableEl);
-          //forEachSibling()
       };
       var zoomNonImg = function () {
           if (!targetEl || state !== State.UNLOADED)
@@ -534,6 +530,25 @@ var ImageZoom = (function () {
           addEventListener(CLICK, handleModalClick, el);
           return el;
       };
+      var ariaHideOtherContent = function () {
+          forEachSibling(function (el) {
+              var ariaHiddenValue = el.getAttribute('aria-hidden');
+              if (ariaHiddenValue) {
+                  ariaHiddenSiblings.push([el, ariaHiddenValue]);
+              }
+              el.setAttribute('aria-hidden', 'true');
+          }, wrapEl);
+      };
+      var ariaResetOtherContent = function () {
+          forEachSibling(function (el) {
+              el.removeAttribute('aria-hidden');
+          }, wrapEl);
+          ariaHiddenSiblings.forEach(function (_a) {
+              var el = _a[0], ariaHiddenValue = _a[1];
+              el === null || el === void 0 ? void 0 : el.setAttribute('aria-hidden', ariaHiddenValue);
+          });
+          ariaHiddenSiblings = [];
+      };
       var unzoom = function () {
           if (state === State.LOADED) {
               var el = isImg ? zoomImgEl : zoomEl;
@@ -548,6 +563,7 @@ var ImageZoom = (function () {
           if (state !== State.UNLOADED) {
               setState(State.UNLOADING);
           }
+          ariaResetOtherContent();
       };
       init();
       return { cleanup: cleanup, update: update };
@@ -670,6 +686,23 @@ var ImageZoom = (function () {
   };
   var focus = function (el) {
       el.focus({ preventScroll: true });
+  };
+  var forEachSibling = function (handler, target) {
+      var _a;
+      var nodes = ((_a = target.parentNode) === null || _a === void 0 ? void 0 : _a.children) || [];
+      for (var i = 0; i < nodes.length; i++) {
+          var el = nodes[i];
+          if (!el)
+              return;
+          var tagName = el.tagName;
+          if (tagName === 'SCRIPT' ||
+              tagName === 'NOSCRIPT' ||
+              tagName === 'STYLE' ||
+              el === target) {
+              return;
+          }
+          handler(el);
+      }
   };
   var addEventListener = function (type, cb, el) {
       el.addEventListener(type, cb);
