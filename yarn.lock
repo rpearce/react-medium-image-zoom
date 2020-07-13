@@ -309,7 +309,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime-corejs3@npm:^7.10.2, @babel/runtime-corejs3@npm:^7.8.3":
+"@babel/runtime-corejs3@npm:^7.10.2":
   version: 7.10.4
   resolution: "@babel/runtime-corejs3@npm:7.10.4"
   dependencies:
@@ -608,9 +608,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-commonjs@npm:13.0.0":
-  version: 13.0.0
-  resolution: "@rollup/plugin-commonjs@npm:13.0.0"
+"@rollup/plugin-commonjs@npm:13.0.1":
+  version: 13.0.1
+  resolution: "@rollup/plugin-commonjs@npm:13.0.1"
   dependencies:
     "@rollup/pluginutils": ^3.0.8
     commondir: ^1.0.1
@@ -621,28 +621,28 @@ __metadata:
     resolve: ^1.11.0
   peerDependencies:
     rollup: ^2.3.4
-  checksum: 47b19d060d5c84d307376d63a9b9751482df2176c535ba93120aca8d42bbb0e20da64b745343ebff6f7a20fd2a851ddcda01ae6e57fc4835b74a022e5fa52be3
+  checksum: 56378546a8ecc9f82705e5b46b9af217cd4619fb6485c398b5367184791aadbf8c123136317122db7aee3654110aa5528f264b18eda367c868942b8bab199954
   languageName: node
   linkType: hard
 
-"@rollup/plugin-node-resolve@npm:8.1.0":
-  version: 8.1.0
-  resolution: "@rollup/plugin-node-resolve@npm:8.1.0"
+"@rollup/plugin-node-resolve@npm:8.4.0":
+  version: 8.4.0
+  resolution: "@rollup/plugin-node-resolve@npm:8.4.0"
   dependencies:
-    "@rollup/pluginutils": ^3.0.8
-    "@types/resolve": 0.0.8
+    "@rollup/pluginutils": ^3.1.0
+    "@types/resolve": 1.17.1
     builtin-modules: ^3.1.0
     deep-freeze: ^0.0.1
     deepmerge: ^4.2.2
     is-module: ^1.0.0
-    resolve: ^1.14.2
+    resolve: ^1.17.0
   peerDependencies:
     rollup: ^1.20.0||^2.0.0
-  checksum: 8e2739ee0daf7e61a57c5132237f32a2baae185bc03b0af115158003d7d0454870a1e4d067381f9442ba115e894206eabd0b8831f8e36c148d5f40ce1ccc2d51
+  checksum: 1c3da8d000f9958d9dd4d52035cca43a985266cb8af42ac1e678179ffd755818a4b18fd23e51b8d7daf49cfac7fd04ca361c11e7db7791b95f2a4010c419a401
   languageName: node
   linkType: hard
 
-"@rollup/pluginutils@npm:^3.0.8":
+"@rollup/pluginutils@npm:^3.0.8, @rollup/pluginutils@npm:^3.1.0":
   version: 3.1.0
   resolution: "@rollup/pluginutils@npm:3.1.0"
   dependencies:
@@ -659,8 +659,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rpearce/image-zoom@workspace:packages/image-zoom"
   dependencies:
-    "@rollup/plugin-commonjs": 13.0.0
-    "@rollup/plugin-node-resolve": 8.1.0
+    "@rollup/plugin-commonjs": 13.0.1
+    "@rollup/plugin-node-resolve": 8.4.0
     focus-options-polyfill: 1.5.0
     rollup: 2.21.0
     rollup-plugin-terser: 6.1.0
@@ -690,15 +690,15 @@ __metadata:
   linkType: hard
 
 "@testing-library/dom@npm:^7.17.1":
-  version: 7.20.0
-  resolution: "@testing-library/dom@npm:7.20.0"
+  version: 7.20.1
+  resolution: "@testing-library/dom@npm:7.20.1"
   dependencies:
     "@babel/runtime": ^7.10.3
     "@types/aria-query": ^4.2.0
     aria-query: ^4.2.2
     dom-accessibility-api: ^0.4.5
     pretty-format: ^25.5.0
-  checksum: 1e6ceb7177c54bfdc220097d932bb540631e6f18104503d815e9f469a4cf670fdb331c12162aa0c5168854fa5c593929f3ea90a7d9404a552eb95c28e95ffb4d
+  checksum: 4e347d171c54ddf1a9da91d3fe258698d4737012a159ef83d29f319fddc2f6d4af1db5e45cb730ffc7694b33b9d618b1ebdad2f9f2c4c1dd8c2636c4ca6cddcd
   languageName: node
   linkType: hard
 
@@ -899,22 +899,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:16.9.42":
-  version: 16.9.42
-  resolution: "@types/react@npm:16.9.42"
+"@types/react@npm:*, @types/react@npm:16.9.43":
+  version: 16.9.43
+  resolution: "@types/react@npm:16.9.43"
   dependencies:
     "@types/prop-types": "*"
     csstype: ^2.2.0
-  checksum: bd7a99e07166cb6ba7ed7da1def35d1b662c6dee84eb4bcfed37f4390c13bd000acbcff43f09f8ffe99dce6076beb5703ef8528909c540c66afcf58ea726f453
+  checksum: b9d4491463ab013e0752bf6f99bd578f91504f74dfd1ebd7fbceebbdffe89762b040494a78403e249bb72d1645d2784f844890e7b1acdb3634432533ff9732fb
   languageName: node
   linkType: hard
 
-"@types/resolve@npm:0.0.8":
-  version: 0.0.8
-  resolution: "@types/resolve@npm:0.0.8"
+"@types/resolve@npm:1.17.1":
+  version: 1.17.1
+  resolution: "@types/resolve@npm:1.17.1"
   dependencies:
     "@types/node": "*"
-  checksum: f54f13e4b6ac46a6c7bde9e609cd730f4369b434aa59c5230478b9262bb75e7349c3247fd2cdb917e98d053a57f5609dd552379c612a720b59a8714914d324ed
+  checksum: 8e72a73574f9489760662498c1ad512a8d4084a5db15f327e0d785cb277bb0a3146cd049241a8e3268bd0ed204ad3ee7b4a6b4622ef681e70547be9af258ca6a
   languageName: node
   linkType: hard
 
@@ -2230,15 +2230,6 @@ __metadata:
   version: 1.2.0
   resolution: "decamelize@npm:1.2.0"
   checksum: 8ca9d03ea8ac07920f4504e219d18edff2491bdd0a3e05a1e5ca2e9a0bf6333564231de3528b01d5e76c40a38c37bbc1e09cb5a0424714f53dd615ed78ced464
-  languageName: node
-  linkType: hard
-
-"decamelize@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "decamelize@npm:3.2.0"
-  dependencies:
-    xregexp: ^4.2.4
-  checksum: dbe98e2e5f49a825c57a0f8c5ab0cb983669b71b6f689909b5f42888fb26c25d65a0c340930b2a3c2d770d6611e3be3b765e3776b75969263a3d401a31507ee4
   languageName: node
   linkType: hard
 
@@ -4273,7 +4264,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-util@npm:^26.1.0":
+"jest-util@npm:26.x, jest-util@npm:^26.1.0":
   version: 26.1.0
   resolution: "jest-util@npm:26.1.0"
   dependencies:
@@ -4412,13 +4403,13 @@ __metadata:
   linkType: hard
 
 "json-fixer@npm:^1.5.1":
-  version: 1.5.2
-  resolution: "json-fixer@npm:1.5.2"
+  version: 1.5.3
+  resolution: "json-fixer@npm:1.5.3"
   dependencies:
-    "@babel/runtime": ^7.10.2
+    "@babel/runtime": ^7.10.3
     chalk: ^4.1.0
     pegjs: ^0.10.0
-  checksum: 599214b56b7bd49fbdb76d6db58c6d0233f5a11203dbae75224d1814e7ffd1790ce7dfbeac3e13f2e1bfbe490e85d933478130a1fbfa14e9eaa6ec66c699cabb
+  checksum: cc0210dd220ef86c90251830982cc1a72ddc97d7fdc99f99de6376eedce5461ff7663075bf180d24b4b5adb07edddb8945975e7b18c06d108ee62cdeee0e67fe
   languageName: node
   linkType: hard
 
@@ -4758,16 +4749,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"micromatch@npm:4.x, micromatch@npm:^4.0.2":
-  version: 4.0.2
-  resolution: "micromatch@npm:4.0.2"
-  dependencies:
-    braces: ^3.0.1
-    picomatch: ^2.0.5
-  checksum: 0cb0e11d647cbb65e398a0a8a1340a7fb751ae2722346219c435704cfac8b3275a94a6464236fe867f52ad46a24046d3bc4ac11b3d21ddb73bc44e27cf1e4904
-  languageName: node
-  linkType: hard
-
 "micromatch@npm:^3.1.4":
   version: 3.1.10
   resolution: "micromatch@npm:3.1.10"
@@ -4786,6 +4767,16 @@ __metadata:
     snapdragon: ^0.8.1
     to-regex: ^3.0.2
   checksum: a60e73539a3ac6c6231f11642257a460861302df5986a94fd418d1b64a817409cda778d7023b53541a2091b523eda2c6f7212721e380d0b696284b7ca0a45bda
+  languageName: node
+  linkType: hard
+
+"micromatch@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "micromatch@npm:4.0.2"
+  dependencies:
+    braces: ^3.0.1
+    picomatch: ^2.0.5
+  checksum: 0cb0e11d647cbb65e398a0a8a1340a7fb751ae2722346219c435704cfac8b3275a94a6464236fe867f52ad46a24046d3bc4ac11b3d21ddb73bc44e27cf1e4904
   languageName: node
   linkType: hard
 
@@ -5698,7 +5689,7 @@ __metadata:
   resolution: "react-medium-image-zoom@workspace:packages/react-medium-image-zoom"
   dependencies:
     "@rpearce/image-zoom": "workspace:packages/image-zoom"
-    "@types/react": 16.9.42
+    "@types/react": 16.9.43
     tslib: ^2.0.0
     typescript: 3.9.6
   peerDependencies:
@@ -5964,7 +5955,7 @@ resolve@1.15.1:
   languageName: node
   linkType: hard
 
-"resolve@^1.10.0, resolve@^1.11.0, resolve@^1.14.2, resolve@^1.17.0, resolve@^1.3.2":
+"resolve@^1.10.0, resolve@^1.11.0, resolve@^1.17.0, resolve@^1.3.2":
   version: 1.17.0
   resolution: "resolve@npm:1.17.0"
   dependencies:
@@ -5982,7 +5973,7 @@ resolve@1.15.1:
   languageName: node
   linkType: hard
 
-"resolve@patch:resolve@^1.10.0#builtin<compat/resolve>, resolve@patch:resolve@^1.11.0#builtin<compat/resolve>, resolve@patch:resolve@^1.14.2#builtin<compat/resolve>, resolve@patch:resolve@^1.17.0#builtin<compat/resolve>, resolve@patch:resolve@^1.3.2#builtin<compat/resolve>":
+"resolve@patch:resolve@^1.10.0#builtin<compat/resolve>, resolve@patch:resolve@^1.11.0#builtin<compat/resolve>, resolve@patch:resolve@^1.17.0#builtin<compat/resolve>, resolve@patch:resolve@^1.3.2#builtin<compat/resolve>":
   version: 1.17.0
   resolution: "resolve@patch:resolve@npm%3A1.17.0#builtin<compat/resolve>::version=1.17.0&hash=3388aa"
   dependencies:
@@ -6093,7 +6084,7 @@ resolve@1.15.1:
     "@testing-library/react": 10.4.5
     "@types/jest": 26.0.4
     "@types/node": 14.0.22
-    "@types/react": 16.9.42
+    "@types/react": 16.9.43
     "@types/react-dom": 16.9.8
     "@typescript-eslint/eslint-plugin": 3.6.0
     "@typescript-eslint/parser": 3.6.0
@@ -6111,7 +6102,7 @@ resolve@1.15.1:
     react: 16.13.1
     react-dom: 16.13.1
     serve: 11.3.2
-    ts-jest: 26.1.1
+    ts-jest: 26.1.2
     typescript: 3.9.6
   languageName: unknown
   linkType: soft
@@ -6756,9 +6747,9 @@ resolve@1.15.1:
   linkType: hard
 
 "strip-json-comments@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "strip-json-comments@npm:3.1.0"
-  checksum: 5c272f2c030937c99edd8c02f120c2e5cb49ab41e82db689167e3dc84413ee39dbda9f0476b5345827d9f408fd9ffc81b3c0160253ec599d929ac35fa7ce0260
+  version: 3.1.1
+  resolution: "strip-json-comments@npm:3.1.1"
+  checksum: f16719ce25abc58a55ef82b1c27f541dcfa5d544f17158f62d10be21ff9bd22fde45a53c592b29d80ad3c97ccb67b7451c4833913fdaeadb508a40f5e0a9c206
   languageName: node
   linkType: hard
 
@@ -6987,17 +6978,17 @@ resolve@1.15.1:
   languageName: node
   linkType: hard
 
-"ts-jest@npm:26.1.1":
-  version: 26.1.1
-  resolution: "ts-jest@npm:26.1.1"
+"ts-jest@npm:26.1.2":
+  version: 26.1.2
+  resolution: "ts-jest@npm:26.1.2"
   dependencies:
     bs-logger: 0.x
     buffer-from: 1.x
     fast-json-stable-stringify: 2.x
+    jest-util: 26.x
     json5: 2.x
     lodash.memoize: 4.x
     make-error: 1.x
-    micromatch: 4.x
     mkdirp: 1.x
     semver: 7.x
     yargs-parser: 18.x
@@ -7006,7 +6997,7 @@ resolve@1.15.1:
     typescript: ">=3.8 <4.0"
   bin:
     ts-jest: cli.js
-  checksum: e972f77c2a4fbf1ef0efd06b393d19de23cc279a13655da06e5e1320423bde903759d687f266df9cbc24c322728aca1ba745b68a0528d5a8e821e6168acb3a9b
+  checksum: 338ea127831642e82e724f10b98f6882a3ffef29a4c3df1c3fde69a2f637f00dec91b8e4a15191a89f693cc8059613b4f7806fb56242d808063d542bb2bcfc85
   languageName: node
   linkType: hard
 
@@ -7460,15 +7451,6 @@ typescript@3.9.6:
   languageName: node
   linkType: hard
 
-"xregexp@npm:^4.2.4":
-  version: 4.3.0
-  resolution: "xregexp@npm:4.3.0"
-  dependencies:
-    "@babel/runtime-corejs3": ^7.8.3
-  checksum: 2dcef4888ea32e7c01b8f42d1ee3df24970de14b299a8f534ccecf2252d297092f92d037502176ec334b6c8d7cd1dd3dba0d3cf949e26f418d50b46846268839
-  languageName: node
-  linkType: hard
-
 "y18n@npm:^4.0.0":
   version: 4.0.0
   resolution: "y18n@npm:4.0.0"
@@ -7529,11 +7511,11 @@ typescript@3.9.6:
   linkType: hard
 
 "yargs@npm:^15.0.1, yargs@npm:^15.3.1":
-  version: 15.4.0
-  resolution: "yargs@npm:15.4.0"
+  version: 15.4.1
+  resolution: "yargs@npm:15.4.1"
   dependencies:
     cliui: ^6.0.0
-    decamelize: ^3.2.0
+    decamelize: ^1.2.0
     find-up: ^4.1.0
     get-caller-file: ^2.0.1
     require-directory: ^2.1.1
@@ -7543,6 +7525,6 @@ typescript@3.9.6:
     which-module: ^2.0.0
     y18n: ^4.0.0
     yargs-parser: ^18.1.2
-  checksum: b4163b7e8f67250bdd4472b8c0a76665030199f3167dcaedc83a6c7daccd761d24208db83320414b9861b44dc3242d737864b13058b5a59c734a5e690d7b7692
+  checksum: dbf687d6b938f01bbf11e158dde6df906282b70cd9295af0217ee8cefbd83ad09d49fa9458d0d5325b0e66f03df954a38986db96f91e5b46ccdbbaf9a0157b23
   languageName: node
   linkType: hard
