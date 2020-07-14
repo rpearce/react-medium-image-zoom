@@ -608,9 +608,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-commonjs@npm:13.0.2":
-  version: 13.0.2
-  resolution: "@rollup/plugin-commonjs@npm:13.0.2"
+"@rollup/plugin-commonjs@npm:14.0.0":
+  version: 14.0.0
+  resolution: "@rollup/plugin-commonjs@npm:14.0.0"
   dependencies:
     "@rollup/pluginutils": ^3.0.8
     commondir: ^1.0.1
@@ -621,7 +621,7 @@ __metadata:
     resolve: ^1.11.0
   peerDependencies:
     rollup: ^2.3.4
-  checksum: 3a3f6fd5ec8608f4bc7343d89d84ae9253d99b45317e3dd2f05ebc7da476490ac553015ae3a4a34bbcd6afc094bfbf47d9a5769c13bb1e2a093703c8533196b4
+  checksum: f8c733dee53be98576bd9c739a876635407792944abcc1eba2cd9444ce673092582b863be9a1d29c2dde56a654761b1df1ba5301686e94359bca114d1c05c893
   languageName: node
   linkType: hard
 
@@ -659,7 +659,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@rpearce/image-zoom@workspace:packages/image-zoom"
   dependencies:
-    "@rollup/plugin-commonjs": 13.0.2
+    "@rollup/plugin-commonjs": 14.0.0
     "@rollup/plugin-node-resolve": 8.4.0
     focus-options-polyfill: 1.5.0
     rollup: 2.21.0
