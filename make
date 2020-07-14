@@ -40,8 +40,8 @@ function build {
 function build_docs {
   echo -n "Building docs... "
 
-  cp $izPath/dist/iife/image-zoom.js $docsPath
-  cp $izPath/dist/iife/image-zoom.min.js $docsPath
+  cp "$izPath/dist/iife/image-zoom.js" "$docsPath"
+  cp "$izPath/dist/iife/image-zoom.min.js" "$docsPath"
 
   echo "Done"
 
@@ -51,7 +51,7 @@ function build_docs {
 function build_iz {
   local pkg="$izPath"
 
-  echo -n "Building $(basename $pkg)... "
+  echo -n "Building $(basename "$pkg")... "
 
   cd "$pkg"
 
@@ -65,13 +65,13 @@ function build_iz {
 function build_rmiz {
   local pkg="$rmizPath"
 
-  echo -n "Building $(basename $pkg)... "
+  echo -n "Building $(basename "$pkg")... "
 
   cd "$pkg"
 
-  yarn tsc -p $pkg/tsconfig.cjs.json & CJS_PID=$!
-  yarn tsc -p $pkg/tsconfig.esm.json & ESM_PID=$!
-  yarn tsc -p $pkg/tsconfig.umd.json & UMD_PID=$!
+  yarn tsc -p "$pkg/tsconfig.cjs.json" & CJS_PID=$!
+  yarn tsc -p "$pkg/tsconfig.esm.json" & ESM_PID=$!
+  yarn tsc -p "$pkg/tsconfig.umd.json" & UMD_PID=$!
 
   wait $CJS_PID
   wait $ESM_PID
@@ -99,8 +99,8 @@ function clean {
 function clean_docs {
   echo -n "Cleaning docs... "
 
-  rm -f $docsPath/image-zoom.js
-  rm -f $docsPath/image-zoom.min.js
+  rm -f "$docsPath/image-zoom.js"
+  rm -f "$docsPath/image-zoom.min.js"
 
   echo "Done"
 
@@ -110,7 +110,7 @@ function clean_docs {
 function clean_pkgs {
   echo -n "Cleaning packages... "
 
-  rm -rf $PWD/packages/*/dist/
+  rm -rf "$PWD/packages/*/dist/"
 
   echo "Done"
 
@@ -123,7 +123,7 @@ function clearscreen {
 }
 
 function contrib {
-  yarn all-contributors --config $PWD/conf/.all-contributorsrc "$@"
+  yarn all-contributors --config "$PWD/conf/.all-contributorsrc" "$@"
 }
 
 function dev {
@@ -156,8 +156,8 @@ function init {
 
 function lint {
   yarn eslint . \
-    -c $PWD/.eslintrc.js \
-    --ignore-path $PWD/.eslintignore \
+    -c "$PWD/.eslintrc.js" \
+    --ignore-path "$PWD/.eslintignore" \
     "$@"
 }
 
@@ -177,11 +177,11 @@ function lint {
 #}
 
 function test {
-  yarn jest $PWD/packages
+  yarn jest "$PWD/packages"
 }
 
 function test_cov_ci {
-  yarn jest $PWD/packages --coverage --coverageReporters=text-lcov | \
+  yarn jest "$PWD/packages" --coverage --coverageReporters=text-lcov | \
     yarn coveralls
 }
 
