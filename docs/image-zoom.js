@@ -97,17 +97,17 @@ var ImageZoom = (function () {
       State["UNLOADED"] = "UNLOADED";
       State["UNLOADING"] = "UNLOADING";
   })(State || (State = {}));
-  var ARIA_DESCRIBEDBY = 'aria-describedby';
   var ARIA_LABEL = 'aria-label';
   var ARIA_LABELLEDBY = 'aria-labelledby';
   var ARIA_MODAL = 'aria-modal';
   var BUTTON = 'button';
   var CLICK = 'click';
-  var DATA_RMIZ_DESC = 'data-rmiz-desc';
   var DATA_RMIZ_OVERLAY = 'data-rmiz-overlay';
   var DATA_RMIZ_WRAP = 'data-rmiz-wrap';
   var DATA_RMIZ_ZOOMED = 'data-rmiz-zoomed';
   var DIALOG = 'dialog';
+  var DIV = 'div';
+  var FOCUS = 'focus';
   var ID = 'id';
   var KEYDOWN = 'keydown';
   var LOAD = 'load';
@@ -118,35 +118,31 @@ var ImageZoom = (function () {
   var TABINDEX = 'tabindex';
   var TRANSITIONEND = 'transitionend';
   var TRUE_STR = 'true';
-  var ZERO_STR = '0';
-  var ZERO_MS = ZERO_STR + 'ms';
+  var ZERO_MS = '0ms';
   var ImageZoom = function (_a, targetEl) {
-      var _b = _a === void 0 ? {} : _a, _c = _b.closeText, closeText = _c === void 0 ? 'Press to unzoom image' : _c, _d = _b.isControlled, isControlled = _d === void 0 ? false : _d, _e = _b.modalText, modalText = _e === void 0 ? 'Zoomed item' : _e, onZoomChange = _b.onZoomChange, _f = _b.openText, openText = _f === void 0 ? 'Press to zoom image' : _f, _g = _b.overlayBgColorEnd, overlayBgColorEnd = _g === void 0 ? 'rgba(255,255,255,0.95)' : _g, _h = _b.overlayBgColorStart, overlayBgColorStart = _h === void 0 ? 'rgba(255,255,255,0)' : _h, _scrollableEl = _b.scrollableEl, _j = _b.transitionDuration, transitionDuration = _j === void 0 ? '300ms' : _j, _k = _b.zoomMargin, zoomMargin = _k === void 0 ? 0 : _k, _l = _b.zoomZindex, zoomZindex = _l === void 0 ? 2147483647 : _l;
-      var closeDescId = uniqueId('rmiz-close-');
-      var openDescId = uniqueId('rmiz-open-');
-      var originalAriaDescribedBy = getAttribute(ARIA_DESCRIBEDBY, targetEl);
+      var _b = _a === void 0 ? {} : _a, _c = _b.closeText, closeText = _c === void 0 ? 'Unzoom image' : _c, _d = _b.isControlled, isControlled = _d === void 0 ? false : _d, _e = _b.modalText, modalText = _e === void 0 ? 'Zoomed item' : _e, onZoomChange = _b.onZoomChange, _f = _b.openText, openText = _f === void 0 ? 'Zoom image' : _f, _g = _b.overlayBgColorEnd, overlayBgColorEnd = _g === void 0 ? 'rgba(255,255,255,0.95)' : _g, _h = _b.overlayBgColorStart, overlayBgColorStart = _h === void 0 ? 'rgba(255,255,255,0)' : _h, _scrollableEl = _b.scrollableEl, _j = _b.transitionDuration, transitionDuration = _j === void 0 ? '300ms' : _j, _k = _b.zoomMargin, zoomMargin = _k === void 0 ? 0 : _k, _l = _b.zoomZindex, zoomZindex = _l === void 0 ? 2147483647 : _l;
       var originalRole = getAttribute(ROLE, targetEl);
-      var originalStyle = getAttribute(STYLE, targetEl);
-      var originalTabIndex = getAttribute(TABINDEX, targetEl);
+      var isDisplayBlock = window.getComputedStyle(targetEl).display === 'block';
       var isImgEl = targetEl.tagName === 'IMG';
       var isSvgSrc = isImgEl && SVG_REGEX.test(targetEl.currentSrc);
       var isImg = !isSvgSrc && isImgEl;
       var documentBody = document.body;
       var ariaHiddenSiblings = [];
-      var closeDescEl;
+      var closeBtnEl;
+      var boundaryDivFirst;
+      var boundaryDivLast;
       var modalEl;
       var motionPref;
-      var openDescEl;
+      var openBtnEl;
       var scrollableEl = _scrollableEl || window;
       var state = State.UNLOADED;
+      var targetCloneEl;
       var wrapEl;
       var zoomEl;
       var zoomImgEl;
       var init = function () {
           addEventListener(RESIZE, handleResize, window);
-          initWrap();
           initMotionPref();
-          initDescriptions();
           if (isImg && !targetEl.complete) {
               targetEl.addEventListener(LOAD, function () {
                   window.setTimeout(function () {
@@ -158,27 +154,19 @@ var ImageZoom = (function () {
               initImg();
           }
       };
-      var initWrap = function () {
-          var foundWrapEl = documentBody.querySelector("[" + DATA_RMIZ_WRAP + "]");
-          if (foundWrapEl) {
-              wrapEl = foundWrapEl;
-          }
-          else {
-              wrapEl = createDiv();
-              setAttribute(DATA_RMIZ_WRAP, '', wrapEl);
-              appendChild(wrapEl, documentBody);
-          }
-      };
+      // START MOTION PREFS
       var initMotionPref = function () {
           motionPref = window.matchMedia('(prefers-reduced-motion:reduce)');
-          motionPref.addListener(handleMotionPref); // NOT addEventListener b/c compatibility
+          motionPref.addListener(handleMotionPref); // NOT addEventListener because compatibility
       };
-      var initDescriptions = function () {
-          openDescEl = createDescEl(openDescId, openText);
-          closeDescEl = createDescEl(closeDescId, closeText);
-          appendChild(openDescEl, wrapEl);
-          appendChild(closeDescEl, wrapEl);
+      var handleMotionPref = function () {
+          transitionDuration = ZERO_MS;
       };
+      var cleanupMotionPref = function () {
+          motionPref === null || motionPref === void 0 ? void 0 : motionPref.removeListener(handleMotionPref); // NOT removeEventListener because compatibility
+          motionPref = undefined;
+      };
+      // END MOTION PREFS
       var initImg = function () {
           if (!targetEl || state !== State.UNLOADED)
               return;
@@ -188,21 +176,33 @@ var ImageZoom = (function () {
               ? getMaxDimensionScale(height, width, zoomMargin, naturalHeight, naturalWidth)
               : getScale(height, width, zoomMargin);
           if (currentScale > 1) {
-              setAttribute(ARIA_DESCRIBEDBY, openDescId, targetEl);
-              setAttribute(ROLE, BUTTON, targetEl);
-              setAttribute(TABINDEX, originalTabIndex || ZERO_STR, targetEl);
-              setAttribute(STYLE, combineStyles(originalStyle, styleCursorZoomIn), targetEl);
-              addEventListener(CLICK, handleImgClick, targetEl);
-              addEventListener(KEYDOWN, handleImgKeyDown, targetEl);
+              if (!targetCloneEl) {
+                  targetCloneEl = targetEl.cloneNode(true);
+                  wrapEl = createElement(DIV);
+                  openBtnEl = createElement(BUTTON);
+                  setAttribute(DATA_RMIZ_WRAP, '', wrapEl);
+                  setAttribute(STYLE, isDisplayBlock ? styleWrapDiv : styleWrap, wrapEl);
+                  setAttribute(ARIA_LABEL, openText, openBtnEl);
+                  setAttribute(STYLE, styleZoomBtnIn, openBtnEl);
+                  addEventListener(CLICK, handleOpenBtnClick, openBtnEl);
+                  appendChild(targetCloneEl, wrapEl);
+                  appendChild(openBtnEl, wrapEl);
+                  replaceChild(targetEl.parentNode, targetEl, wrapEl);
+              }
           }
           else {
-              cleanupImg();
+              cleanupZoom();
+              cleanupDOMMutations();
           }
       };
       var update = function (opts) {
           if (opts === void 0) { opts = {}; }
+          if (opts.closeText)
+              closeText = opts.closeText;
           if (opts.modalText)
               modalText = opts.modalText;
+          if (opts.openText)
+              openText = opts.openText;
           if (opts.overlayBgColorEnd)
               overlayBgColorEnd = opts.overlayBgColorEnd;
           if (opts.overlayBgColorStart)
@@ -213,22 +213,8 @@ var ImageZoom = (function () {
               zoomMargin = opts.zoomMargin;
           if (opts.zoomZindex)
               zoomZindex = opts.zoomZindex;
-          if (opts.closeText) {
-              closeText = opts.closeText;
-              if (closeDescEl) {
-                  setTextContent(closeText, closeDescEl);
-              }
-          }
-          if (opts.openText) {
-              openText = opts.openText;
-              if (openDescEl) {
-                  setTextContent(openText, openDescEl);
-              }
-          }
-          if (state === State.UNLOADED) {
-              if (opts.scrollableEl) {
-                  scrollableEl = opts.scrollableEl;
-              }
+          if (state === State.UNLOADED && opts.scrollableEl) {
+              scrollableEl = opts.scrollableEl;
           }
           setZoomImgStyle();
           if (state === State.UNLOADED && opts.isZoomed) {
@@ -238,82 +224,57 @@ var ImageZoom = (function () {
               unzoom();
           }
       };
+      // START CLEANUP
       var cleanup = function () {
-          cleanupZoomImg();
-          cleanupImg();
-          cleanupModal();
-          cleanupDescriptions();
+          cleanupZoom();
           if (isImg && targetEl) {
               removeEventListener(LOAD, initImg, targetEl);
           }
-          if (motionPref) {
-              motionPref.removeListener(handleMotionPref);
-              motionPref = undefined;
-          }
+          cleanupDOMMutations();
+          cleanupMotionPref();
           removeEventListener(RESIZE, handleResize, window);
       };
-      var cleanupDescriptions = function () {
-          var openEl = getElementById(openDescId);
-          var closeEl = getElementById(closeDescId);
-          removeChild(openEl, wrapEl);
-          removeChild(closeEl, wrapEl);
+      var cleanupDOMMutations = function () {
+          if (openBtnEl) {
+              removeEventListener(CLICK, handleOpenBtnClick, openBtnEl);
+          }
+          replaceChild(wrapEl === null || wrapEl === void 0 ? void 0 : wrapEl.parentNode, wrapEl, targetEl);
+          openBtnEl = undefined;
+          wrapEl = undefined;
+          targetCloneEl = undefined;
       };
-      var cleanupImg = function () {
-          if (!targetEl)
-              return;
-          removeEventListener(KEYDOWN, handleImgKeyDown, targetEl);
-          removeEventListener(CLICK, handleImgClick, targetEl);
-          if (originalTabIndex) {
-              setAttribute(TABINDEX, originalTabIndex, targetEl);
-          }
-          else {
-              removeAttribute(TABINDEX, targetEl);
-          }
-          if (originalStyle) {
-              setAttribute(STYLE, originalStyle, targetEl);
-          }
-          else {
-              removeAttribute(STYLE, targetEl);
-          }
-          if (originalRole) {
-              setAttribute(ROLE, originalRole, targetEl);
-          }
-          else {
-              removeAttribute(ROLE, targetEl);
-          }
-          if (originalAriaDescribedBy) {
-              setAttribute(ARIA_DESCRIBEDBY, originalAriaDescribedBy, targetEl);
-          }
-          else {
-              removeAttribute(ARIA_DESCRIBEDBY, targetEl);
-          }
-      };
-      var cleanupZoomImg = function () {
+      var cleanupZoom = function () {
           var el = isImg ? zoomImgEl : zoomEl;
           if (el) {
               removeEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, el);
               removeEventListener(TRANSITIONEND, handleZoomTransitionEnd, el);
-              removeEventListener(CLICK, handleZoomImgClick, el);
-              removeEventListener(KEYDOWN, handleZoomImgKeyDown, el);
               removeEventListener(LOAD, handleZoomImgLoad, el);
               removeChild(el, modalEl);
           }
+          if (closeBtnEl) {
+              removeEventListener(CLICK, handleCloseBtnClick, closeBtnEl);
+          }
+          if (boundaryDivFirst) {
+              removeEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivFirst);
+          }
+          if (boundaryDivLast) {
+              removeEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivLast);
+          }
+          if (modalEl) {
+              removeEventListener(CLICK, handleModalClick, modalEl);
+              removeChild(modalEl, documentBody);
+          }
           zoomImgEl = undefined;
           zoomEl = undefined;
+          closeBtnEl = undefined;
+          boundaryDivFirst = undefined;
+          boundaryDivLast = undefined;
+          modalEl = undefined;
           removeEventListener(SCROLL, handleScroll, scrollableEl);
           removeEventListener(KEYDOWN, handleDocumentKeyDown, document);
       };
-      var cleanupModal = function () {
-          if (!modalEl)
-              return;
-          removeEventListener(CLICK, handleModalClick, modalEl);
-          removeChild(modalEl, wrapEl);
-          modalEl = undefined;
-      };
-      var handleMotionPref = function () {
-          transitionDuration = ZERO_MS;
-      };
-      var handleImgClick = function (e) {
+      // END CLEANUP
+      var handleOpenBtnClick = function (e) {
           e.preventDefault();
           if (onZoomChange) {
               onZoomChange(true);
@@ -322,7 +283,7 @@ var ImageZoom = (function () {
               zoom();
           }
       };
-      var handleZoomImgClick = function (e) {
+      var handleCloseBtnClick = function (e) {
           e.preventDefault();
           if (onZoomChange) {
               onZoomChange(false);
@@ -331,27 +292,8 @@ var ImageZoom = (function () {
               unzoom();
           }
       };
-      var handleImgKeyDown = function (e) {
-          if (isSelectKey(e)) {
-              e.preventDefault();
-              if (onZoomChange) {
-                  onZoomChange(true);
-              }
-              if (!isControlled) {
-                  zoom();
-              }
-          }
-      };
-      var handleZoomImgKeyDown = function (e) {
-          if (isSelectKey(e)) {
-              e.preventDefault();
-              if (onZoomChange) {
-                  onZoomChange(false);
-              }
-              if (!isControlled) {
-                  unzoom();
-              }
-          }
+      var handleFocusBoundaryDiv = function () {
+          focus(closeBtnEl);
       };
       var handleResize = function () {
           if (state === State.LOADED) {
@@ -362,14 +304,11 @@ var ImageZoom = (function () {
           }
       };
       var handleZoomTransitionEnd = function () {
-          var el = zoomImgEl || zoomEl;
-          if (el) {
-              focus(el);
-          }
+          focus(closeBtnEl);
       };
       var handleZoomImgLoad = function () {
-          if (targetEl) {
-              setAttribute(STYLE, combineStyles(originalStyle, styleVisibilityHidden), targetEl);
+          if (targetCloneEl) {
+              targetCloneEl.style.visibility = 'hidden';
           }
           if (modalEl) {
               modalEl.style.backgroundColor = overlayBgColorEnd;
@@ -386,14 +325,13 @@ var ImageZoom = (function () {
           setState(State.LOADED);
       };
       var handleUnzoomTransitionEnd = function () {
-          if (!targetEl)
+          if (!targetCloneEl)
               return;
-          setAttribute(STYLE, combineStyles(originalStyle, styleCursorZoomIn), targetEl);
+          targetCloneEl.style.visibility = '';
           // timeout for Safari flickering issue
           window.setTimeout(function () {
-              cleanupZoomImg();
-              cleanupModal();
-              focus(targetEl);
+              cleanupZoom();
+              focus(openBtnEl);
               setState(State.UNLOADED);
           }, 0);
       };
@@ -432,11 +370,11 @@ var ImageZoom = (function () {
       };
       var setZoomImgStyle = function (instant) {
           if (instant === void 0) { instant = false; }
-          if (!targetEl)
+          if (!targetCloneEl)
               return;
           var el = isImg ? zoomImgEl : zoomEl;
           if (el) {
-              setAttribute(STYLE, getZoomImgStyle(instant ? ZERO_MS : transitionDuration, zoomMargin, targetEl, isImg, state), el);
+              setAttribute(STYLE, getZoomImgStyle(instant ? ZERO_MS : transitionDuration, zoomMargin, targetCloneEl, isImg, state), el);
           }
       };
       var zoom = function () {
@@ -446,26 +384,32 @@ var ImageZoom = (function () {
           else {
               zoomNonImg();
           }
+          blur(openBtnEl);
           ariaHideOtherContent();
       };
       var zoomImg = function () {
-          if (!targetEl || state !== State.UNLOADED)
+          if (!targetCloneEl || state !== State.UNLOADED)
               return;
-          var targetAlt = targetEl.alt;
-          var targetLabel = getAttribute(ARIA_LABEL, targetEl);
-          var targetLabelledBy = getAttribute(ARIA_LABELLEDBY, targetEl);
-          var targetSizes = targetEl.sizes;
-          var targetSrc = targetEl.src;
-          var targetSrcset = targetEl.srcset;
+          var targetAlt = targetCloneEl.alt;
+          var targetLabel = getAttribute(ARIA_LABEL, targetCloneEl);
+          var targetLabelledBy = getAttribute(ARIA_LABELLEDBY, targetCloneEl);
+          var targetSizes = targetCloneEl.sizes;
+          var targetSrc = targetCloneEl.src;
+          var targetSrcset = targetCloneEl.srcset;
+          boundaryDivFirst = createElement(DIV);
+          setAttribute(TABINDEX, '0', boundaryDivFirst);
+          addEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivFirst);
+          boundaryDivLast = createElement(DIV);
+          setAttribute(TABINDEX, '0', boundaryDivLast);
+          addEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivLast);
+          closeBtnEl = createElement(BUTTON);
+          setAttribute(STYLE, styleZoomBtnOut, closeBtnEl);
+          setAttribute(ARIA_LABEL, closeText, closeBtnEl);
+          addEventListener(CLICK, handleCloseBtnClick, closeBtnEl);
           zoomImgEl = new Image();
           addEventListener(LOAD, handleZoomImgLoad, zoomImgEl);
-          addEventListener(CLICK, handleZoomImgClick, zoomImgEl);
-          addEventListener(KEYDOWN, handleZoomImgKeyDown, zoomImgEl);
-          setAttribute(ARIA_DESCRIBEDBY, closeDescId, zoomImgEl);
           setAttribute(DATA_RMIZ_ZOOMED, '', zoomImgEl);
-          setAttribute(ROLE, BUTTON, zoomImgEl);
           setAttribute(STYLE, styleZoomStart, zoomImgEl);
-          setAttribute(TABINDEX, ZERO_STR, zoomImgEl);
           if (targetAlt)
               zoomImgEl.alt = targetAlt;
           if (targetSrc)
@@ -480,22 +424,30 @@ var ImageZoom = (function () {
               setAttribute(ARIA_LABELLEDBY, targetLabelledBy, zoomImgEl);
           }
           modalEl = createModal();
+          appendChild(boundaryDivFirst, modalEl);
+          appendChild(closeBtnEl, modalEl);
           appendChild(zoomImgEl, modalEl);
-          appendChild(modalEl, wrapEl);
+          appendChild(boundaryDivLast, modalEl);
+          appendChild(modalEl, documentBody);
           addEventListener(KEYDOWN, handleDocumentKeyDown, document);
           addEventListener(SCROLL, handleScroll, scrollableEl);
       };
       var zoomNonImg = function () {
           if (!targetEl || state !== State.UNLOADED)
               return;
-          zoomEl = createDiv();
-          addEventListener(CLICK, handleZoomImgClick, zoomEl);
-          addEventListener(KEYDOWN, handleZoomImgKeyDown, zoomEl);
-          setAttribute(ARIA_DESCRIBEDBY, closeDescId, zoomEl);
+          boundaryDivFirst = createElement(DIV);
+          setAttribute(TABINDEX, '0', boundaryDivFirst);
+          addEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivFirst);
+          boundaryDivLast = createElement(DIV);
+          setAttribute(TABINDEX, '0', boundaryDivLast);
+          addEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivLast);
+          closeBtnEl = createElement(BUTTON);
+          setAttribute(STYLE, styleZoomBtnOut, closeBtnEl);
+          setAttribute(ARIA_LABEL, closeText, closeBtnEl);
+          addEventListener(CLICK, handleCloseBtnClick, closeBtnEl);
+          zoomEl = createElement(DIV);
           setAttribute(DATA_RMIZ_ZOOMED, '', zoomEl);
-          setAttribute(ROLE, BUTTON, zoomEl);
           setAttribute(STYLE, styleZoomStart, zoomEl);
-          setAttribute(TABINDEX, ZERO_STR, zoomEl);
           var cloneEl = targetEl.cloneNode(true);
           removeAttribute(ID, cloneEl);
           removeAttribute(TABINDEX, cloneEl);
@@ -505,23 +457,20 @@ var ImageZoom = (function () {
           else {
               removeAttribute(ROLE, cloneEl);
           }
-          if (originalAriaDescribedBy) {
-              setAttribute(ARIA_DESCRIBEDBY, originalAriaDescribedBy, cloneEl);
-          }
-          else {
-              removeAttribute(ARIA_DESCRIBEDBY, cloneEl);
-          }
-          addEventListener(CLICK, handleZoomImgClick, zoomEl);
+          addEventListener(CLICK, handleCloseBtnClick, zoomEl);
           appendChild(cloneEl, zoomEl);
           modalEl = createModal();
+          appendChild(boundaryDivFirst, modalEl);
+          appendChild(closeBtnEl, modalEl);
           appendChild(zoomEl, modalEl);
-          appendChild(modalEl, wrapEl);
+          appendChild(boundaryDivLast, modalEl);
+          appendChild(modalEl, documentBody);
           addEventListener(KEYDOWN, handleDocumentKeyDown, document);
           addEventListener(SCROLL, handleScroll, scrollableEl);
           handleZoomImgLoad();
       };
       var createModal = function () {
-          var el = createDiv();
+          var el = createElement(DIV);
           setAttribute(ARIA_LABEL, modalText, el);
           setAttribute(ARIA_MODAL, TRUE_STR, el);
           setAttribute(DATA_RMIZ_OVERLAY, '', el);
@@ -537,12 +486,12 @@ var ImageZoom = (function () {
                   ariaHiddenSiblings.push([el, ariaHiddenValue]);
               }
               el.setAttribute('aria-hidden', 'true');
-          }, wrapEl);
+          }, documentBody);
       };
       var ariaResetOtherContent = function () {
           forEachSibling(function (el) {
               el.removeAttribute('aria-hidden');
-          }, wrapEl);
+          }, documentBody);
           ariaHiddenSiblings.forEach(function (_a) {
               var el = _a[0], ariaHiddenValue = _a[1];
               el === null || el === void 0 ? void 0 : el.setAttribute('aria-hidden', ariaHiddenValue);
@@ -553,7 +502,7 @@ var ImageZoom = (function () {
           if (state === State.LOADED) {
               var el = isImg ? zoomImgEl : zoomEl;
               if (el) {
-                  el.blur();
+                  blur(el);
                   addEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, el);
               }
               if (modalEl) {
@@ -571,15 +520,24 @@ var ImageZoom = (function () {
   //
   // STYLING
   //
+  var stylePosAbsolute = 'position:absolute;';
+  var stylePosRelative = 'position:relative;';
+  var styleAllDirsZero = 'top:0;right:0;bottom:0;left:0;';
+  var styleWrap = stylePosRelative + 'display:inline-block;';
+  var styleWrapDiv = styleWrap + 'width:100%;';
   var styleCursorZoomIn = 'cursor:-webkit-zoom-in;cursor:zoom-in;';
   var styleCursorZoomOut = 'cursor:-webkit-zoom-out;cursor:zoom-out;';
+  var styleZoomBtn = stylePosAbsolute +
+      styleAllDirsZero +
+      'background:none;' +
+      'border:none;' +
+      'margin:0;' +
+      'padding:0;';
+  var styleZoomBtnIn = styleZoomBtn + styleCursorZoomIn;
+  var styleZoomBtnOut = styleZoomBtn + styleCursorZoomOut;
   var getStyleOverlay = function (backgroundColor, transitionDuration, zIndex) {
-      return styleCursorZoomOut +
-          'position:fixed;' +
-          'top:0;' +
-          'right:0;' +
-          'bottom:0;' +
-          'left:0;' +
+      return 'position:fixed;' +
+          styleAllDirsZero +
           'width:100%;' +
           'height:100%;' +
           '-webkit-transition-property:background-color;' +
@@ -591,9 +549,7 @@ var ImageZoom = (function () {
           ("z-index:" + zIndex + ";");
   };
   var styleVisibilityHidden = 'visibility:hidden;';
-  var styleHidden = 'display:none;';
-  var styleZoomed = styleCursorZoomOut +
-      'position:absolute;' +
+  var styleZoomed = stylePosAbsolute +
       '-webkit-transition-property:-webkit-transform;' +
       'transition-property:-webkit-transform;' +
       '-o-transition-property:transform;' +
@@ -615,14 +571,9 @@ var ImageZoom = (function () {
           ("transition-duration:" + transitionDuration + ";") +
           'transition-timing-function:ease;';
   };
-  var combineStyles = function (x, y) {
-      var safeX = (x || '').trim();
-      var separator = safeX.slice(-1) === ';' ? '' : ';';
-      return [safeX, y].join(separator);
-  };
   var getZoomImgStyle = function (transitionDuration, zoomMargin, targetEl, isImg, state) {
       if (!targetEl) {
-          return getZoomImgStyleStr(0, 0, 0, 0, 'none', '0ms');
+          return getZoomImgStyleStr(0, 0, 0, 0, 'none', ZERO_MS);
       }
       var _a = targetEl.getBoundingClientRect(), height = _a.height, left = _a.left, top = _a.top, width = _a.width;
       var originalTransform = targetEl.style.transform;
@@ -650,14 +601,7 @@ var ImageZoom = (function () {
           (originalTransform ? " " + originalTransform : '');
       return getZoomImgStyleStr(height, width, left, top, transform, transitionDuration);
   };
-  var isSelectKey = function (e) {
-      return e.key === 'Enter' || e.keyCode === 13 || e.key === 'Space' || e.keyCode === 32;
-  };
   var isEscapeKey = function (e) { return e.key === 'Escape' || e.keyCode === 27; };
-  var uniqueId = function (prefix) {
-      if (prefix === void 0) { prefix = ''; }
-      return prefix.concat(Math.random().toString(16).slice(-4));
-  };
   var getScale = function (height, width, zoomMargin) {
       var scaleX = window.innerWidth / (width + zoomMargin);
       var scaleY = window.innerHeight / (height + zoomMargin);
@@ -675,17 +619,16 @@ var ImageZoom = (function () {
           parent.removeChild(child);
       }
   };
-  var createDiv = function () { return document.createElement('div'); };
-  var createDescEl = function (id, text) {
-      var el = createDiv();
-      setAttribute(ID, id, el);
-      setAttribute(DATA_RMIZ_DESC, '', el);
-      setAttribute(STYLE, styleHidden, el);
-      setTextContent(text, el);
-      return el;
+  var createElement = function (type) { return document.createElement(type); };
+  var blur = function (el) {
+      if (el) {
+          el.blur();
+      }
   };
   var focus = function (el) {
-      el.focus({ preventScroll: true });
+      if (el) {
+          el.focus({ preventScroll: true });
+      }
   };
   var forEachSibling = function (handler, target) {
       var _a;
@@ -704,19 +647,22 @@ var ImageZoom = (function () {
           handler(el);
       }
   };
+  var replaceChild = function (parentNode, oldChild, newChild) {
+      if (parentNode && oldChild && newChild) {
+          parentNode.replaceChild(newChild, oldChild);
+      }
+  };
   var addEventListener = function (type, cb, el) {
       el.addEventListener(type, cb);
   };
   var removeEventListener = function (type, handler, el) {
       el.removeEventListener(type, handler);
   };
-  var getElementById = function (id) { return document.getElementById(id); };
   var getAttribute = function (attr, el) { return el.getAttribute(attr); };
   var removeAttribute = function (attr, el) { return el.removeAttribute(attr); };
   var setAttribute = function (attr, value, el) {
       return el.setAttribute(attr, value);
   };
-  var setTextContent = function (text, el) { return (el.textContent = text); };
 
   return ImageZoom;
 

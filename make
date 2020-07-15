@@ -84,7 +84,7 @@ function build_rmiz {
 
 function build_pkgs {
   build_iz
-  build_rmiz
+  #build_rmiz
 
   return 0
 }

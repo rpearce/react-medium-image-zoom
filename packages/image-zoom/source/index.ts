@@ -7,24 +7,22 @@ enum State {
 }
 
 type AriaHiddenSiblingsTuple = [HTMLElement, string][]
-type DescEl = HTMLDivElement | undefined
 type ModalEl = HTMLDivElement | undefined
 type ScrollableEl = HTMLElement | Window
-type WrapEl = HTMLDivElement
 type ZoomEl = HTMLDivElement | undefined
 type ZoomImgEl = HTMLImageElement | undefined
 
-const ARIA_DESCRIBEDBY = 'aria-describedby'
 const ARIA_LABEL = 'aria-label'
 const ARIA_LABELLEDBY = 'aria-labelledby'
 const ARIA_MODAL = 'aria-modal'
 const BUTTON = 'button'
 const CLICK = 'click'
-const DATA_RMIZ_DESC = 'data-rmiz-desc'
 const DATA_RMIZ_OVERLAY = 'data-rmiz-overlay'
 const DATA_RMIZ_WRAP = 'data-rmiz-wrap'
 const DATA_RMIZ_ZOOMED = 'data-rmiz-zoomed'
 const DIALOG = 'dialog'
+const DIV = 'div'
+const FOCUS = 'focus'
 const ID = 'id'
 const KEYDOWN = 'keydown'
 const LOAD = 'load'
@@ -35,8 +33,7 @@ const STYLE = 'style'
 const TABINDEX = 'tabindex'
 const TRANSITIONEND = 'transitionend'
 const TRUE_STR = 'true'
-const ZERO_STR = '0'
-const ZERO_MS = ZERO_STR + 'ms'
+const ZERO_MS = '0ms'
 
 export interface ImageZoomOpts {
   closeText?: string
@@ -67,11 +64,11 @@ export interface ImageZoomReturnType {
 
 const ImageZoom = (
   {
-    closeText = 'Press to unzoom image',
+    closeText = 'Unzoom image',
     isControlled = false,
     modalText = 'Zoomed item',
     onZoomChange,
-    openText = 'Press to zoom image',
+    openText = 'Zoom image',
     overlayBgColorEnd = 'rgba(255,255,255,0.95)',
     overlayBgColorStart = 'rgba(255,255,255,0)',
     scrollableEl: _scrollableEl,
@@ -81,12 +78,8 @@ const ImageZoom = (
   }: ImageZoomOpts = {},
   targetEl: HTMLElement
 ): ImageZoomReturnType => {
-  const closeDescId = uniqueId('rmiz-close-')
-  const openDescId = uniqueId('rmiz-open-')
-  const originalAriaDescribedBy = getAttribute(ARIA_DESCRIBEDBY, targetEl)
   const originalRole = getAttribute(ROLE, targetEl)
-  const originalStyle = getAttribute(STYLE, targetEl)
-  const originalTabIndex = getAttribute(TABINDEX, targetEl)
+  const isDisplayBlock = window.getComputedStyle(targetEl).display === 'block'
   const isImgEl = targetEl.tagName === 'IMG'
   const isSvgSrc = isImgEl && SVG_REGEX.test(
     (targetEl as HTMLImageElement).currentSrc
@@ -94,24 +87,24 @@ const ImageZoom = (
   const isImg = !isSvgSrc && isImgEl
   const documentBody = document.body
 
-
   let ariaHiddenSiblings: AriaHiddenSiblingsTuple = []
-  let closeDescEl: DescEl
+  let closeBtnEl: HTMLButtonElement | undefined
+  let boundaryDivFirst: HTMLDivElement | undefined
+  let boundaryDivLast: HTMLDivElement | undefined
   let modalEl: ModalEl
   let motionPref: MediaQueryList | undefined
-  let openDescEl: DescEl
+  let openBtnEl: HTMLButtonElement | undefined
   let scrollableEl: ScrollableEl = _scrollableEl || window
   let state: State = State.UNLOADED
-  let wrapEl: WrapEl
+  let targetCloneEl: HTMLElement | undefined
+  let wrapEl: HTMLDivElement | undefined
   let zoomEl: ZoomEl
   let zoomImgEl: ZoomImgEl
 
   const init = (): void => {
     addEventListener(RESIZE, handleResize, window)
 
-    initWrap()
     initMotionPref()
-    initDescriptions()
 
     if (isImg && !(targetEl as HTMLImageElement).complete) {
       targetEl.addEventListener(LOAD, () => {
@@ -124,30 +117,23 @@ const ImageZoom = (
     }
   }
 
-  const initWrap = (): void => {
-    const foundWrapEl = documentBody.querySelector(`[${DATA_RMIZ_WRAP}]`) as HTMLElement
-
-    if (foundWrapEl) {
-      wrapEl = foundWrapEl as WrapEl
-    } else {
-      wrapEl = createDiv()
-      setAttribute(DATA_RMIZ_WRAP, '', wrapEl)
-      appendChild(wrapEl, documentBody)
-    }
-  }
+  // START MOTION PREFS
 
   const initMotionPref = (): void => {
     motionPref = window.matchMedia('(prefers-reduced-motion:reduce)')
-    motionPref.addListener(handleMotionPref) // NOT addEventListener b/c compatibility
+    motionPref.addListener(handleMotionPref) // NOT addEventListener because compatibility
   }
 
-  const initDescriptions = (): void => {
-    openDescEl = createDescEl(openDescId, openText)
-    closeDescEl = createDescEl(closeDescId, closeText)
-
-    appendChild(openDescEl, wrapEl)
-    appendChild(closeDescEl, wrapEl)
+  const handleMotionPref = (): void => {
+    transitionDuration = ZERO_MS
   }
+
+  const cleanupMotionPref = (): void => {
+    motionPref?.removeListener(handleMotionPref) // NOT removeEventListener because compatibility
+    motionPref = undefined
+  }
+
+  // END MOTION PREFS
 
   const initImg = (): void => {
     if (!targetEl || state !== State.UNLOADED) return
@@ -166,47 +152,44 @@ const ImageZoom = (
       : getScale(height, width, zoomMargin)
 
     if (currentScale > 1) {
-      setAttribute(ARIA_DESCRIBEDBY, openDescId, targetEl)
-      setAttribute(ROLE, BUTTON, targetEl)
-      setAttribute(TABINDEX, originalTabIndex || ZERO_STR, targetEl)
-      setAttribute(
-        STYLE,
-        combineStyles(originalStyle, styleCursorZoomIn),
-        targetEl
-      )
-      addEventListener(CLICK, handleImgClick, targetEl)
-      addEventListener(KEYDOWN, handleImgKeyDown, targetEl)
+      if (!targetCloneEl) {
+        targetCloneEl = targetEl.cloneNode(true) as HTMLElement
+        wrapEl = createElement(DIV) as HTMLDivElement
+        openBtnEl = createElement(BUTTON) as HTMLButtonElement
+
+        setAttribute(DATA_RMIZ_WRAP, '', wrapEl)
+        setAttribute(
+          STYLE,
+          isDisplayBlock ? styleWrapDiv : styleWrap,
+          wrapEl
+        )
+
+        setAttribute(ARIA_LABEL, openText, openBtnEl)
+        setAttribute(STYLE, styleZoomBtnIn, openBtnEl)
+        addEventListener(CLICK, handleOpenBtnClick, openBtnEl)
+
+        appendChild(targetCloneEl, wrapEl)
+        appendChild(openBtnEl, wrapEl)
+
+        replaceChild(targetEl.parentNode as HTMLElement, targetEl, wrapEl)
+      }
     } else {
-      cleanupImg()
+      cleanupZoom()
+      cleanupDOMMutations()
     }
   }
 
   const update: Update = (opts = {}) => {
+    if (opts.closeText) closeText = opts.closeText
     if (opts.modalText) modalText = opts.modalText
+    if (opts.openText) openText = opts.openText
     if (opts.overlayBgColorEnd) overlayBgColorEnd = opts.overlayBgColorEnd
     if (opts.overlayBgColorStart) overlayBgColorStart = opts.overlayBgColorStart
     if (opts.transitionDuration) transitionDuration = opts.transitionDuration
     if (opts.zoomMargin) zoomMargin = opts.zoomMargin
     if (opts.zoomZindex) zoomZindex = opts.zoomZindex
-
-    if (opts.closeText) {
-      closeText = opts.closeText
-      if (closeDescEl) {
-        setTextContent(closeText, closeDescEl)
-      }
-    }
-
-    if (opts.openText) {
-      openText = opts.openText
-      if (openDescEl) {
-        setTextContent(openText, openDescEl)
-      }
-    }
-
-    if (state === State.UNLOADED) {
-      if (opts.scrollableEl) {
-        scrollableEl = opts.scrollableEl
-      }
+    if (state === State.UNLOADED && opts.scrollableEl) {
+      scrollableEl = opts.scrollableEl
     }
 
     setZoomImgStyle()
@@ -218,98 +201,74 @@ const ImageZoom = (
     }
   }
 
+  // START CLEANUP
+
   const cleanup = (): void => {
-    cleanupZoomImg()
-    cleanupImg()
-    cleanupModal()
-    cleanupDescriptions()
+    cleanupZoom()
 
     if (isImg && targetEl) {
       removeEventListener(LOAD, initImg, targetEl)
     }
 
-    if (motionPref) {
-      motionPref.removeListener(handleMotionPref)
-      motionPref = undefined
-    }
+    cleanupDOMMutations()
+    cleanupMotionPref()
 
     removeEventListener(RESIZE, handleResize, window)
   }
 
-  const cleanupDescriptions = (): void => {
-    const openEl = getElementById(openDescId)
-    const closeEl = getElementById(closeDescId)
+  const cleanupDOMMutations = (): void => {
+    if (openBtnEl) {
+      removeEventListener(CLICK, handleOpenBtnClick, openBtnEl)
+    }
 
-    removeChild(openEl, wrapEl)
-    removeChild(closeEl, wrapEl)
+    replaceChild(wrapEl?.parentNode as HTMLElement, wrapEl, targetEl)
+
+    openBtnEl = undefined
+    wrapEl = undefined
+    targetCloneEl = undefined
   }
 
-  const cleanupImg = (): void => {
-    if (!targetEl) return
-
-    removeEventListener(KEYDOWN, handleImgKeyDown, targetEl)
-    removeEventListener(CLICK, handleImgClick, targetEl)
-
-    if (originalTabIndex) {
-      setAttribute(TABINDEX, originalTabIndex, targetEl)
-    } else {
-      removeAttribute(TABINDEX, targetEl)
-    }
-
-    if (originalStyle) {
-      setAttribute(STYLE, originalStyle, targetEl)
-    } else {
-      removeAttribute(STYLE, targetEl)
-    }
-
-    if (originalRole) {
-      setAttribute(ROLE, originalRole, targetEl)
-    } else {
-      removeAttribute(ROLE, targetEl)
-    }
-
-    if (originalAriaDescribedBy) {
-      setAttribute(ARIA_DESCRIBEDBY, originalAriaDescribedBy, targetEl)
-    } else {
-      removeAttribute(ARIA_DESCRIBEDBY, targetEl)
-    }
-  }
-
-  const cleanupZoomImg = (): void => {
+  const cleanupZoom = (): void => {
     const el = isImg ? zoomImgEl : zoomEl
 
     if (el) {
       removeEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, el)
       removeEventListener(TRANSITIONEND, handleZoomTransitionEnd, el)
-      removeEventListener(CLICK, handleZoomImgClick, el)
-      removeEventListener(KEYDOWN, handleZoomImgKeyDown, el)
       removeEventListener(LOAD, handleZoomImgLoad, el)
-
       removeChild(el, modalEl)
+    }
+
+    if (closeBtnEl) {
+      removeEventListener(CLICK, handleCloseBtnClick, closeBtnEl)
+    }
+
+    if (boundaryDivFirst) {
+      removeEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivFirst)
+    }
+
+    if (boundaryDivLast) {
+      removeEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivLast)
+    }
+
+    if (modalEl) {
+      removeEventListener(CLICK, handleModalClick, modalEl)
+      removeChild(modalEl, documentBody)
     }
 
     zoomImgEl = undefined
     zoomEl = undefined
+    closeBtnEl = undefined
+    boundaryDivFirst = undefined
+    boundaryDivLast = undefined
+    modalEl = undefined
 
     removeEventListener(SCROLL, handleScroll, scrollableEl)
     removeEventListener(KEYDOWN, handleDocumentKeyDown, document)
   }
 
-  const cleanupModal = (): void => {
-    if (!modalEl) return
+  // END CLEANUP
 
-    removeEventListener(CLICK, handleModalClick, modalEl)
-
-    removeChild(modalEl, wrapEl)
-
-    modalEl = undefined
-  }
-
-  const handleMotionPref = (): void => {
-    transitionDuration = ZERO_MS
-  }
-
-  const handleImgClick = (e: MouseEvent): void => {
+  const handleOpenBtnClick = (e: MouseEvent): void => {
     e.preventDefault()
 
     if (onZoomChange) {
@@ -321,7 +280,7 @@ const ImageZoom = (
     }
   }
 
-  const handleZoomImgClick = (e: MouseEvent): void => {
+  const handleCloseBtnClick = (e: MouseEvent): void => {
     e.preventDefault()
 
     if (onZoomChange) {
@@ -333,32 +292,8 @@ const ImageZoom = (
     }
   }
 
-  const handleImgKeyDown = (e: KeyboardEvent): void => {
-    if (isSelectKey(e)) {
-      e.preventDefault()
-
-      if (onZoomChange) {
-        onZoomChange(true)
-      }
-
-      if (!isControlled) {
-        zoom()
-      }
-    }
-  }
-
-  const handleZoomImgKeyDown = (e: KeyboardEvent): void => {
-    if (isSelectKey(e)) {
-      e.preventDefault()
-
-      if (onZoomChange) {
-        onZoomChange(false)
-      }
-
-      if (!isControlled) {
-        unzoom()
-      }
-    }
+  const handleFocusBoundaryDiv = (): void => {
+    focus(closeBtnEl)
   }
 
   const handleResize = (): void => {
@@ -370,20 +305,12 @@ const ImageZoom = (
   }
 
   const handleZoomTransitionEnd = (): void => {
-    const el = zoomImgEl || zoomEl
-
-    if (el) {
-      focus(el)
-    }
+    focus(closeBtnEl)
   }
 
   const handleZoomImgLoad = (): void => {
-    if (targetEl) {
-      setAttribute(
-        STYLE,
-        combineStyles(originalStyle, styleVisibilityHidden),
-        targetEl
-      )
+    if (targetCloneEl) {
+      targetCloneEl.style.visibility = 'hidden'
     }
 
     if (modalEl) {
@@ -405,21 +332,14 @@ const ImageZoom = (
   }
 
   const handleUnzoomTransitionEnd = (): void => {
-    if (!targetEl) return
+    if (!targetCloneEl) return
 
-    setAttribute(
-      STYLE,
-      combineStyles(originalStyle, styleCursorZoomIn),
-      targetEl
-    )
+    targetCloneEl.style.visibility = ''
 
     // timeout for Safari flickering issue
     window.setTimeout(() => {
-      cleanupZoomImg()
-      cleanupModal()
-
-      focus(targetEl)
-
+      cleanupZoom()
+      focus(openBtnEl)
       setState(State.UNLOADED)
     }, 0)
   }
@@ -467,7 +387,7 @@ const ImageZoom = (
   }
 
   const setZoomImgStyle = (instant = false): void => {
-    if (!targetEl) return
+    if (!targetCloneEl) return
 
     const el = isImg ? zoomImgEl : zoomEl
 
@@ -477,7 +397,7 @@ const ImageZoom = (
         getZoomImgStyle(
           instant ? ZERO_MS : transitionDuration,
           zoomMargin,
-          targetEl,
+          targetCloneEl,
           isImg,
           state
         ),
@@ -493,28 +413,37 @@ const ImageZoom = (
       zoomNonImg()
     }
 
+    blur(openBtnEl)
     ariaHideOtherContent()
   }
 
   const zoomImg = (): void => {
-    if (!targetEl || state !== State.UNLOADED) return
+    if (!targetCloneEl || state !== State.UNLOADED) return
 
-    const targetAlt = (targetEl as HTMLImageElement).alt
-    const targetLabel = getAttribute(ARIA_LABEL, targetEl)
-    const targetLabelledBy = getAttribute(ARIA_LABELLEDBY, targetEl)
-    const targetSizes = (targetEl as HTMLImageElement).sizes
-    const targetSrc = (targetEl as HTMLImageElement).src
-    const targetSrcset = (targetEl as HTMLImageElement).srcset
+    const targetAlt = (targetCloneEl as HTMLImageElement).alt
+    const targetLabel = getAttribute(ARIA_LABEL, targetCloneEl)
+    const targetLabelledBy = getAttribute(ARIA_LABELLEDBY, targetCloneEl)
+    const targetSizes = (targetCloneEl as HTMLImageElement).sizes
+    const targetSrc = (targetCloneEl as HTMLImageElement).src
+    const targetSrcset = (targetCloneEl as HTMLImageElement).srcset
+
+    boundaryDivFirst = createElement(DIV) as HTMLDivElement
+    setAttribute(TABINDEX, '0', boundaryDivFirst)
+    addEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivFirst)
+
+    boundaryDivLast = createElement(DIV) as HTMLDivElement
+    setAttribute(TABINDEX, '0', boundaryDivLast)
+    addEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivLast)
+
+    closeBtnEl = createElement(BUTTON) as HTMLButtonElement
+    setAttribute(STYLE, styleZoomBtnOut, closeBtnEl)
+    setAttribute(ARIA_LABEL, closeText, closeBtnEl)
+    addEventListener(CLICK, handleCloseBtnClick, closeBtnEl)
 
     zoomImgEl = new Image()
     addEventListener(LOAD, handleZoomImgLoad, zoomImgEl)
-    addEventListener(CLICK, handleZoomImgClick, zoomImgEl)
-    addEventListener(KEYDOWN, handleZoomImgKeyDown, zoomImgEl)
-    setAttribute(ARIA_DESCRIBEDBY, closeDescId, zoomImgEl)
     setAttribute(DATA_RMIZ_ZOOMED, '', zoomImgEl)
-    setAttribute(ROLE, BUTTON, zoomImgEl)
     setAttribute(STYLE, styleZoomStart, zoomImgEl)
-    setAttribute(TABINDEX, ZERO_STR, zoomImgEl)
 
     if (targetAlt) zoomImgEl.alt = targetAlt
     if (targetSrc) zoomImgEl.src = targetSrc
@@ -527,8 +456,11 @@ const ImageZoom = (
 
     modalEl = createModal()
 
+    appendChild(boundaryDivFirst, modalEl)
+    appendChild(closeBtnEl, modalEl)
     appendChild(zoomImgEl, modalEl)
-    appendChild(modalEl, wrapEl)
+    appendChild(boundaryDivLast, modalEl)
+    appendChild(modalEl, documentBody)
 
     addEventListener(KEYDOWN, handleDocumentKeyDown, document)
     addEventListener(SCROLL, handleScroll, scrollableEl)
@@ -537,14 +469,22 @@ const ImageZoom = (
   const zoomNonImg = (): void => {
     if (!targetEl || state !== State.UNLOADED) return
 
-    zoomEl = createDiv()
-    addEventListener(CLICK, handleZoomImgClick, zoomEl)
-    addEventListener(KEYDOWN, handleZoomImgKeyDown, zoomEl)
-    setAttribute(ARIA_DESCRIBEDBY, closeDescId, zoomEl)
+    boundaryDivFirst = createElement(DIV) as HTMLDivElement
+    setAttribute(TABINDEX, '0', boundaryDivFirst)
+    addEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivFirst)
+
+    boundaryDivLast = createElement(DIV) as HTMLDivElement
+    setAttribute(TABINDEX, '0', boundaryDivLast)
+    addEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivLast)
+
+    closeBtnEl = createElement(BUTTON) as HTMLButtonElement
+    setAttribute(STYLE, styleZoomBtnOut, closeBtnEl)
+    setAttribute(ARIA_LABEL, closeText, closeBtnEl)
+    addEventListener(CLICK, handleCloseBtnClick, closeBtnEl)
+
+    zoomEl = createElement(DIV) as HTMLDivElement
     setAttribute(DATA_RMIZ_ZOOMED, '', zoomEl)
-    setAttribute(ROLE, BUTTON, zoomEl)
     setAttribute(STYLE, styleZoomStart, zoomEl)
-    setAttribute(TABINDEX, ZERO_STR, zoomEl)
 
     const cloneEl = targetEl.cloneNode(true) as HTMLElement
     removeAttribute(ID, cloneEl)
@@ -554,18 +494,16 @@ const ImageZoom = (
     } else {
       removeAttribute(ROLE, cloneEl)
     }
-    if (originalAriaDescribedBy) {
-      setAttribute(ARIA_DESCRIBEDBY, originalAriaDescribedBy, cloneEl)
-    } else {
-      removeAttribute(ARIA_DESCRIBEDBY, cloneEl)
-    }
-    addEventListener(CLICK, handleZoomImgClick, zoomEl)
+    addEventListener(CLICK, handleCloseBtnClick, zoomEl)
     appendChild(cloneEl, zoomEl)
 
     modalEl = createModal()
 
+    appendChild(boundaryDivFirst, modalEl)
+    appendChild(closeBtnEl, modalEl)
     appendChild(zoomEl, modalEl)
-    appendChild(modalEl, wrapEl)
+    appendChild(boundaryDivLast, modalEl)
+    appendChild(modalEl, documentBody)
 
     addEventListener(KEYDOWN, handleDocumentKeyDown, document)
     addEventListener(SCROLL, handleScroll, scrollableEl)
@@ -578,7 +516,7 @@ const ImageZoom = (
   }
 
   const createModal: CreateModal = () => {
-    const el = createDiv()
+    const el = createElement(DIV) as HTMLDivElement
 
     setAttribute(ARIA_LABEL, modalText, el)
     setAttribute(ARIA_MODAL, TRUE_STR, el)
@@ -607,13 +545,13 @@ const ImageZoom = (
       }
 
       el.setAttribute('aria-hidden', 'true')
-    }, wrapEl)
+    }, documentBody)
   }
 
   const ariaResetOtherContent = (): void => {
     forEachSibling((el) => {
       el.removeAttribute('aria-hidden')
-    }, wrapEl)
+    }, documentBody)
 
     ariaHiddenSiblings.forEach(([el, ariaHiddenValue]) => {
       el?.setAttribute('aria-hidden', ariaHiddenValue)
@@ -627,7 +565,7 @@ const ImageZoom = (
       const el = isImg ? zoomImgEl : zoomEl
 
       if (el) {
-        el.blur()
+        blur(el)
         addEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, el)
       }
 
@@ -654,9 +592,26 @@ export default ImageZoom
 // STYLING
 //
 
-const styleCursorZoomIn = 'cursor:-webkit-zoom-in;cursor:zoom-in;'
+const stylePosAbsolute = 'position:absolute;'
+const stylePosRelative = 'position:relative;'
+const styleAllDirsZero = 'top:0;right:0;bottom:0;left:0;'
 
+const styleWrap = stylePosRelative + 'display:inline-block;'
+const styleWrapDiv = styleWrap + 'width:100%;'
+
+const styleCursorZoomIn = 'cursor:-webkit-zoom-in;cursor:zoom-in;'
 const styleCursorZoomOut = 'cursor:-webkit-zoom-out;cursor:zoom-out;'
+
+const styleZoomBtn =
+  stylePosAbsolute +
+  styleAllDirsZero +
+  'background:none;' +
+  'border:none;' +
+  'margin:0;' +
+  'padding:0;'
+
+const styleZoomBtnIn = styleZoomBtn + styleCursorZoomIn
+const styleZoomBtnOut = styleZoomBtn + styleCursorZoomOut
 
 interface GetStyleOverlay {
   (backgroundColor: string, transitionDuration: string, zIndex: string): string
@@ -667,12 +622,8 @@ const getStyleOverlay: GetStyleOverlay = (
   transitionDuration,
   zIndex
 ) =>
-  styleCursorZoomOut +
   'position:fixed;' +
-  'top:0;' +
-  'right:0;' +
-  'bottom:0;' +
-  'left:0;' +
+  styleAllDirsZero +
   'width:100%;' +
   'height:100%;' +
   '-webkit-transition-property:background-color;' +
@@ -685,11 +636,8 @@ const getStyleOverlay: GetStyleOverlay = (
 
 const styleVisibilityHidden = 'visibility:hidden;'
 
-const styleHidden = 'display:none;'
-
 const styleZoomed =
-  styleCursorZoomOut +
-  'position:absolute;' +
+  stylePosAbsolute +
   '-webkit-transition-property:-webkit-transform;' +
   'transition-property:-webkit-transform;' +
   '-o-transition-property:transform;' +
@@ -731,17 +679,6 @@ const getZoomImgStyleStr: GetZoomImgStyleStr = (
   `transition-duration:${transitionDuration};` +
   'transition-timing-function:ease;'
 
-interface CombineStyles {
-  (x: string | null, y: string): string
-}
-
-const combineStyles: CombineStyles = (x, y) => {
-  const safeX = (x || '').trim()
-  const separator = safeX.slice(-1) === ';' ? '' : ';'
-
-  return [safeX, y].join(separator)
-}
-
 interface GetZoomImgStyle {
   (
     transitionDuration: string,
@@ -760,7 +697,7 @@ const getZoomImgStyle: GetZoomImgStyle = (
   state
 ) => {
   if (!targetEl) {
-    return getZoomImgStyleStr(0, 0, 0, 0, 'none', '0ms')
+    return getZoomImgStyleStr(0, 0, 0, 0, 'none', ZERO_MS)
   }
 
   const { height, left, top, width } = targetEl.getBoundingClientRect()
@@ -830,17 +767,11 @@ interface IsKey {
   (e: KeyboardEvent): boolean
 }
 
-const isSelectKey: IsKey = (e) =>
-  e.key === 'Enter' || e.keyCode === 13 || e.key === 'Space' || e.keyCode === 32
-
 const isEscapeKey: IsKey = (e) => e.key === 'Escape' || e.keyCode === 27
 
 interface UniqueId {
   (prefix?: string): string
 }
-
-const uniqueId: UniqueId = (prefix = '') =>
-  prefix.concat(Math.random().toString(16).slice(-4))
 
 interface GetScale {
   (height: number, width: number, zoomMargin: number): number
@@ -903,33 +834,30 @@ const removeChild: RemoveChild = (child, parent) => {
   }
 }
 
-interface CreateDiv {
-  (): HTMLDivElement
+interface CreateElement {
+  (type: string): HTMLElement
 }
 
-const createDiv: CreateDiv = () => document.createElement('div')
+const createElement: CreateElement = (type) => document.createElement(type)
 
-interface CreateDescEl {
-  (id: string, text: string): HTMLDivElement
+interface Blur {
+  (el: HTMLElement | null | undefined): void
 }
 
-const createDescEl: CreateDescEl = (id, text) => {
-  const el = createDiv()
-
-  setAttribute(ID, id, el)
-  setAttribute(DATA_RMIZ_DESC, '', el)
-  setAttribute(STYLE, styleHidden, el)
-  setTextContent(text, el)
-
-  return el
+const blur: Blur = (el) => {
+  if (el) {
+    el.blur()
+  }
 }
 
 interface Focus {
-  (el: HTMLElement): void
+  (el: HTMLElement | null | undefined): void
 }
 
 const focus: Focus = (el) => {
-  el.focus({ preventScroll: true })
+  if (el) {
+    el.focus({ preventScroll: true })
+  }
 }
 
 interface ForEachSibling {
@@ -959,6 +887,20 @@ const forEachSibling: ForEachSibling = (handler, target) => {
   }
 }
 
+interface ReplaceChild {
+  (
+    parentNode: HTMLElement | null | undefined,
+    oldChild: HTMLElement | null | undefined,
+    newChild: HTMLElement | null | undefined
+  ): void
+}
+
+const replaceChild: ReplaceChild = (parentNode, oldChild, newChild) => {
+  if (parentNode && oldChild && newChild) {
+    parentNode.replaceChild(newChild, oldChild)
+  }
+}
+
 interface AddEventListener {
   <A extends EventTarget, E extends Event>(
     type: string,
@@ -983,12 +925,6 @@ const removeEventListener: RemoveEventListener = (type, handler, el) => {
   el.removeEventListener(type, handler as (e: Event) => void)
 }
 
-interface GetElementById {
-  (id: string): HTMLElement | null
-}
-
-const getElementById: GetElementById = (id) => document.getElementById(id)
-
 interface GetAttribute {
   (attr: string, el: HTMLElement): string | null
 }
@@ -1007,9 +943,3 @@ interface SetAttribute {
 
 const setAttribute: SetAttribute = (attr, value, el) =>
   el.setAttribute(attr, value)
-
-interface SetTextContent {
-  (text: string, el: HTMLElement): void
-}
-
-const setTextContent: SetTextContent = (text, el) => (el.textContent = text)

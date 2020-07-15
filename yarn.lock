@@ -702,21 +702,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:5.11.0":
-  version: 5.11.0
-  resolution: "@testing-library/jest-dom@npm:5.11.0"
+"@testing-library/jest-dom@npm:5.11.1":
+  version: 5.11.1
+  resolution: "@testing-library/jest-dom@npm:5.11.1"
   dependencies:
     "@babel/runtime": ^7.9.2
     "@types/testing-library__jest-dom": ^5.9.1
     aria-query: ^4.2.2
     chalk: ^3.0.0
-    css: ^2.2.4
+    css: ^3.0.0
     css.escape: ^1.5.1
     jest-diff: ^25.1.0
     jest-matcher-utils: ^25.1.0
     lodash: ^4.17.15
     redent: ^3.0.0
-  checksum: c6f6270ca2f4cf88af01cb8872ab2ee92f276a1434e43a49f59fcd2265710f6ff828900b54687f46ec79140646f2eec8765a8162dbe3349010d7841f8fa3567b
+  checksum: 15151fde17fc75dacc1a8c065cf23495286afd6605dc3ec39ef54d41b8880b689036976f0f0efd0c8f1cc2ee99bc2ce5d487fdb7cd3e2da9f6b27574684fca72
   languageName: node
   linkType: hard
 
@@ -2140,15 +2140,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css@npm:^2.2.4":
-  version: 2.2.4
-  resolution: "css@npm:2.2.4"
+"css@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "css@npm:3.0.0"
   dependencies:
-    inherits: ^2.0.3
+    inherits: ^2.0.4
     source-map: ^0.6.1
-    source-map-resolve: ^0.5.2
-    urix: ^0.1.0
-  checksum: b94365b3c07c35529beab95f679102c66d1027774c2e80f5179a6ee11ccc440046aeb7771df33569334bbdfd8ea753dd132197040dc079fcd881141348a1886f
+    source-map-resolve: ^0.6.0
+  checksum: a62cc8350fa1f6805a81447dc4a1df30f37316bcb671e4669531b5ddf24a8dd7024324ce321a8ec0b1dd48baafb38781ae4b0d80fa7c7f5adab5f46b8b9e29c8
   languageName: node
   linkType: hard
 
@@ -3448,7 +3447,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"inherits@npm:2, inherits@npm:^2.0.3, inherits@npm:~2.0.3":
+"inherits@npm:2, inherits@npm:^2.0.4, inherits@npm:~2.0.3":
   version: 2.0.4
   resolution: "inherits@npm:2.0.4"
   checksum: 98426da247ddfc3dcd7d7daedd90c3ca32d5b08deca08949726f12d49232aef94772a07b36cf4ff833e105ae2ef931777f6de4a6dd8245a216b9299ad4a50bea
@@ -6086,7 +6085,7 @@ resolve@1.15.1:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@testing-library/jest-dom": 5.11.0
+    "@testing-library/jest-dom": 5.11.1
     "@testing-library/react": 10.4.7
     "@types/jest": 26.0.4
     "@types/node": 14.0.23
@@ -6418,7 +6417,7 @@ resolve@1.15.1:
   languageName: node
   linkType: hard
 
-"source-map-resolve@npm:^0.5.0, source-map-resolve@npm:^0.5.2":
+"source-map-resolve@npm:^0.5.0":
   version: 0.5.3
   resolution: "source-map-resolve@npm:0.5.3"
   dependencies:
@@ -6428,6 +6427,16 @@ resolve@1.15.1:
     source-map-url: ^0.4.0
     urix: ^0.1.0
   checksum: 042ad0c0ba70458ba45fc8726a4eb61068ca0a5273578994803e25fc0fb8da00854cf5004616c9b6d0cb7fcd528c50313789d75dfc56a2f5c789cbd332bf4331
+  languageName: node
+  linkType: hard
+
+"source-map-resolve@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "source-map-resolve@npm:0.6.0"
+  dependencies:
+    atob: ^2.1.2
+    decode-uri-component: ^0.2.0
+  checksum: 9bbd2656937ce422f1526026638a91dacba0822f1ab954ac34728c9b4f2960dbfc22a8463af9fbf74f28f3722263444df79b2b5ffa07de07dbcda2ec5a8c7513
   languageName: node
   linkType: hard
 
