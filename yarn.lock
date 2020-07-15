@@ -720,16 +720,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:10.4.6":
-  version: 10.4.6
-  resolution: "@testing-library/react@npm:10.4.6"
+"@testing-library/react@npm:10.4.7":
+  version: 10.4.7
+  resolution: "@testing-library/react@npm:10.4.7"
   dependencies:
     "@babel/runtime": ^7.10.3
     "@testing-library/dom": ^7.17.1
   peerDependencies:
     react: "*"
     react-dom: "*"
-  checksum: 8b3bbb3dbee4dec3de4d1a702e12c7c8423f02ed2e64f33678ce77fbd8ea2aa9d329fe085cc8d5bf0b78051884c1722e15a50a7d99da0fcd15c41166060bcef6
+  checksum: 2e640e25219886afbaa363a9bac81d2c29317c40ef3d8fb7c5b620e90872fa2671ef313f0fc7e3dab1b9eb3ed5c9b7c628b3a04abb1106d60dbab146a9fc0aa1
   languageName: node
   linkType: hard
 
@@ -6087,7 +6087,7 @@ resolve@1.15.1:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@testing-library/jest-dom": 5.11.0
-    "@testing-library/react": 10.4.6
+    "@testing-library/react": 10.4.7
     "@types/jest": 26.0.4
     "@types/node": 14.0.23
     "@types/react": 16.9.43
