@@ -297,7 +297,7 @@ var ImageZoom = (function () {
       };
       var handleResize = function () {
           if (state === State.LOADED) {
-              window.requestAnimationFrame(function () { return setZoomImgStyle(true); });
+              setZoomImgStyle(true);
           }
           else {
               initImg();
@@ -344,14 +344,12 @@ var ImageZoom = (function () {
           }
       };
       var handleScroll = function () {
-          window.requestAnimationFrame(function () {
-              if (onZoomChange) {
-                  return onZoomChange(false);
-              }
-              if (!isControlled) {
-                  return unzoom();
-              }
-          });
+          if (onZoomChange) {
+              onZoomChange(false);
+          }
+          if (!isControlled) {
+              unzoom();
+          }
       };
       var handleDocumentKeyDown = function (e) {
           if (isEscapeKey(e)) {
@@ -520,11 +518,15 @@ var ImageZoom = (function () {
   //
   // STYLING
   //
+  var styleAllDirsZero = 'top:0;right:0;bottom:0;left:0;';
   var stylePosAbsolute = 'position:absolute;';
   var stylePosRelative = 'position:relative;';
-  var styleAllDirsZero = 'top:0;right:0;bottom:0;left:0;';
-  var styleWrap = stylePosRelative + 'display:inline-block;';
-  var styleWrapDiv = styleWrap + 'width:100%;';
+  var styleVisibilityHidden = 'visibility:hidden;';
+  var styleWidth100pct = 'width:100%;';
+  var styleWrap = stylePosRelative +
+      'display:inline-flex;' +
+      'align-items:flex-start;';
+  var styleWrapDiv = styleWrap + styleWidth100pct;
   var styleCursorZoomIn = 'cursor:-webkit-zoom-in;cursor:zoom-in;';
   var styleCursorZoomOut = 'cursor:-webkit-zoom-out;cursor:zoom-out;';
   var styleZoomBtn = stylePosAbsolute +
@@ -535,20 +537,6 @@ var ImageZoom = (function () {
       'padding:0;';
   var styleZoomBtnIn = styleZoomBtn + styleCursorZoomIn;
   var styleZoomBtnOut = styleZoomBtn + styleCursorZoomOut;
-  var getStyleOverlay = function (backgroundColor, transitionDuration, zIndex) {
-      return 'position:fixed;' +
-          styleAllDirsZero +
-          'width:100%;' +
-          'height:100%;' +
-          '-webkit-transition-property:background-color;' +
-          '-o-transition-property:background-color;' +
-          'transition-property:background-color;' +
-          ("background-color:" + backgroundColor + ";") +
-          ("transition-duration:" + transitionDuration + ";") +
-          'transition-timing-function:ease;' +
-          ("z-index:" + zIndex + ";");
-  };
-  var styleVisibilityHidden = 'visibility:hidden;';
   var styleZoomed = stylePosAbsolute +
       '-webkit-transition-property:-webkit-transform;' +
       'transition-property:-webkit-transform;' +
@@ -559,6 +547,19 @@ var ImageZoom = (function () {
       '-ms-transform-origin:center center;' +
       'transform-origin:center center;';
   var styleZoomStart = styleZoomed + styleVisibilityHidden;
+  var getStyleOverlay = function (backgroundColor, transitionDuration, zIndex) {
+      return 'position:fixed;' +
+          styleAllDirsZero +
+          styleWidth100pct +
+          'height:100%;' +
+          '-webkit-transition-property:background-color;' +
+          '-o-transition-property:background-color;' +
+          'transition-property:background-color;' +
+          ("background-color:" + backgroundColor + ";") +
+          ("transition-duration:" + transitionDuration + ";") +
+          'transition-timing-function:cubic-bezier(0.2,0,0.2,1);' +
+          ("z-index:" + zIndex + ";");
+  };
   var getZoomImgStyleStr = function (height, width, left, top, transform, transitionDuration) {
       return styleZoomed +
           ("height:" + height + "px;") +

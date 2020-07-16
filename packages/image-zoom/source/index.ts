@@ -298,7 +298,7 @@ const ImageZoom = (
 
   const handleResize = (): void => {
     if (state === State.LOADED) {
-      window.requestAnimationFrame(() => setZoomImgStyle(true))
+      setZoomImgStyle(true)
     } else {
       initImg()
     }
@@ -355,15 +355,13 @@ const ImageZoom = (
   }
 
   const handleScroll = (): void => {
-    window.requestAnimationFrame(() => {
-      if (onZoomChange) {
-        return onZoomChange(false)
-      }
+    if (onZoomChange) {
+      onZoomChange(false)
+    }
 
-      if (!isControlled) {
-        return unzoom()
-      }
-    })
+    if (!isControlled) {
+      unzoom()
+    }
   }
 
   const handleDocumentKeyDown = (e: KeyboardEvent): void => {
@@ -592,12 +590,18 @@ export default ImageZoom
 // STYLING
 //
 
+const styleAllDirsZero = 'top:0;right:0;bottom:0;left:0;'
 const stylePosAbsolute = 'position:absolute;'
 const stylePosRelative = 'position:relative;'
-const styleAllDirsZero = 'top:0;right:0;bottom:0;left:0;'
+const styleVisibilityHidden = 'visibility:hidden;'
+const styleWidth100pct = 'width:100%;'
 
-const styleWrap = stylePosRelative + 'display:inline-block;'
-const styleWrapDiv = styleWrap + 'width:100%;'
+const styleWrap =
+  stylePosRelative +
+  'display:inline-flex;' +
+  'align-items:flex-start;'
+
+const styleWrapDiv = styleWrap + styleWidth100pct
 
 const styleCursorZoomIn = 'cursor:-webkit-zoom-in;cursor:zoom-in;'
 const styleCursorZoomOut = 'cursor:-webkit-zoom-out;cursor:zoom-out;'
@@ -613,29 +617,6 @@ const styleZoomBtn =
 const styleZoomBtnIn = styleZoomBtn + styleCursorZoomIn
 const styleZoomBtnOut = styleZoomBtn + styleCursorZoomOut
 
-interface GetStyleOverlay {
-  (backgroundColor: string, transitionDuration: string, zIndex: string): string
-}
-
-const getStyleOverlay: GetStyleOverlay = (
-  backgroundColor,
-  transitionDuration,
-  zIndex
-) =>
-  'position:fixed;' +
-  styleAllDirsZero +
-  'width:100%;' +
-  'height:100%;' +
-  '-webkit-transition-property:background-color;' +
-  '-o-transition-property:background-color;' +
-  'transition-property:background-color;' +
-  `background-color:${backgroundColor};` +
-  `transition-duration:${transitionDuration};` +
-  'transition-timing-function:ease;' +
-  `z-index:${zIndex};`
-
-const styleVisibilityHidden = 'visibility:hidden;'
-
 const styleZoomed =
   stylePosAbsolute +
   '-webkit-transition-property:-webkit-transform;' +
@@ -648,6 +629,27 @@ const styleZoomed =
   'transform-origin:center center;'
 
 const styleZoomStart = styleZoomed + styleVisibilityHidden
+
+interface GetStyleOverlay {
+  (backgroundColor: string, transitionDuration: string, zIndex: string): string
+}
+
+const getStyleOverlay: GetStyleOverlay = (
+  backgroundColor,
+  transitionDuration,
+  zIndex
+) =>
+  'position:fixed;' +
+  styleAllDirsZero +
+  styleWidth100pct +
+  'height:100%;' +
+  '-webkit-transition-property:background-color;' +
+  '-o-transition-property:background-color;' +
+  'transition-property:background-color;' +
+  `background-color:${backgroundColor};` +
+  `transition-duration:${transitionDuration};` +
+  'transition-timing-function:cubic-bezier(0.2,0,0.2,1);' +
+  `z-index:${zIndex};`
 
 interface GetZoomImgStyleStr {
   (
