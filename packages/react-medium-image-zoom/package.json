@@ -62,7 +62,7 @@
   ],
   "devDependencies": {
     "@types/react": "16.9.43",
-    "typescript": "3.9.6"
+    "typescript": "3.9.7"
   },
   "peerDependencies": {
     "react": ">= 16.8.0"
