@@ -138,6 +138,7 @@ var ImageZoom = (function () {
       var state = State.UNLOADED;
       var targetCloneEl;
       var wrapEl;
+      var zoomWrapEl;
       var zoomEl;
       var zoomImgEl;
       var init = function () {
@@ -244,12 +245,13 @@ var ImageZoom = (function () {
           targetCloneEl = undefined;
       };
       var cleanupZoom = function () {
-          var el = isImg ? zoomImgEl : zoomEl;
-          if (el) {
-              removeEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, el);
-              removeEventListener(TRANSITIONEND, handleZoomTransitionEnd, el);
-              removeEventListener(LOAD, handleZoomImgLoad, el);
-              removeChild(el, modalEl);
+          if (zoomImgEl) {
+              removeEventListener(LOAD, handleZoomImgLoad, zoomImgEl);
+          }
+          if (zoomWrapEl) {
+              removeEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, zoomWrapEl);
+              removeEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomWrapEl);
+              removeChild(zoomWrapEl, modalEl);
           }
           if (closeBtnEl) {
               removeEventListener(CLICK, handleCloseBtnClick, closeBtnEl);
@@ -315,8 +317,10 @@ var ImageZoom = (function () {
           }
           if (zoomImgEl) {
               removeEventListener(LOAD, handleZoomImgLoad, zoomImgEl);
-              addEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomImgEl);
-              setAttribute(STYLE, styleZoomed, zoomImgEl);
+          }
+          if (zoomWrapEl) {
+              addEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomWrapEl);
+              setAttribute(STYLE, styleZoomed, zoomWrapEl);
           }
           if (zoomEl) {
               addEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomEl);
@@ -325,11 +329,11 @@ var ImageZoom = (function () {
           setState(State.LOADED);
       };
       var handleUnzoomTransitionEnd = function () {
-          if (!targetCloneEl)
-              return;
-          targetCloneEl.style.visibility = '';
           // timeout for Safari flickering issue
           window.setTimeout(function () {
+              if (targetCloneEl) {
+                  targetCloneEl.style.visibility = '';
+              }
               cleanupZoom();
               focus(openBtnEl);
               setState(State.UNLOADED);
@@ -370,9 +374,8 @@ var ImageZoom = (function () {
           if (instant === void 0) { instant = false; }
           if (!targetCloneEl)
               return;
-          var el = isImg ? zoomImgEl : zoomEl;
-          if (el) {
-              setAttribute(STYLE, getZoomImgStyle(instant ? ZERO_MS : transitionDuration, zoomMargin, targetCloneEl, isImg, state), el);
+          if (zoomWrapEl) {
+              setAttribute(STYLE, getZoomImgStyle(instant ? ZERO_MS : transitionDuration, zoomMargin, targetCloneEl, isImg, state), zoomWrapEl);
           }
       };
       var zoom = function () {
@@ -394,6 +397,8 @@ var ImageZoom = (function () {
           var targetSizes = targetCloneEl.sizes;
           var targetSrc = targetCloneEl.src;
           var targetSrcset = targetCloneEl.srcset;
+          zoomWrapEl = createElement(DIV);
+          setAttribute(STYLE, styleZoomStart, zoomWrapEl);
           boundaryDivFirst = createElement(DIV);
           setAttribute(TABINDEX, '0', boundaryDivFirst);
           addEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivFirst);
@@ -407,7 +412,7 @@ var ImageZoom = (function () {
           zoomImgEl = new Image();
           addEventListener(LOAD, handleZoomImgLoad, zoomImgEl);
           setAttribute(DATA_RMIZ_ZOOMED, '', zoomImgEl);
-          setAttribute(STYLE, styleZoomStart, zoomImgEl);
+          setAttribute(STYLE, styleZoomContent, zoomImgEl);
           if (targetAlt)
               zoomImgEl.alt = targetAlt;
           if (targetSrc)
@@ -421,10 +426,11 @@ var ImageZoom = (function () {
           if (targetLabelledBy) {
               setAttribute(ARIA_LABELLEDBY, targetLabelledBy, zoomImgEl);
           }
+          appendChild(zoomImgEl, zoomWrapEl);
           modalEl = createModal();
           appendChild(boundaryDivFirst, modalEl);
           appendChild(closeBtnEl, modalEl);
-          appendChild(zoomImgEl, modalEl);
+          appendChild(zoomWrapEl, modalEl);
           appendChild(boundaryDivLast, modalEl);
           appendChild(modalEl, documentBody);
           addEventListener(KEYDOWN, handleDocumentKeyDown, document);
@@ -443,9 +449,9 @@ var ImageZoom = (function () {
           setAttribute(STYLE, styleZoomBtnOut, closeBtnEl);
           setAttribute(ARIA_LABEL, closeText, closeBtnEl);
           addEventListener(CLICK, handleCloseBtnClick, closeBtnEl);
-          zoomEl = createElement(DIV);
-          setAttribute(DATA_RMIZ_ZOOMED, '', zoomEl);
-          setAttribute(STYLE, styleZoomStart, zoomEl);
+          zoomWrapEl = createElement(DIV);
+          setAttribute(DATA_RMIZ_ZOOMED, '', zoomWrapEl);
+          setAttribute(STYLE, styleZoomStart, zoomWrapEl);
           var cloneEl = targetEl.cloneNode(true);
           removeAttribute(ID, cloneEl);
           removeAttribute(TABINDEX, cloneEl);
@@ -455,11 +461,11 @@ var ImageZoom = (function () {
           else {
               removeAttribute(ROLE, cloneEl);
           }
-          appendChild(cloneEl, zoomEl);
+          appendChild(cloneEl, zoomWrapEl);
           modalEl = createModal();
           appendChild(boundaryDivFirst, modalEl);
           appendChild(closeBtnEl, modalEl);
-          appendChild(zoomEl, modalEl);
+          appendChild(zoomWrapEl, modalEl);
           appendChild(boundaryDivLast, modalEl);
           appendChild(modalEl, documentBody);
           addEventListener(KEYDOWN, handleDocumentKeyDown, document);
@@ -497,10 +503,9 @@ var ImageZoom = (function () {
       };
       var unzoom = function () {
           if (state === State.LOADED) {
-              var el = isImg ? zoomImgEl : zoomEl;
-              if (el) {
-                  blur(el);
-                  addEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, el);
+              blur(closeBtnEl);
+              if (zoomWrapEl) {
+                  addEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, zoomWrapEl);
               }
               if (modalEl) {
                   modalEl.style.backgroundColor = overlayBgColorStart;
@@ -523,6 +528,7 @@ var ImageZoom = (function () {
   var stylePosAbsolute = 'position:absolute;';
   var stylePosRelative = 'position:relative;';
   var styleVisibilityHidden = 'visibility:hidden;';
+  var styleHeight100pct = 'height:100%;';
   var styleWidth100pct = 'width:100%;';
   var styleWrap = stylePosRelative +
       'display:inline-flex;' +
@@ -549,11 +555,12 @@ var ImageZoom = (function () {
       '-ms-transform-origin:center center;' +
       'transform-origin:center center;';
   var styleZoomStart = styleZoomed + styleVisibilityHidden;
+  var styleZoomContent = styleHeight100pct + 'max-width:100%;';
   var getStyleOverlay = function (backgroundColor, transitionDuration, zIndex) {
       return 'position:fixed;' +
           styleAllDirsZero +
           styleWidth100pct +
-          'height:100%;' +
+          styleHeight100pct +
           '-webkit-transition-property:background-color;' +
           '-o-transition-property:background-color;' +
           'transition-property:background-color;' +

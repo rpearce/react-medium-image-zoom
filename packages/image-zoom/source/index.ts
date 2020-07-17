@@ -98,6 +98,7 @@ const ImageZoom = (
   let state: State = State.UNLOADED
   let targetCloneEl: HTMLElement | undefined
   let wrapEl: HTMLDivElement | undefined
+  let zoomWrapEl: HTMLDivElement | undefined
   let zoomEl: ZoomEl
   let zoomImgEl: ZoomImgEl
 
@@ -229,13 +230,14 @@ const ImageZoom = (
   }
 
   const cleanupZoom = (): void => {
-    const el = isImg ? zoomImgEl : zoomEl
+    if (zoomImgEl) {
+      removeEventListener(LOAD, handleZoomImgLoad, zoomImgEl)
+    }
 
-    if (el) {
-      removeEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, el)
-      removeEventListener(TRANSITIONEND, handleZoomTransitionEnd, el)
-      removeEventListener(LOAD, handleZoomImgLoad, el)
-      removeChild(el, modalEl)
+    if (zoomWrapEl) {
+      removeEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, zoomWrapEl)
+      removeEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomWrapEl)
+      removeChild(zoomWrapEl, modalEl)
     }
 
     if (closeBtnEl) {
@@ -319,8 +321,11 @@ const ImageZoom = (
 
     if (zoomImgEl) {
       removeEventListener(LOAD, handleZoomImgLoad, zoomImgEl)
-      addEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomImgEl)
-      setAttribute(STYLE, styleZoomed, zoomImgEl)
+    }
+
+    if (zoomWrapEl) {
+      addEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomWrapEl)
+      setAttribute(STYLE, styleZoomed, zoomWrapEl)
     }
 
     if (zoomEl) {
@@ -332,12 +337,11 @@ const ImageZoom = (
   }
 
   const handleUnzoomTransitionEnd = (): void => {
-    if (!targetCloneEl) return
-
-    targetCloneEl.style.visibility = ''
-
     // timeout for Safari flickering issue
     window.setTimeout(() => {
+      if (targetCloneEl) {
+        targetCloneEl.style.visibility = ''
+      }
       cleanupZoom()
       focus(openBtnEl)
       setState(State.UNLOADED)
@@ -387,9 +391,7 @@ const ImageZoom = (
   const setZoomImgStyle = (instant = false): void => {
     if (!targetCloneEl) return
 
-    const el = isImg ? zoomImgEl : zoomEl
-
-    if (el) {
+    if (zoomWrapEl) {
       setAttribute(
         STYLE,
         getZoomImgStyle(
@@ -399,7 +401,7 @@ const ImageZoom = (
           isImg,
           state
         ),
-        el
+        zoomWrapEl
       )
     }
   }
@@ -425,6 +427,9 @@ const ImageZoom = (
     const targetSrc = (targetCloneEl as HTMLImageElement).src
     const targetSrcset = (targetCloneEl as HTMLImageElement).srcset
 
+    zoomWrapEl = createElement(DIV) as HTMLDivElement
+    setAttribute(STYLE, styleZoomStart, zoomWrapEl)
+
     boundaryDivFirst = createElement(DIV) as HTMLDivElement
     setAttribute(TABINDEX, '0', boundaryDivFirst)
     addEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivFirst)
@@ -441,7 +446,7 @@ const ImageZoom = (
     zoomImgEl = new Image()
     addEventListener(LOAD, handleZoomImgLoad, zoomImgEl)
     setAttribute(DATA_RMIZ_ZOOMED, '', zoomImgEl)
-    setAttribute(STYLE, styleZoomStart, zoomImgEl)
+    setAttribute(STYLE, styleZoomContent, zoomImgEl)
 
     if (targetAlt) zoomImgEl.alt = targetAlt
     if (targetSrc) zoomImgEl.src = targetSrc
@@ -452,11 +457,13 @@ const ImageZoom = (
       setAttribute(ARIA_LABELLEDBY, targetLabelledBy, zoomImgEl)
     }
 
+    appendChild(zoomImgEl, zoomWrapEl)
+
     modalEl = createModal()
 
     appendChild(boundaryDivFirst, modalEl)
     appendChild(closeBtnEl, modalEl)
-    appendChild(zoomImgEl, modalEl)
+    appendChild(zoomWrapEl, modalEl)
     appendChild(boundaryDivLast, modalEl)
     appendChild(modalEl, documentBody)
 
@@ -480,9 +487,9 @@ const ImageZoom = (
     setAttribute(ARIA_LABEL, closeText, closeBtnEl)
     addEventListener(CLICK, handleCloseBtnClick, closeBtnEl)
 
-    zoomEl = createElement(DIV) as HTMLDivElement
-    setAttribute(DATA_RMIZ_ZOOMED, '', zoomEl)
-    setAttribute(STYLE, styleZoomStart, zoomEl)
+    zoomWrapEl = createElement(DIV) as HTMLDivElement
+    setAttribute(DATA_RMIZ_ZOOMED, '', zoomWrapEl)
+    setAttribute(STYLE, styleZoomStart, zoomWrapEl)
 
     const cloneEl = targetEl.cloneNode(true) as HTMLElement
     removeAttribute(ID, cloneEl)
@@ -492,13 +499,13 @@ const ImageZoom = (
     } else {
       removeAttribute(ROLE, cloneEl)
     }
-    appendChild(cloneEl, zoomEl)
+    appendChild(cloneEl, zoomWrapEl)
 
     modalEl = createModal()
 
     appendChild(boundaryDivFirst, modalEl)
     appendChild(closeBtnEl, modalEl)
-    appendChild(zoomEl, modalEl)
+    appendChild(zoomWrapEl, modalEl)
     appendChild(boundaryDivLast, modalEl)
     appendChild(modalEl, documentBody)
 
@@ -559,11 +566,10 @@ const ImageZoom = (
 
   const unzoom = (): void => {
     if (state === State.LOADED) {
-      const el = isImg ? zoomImgEl : zoomEl
+      blur(closeBtnEl)
 
-      if (el) {
-        blur(el)
-        addEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, el)
+      if (zoomWrapEl) {
+        addEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, zoomWrapEl)
       }
 
       if (modalEl) {
@@ -595,6 +601,7 @@ const styleFastTap = 'touch-action:manipulation;'
 const stylePosAbsolute = 'position:absolute;'
 const stylePosRelative = 'position:relative;'
 const styleVisibilityHidden = 'visibility:hidden;'
+const styleHeight100pct = 'height:100%;'
 const styleWidth100pct = 'width:100%;'
 
 const styleWrap =
@@ -631,6 +638,7 @@ const styleZoomed =
   'transform-origin:center center;'
 
 const styleZoomStart = styleZoomed + styleVisibilityHidden
+const styleZoomContent = styleHeight100pct + 'max-width:100%;'
 
 interface GetStyleOverlay {
   (backgroundColor: string, transitionDuration: string, zIndex: string): string
@@ -644,7 +652,7 @@ const getStyleOverlay: GetStyleOverlay = (
   'position:fixed;' +
   styleAllDirsZero +
   styleWidth100pct +
-  'height:100%;' +
+  styleHeight100pct +
   '-webkit-transition-property:background-color;' +
   '-o-transition-property:background-color;' +
   'transition-property:background-color;' +
