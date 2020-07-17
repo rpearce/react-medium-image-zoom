@@ -230,6 +230,9 @@ const ImageZoom = (
   }
 
   const cleanupZoom = (): void => {
+    removeEventListener(SCROLL, handleScroll, scrollableEl)
+    removeEventListener(KEYDOWN, handleDocumentKeyDown, document)
+
     if (zoomImgEl) {
       removeEventListener(LOAD, handleZoomImgLoad, zoomImgEl)
     }
@@ -237,7 +240,6 @@ const ImageZoom = (
     if (zoomWrapEl) {
       removeEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, zoomWrapEl)
       removeEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomWrapEl)
-      removeChild(zoomWrapEl, modalEl)
     }
 
     if (closeBtnEl) {
@@ -257,15 +259,13 @@ const ImageZoom = (
       removeChild(modalEl, documentBody)
     }
 
-    zoomImgEl = undefined
-    zoomEl = undefined
     closeBtnEl = undefined
     boundaryDivFirst = undefined
     boundaryDivLast = undefined
+    zoomImgEl = undefined
+    zoomEl = undefined
+    zoomWrapEl = undefined
     modalEl = undefined
-
-    removeEventListener(SCROLL, handleScroll, scrollableEl)
-    removeEventListener(KEYDOWN, handleDocumentKeyDown, document)
   }
 
   // END CLEANUP
@@ -397,6 +397,7 @@ const ImageZoom = (
         getZoomImgStyle(
           instant ? ZERO_MS : transitionDuration,
           zoomMargin,
+          wrapEl,
           targetCloneEl,
           isImg,
           state
@@ -695,7 +696,8 @@ interface GetZoomImgStyle {
   (
     transitionDuration: string,
     zoomMargin: number,
-    targetEl: HTMLElement,
+    targetEl: HTMLElement | undefined,
+    targetCloneEl: HTMLElement,
     isImg: boolean,
     state: State
   ): string
@@ -704,15 +706,16 @@ interface GetZoomImgStyle {
 const getZoomImgStyle: GetZoomImgStyle = (
   transitionDuration,
   zoomMargin,
+  containerEl,
   targetEl,
   isImg,
   state
 ) => {
-  if (!targetEl) {
+  if (!containerEl) {
     return getZoomImgStyleStr(0, 0, 0, 0, 'none', ZERO_MS)
   }
 
-  const { height, left, top, width } = targetEl.getBoundingClientRect()
+  const { height, left, top, width } = containerEl.getBoundingClientRect()
   const originalTransform = targetEl.style.transform
 
   if (state !== State.LOADED) {
@@ -917,24 +920,36 @@ interface AddEventListener {
   <A extends EventTarget, E extends Event>(
     type: string,
     cb: (this: A, evt: E) => void,
-    el: A
+    el: A,
+    useCapture?: boolean
   ): void
 }
 
-const addEventListener: AddEventListener = (type, cb, el) => {
-  el.addEventListener(type, cb as (e: Event) => void)
+const addEventListener: AddEventListener = (
+  type,
+  cb,
+  el,
+  useCapture = false
+) => {
+  el.addEventListener(type, cb as (e: Event) => void, useCapture)
 }
 
 interface RemoveEventListener {
   <A extends EventTarget, E extends Event>(
     type: string,
     handler: (this: A, evt: E) => void,
-    el: A
+    el: A,
+    useCapture?: boolean
   ): void
 }
 
-const removeEventListener: RemoveEventListener = (type, handler, el) => {
-  el.removeEventListener(type, handler as (e: Event) => void)
+const removeEventListener: RemoveEventListener = (
+  type,
+  handler,
+  el,
+  useCapture = false
+) => {
+  el.removeEventListener(type, handler as (e: Event) => void, useCapture)
 }
 
 interface GetAttribute {

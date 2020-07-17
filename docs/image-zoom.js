@@ -245,13 +245,14 @@ var ImageZoom = (function () {
           targetCloneEl = undefined;
       };
       var cleanupZoom = function () {
+          removeEventListener(SCROLL, handleScroll, scrollableEl);
+          removeEventListener(KEYDOWN, handleDocumentKeyDown, document);
           if (zoomImgEl) {
               removeEventListener(LOAD, handleZoomImgLoad, zoomImgEl);
           }
           if (zoomWrapEl) {
               removeEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, zoomWrapEl);
               removeEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomWrapEl);
-              removeChild(zoomWrapEl, modalEl);
           }
           if (closeBtnEl) {
               removeEventListener(CLICK, handleCloseBtnClick, closeBtnEl);
@@ -266,14 +267,13 @@ var ImageZoom = (function () {
               removeEventListener(CLICK, handleModalClick, modalEl);
               removeChild(modalEl, documentBody);
           }
-          zoomImgEl = undefined;
-          zoomEl = undefined;
           closeBtnEl = undefined;
           boundaryDivFirst = undefined;
           boundaryDivLast = undefined;
+          zoomImgEl = undefined;
+          zoomEl = undefined;
+          zoomWrapEl = undefined;
           modalEl = undefined;
-          removeEventListener(SCROLL, handleScroll, scrollableEl);
-          removeEventListener(KEYDOWN, handleDocumentKeyDown, document);
       };
       // END CLEANUP
       var handleOpenBtnClick = function (e) {
@@ -375,7 +375,7 @@ var ImageZoom = (function () {
           if (!targetCloneEl)
               return;
           if (zoomWrapEl) {
-              setAttribute(STYLE, getZoomImgStyle(instant ? ZERO_MS : transitionDuration, zoomMargin, targetCloneEl, isImg, state), zoomWrapEl);
+              setAttribute(STYLE, getZoomImgStyle(instant ? ZERO_MS : transitionDuration, zoomMargin, wrapEl, targetCloneEl, isImg, state), zoomWrapEl);
           }
       };
       var zoom = function () {
@@ -581,11 +581,11 @@ var ImageZoom = (function () {
           ("transition-duration:" + transitionDuration + ";") +
           'transition-timing-function:ease;';
   };
-  var getZoomImgStyle = function (transitionDuration, zoomMargin, targetEl, isImg, state) {
-      if (!targetEl) {
+  var getZoomImgStyle = function (transitionDuration, zoomMargin, containerEl, targetEl, isImg, state) {
+      if (!containerEl) {
           return getZoomImgStyleStr(0, 0, 0, 0, 'none', ZERO_MS);
       }
-      var _a = targetEl.getBoundingClientRect(), height = _a.height, left = _a.left, top = _a.top, width = _a.width;
+      var _a = containerEl.getBoundingClientRect(), height = _a.height, left = _a.left, top = _a.top, width = _a.width;
       var originalTransform = targetEl.style.transform;
       if (state !== State.LOADED) {
           var initTransform = 'scale(1) translate(0,0)' +
@@ -662,11 +662,13 @@ var ImageZoom = (function () {
           parentNode.replaceChild(newChild, oldChild);
       }
   };
-  var addEventListener = function (type, cb, el) {
-      el.addEventListener(type, cb);
+  var addEventListener = function (type, cb, el, useCapture) {
+      if (useCapture === void 0) { useCapture = false; }
+      el.addEventListener(type, cb, useCapture);
   };
-  var removeEventListener = function (type, handler, el) {
-      el.removeEventListener(type, handler);
+  var removeEventListener = function (type, handler, el, useCapture) {
+      if (useCapture === void 0) { useCapture = false; }
+      el.removeEventListener(type, handler, useCapture);
   };
   var getAttribute = function (attr, el) { return el.getAttribute(attr); };
   var removeAttribute = function (attr, el) { return el.removeAttribute(attr); };
