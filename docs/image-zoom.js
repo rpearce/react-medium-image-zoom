@@ -455,7 +455,6 @@ var ImageZoom = (function () {
           else {
               removeAttribute(ROLE, cloneEl);
           }
-          addEventListener(CLICK, handleCloseBtnClick, zoomEl);
           appendChild(cloneEl, zoomEl);
           modalEl = createModal();
           appendChild(boundaryDivFirst, modalEl);
@@ -519,6 +518,8 @@ var ImageZoom = (function () {
   // STYLING
   //
   var styleAllDirsZero = 'top:0;right:0;bottom:0;left:0;';
+  var styleAppearanceNone = '-webkit-appearance:none;-moz-appearance:none;appearance:none;';
+  var styleFastTap = 'touch-action:manipulation;';
   var stylePosAbsolute = 'position:absolute;';
   var stylePosRelative = 'position:relative;';
   var styleVisibilityHidden = 'visibility:hidden;';
@@ -535,8 +536,9 @@ var ImageZoom = (function () {
       'border:none;' +
       'margin:0;' +
       'padding:0;';
-  var styleZoomBtnIn = styleZoomBtn + styleCursorZoomIn;
-  var styleZoomBtnOut = styleZoomBtn + styleCursorZoomOut;
+  var styleZoomBtnBase = styleZoomBtn + styleFastTap + styleAppearanceNone;
+  var styleZoomBtnIn = styleZoomBtnBase + styleCursorZoomIn;
+  var styleZoomBtnOut = styleZoomBtnBase + styleCursorZoomOut + 'z-index:1;';
   var styleZoomed = stylePosAbsolute +
       '-webkit-transition-property:-webkit-transform;' +
       'transition-property:-webkit-transform;' +

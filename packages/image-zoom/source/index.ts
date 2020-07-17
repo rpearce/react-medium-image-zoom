@@ -492,7 +492,6 @@ const ImageZoom = (
     } else {
       removeAttribute(ROLE, cloneEl)
     }
-    addEventListener(CLICK, handleCloseBtnClick, zoomEl)
     appendChild(cloneEl, zoomEl)
 
     modalEl = createModal()
@@ -591,6 +590,8 @@ export default ImageZoom
 //
 
 const styleAllDirsZero = 'top:0;right:0;bottom:0;left:0;'
+const styleAppearanceNone = '-webkit-appearance:none;-moz-appearance:none;appearance:none;'
+const styleFastTap = 'touch-action:manipulation;'
 const stylePosAbsolute = 'position:absolute;'
 const stylePosRelative = 'position:relative;'
 const styleVisibilityHidden = 'visibility:hidden;'
@@ -614,8 +615,9 @@ const styleZoomBtn =
   'margin:0;' +
   'padding:0;'
 
-const styleZoomBtnIn = styleZoomBtn + styleCursorZoomIn
-const styleZoomBtnOut = styleZoomBtn + styleCursorZoomOut
+const styleZoomBtnBase = styleZoomBtn + styleFastTap + styleAppearanceNone
+const styleZoomBtnIn = styleZoomBtnBase + styleCursorZoomIn
+const styleZoomBtnOut = styleZoomBtnBase + styleCursorZoomOut + 'z-index:1;'
 
 const styleZoomed =
   stylePosAbsolute +

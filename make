@@ -83,8 +83,14 @@ function build_rmiz {
 }
 
 function build_pkgs {
-  build_iz
-  build_rmiz
+  local build_env="${BUILD_ENV:-}"
+
+  if [ "$build_env" = "iife" ]; then
+    build_iz
+  else
+    build_iz
+    build_rmiz
+  fi
 
   return 0
 }
