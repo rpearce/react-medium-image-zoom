@@ -4,6 +4,8 @@
 
 Accessible, progressive zooming for images.
 
+As an added bonus, it should let you zoom _anything_.
+
 Links:
 * [Installation](#installation)
 * [Usage In a Build System](#usage-in-a-build-system)
@@ -76,6 +78,7 @@ Add the following HTML before the closing `</body>` tag on your web page.
   }
 })();
 </script>
+```
 
 ## Methods
 There are two methods, `update` and `cleanup`, that can be called on the result
@@ -106,7 +109,6 @@ interface ImageZoomOpts {
   openText?: string
   overlayBgColorEnd?: string
   overlayBgColorStart?: string
-  scrollableEl?: HTMLElement | Window
   transitionDuration?: string
   zoomMargin?: number
   zoomZindex?: number
@@ -115,29 +117,26 @@ interface ImageZoomOpts {
 
 * `closeText`
   * accessible text for unzooming
-  * default: `Press to unzoom image`
+  * default: `'Unzoom image'`
 * `isControlled`
   * flag to specify that you intend to control the component's
     state yourself
   * default: `false`
 * `modalText`
   * accessible modal dialog text when zoomed
-  * default: `Zoomed item`
+  * default: `'Zoomed item'`
 * `onZoomChange`
   * callback that is called with `true` when the zooming should be triggered
   * default: `undefined`
 * `openText`
   * accessible text for zooming
-  * default: `Press to zoom image`
+  * default: `'Zoom image'`
 * `overlayBgColorEnd`
   * modal dialog overlay ending background color
-  * default: `rgba(255, 255, 255, 0.95)`
+  * default: `'rgba(255, 255, 255, 0.95)'`
 * `overlayBgColorStart`
   * modal dialog overlay starting background color
-  * default: `rgba(255, 255, 255, 0)`
-* `scrollableEl`
-  * `HTMLElement | Window` to be used for the scrolling listener
-  * default: `window`
+  * default: `'rgba(255, 255, 255, 0)'`
 * `transitionDuration`
   * length of time for the animations to run
   * default: `300ms`
@@ -173,10 +172,10 @@ Let's say you have a number of things you would like to zoom that all have
 unzoomed states.
 
 ```js
-var uncontrolleds = document.querySelectorAll('[data-uncontrolled]');
+var uncontrolledEls = document.querySelectorAll('[data-uncontrolled]');
 
-for (var i = 0; i < uncontrolleds.length; i++) {
-  ImageZoom({}, uncontrolleds[i])
+for (var i = 0; i < uncontrolledEls.length; i++) {
+  ImageZoom({}, uncontrolledEls[i])
 }
 ```
 
@@ -185,15 +184,15 @@ If you want to control the zoom state yourself and have `ImageZoom` guide you on
 when it should be zooming or unzooming, you can do so like this:
 
 ```js
-var controlledCb = document.querySelector('[data-cb]');
-var controlledCbWithOpts = ImageZoom(
+var controlledCbEl = document.querySelector('[data-controlled]');
+var controlledCbIz = ImageZoom(
   {
     isControlled: true,
     onZoomChange: function onZoomChange(isZoomed) {
-      controlledCbWithOpts.update({ isZoomed: isZoomed });
+      controlledCbIz.update({ isZoomed: isZoomed });
     },
   },
-  controlledCb
+  controlledCbEl
 );
 ```
 
@@ -211,21 +210,24 @@ In this example, we specify that the `j` key will zoom the item, and the `k` key
 will unzoom the item. Any other interactions with it will not work.
 
 ```js
-var controlledJk = document.querySelector('[data-jk]');
-var controlledJkWithOpts = ImageZoom(
+var controlledJkEl = document.querySelector('[data-jk]');
+var controlledJkIz = ImageZoom(
   {
     isControlled: true,
     closeText: 'Press k to unzoom',
     openText: 'Press j to zoom',
   },
-  controlledJk
+  controlledJkEl
 );
 
 document.addEventListener('keydown', function (e) {
   if (e.key === 'j' || e.keyCode === 74) {
-    controlledJkWithOpts.update({ isZoomed: true });
+    controlledJkIz.update({ isZoomed: true });
   } else if (e.key === 'k' || e.keyCode === 75) {
-    controlledJkWithOpts.update({ isZoomed: false });
+    controlledJkIz.update({ isZoomed: false });
   }
 })
 ```
+
+### Got Your Own Example?
+Create a pull request and share it with the `image-zoom` world!

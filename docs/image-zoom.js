@@ -120,13 +120,14 @@ var ImageZoom = (function () {
   var TRUE_STR = 'true';
   var ZERO_MS = '0ms';
   var ImageZoom = function (_a, targetEl) {
-      var _b = _a === void 0 ? {} : _a, _c = _b.closeText, closeText = _c === void 0 ? 'Unzoom image' : _c, _d = _b.isControlled, isControlled = _d === void 0 ? false : _d, _e = _b.modalText, modalText = _e === void 0 ? 'Zoomed item' : _e, onZoomChange = _b.onZoomChange, _f = _b.openText, openText = _f === void 0 ? 'Zoom image' : _f, _g = _b.overlayBgColorEnd, overlayBgColorEnd = _g === void 0 ? 'rgba(255,255,255,0.95)' : _g, _h = _b.overlayBgColorStart, overlayBgColorStart = _h === void 0 ? 'rgba(255,255,255,0)' : _h, _scrollableEl = _b.scrollableEl, _j = _b.transitionDuration, transitionDuration = _j === void 0 ? '300ms' : _j, _k = _b.zoomMargin, zoomMargin = _k === void 0 ? 0 : _k, _l = _b.zoomZindex, zoomZindex = _l === void 0 ? 2147483647 : _l;
+      var _b = _a === void 0 ? {} : _a, _c = _b.closeText, closeText = _c === void 0 ? 'Unzoom image' : _c, _d = _b.isControlled, isControlled = _d === void 0 ? false : _d, _e = _b.modalText, modalText = _e === void 0 ? 'Zoomed item' : _e, onZoomChange = _b.onZoomChange, _f = _b.openText, openText = _f === void 0 ? 'Zoom image' : _f, _g = _b.overlayBgColorEnd, overlayBgColorEnd = _g === void 0 ? 'rgba(255,255,255,0.95)' : _g, _h = _b.overlayBgColorStart, overlayBgColorStart = _h === void 0 ? 'rgba(255,255,255,0)' : _h, _j = _b.transitionDuration, transitionDuration = _j === void 0 ? '300ms' : _j, _k = _b.zoomMargin, zoomMargin = _k === void 0 ? 0 : _k, _l = _b.zoomZindex, zoomZindex = _l === void 0 ? 2147483647 : _l;
       var originalRole = getAttribute(ROLE, targetEl);
       var isDisplayBlock = window.getComputedStyle(targetEl).display === 'block';
       var isImgEl = targetEl.tagName === 'IMG';
       var isSvgSrc = isImgEl && SVG_REGEX.test(targetEl.currentSrc);
       var isImg = !isSvgSrc && isImgEl;
       var documentBody = document.body;
+      var scrollableEl = window;
       var ariaHiddenSiblings = [];
       var closeBtnEl;
       var boundaryDivFirst;
@@ -134,7 +135,6 @@ var ImageZoom = (function () {
       var modalEl;
       var motionPref;
       var openBtnEl;
-      var scrollableEl = _scrollableEl || window;
       var state = State.UNLOADED;
       var targetCloneEl;
       var wrapEl;
@@ -214,9 +214,6 @@ var ImageZoom = (function () {
               zoomMargin = opts.zoomMargin;
           if (opts.zoomZindex)
               zoomZindex = opts.zoomZindex;
-          if (state === State.UNLOADED && opts.scrollableEl) {
-              scrollableEl = opts.scrollableEl;
-          }
           setZoomImgStyle();
           if (state === State.UNLOADED && opts.isZoomed) {
               zoom();
@@ -538,6 +535,8 @@ var ImageZoom = (function () {
   var styleCursorZoomOut = 'cursor:-webkit-zoom-out;cursor:zoom-out;';
   var styleZoomBtn = stylePosAbsolute +
       styleAllDirsZero +
+      styleHeight100pct +
+      styleWidth100pct +
       'background:none;' +
       'border:none;' +
       'margin:0;' +

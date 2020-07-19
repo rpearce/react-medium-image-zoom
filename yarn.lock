@@ -662,7 +662,7 @@ __metadata:
     "@rollup/plugin-commonjs": 14.0.0
     "@rollup/plugin-node-resolve": 8.4.0
     focus-options-polyfill: 1.5.0
-    rollup: 2.21.0
+    rollup: 2.22.1
     rollup-plugin-terser: 6.1.0
     rollup-plugin-typescript2: 0.27.1
     terser: 4.8.0
@@ -844,13 +844,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*, @types/jest@npm:26.0.4":
+"@types/jest@npm:*":
   version: 26.0.4
   resolution: "@types/jest@npm:26.0.4"
   dependencies:
     jest-diff: ^25.2.1
     pretty-format: ^25.2.1
   checksum: f815792ecc2191410bf541740b834bafb608b9a5be0b77b21770d8728e87b2bdd55843999bc9236ebd027e11a4cabbec90da7612fb9a620cf8bd858ae3774bd2
+  languageName: node
+  linkType: hard
+
+"@types/jest@npm:26.0.5":
+  version: 26.0.5
+  resolution: "@types/jest@npm:26.0.5"
+  dependencies:
+    jest-diff: ^25.2.1
+    pretty-format: ^25.2.1
+  checksum: ffe129cacd0b1472ab8018d1cd5e88cd66f31223d1cc02f2366143e792eba59031432065c37199d7351da5c2b4a6cea21c4a6d30075f925dff3a9f32ba8dc04d
   languageName: node
   linkType: hard
 
@@ -1139,7 +1149,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:^7.1.1, acorn@npm:^7.2.0":
+"acorn@npm:^7.1.1, acorn@npm:^7.3.1":
   version: 7.3.1
   resolution: "acorn@npm:7.3.1"
   bin:
@@ -2593,7 +2603,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-utils@npm:^2.0.0":
+"eslint-utils@npm:^2.0.0, eslint-utils@npm:^2.1.0":
   version: 2.1.0
   resolution: "eslint-utils@npm:2.1.0"
   dependencies:
@@ -2602,16 +2612,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-visitor-keys@npm:^1.1.0, eslint-visitor-keys@npm:^1.2.0":
+"eslint-visitor-keys@npm:^1.1.0, eslint-visitor-keys@npm:^1.3.0":
   version: 1.3.0
   resolution: "eslint-visitor-keys@npm:1.3.0"
   checksum: 58ab7a0107621d8a0fe19142a5e1306fd527c0f36b65d5c79033639e80278d8060264804f42c56f68e5541c4cc83d9175f9143083774cec8222f6cd5a695306e
   languageName: node
   linkType: hard
 
-"eslint@npm:7.4.0":
-  version: 7.4.0
-  resolution: "eslint@npm:7.4.0"
+"eslint@npm:7.5.0":
+  version: 7.5.0
+  resolution: "eslint@npm:7.5.0"
   dependencies:
     "@babel/code-frame": ^7.0.0
     ajv: ^6.10.0
@@ -2621,9 +2631,9 @@ __metadata:
     doctrine: ^3.0.0
     enquirer: ^2.3.5
     eslint-scope: ^5.1.0
-    eslint-utils: ^2.0.0
-    eslint-visitor-keys: ^1.2.0
-    espree: ^7.1.0
+    eslint-utils: ^2.1.0
+    eslint-visitor-keys: ^1.3.0
+    espree: ^7.2.0
     esquery: ^1.2.0
     esutils: ^2.0.2
     file-entry-cache: ^5.0.1
@@ -2637,7 +2647,7 @@ __metadata:
     js-yaml: ^3.13.1
     json-stable-stringify-without-jsonify: ^1.0.1
     levn: ^0.4.1
-    lodash: ^4.17.14
+    lodash: ^4.17.19
     minimatch: ^3.0.4
     natural-compare: ^1.4.0
     optionator: ^0.9.1
@@ -2651,18 +2661,18 @@ __metadata:
     v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: ef144e684ce031b045aca156439af5c5ec8a9b843613ed2948bb28ed767dc5e106d9f057a9bf93c752071b7833656bc7affa1d28daa9609c6ea59d1311f0a8de
+  checksum: 5a65f133db997f39e48082636496e11db168c7385839111b2ecbb9d4fa16d9eaeae9a88f0317ddcc5118fe388c2907ab0f302c752fb36e56ace6e3660070ea42
   languageName: node
   linkType: hard
 
-"espree@npm:^7.1.0":
-  version: 7.1.0
-  resolution: "espree@npm:7.1.0"
+"espree@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "espree@npm:7.2.0"
   dependencies:
-    acorn: ^7.2.0
+    acorn: ^7.3.1
     acorn-jsx: ^5.2.0
-    eslint-visitor-keys: ^1.2.0
-  checksum: 447e2663f82c7804d4d215bea01f54c2b21dcec247ce642d05f05a5e4639a4d91b51cf329ae5a3e154a59fa4b02782b0ff100c09a10bda70fe12fe36e1d658ea
+    eslint-visitor-keys: ^1.3.0
+  checksum: 51bdb836f47a360ea4fd1a28cf7df1974f2be93abd5cf707cfbedcb15fb6591d26f6dc345d3cb07c4b1df7c5435e50d4b2fdf2a0ed4d63175da8b2c83f06057b
   languageName: node
   linkType: hard
 
@@ -4655,7 +4665,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.11.2, lodash@npm:^4.17.13, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.16":
+"lodash@npm:^4.11.2, lodash@npm:^4.17.13, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.16, lodash@npm:^4.17.19":
   version: 4.17.19
   resolution: "lodash@npm:4.17.19"
   checksum: ff2b7a95f0129dba9101e346d44e0eda0f159d76bbbf23721eec1969b87a32bde3de0cfef0733218c64620e9be08040a973278d46a686540233b356115f3527c
@@ -6067,9 +6077,9 @@ resolve@1.15.1:
   languageName: node
   linkType: hard
 
-"rollup@npm:2.21.0":
-  version: 2.21.0
-  resolution: "rollup@npm:2.21.0"
+"rollup@npm:2.22.1":
+  version: 2.22.1
+  resolution: "rollup@npm:2.22.1"
   dependencies:
     fsevents: ~2.1.2
   dependenciesMeta:
@@ -6077,7 +6087,7 @@ resolve@1.15.1:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 09412c93f79d409c2376575749e6c0caa84c14df4939084590ca431b7aec9a48e0bad5199368587fe37191c96cf77c4b3d7d60065ab7228461c915104ad71980
+  checksum: 176eaf04a1597fbaf2a5e61c840c909dedd7d2857d659468a6ae084f3528d3aeb0d96470a242406fef63702c65e32795b086e8aa3420e6a55d84b5a1d4af03e5
   languageName: node
   linkType: hard
 
@@ -6087,7 +6097,7 @@ resolve@1.15.1:
   dependencies:
     "@testing-library/jest-dom": 5.11.1
     "@testing-library/react": 10.4.7
-    "@types/jest": 26.0.4
+    "@types/jest": 26.0.5
     "@types/node": 14.0.23
     "@types/react": 16.9.43
     "@types/react-dom": 16.9.8
@@ -6097,7 +6107,7 @@ resolve@1.15.1:
     axe-core: 3.5.5
     chokidar-cli: 2.1.0
     coveralls: 3.1.0
-    eslint: 7.4.0
+    eslint: 7.5.0
     eslint-plugin-jest: 23.18.0
     eslint-plugin-jsx-a11y: 6.3.1
     eslint-plugin-react: 7.20.3

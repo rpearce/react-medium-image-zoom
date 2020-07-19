@@ -2,12 +2,12 @@
 
 [![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![bundlephobia size](https://badgen.net/bundlephobia/minzip/react-medium-image-zoom)](bundlephobia.com/result?p=react-medium-image-zoom) [![Build Status](https://travis-ci.org/rpearce/react-medium-image-zoom.svg?branch=master)](https://travis-ci.org/rpearce/react-medium-image-zoom) [![Coverage Status](https://coveralls.io/repos/github/rpearce/react-medium-image-zoom/badge.svg?branch=master)](https://coveralls.io/github/rpearce/react-medium-image-zoom?branch=master) [![Maintainability](https://api.codeclimate.com/v1/badges/8e4debef4b9f0e8acd6e/maintainability)](https://codeclimate.com/github/rpearce/react-medium-image-zoom/maintainability)
 
-This library is a [`React.js`](https://reactjs.org/) implementation of
-[Medium.com's image
-zoom](https://medium.com/design/image-zoom-on-medium-24d146fc0c20) that allows
-for images to work together for a “zooming” effect, is keyboard accessible, and
-works regardless of parent elements that have `overflow: hidden` or
-[parents with transform properties](https://codepen.io/rpearce/pen/MEyOmb).
+This library is a [`React.js`](https://reactjs.org/) iteration on [Medium.com's
+image zoom](https://medium.com/design/image-zoom-on-medium-24d146fc0c20) that
+allows for images to work together for a “zooming” effect, is accessible
+(keyboard and screen readers), and works regardless of parent elements that have
+`overflow: hidden` or [parents with transform
+properties](https://codepen.io/rpearce/pen/MEyOmb).
 
 As an added bonus, it should let you zoom _anything_.
 
@@ -52,7 +52,7 @@ interface ImageZoomOpts {
 
 * `closeText`
   * accessible text for unzooming
-  * default: `Press to unzoom image`
+  * default: `'Unzoom image'`
 * `isControlled`
   * flag to specify that you intend to control the component's
     state yourself
@@ -63,25 +63,22 @@ interface ImageZoomOpts {
   * default: `false`
 * `modalText`
   * accessible modal dialog text when zoomed
-  * default: `Zoomed item`
+  * default: `'Zoomed item'`
 * `onZoomChange`
   * callback that is called with `true` when the zooming should be triggered
   * default: `undefined`
 * `openText`
   * accessible text for zooming
-  * default: `Press to zoom image`
+  * default: `'Zoom image'`
 * `overlayBgColorEnd`
   * modal dialog overlay ending background color
-  * default: `rgba(255, 255, 255, 0.95)`
+  * default: `'rgba(255, 255, 255, 0.95)'`
 * `overlayBgColorStart`
   * modal dialog overlay starting background color
-  * default: `rgba(255, 255, 255, 0)`
-* `scrollableEl`
-  * `HTMLElement | Window` to be used for the scrolling listener
-  * default: `window`
+  * default: `'rgba(255, 255, 255, 0)'`
 * `transitionDuration`
   * length of time for the animations to run
-  * default: `300ms`
+  * default: `'300ms'`
 * `zoomMargin`
   * amount the zoomed item should be offset from the window
   * default: `0`

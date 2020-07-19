@@ -8,7 +8,6 @@ enum State {
 
 type AriaHiddenSiblingsTuple = [HTMLElement, string][]
 type ModalEl = HTMLDivElement | undefined
-type ScrollableEl = HTMLElement | Window
 type ZoomEl = HTMLDivElement | undefined
 type ZoomImgEl = HTMLImageElement | undefined
 
@@ -43,7 +42,6 @@ export interface ImageZoomOpts {
   openText?: string
   overlayBgColorEnd?: string
   overlayBgColorStart?: string
-  scrollableEl?: ScrollableEl
   transitionDuration?: string
   zoomMargin?: number
   zoomZindex?: number
@@ -71,7 +69,6 @@ const ImageZoom = (
     openText = 'Zoom image',
     overlayBgColorEnd = 'rgba(255,255,255,0.95)',
     overlayBgColorStart = 'rgba(255,255,255,0)',
-    scrollableEl: _scrollableEl,
     transitionDuration = '300ms',
     zoomMargin = 0,
     zoomZindex = 2147483647,
@@ -86,6 +83,7 @@ const ImageZoom = (
   )
   const isImg = !isSvgSrc && isImgEl
   const documentBody = document.body
+  const scrollableEl = window
 
   let ariaHiddenSiblings: AriaHiddenSiblingsTuple = []
   let closeBtnEl: HTMLButtonElement | undefined
@@ -94,7 +92,6 @@ const ImageZoom = (
   let modalEl: ModalEl
   let motionPref: MediaQueryList | undefined
   let openBtnEl: HTMLButtonElement | undefined
-  let scrollableEl: ScrollableEl = _scrollableEl || window
   let state: State = State.UNLOADED
   let targetCloneEl: HTMLElement | undefined
   let wrapEl: HTMLDivElement | undefined
@@ -189,9 +186,6 @@ const ImageZoom = (
     if (opts.transitionDuration) transitionDuration = opts.transitionDuration
     if (opts.zoomMargin) zoomMargin = opts.zoomMargin
     if (opts.zoomZindex) zoomZindex = opts.zoomZindex
-    if (state === State.UNLOADED && opts.scrollableEl) {
-      scrollableEl = opts.scrollableEl
-    }
 
     setZoomImgStyle()
 
@@ -618,6 +612,8 @@ const styleCursorZoomOut = 'cursor:-webkit-zoom-out;cursor:zoom-out;'
 const styleZoomBtn =
   stylePosAbsolute +
   styleAllDirsZero +
+  styleHeight100pct +
+  styleWidth100pct +
   'background:none;' +
   'border:none;' +
   'margin:0;' +
