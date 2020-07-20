@@ -139,7 +139,6 @@ var ImageZoom = (function () {
       var targetCloneEl;
       var wrapEl;
       var zoomWrapEl;
-      var zoomEl;
       var zoomImgEl;
       var init = function () {
           addEventListener(RESIZE, handleResize, window);
@@ -268,7 +267,6 @@ var ImageZoom = (function () {
           boundaryDivFirst = undefined;
           boundaryDivLast = undefined;
           zoomImgEl = undefined;
-          zoomEl = undefined;
           zoomWrapEl = undefined;
           modalEl = undefined;
       };
@@ -318,10 +316,6 @@ var ImageZoom = (function () {
           if (zoomWrapEl) {
               addEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomWrapEl);
               setAttribute(STYLE, styleZoomed, zoomWrapEl);
-          }
-          if (zoomEl) {
-              addEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomEl);
-              setAttribute(STYLE, styleZoomed, zoomEl);
           }
           setState(State.LOADED);
       };

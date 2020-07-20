@@ -96,7 +96,6 @@ const ImageZoom = (
   let targetCloneEl: HTMLElement | undefined
   let wrapEl: HTMLDivElement | undefined
   let zoomWrapEl: HTMLDivElement | undefined
-  let zoomEl: ZoomEl
   let zoomImgEl: ZoomImgEl
 
   const init = (): void => {
@@ -257,7 +256,6 @@ const ImageZoom = (
     boundaryDivFirst = undefined
     boundaryDivLast = undefined
     zoomImgEl = undefined
-    zoomEl = undefined
     zoomWrapEl = undefined
     modalEl = undefined
   }
@@ -320,11 +318,6 @@ const ImageZoom = (
     if (zoomWrapEl) {
       addEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomWrapEl)
       setAttribute(STYLE, styleZoomed, zoomWrapEl)
-    }
-
-    if (zoomEl) {
-      addEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomEl)
-      setAttribute(STYLE, styleZoomed, zoomEl)
     }
 
     setState(State.LOADED)
