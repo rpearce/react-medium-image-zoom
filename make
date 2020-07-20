@@ -21,6 +21,7 @@ Usage: $pname <COMMAND>
   help, -h, --help       See this help information
   init                   Initialize and build the project
   lint                   Run the linter
+  publish                Publish a package
   test                   Run the tests
   test_cov_ci            Generate test coverage for CI
   watch                  Watch for changes and rebuild output
@@ -133,7 +134,7 @@ function contrib {
 }
 
 function dev {
-  echo "Not yet implemented"
+  echo "dev: Not yet implemented"
 
   #clearscreen
   #echo "Starting dev environment..."
@@ -165,6 +166,13 @@ function lint {
     -c "$PWD/.eslintrc.js" \
     --ignore-path "$PWD/.eslintignore" \
     "$@"
+}
+
+function publish {
+  echo "publish: Not yet implemented"
+  # local pkg="$1"
+  # cd "$pkg"
+  # lint & test then yarn npm publish with args
 }
 
 #function spin {
@@ -220,6 +228,7 @@ case "$cmd" in
   help|-h|--help) usage;;
   init          ) init;;
   lint          ) lint "$@";;
+  publish       ) publish "$@";;
   test          ) test;;
   test_cov_ci   ) test_cov_ci;;
   watch         ) watch;;
