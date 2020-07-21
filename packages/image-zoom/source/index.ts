@@ -97,6 +97,7 @@ const ImageZoom = (
   let transitionDuration = _transitionDuration
   let originalStyleDisplay = ''
   let wrapEl: HTMLDivElement | undefined
+  let zoomImgEl: HTMLImageElement | undefined
   let zoomWrapEl: HTMLDivElement | undefined
 
   const init = (): void => {
@@ -262,6 +263,10 @@ const ImageZoom = (
     removeEventListener(SCROLL, handleScroll, scrollableEl)
     removeEventListener(KEYDOWN, handleDocumentKeyDown, document)
 
+    if (zoomImgEl) {
+      removeEventListener(LOAD, handleZoomImgLoad, zoomImgEl)
+    }
+
     if (zoomWrapEl) {
       removeEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, zoomWrapEl)
       removeEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomWrapEl)
@@ -287,6 +292,7 @@ const ImageZoom = (
     closeBtnEl = undefined
     boundaryDivFirst = undefined
     boundaryDivLast = undefined
+    zoomImgEl = undefined
     zoomWrapEl = undefined
     overlayEl = undefined
     modalEl = undefined
@@ -338,6 +344,10 @@ const ImageZoom = (
     if (targetCloneEl) {
       targetCloneEl.style.visibility = 'hidden'
     }
+
+   if (zoomImgEl) {
+     removeEventListener(LOAD, handleZoomImgLoad, zoomImgEl)
+   }
 
     if (overlayEl) {
       setAttribute(
@@ -440,17 +450,16 @@ const ImageZoom = (
   const zoomImg = (): void => {
     if (!targetCloneEl || state !== State.UNLOADED) return
 
-    const cloneEl = targetCloneEl.cloneNode(true) as HTMLImageElement
-    removeAttribute(ID, cloneEl)
-    setAttribute(STYLE, styleZoomImgContent, cloneEl)
+    zoomImgEl = targetCloneEl.cloneNode(true) as HTMLImageElement
+    addEventListener(LOAD, handleZoomImgLoad, zoomImgEl)
+    setAttribute(STYLE, styleZoomImgContent, zoomImgEl)
+    removeAttribute(ID, zoomImgEl)
 
-    modalEl = createModal(cloneEl)
+    modalEl = createModal(zoomImgEl)
     appendChild(modalEl, documentBody)
 
     addEventListener(KEYDOWN, handleDocumentKeyDown, document)
     addEventListener(SCROLL, handleScroll, scrollableEl)
-
-    handleZoomImgLoad()
   }
 
   const zoomNonImg = (): void => {

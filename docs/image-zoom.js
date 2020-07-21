@@ -141,6 +141,7 @@ var ImageZoom = (function () {
       var transitionDuration = _transitionDuration;
       var originalStyleDisplay = '';
       var wrapEl;
+      var zoomImgEl;
       var zoomWrapEl;
       var init = function () {
           addEventListener(RESIZE, handleResize, window);
@@ -273,6 +274,9 @@ var ImageZoom = (function () {
       var cleanupZoom = function () {
           removeEventListener(SCROLL, handleScroll, scrollableEl);
           removeEventListener(KEYDOWN, handleDocumentKeyDown, document);
+          if (zoomImgEl) {
+              removeEventListener(LOAD, handleZoomImgLoad, zoomImgEl);
+          }
           if (zoomWrapEl) {
               removeEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, zoomWrapEl);
               removeEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomWrapEl);
@@ -293,6 +297,7 @@ var ImageZoom = (function () {
           closeBtnEl = undefined;
           boundaryDivFirst = undefined;
           boundaryDivLast = undefined;
+          zoomImgEl = undefined;
           zoomWrapEl = undefined;
           overlayEl = undefined;
           modalEl = undefined;
@@ -333,6 +338,9 @@ var ImageZoom = (function () {
       var handleZoomImgLoad = function () {
           if (targetCloneEl) {
               targetCloneEl.style.visibility = 'hidden';
+          }
+          if (zoomImgEl) {
+              removeEventListener(LOAD, handleZoomImgLoad, zoomImgEl);
           }
           if (overlayEl) {
               setAttribute(STYLE, getStyleOverlay(overlayBgColorEnd, transitionDuration), overlayEl);
@@ -406,14 +414,14 @@ var ImageZoom = (function () {
       var zoomImg = function () {
           if (!targetCloneEl || state !== State.UNLOADED)
               return;
-          var cloneEl = targetCloneEl.cloneNode(true);
-          removeAttribute(ID, cloneEl);
-          setAttribute(STYLE, styleZoomImgContent, cloneEl);
-          modalEl = createModal(cloneEl);
+          zoomImgEl = targetCloneEl.cloneNode(true);
+          addEventListener(LOAD, handleZoomImgLoad, zoomImgEl);
+          setAttribute(STYLE, styleZoomImgContent, zoomImgEl);
+          removeAttribute(ID, zoomImgEl);
+          modalEl = createModal(zoomImgEl);
           appendChild(modalEl, documentBody);
           addEventListener(KEYDOWN, handleDocumentKeyDown, document);
           addEventListener(SCROLL, handleScroll, scrollableEl);
-          handleZoomImgLoad();
       };
       var zoomNonImg = function () {
           if (!targetCloneEl || state !== State.UNLOADED)
