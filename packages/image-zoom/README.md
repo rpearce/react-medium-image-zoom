@@ -109,7 +109,7 @@ interface ImageZoomOpts {
   openText?: string
   overlayBgColorEnd?: string
   overlayBgColorStart?: string
-  transitionDuration?: string
+  transitionDuration?: number
   zoomMargin?: number
   zoomZindex?: number
 }
@@ -138,8 +138,8 @@ interface ImageZoomOpts {
   * modal dialog overlay starting background color
   * default: `'rgba(255, 255, 255, 0)'`
 * `transitionDuration`
-  * length of time for the animations to run
-  * default: `300ms`
+  * length of time in milliseconds for the zoom animation to run
+  * default: `300`
 * `zoomMargin`
   * amount the zoomed item should be offset from the window
   * default: `0`

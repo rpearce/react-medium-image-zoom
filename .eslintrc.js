@@ -42,7 +42,7 @@ module.exports = {
       },
     },
     {
-      files: ['packages/react-medium-image-zoom/*.{ts,tsx}'],
+      files: ['packages/react-medium-image-zoom/**/*.{ts,tsx}'],
       extends: [
         'plugin:jsx-a11y/recommended',
         'plugin:react/recommended',
