@@ -147,11 +147,7 @@ var ImageZoom = (function () {
           addEventListener(RESIZE, handleResize, window);
           initMotionPref();
           if (isImg && !targetEl.complete) {
-              targetEl.addEventListener(LOAD, function () {
-                  window.setTimeout(function () {
-                      initImg();
-                  }, 500);
-              });
+              addEventListener(LOAD, initImg, targetEl);
           }
           else {
               initImg();
@@ -221,6 +217,7 @@ var ImageZoom = (function () {
           else {
               cleanupZoom();
               cleanupMutationObserver();
+              cleanupTargetLoad();
               cleanupDOMMutations();
           }
       };
@@ -254,12 +251,15 @@ var ImageZoom = (function () {
       var cleanup = function () {
           cleanupZoom();
           cleanupMutationObserver();
-          if (isImg && targetEl) {
-              removeEventListener(LOAD, initImg, targetEl);
-          }
+          cleanupTargetLoad();
           cleanupDOMMutations();
           cleanupMotionPref();
           removeEventListener(RESIZE, handleResize, window);
+      };
+      var cleanupTargetLoad = function () {
+          if (isImg && targetEl) {
+              removeEventListener(LOAD, initImg, targetEl);
+          }
       };
       var cleanupDOMMutations = function () {
           if (openBtnEl) {
@@ -351,8 +351,8 @@ var ImageZoom = (function () {
                   targetCloneEl.style.visibility = '';
               }
               cleanupZoom();
-              focus(openBtnEl);
               setState(State.UNLOADED);
+              focus(openBtnEl);
           }, 0);
       };
       var handleModalClick = function () {
@@ -607,9 +607,7 @@ var ImageZoom = (function () {
       return el.cloneNode(deep);
   };
   var blur = function (el) {
-      if (el) {
-          el.blur();
-      }
+      el === null || el === void 0 ? void 0 : el.blur();
   };
   var focus = function (el) {
       if (el) {

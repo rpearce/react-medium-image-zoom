@@ -1,14 +1,12 @@
 import 'focus-options-polyfill'
 
+type PossibleElement = HTMLElement | null | undefined
+
 enum State {
   LOADED = 'LOADED',
   UNLOADED = 'UNLOADED',
   UNLOADING = 'UNLOADING',
 }
-
-type AriaHiddenSiblingsTuple = [HTMLElement, string][]
-type ModalEl = HTMLDivElement | undefined
-type ZoomEl = HTMLDivElement | undefined
 
 const ARIA_HIDDEN = 'aria-hidden'
 const ARIA_LABEL = 'aria-label'
@@ -84,11 +82,11 @@ const ImageZoom = (
   const documentBody = document.body
   const scrollableEl = window
 
-  let ariaHiddenSiblings: AriaHiddenSiblingsTuple = []
+  let ariaHiddenSiblings: [HTMLElement, string][] = []
   let closeBtnEl: HTMLButtonElement | undefined
   let boundaryDivFirst: HTMLDivElement | undefined
   let boundaryDivLast: HTMLDivElement | undefined
-  let modalEl: ModalEl
+  let modalEl: HTMLDivElement | undefined
   let motionPref: MediaQueryList | undefined
   let observer: MutationObserver | undefined
   let openBtnEl: HTMLButtonElement | undefined
@@ -106,11 +104,7 @@ const ImageZoom = (
     initMotionPref()
 
     if (isImg && !(targetEl as HTMLImageElement).complete) {
-      targetEl.addEventListener(LOAD, () => {
-        window.setTimeout(() => {
-          initImg()
-        }, 500)
-      })
+      addEventListener(LOAD, initImg, targetEl)
     } else {
       initImg()
     }
@@ -207,6 +201,7 @@ const ImageZoom = (
     } else {
       cleanupZoom()
       cleanupMutationObserver()
+      cleanupTargetLoad()
       cleanupDOMMutations()
     }
   }
@@ -235,15 +230,17 @@ const ImageZoom = (
   const cleanup = (): void => {
     cleanupZoom()
     cleanupMutationObserver()
-
-    if (isImg && targetEl) {
-      removeEventListener(LOAD, initImg, targetEl)
-    }
-
+    cleanupTargetLoad()
     cleanupDOMMutations()
     cleanupMotionPref()
 
     removeEventListener(RESIZE, handleResize, window)
+  }
+
+  const cleanupTargetLoad = ():void => {
+    if (isImg && targetEl) {
+      removeEventListener(LOAD, initImg, targetEl)
+    }
   }
 
   const cleanupDOMMutations = (): void => {
@@ -363,8 +360,8 @@ const ImageZoom = (
         targetCloneEl.style.visibility = ''
       }
       cleanupZoom()
-      focus(openBtnEl)
       setState(State.UNLOADED)
+      focus(openBtnEl)
     }, 0)
   }
 
@@ -818,10 +815,7 @@ interface AppendChild {
 const appendChild: AppendChild = (child, parent) => parent.appendChild(child)
 
 interface RemoveChild {
-  (
-    child: HTMLElement | null | undefined,
-    parent: HTMLElement | null | undefined
-  ): void
+  (child: PossibleElement, parent: PossibleElement): void
 }
 
 const removeChild: RemoveChild = (child, parent) => {
@@ -844,17 +838,15 @@ const cloneElement: CloneElement = (deep, el) =>
   el.cloneNode(deep) as HTMLElement
 
 interface Blur {
-  (el: HTMLElement | null | undefined): void
+  (el: PossibleElement): void
 }
 
 const blur: Blur = (el) => {
-  if (el) {
-    el.blur()
-  }
+  el?.blur()
 }
 
 interface Focus {
-  (el: HTMLElement | null | undefined): void
+  (el: PossibleElement): void
 }
 
 const focus: Focus = (el) => {
@@ -888,14 +880,6 @@ const forEachSibling: ForEachSibling = (handler, target) => {
 
     handler(el)
   }
-}
-
-interface ReplaceChild {
-  (
-    parentNode: HTMLElement | null | undefined,
-    oldChild: HTMLElement | null | undefined,
-    newChild: HTMLElement | null | undefined
-  ): void
 }
 
 interface AddEventListener {
