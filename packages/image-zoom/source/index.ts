@@ -14,6 +14,7 @@ const ARIA_HIDDEN = 'aria-hidden'
 const ARIA_LABEL = 'aria-label'
 const ARIA_MODAL = 'aria-modal'
 const BUTTON = 'button'
+const CLASS = 'class'
 const CLICK = 'click'
 const DATA_RMIZ_OVERLAY = 'data-rmiz-overlay'
 const DATA_RMIZ_WRAP = 'data-rmiz-wrap'
@@ -97,7 +98,6 @@ const ImageZoom = (
   let transitionDuration = _transitionDuration
   let originalStyleDisplay = ''
   let wrapEl: HTMLDivElement | undefined
-  let zoomImgEl: HTMLImageElement | undefined
   let zoomWrapEl: HTMLDivElement | undefined
 
   const init = (): void => {
@@ -176,7 +176,7 @@ const ImageZoom = (
 
     if (currentScale > 1) {
       if (!targetCloneEl) {
-        targetCloneEl = targetEl.cloneNode(true) as HTMLElement
+        targetCloneEl = cloneElement(true, targetEl)
         removeAttribute(TABINDEX, targetCloneEl)
 
         wrapEl = createElement(DIV) as HTMLDivElement
@@ -263,10 +263,6 @@ const ImageZoom = (
     removeEventListener(SCROLL, handleScroll, scrollableEl)
     removeEventListener(KEYDOWN, handleDocumentKeyDown, document)
 
-    if (zoomImgEl) {
-      removeEventListener(LOAD, handleZoomImgLoad, zoomImgEl)
-    }
-
     if (zoomWrapEl) {
       removeEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, zoomWrapEl)
       removeEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomWrapEl)
@@ -292,7 +288,6 @@ const ImageZoom = (
     closeBtnEl = undefined
     boundaryDivFirst = undefined
     boundaryDivLast = undefined
-    zoomImgEl = undefined
     zoomWrapEl = undefined
     overlayEl = undefined
     modalEl = undefined
@@ -344,10 +339,6 @@ const ImageZoom = (
     if (targetCloneEl) {
       targetCloneEl.style.visibility = 'hidden'
     }
-
-   if (zoomImgEl) {
-     removeEventListener(LOAD, handleZoomImgLoad, zoomImgEl)
-   }
 
     if (overlayEl) {
       setAttribute(
@@ -450,22 +441,24 @@ const ImageZoom = (
   const zoomImg = (): void => {
     if (!targetCloneEl || state !== State.UNLOADED) return
 
-    zoomImgEl = targetCloneEl.cloneNode(true) as HTMLImageElement
-    addEventListener(LOAD, handleZoomImgLoad, zoomImgEl)
-    setAttribute(STYLE, styleZoomImgContent, zoomImgEl)
-    removeAttribute(ID, zoomImgEl)
+    const cloneEl = cloneElement(true, targetCloneEl)
+    removeAttribute(ID, cloneEl)
+    removeAttribute(CLASS, cloneEl)
+    setAttribute(STYLE, styleZoomImgContent, cloneEl)
 
-    modalEl = createModal(zoomImgEl)
+    modalEl = createModal(cloneEl)
     appendChild(modalEl, documentBody)
 
     addEventListener(KEYDOWN, handleDocumentKeyDown, document)
     addEventListener(SCROLL, handleScroll, scrollableEl)
+
+    handleZoomImgLoad()
   }
 
   const zoomNonImg = (): void => {
     if (!targetCloneEl || state !== State.UNLOADED) return
 
-    const cloneEl = targetCloneEl.cloneNode(true) as HTMLElement
+    const cloneEl = cloneElement(true, targetCloneEl)
     removeAttribute(ID, cloneEl)
 
     modalEl = createModal(cloneEl)
@@ -842,6 +835,13 @@ interface CreateElement {
 }
 
 const createElement: CreateElement = (type) => document.createElement(type)
+
+interface CloneElement {
+  (deep: boolean, el: HTMLElement): HTMLElement
+}
+
+const cloneElement: CloneElement = (deep, el) =>
+  el.cloneNode(deep) as HTMLElement
 
 interface Blur {
   (el: HTMLElement | null | undefined): void

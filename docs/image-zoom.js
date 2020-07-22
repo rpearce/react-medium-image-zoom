@@ -101,6 +101,7 @@ var ImageZoom = (function () {
   var ARIA_LABEL = 'aria-label';
   var ARIA_MODAL = 'aria-modal';
   var BUTTON = 'button';
+  var CLASS = 'class';
   var CLICK = 'click';
   var DATA_RMIZ_OVERLAY = 'data-rmiz-overlay';
   var DATA_RMIZ_WRAP = 'data-rmiz-wrap';
@@ -141,7 +142,6 @@ var ImageZoom = (function () {
       var transitionDuration = _transitionDuration;
       var originalStyleDisplay = '';
       var wrapEl;
-      var zoomImgEl;
       var zoomWrapEl;
       var init = function () {
           addEventListener(RESIZE, handleResize, window);
@@ -199,7 +199,7 @@ var ImageZoom = (function () {
               : getScale(height, width, zoomMargin);
           if (currentScale > 1) {
               if (!targetCloneEl) {
-                  targetCloneEl = targetEl.cloneNode(true);
+                  targetCloneEl = cloneElement(true, targetEl);
                   removeAttribute(TABINDEX, targetCloneEl);
                   wrapEl = createElement(DIV);
                   openBtnEl = createElement(BUTTON);
@@ -274,9 +274,6 @@ var ImageZoom = (function () {
       var cleanupZoom = function () {
           removeEventListener(SCROLL, handleScroll, scrollableEl);
           removeEventListener(KEYDOWN, handleDocumentKeyDown, document);
-          if (zoomImgEl) {
-              removeEventListener(LOAD, handleZoomImgLoad, zoomImgEl);
-          }
           if (zoomWrapEl) {
               removeEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, zoomWrapEl);
               removeEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomWrapEl);
@@ -297,7 +294,6 @@ var ImageZoom = (function () {
           closeBtnEl = undefined;
           boundaryDivFirst = undefined;
           boundaryDivLast = undefined;
-          zoomImgEl = undefined;
           zoomWrapEl = undefined;
           overlayEl = undefined;
           modalEl = undefined;
@@ -338,9 +334,6 @@ var ImageZoom = (function () {
       var handleZoomImgLoad = function () {
           if (targetCloneEl) {
               targetCloneEl.style.visibility = 'hidden';
-          }
-          if (zoomImgEl) {
-              removeEventListener(LOAD, handleZoomImgLoad, zoomImgEl);
           }
           if (overlayEl) {
               setAttribute(STYLE, getStyleOverlay(overlayBgColorEnd, transitionDuration), overlayEl);
@@ -414,19 +407,20 @@ var ImageZoom = (function () {
       var zoomImg = function () {
           if (!targetCloneEl || state !== State.UNLOADED)
               return;
-          zoomImgEl = targetCloneEl.cloneNode(true);
-          addEventListener(LOAD, handleZoomImgLoad, zoomImgEl);
-          setAttribute(STYLE, styleZoomImgContent, zoomImgEl);
-          removeAttribute(ID, zoomImgEl);
-          modalEl = createModal(zoomImgEl);
+          var cloneEl = cloneElement(true, targetCloneEl);
+          removeAttribute(ID, cloneEl);
+          removeAttribute(CLASS, cloneEl);
+          setAttribute(STYLE, styleZoomImgContent, cloneEl);
+          modalEl = createModal(cloneEl);
           appendChild(modalEl, documentBody);
           addEventListener(KEYDOWN, handleDocumentKeyDown, document);
           addEventListener(SCROLL, handleScroll, scrollableEl);
+          handleZoomImgLoad();
       };
       var zoomNonImg = function () {
           if (!targetCloneEl || state !== State.UNLOADED)
               return;
-          var cloneEl = targetCloneEl.cloneNode(true);
+          var cloneEl = cloneElement(true, targetCloneEl);
           removeAttribute(ID, cloneEl);
           modalEl = createModal(cloneEl);
           appendChild(modalEl, documentBody);
@@ -609,6 +603,9 @@ var ImageZoom = (function () {
       }
   };
   var createElement = function (type) { return document.createElement(type); };
+  var cloneElement = function (deep, el) {
+      return el.cloneNode(deep);
+  };
   var blur = function (el) {
       if (el) {
           el.blur();
