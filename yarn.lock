@@ -662,7 +662,7 @@ __metadata:
     "@rollup/plugin-commonjs": 14.0.0
     "@rollup/plugin-node-resolve": 8.4.0
     focus-options-polyfill: 1.5.0
-    rollup: 2.22.2
+    rollup: 2.23.0
     rollup-plugin-terser: 6.1.0
     rollup-plugin-typescript2: 0.27.1
     terser: 4.8.0
@@ -854,13 +854,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:26.0.5":
-  version: 26.0.5
-  resolution: "@types/jest@npm:26.0.5"
+"@types/jest@npm:26.0.6":
+  version: 26.0.6
+  resolution: "@types/jest@npm:26.0.6"
   dependencies:
     jest-diff: ^25.2.1
     pretty-format: ^25.2.1
-  checksum: ffe129cacd0b1472ab8018d1cd5e88cd66f31223d1cc02f2366143e792eba59031432065c37199d7351da5c2b4a6cea21c4a6d30075f925dff3a9f32ba8dc04d
+  checksum: c0bf9e843bee97feb83fc84396f1ebcf20a8e137accfc472867370672d97031ba9d0b85a7d530044642e9ad4d29ccdcaf1b49a5ed4b5c21fc710c17c73072ab0
   languageName: node
   linkType: hard
 
@@ -6077,9 +6077,9 @@ resolve@1.15.1:
   languageName: node
   linkType: hard
 
-"rollup@npm:2.22.2":
-  version: 2.22.2
-  resolution: "rollup@npm:2.22.2"
+"rollup@npm:2.23.0":
+  version: 2.23.0
+  resolution: "rollup@npm:2.23.0"
   dependencies:
     fsevents: ~2.1.2
   dependenciesMeta:
@@ -6087,7 +6087,7 @@ resolve@1.15.1:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 93d41f0a506e1890b09632324385b6726fc71ab5cc9c755443dd22ab041fd034afbdc8aef1f854f06a58786f1cb35834509de5528d0871b1cb847dfb5a3920ba
+  checksum: 579691c582f1b1675a049f30410e6c04942b207775378afda3b16911582721ec0357a44cdc9d637841231b0846355ac4b3055fd32a2871840b7dab0c3235693d
   languageName: node
   linkType: hard
 
@@ -6097,7 +6097,7 @@ resolve@1.15.1:
   dependencies:
     "@testing-library/jest-dom": 5.11.1
     "@testing-library/react": 10.4.7
-    "@types/jest": 26.0.5
+    "@types/jest": 26.0.6
     "@types/node": 14.0.24
     "@types/react": 16.9.43
     "@types/react-dom": 16.9.8
