@@ -27,6 +27,11 @@ const HUNDRED_PCT = '100%'
 const ID = 'id'
 const KEYDOWN = 'keydown'
 const LOAD = 'load'
+const MARGIN = 'margin'
+const MARGIN_BOTTOM = 'marginBottom'
+const MARGIN_LEFT = 'marginLeft'
+const MARGIN_RIGHT = 'marginRight'
+const MARGIN_TOP = 'marginTop'
 const MAX_WIDTH = 'maxWidth'
 const NONE = 'none'
 const RESIZE = 'resize'
@@ -177,37 +182,54 @@ const ImageZoom = (
 
     if (currentScale > 1) {
       if (!targetCloneEl) {
-        targetCloneEl = cloneElement(true, targetEl)
-        removeAttribute(TABINDEX, targetCloneEl)
+        targetCloneEl = createTargetCloneEl()
+        wrapEl = createWrapEl()
+        openBtnEl = createOpenBtnEl()
 
-        if (isImg) {
-          setStyleProp(DISPLAY, BLOCK, targetCloneEl)
-          setStyleProp(MAX_WIDTH, HUNDRED_PCT, targetCloneEl)
+        // add targetCloneEl margin to wrapEl
+        const targetCloneStyles = getStyle(targetCloneEl)
+        const cloneMargin = targetCloneStyles[MARGIN]
+        const cloneMarginBottom = targetCloneStyles[MARGIN_BOTTOM]
+        const cloneMarginLeft = targetCloneStyles[MARGIN_LEFT]
+        const cloneMarginRight = targetCloneStyles[MARGIN_RIGHT]
+        const cloneMarginTop = targetCloneStyles[MARGIN_TOP]
+        if (cloneMargin) {
+          setStyleProp(MARGIN, cloneMargin, wrapEl)
+        }
+        if (cloneMarginBottom) {
+          setStyleProp(MARGIN_BOTTOM, cloneMarginBottom, wrapEl)
+        }
+        if (cloneMarginLeft) {
+          setStyleProp(MARGIN_LEFT, cloneMarginLeft, wrapEl)
+        }
+        if (cloneMarginRight) {
+          setStyleProp(MARGIN_RIGHT, cloneMarginRight, wrapEl)
+        }
+        if (cloneMarginTop) {
+          setStyleProp(MARGIN_TOP, cloneMarginTop, wrapEl)
         }
 
-        wrapEl = createElement(DIV) as HTMLDivElement
-        openBtnEl = createElement(BUTTON) as HTMLButtonElement
+        // remove margin from targetCloneEl
+        setStyleProp(MARGIN, '', targetCloneEl)
+        setStyleProp(MARGIN_BOTTOM, '', targetCloneEl)
+        setStyleProp(MARGIN_LEFT, '', targetCloneEl)
+        setStyleProp(MARGIN_RIGHT, '', targetCloneEl)
+        setStyleProp(MARGIN_TOP, '', targetCloneEl)
 
-        setAttribute(DATA_RMIZ_WRAP, '', wrapEl)
-        setAttribute(
-          STYLE,
-          isDisplayBlock ? styleWrapBlock : styleWrapInline,
-          wrapEl
-        )
-
-        setAttribute(ARIA_LABEL, openText, openBtnEl)
-        setAttribute(STYLE, styleZoomBtnIn, openBtnEl)
-        addEventListener(CLICK, handleOpenBtnClick, openBtnEl)
-
+        // add targetCloneEl & openBtnEl to the wrapEl
         appendChild(targetCloneEl, wrapEl)
         appendChild(openBtnEl, wrapEl)
 
+        // store the original display style,
+        // hide the targetEl, and insert wrapEl
+        // just before targetEl
         if (targetEl.parentNode) {
           originalStyleDisplay = getStyleProp(DISPLAY, targetEl)
 
           setStyleProp(DISPLAY, NONE, targetEl)
           targetEl.parentNode.insertBefore(wrapEl, targetEl)
         }
+
         initMutationObserver()
       }
     } else {
@@ -216,6 +238,39 @@ const ImageZoom = (
       cleanupTargetLoad()
       cleanupDOMMutations()
     }
+  }
+
+  const createTargetCloneEl = () => {
+    const el = cloneElement(true, targetEl)
+
+    removeAttribute(TABINDEX, el)
+
+    if (isImg) {
+      setStyleProp(DISPLAY, BLOCK, el)
+      setStyleProp(MAX_WIDTH, HUNDRED_PCT, el)
+    }
+
+    return el
+  }
+
+  const createWrapEl = (): HTMLDivElement => {
+    const el = createElement(DIV) as HTMLDivElement
+    const styleStr = isDisplayBlock ? styleWrapBlock : styleWrapInline
+
+    setAttribute(DATA_RMIZ_WRAP, '', el)
+    setAttribute(STYLE, styleStr, el)
+
+    return el
+  }
+
+  const createOpenBtnEl = (): HTMLButtonElement => {
+    const el = createElement(BUTTON) as HTMLButtonElement
+
+    setAttribute(ARIA_LABEL, openText, el)
+    setAttribute(STYLE, styleZoomBtnIn, el)
+    addEventListener(CLICK, handleOpenBtnClick, el)
+
+    return el
   }
 
   const update: Update = (opts = {}) => {
@@ -951,21 +1006,25 @@ interface GetStyle {
 
 const getStyle: GetStyle = (el) => el.style
 
+type CSSProps =
+  'display'
+  | 'margin'
+  | 'marginBottom'
+  | 'marginLeft'
+  | 'marginRight'
+  | 'marginTop'
+  | 'maxWidth'
+  | 'transform'
+  | 'visibility'
+
 interface GetStyleProp {
-  (
-    attr: 'display' | 'maxWidth' | 'transform' | 'visibility',
-    el: HTMLElement
-  ): string
+  (attr: CSSProps, el: HTMLElement): string
 }
 
 const getStyleProp: GetStyleProp = (attr, el) => getStyle(el)[attr]
 
 interface SetStyleProp {
-  (
-    attr: 'display' | 'maxWidth' | 'visibility',
-    value: string,
-    el: HTMLElement
-  ): void
+  (attr: CSSProps, value: string, el: HTMLElement): void
 }
 
 const setStyleProp: SetStyleProp = (attr, value, el) => {

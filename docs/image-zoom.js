@@ -116,6 +116,11 @@ var ImageZoom = (function () {
   var ID = 'id';
   var KEYDOWN = 'keydown';
   var LOAD = 'load';
+  var MARGIN = 'margin';
+  var MARGIN_BOTTOM = 'marginBottom';
+  var MARGIN_LEFT = 'marginLeft';
+  var MARGIN_RIGHT = 'marginRight';
+  var MARGIN_TOP = 'marginTop';
   var MAX_WIDTH = 'maxWidth';
   var NONE = 'none';
   var RESIZE = 'resize';
@@ -202,21 +207,43 @@ var ImageZoom = (function () {
               : getScale(height, width, zoomMargin);
           if (currentScale > 1) {
               if (!targetCloneEl) {
-                  targetCloneEl = cloneElement(true, targetEl);
-                  removeAttribute(TABINDEX, targetCloneEl);
-                  if (isImg) {
-                      setStyleProp(DISPLAY, BLOCK, targetCloneEl);
-                      setStyleProp(MAX_WIDTH, HUNDRED_PCT, targetCloneEl);
+                  targetCloneEl = createTargetCloneEl();
+                  wrapEl = createWrapEl();
+                  openBtnEl = createOpenBtnEl();
+                  // add targetCloneEl margin to wrapEl
+                  var targetCloneStyles = getStyle(targetCloneEl);
+                  var cloneMargin = targetCloneStyles[MARGIN];
+                  var cloneMarginBottom = targetCloneStyles[MARGIN_BOTTOM];
+                  var cloneMarginLeft = targetCloneStyles[MARGIN_LEFT];
+                  var cloneMarginRight = targetCloneStyles[MARGIN_RIGHT];
+                  var cloneMarginTop = targetCloneStyles[MARGIN_TOP];
+                  if (cloneMargin) {
+                      setStyleProp(MARGIN, cloneMargin, wrapEl);
                   }
-                  wrapEl = createElement(DIV);
-                  openBtnEl = createElement(BUTTON);
-                  setAttribute(DATA_RMIZ_WRAP, '', wrapEl);
-                  setAttribute(STYLE, isDisplayBlock ? styleWrapBlock : styleWrapInline, wrapEl);
-                  setAttribute(ARIA_LABEL, openText, openBtnEl);
-                  setAttribute(STYLE, styleZoomBtnIn, openBtnEl);
-                  addEventListener(CLICK, handleOpenBtnClick, openBtnEl);
+                  if (cloneMarginBottom) {
+                      setStyleProp(MARGIN_BOTTOM, cloneMarginBottom, wrapEl);
+                  }
+                  if (cloneMarginLeft) {
+                      setStyleProp(MARGIN_LEFT, cloneMarginLeft, wrapEl);
+                  }
+                  if (cloneMarginRight) {
+                      setStyleProp(MARGIN_RIGHT, cloneMarginRight, wrapEl);
+                  }
+                  if (cloneMarginTop) {
+                      setStyleProp(MARGIN_TOP, cloneMarginTop, wrapEl);
+                  }
+                  // remove margin from targetCloneEl
+                  setStyleProp(MARGIN, '', targetCloneEl);
+                  setStyleProp(MARGIN_BOTTOM, '', targetCloneEl);
+                  setStyleProp(MARGIN_LEFT, '', targetCloneEl);
+                  setStyleProp(MARGIN_RIGHT, '', targetCloneEl);
+                  setStyleProp(MARGIN_TOP, '', targetCloneEl);
+                  // add targetCloneEl & openBtnEl to the wrapEl
                   appendChild(targetCloneEl, wrapEl);
                   appendChild(openBtnEl, wrapEl);
+                  // store the original display style,
+                  // hide the targetEl, and insert wrapEl
+                  // just before targetEl
                   if (targetEl.parentNode) {
                       originalStyleDisplay = getStyleProp(DISPLAY, targetEl);
                       setStyleProp(DISPLAY, NONE, targetEl);
@@ -231,6 +258,29 @@ var ImageZoom = (function () {
               cleanupTargetLoad();
               cleanupDOMMutations();
           }
+      };
+      var createTargetCloneEl = function () {
+          var el = cloneElement(true, targetEl);
+          removeAttribute(TABINDEX, el);
+          if (isImg) {
+              setStyleProp(DISPLAY, BLOCK, el);
+              setStyleProp(MAX_WIDTH, HUNDRED_PCT, el);
+          }
+          return el;
+      };
+      var createWrapEl = function () {
+          var el = createElement(DIV);
+          var styleStr = isDisplayBlock ? styleWrapBlock : styleWrapInline;
+          setAttribute(DATA_RMIZ_WRAP, '', el);
+          setAttribute(STYLE, styleStr, el);
+          return el;
+      };
+      var createOpenBtnEl = function () {
+          var el = createElement(BUTTON);
+          setAttribute(ARIA_LABEL, openText, el);
+          setAttribute(STYLE, styleZoomBtnIn, el);
+          addEventListener(CLICK, handleOpenBtnClick, el);
+          return el;
       };
       var update = function (opts) {
           if (opts === void 0) { opts = {}; }
