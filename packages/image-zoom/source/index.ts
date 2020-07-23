@@ -28,10 +28,6 @@ const ID = 'id'
 const KEYDOWN = 'keydown'
 const LOAD = 'load'
 const MARGIN = 'margin'
-const MARGIN_BOTTOM = 'marginBottom'
-const MARGIN_LEFT = 'marginLeft'
-const MARGIN_RIGHT = 'marginRight'
-const MARGIN_TOP = 'marginTop'
 const MAX_WIDTH = 'maxWidth'
 const NONE = 'none'
 const RESIZE = 'resize'
@@ -43,6 +39,7 @@ const TRANSFORM = 'transform'
 const TRANSITIONEND = 'transitionend'
 const TRUE_STR = 'true'
 const VISIBILITY = 'visibility'
+const ZERO = '0'
 
 export interface ImageZoomOpts {
   closeText?: string
@@ -85,7 +82,7 @@ const ImageZoom = (
   }: ImageZoomOpts = {},
   targetEl: HTMLElement
 ): ImageZoomReturnType => {
-  const isDisplayBlock = window.getComputedStyle(targetEl).display === BLOCK
+  const isDisplayBlock = getCompStyle(targetEl).display === BLOCK
   const isImgEl = targetEl.tagName === 'IMG'
   const isSvgSrc = isImgEl && SVG_REGEX.test(
     (targetEl as HTMLImageElement).currentSrc
@@ -186,35 +183,11 @@ const ImageZoom = (
         wrapEl = createWrapEl()
         openBtnEl = createOpenBtnEl()
 
-        // add targetCloneEl margin to wrapEl
-        const targetCloneStyles = getStyle(targetCloneEl)
-        const cloneMargin = targetCloneStyles[MARGIN]
-        const cloneMarginBottom = targetCloneStyles[MARGIN_BOTTOM]
-        const cloneMarginLeft = targetCloneStyles[MARGIN_LEFT]
-        const cloneMarginRight = targetCloneStyles[MARGIN_RIGHT]
-        const cloneMarginTop = targetCloneStyles[MARGIN_TOP]
-        if (cloneMargin) {
-          setStyleProp(MARGIN, cloneMargin, wrapEl)
-        }
-        if (cloneMarginBottom) {
-          setStyleProp(MARGIN_BOTTOM, cloneMarginBottom, wrapEl)
-        }
-        if (cloneMarginLeft) {
-          setStyleProp(MARGIN_LEFT, cloneMarginLeft, wrapEl)
-        }
-        if (cloneMarginRight) {
-          setStyleProp(MARGIN_RIGHT, cloneMarginRight, wrapEl)
-        }
-        if (cloneMarginTop) {
-          setStyleProp(MARGIN_TOP, cloneMarginTop, wrapEl)
-        }
+        // add targetEl margin to wrapEl
+        setStyleProp(MARGIN, getCompStyle(targetEl)[MARGIN], wrapEl)
 
         // remove margin from targetCloneEl
-        setStyleProp(MARGIN, '', targetCloneEl)
-        setStyleProp(MARGIN_BOTTOM, '', targetCloneEl)
-        setStyleProp(MARGIN_LEFT, '', targetCloneEl)
-        setStyleProp(MARGIN_RIGHT, '', targetCloneEl)
-        setStyleProp(MARGIN_TOP, '', targetCloneEl)
+        setStyleProp(MARGIN, ZERO, targetCloneEl)
 
         // add targetCloneEl & openBtnEl to the wrapEl
         appendChild(targetCloneEl, wrapEl)
@@ -556,11 +529,11 @@ const ImageZoom = (
     )
 
     boundaryDivFirst = createElement(DIV) as HTMLDivElement
-    setAttribute(TABINDEX, '0', boundaryDivFirst)
+    setAttribute(TABINDEX, ZERO, boundaryDivFirst)
     addEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivFirst)
 
     boundaryDivLast = createElement(DIV) as HTMLDivElement
-    setAttribute(TABINDEX, '0', boundaryDivLast)
+    setAttribute(TABINDEX, ZERO, boundaryDivLast)
     addEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivLast)
 
     closeBtnEl = createElement(BUTTON) as HTMLButtonElement
@@ -1030,3 +1003,9 @@ interface SetStyleProp {
 const setStyleProp: SetStyleProp = (attr, value, el) => {
   getStyle(el)[attr] = value
 }
+
+interface GetCompStyle {
+  (el: HTMLElement): CSSStyleDeclaration
+}
+
+const getCompStyle: GetCompStyle = (el) => window.getComputedStyle(el)

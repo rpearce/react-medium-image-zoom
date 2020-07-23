@@ -117,10 +117,6 @@ var ImageZoom = (function () {
   var KEYDOWN = 'keydown';
   var LOAD = 'load';
   var MARGIN = 'margin';
-  var MARGIN_BOTTOM = 'marginBottom';
-  var MARGIN_LEFT = 'marginLeft';
-  var MARGIN_RIGHT = 'marginRight';
-  var MARGIN_TOP = 'marginTop';
   var MAX_WIDTH = 'maxWidth';
   var NONE = 'none';
   var RESIZE = 'resize';
@@ -132,9 +128,10 @@ var ImageZoom = (function () {
   var TRANSITIONEND = 'transitionend';
   var TRUE_STR = 'true';
   var VISIBILITY = 'visibility';
+  var ZERO = '0';
   var ImageZoom = function (_a, targetEl) {
       var _b = _a === void 0 ? {} : _a, _c = _b.closeText, closeText = _c === void 0 ? 'Unzoom image' : _c, _d = _b.isControlled, isControlled = _d === void 0 ? false : _d, _e = _b.modalText, modalText = _e === void 0 ? 'Zoomed item' : _e, onZoomChange = _b.onZoomChange, _f = _b.openText, openText = _f === void 0 ? 'Zoom image' : _f, _g = _b.overlayBgColorEnd, overlayBgColorEnd = _g === void 0 ? 'rgba(255,255,255,0.95)' : _g, _h = _b.overlayBgColorStart, overlayBgColorStart = _h === void 0 ? 'rgba(255,255,255,0)' : _h, _j = _b.transitionDuration, _transitionDuration = _j === void 0 ? 300 : _j, _k = _b.zoomMargin, zoomMargin = _k === void 0 ? 0 : _k, _l = _b.zoomZindex, zoomZindex = _l === void 0 ? 2147483647 : _l;
-      var isDisplayBlock = window.getComputedStyle(targetEl).display === BLOCK;
+      var isDisplayBlock = getCompStyle(targetEl).display === BLOCK;
       var isImgEl = targetEl.tagName === 'IMG';
       var isSvgSrc = isImgEl && SVG_REGEX.test(targetEl.currentSrc);
       var isImg = !isSvgSrc && isImgEl;
@@ -210,34 +207,10 @@ var ImageZoom = (function () {
                   targetCloneEl = createTargetCloneEl();
                   wrapEl = createWrapEl();
                   openBtnEl = createOpenBtnEl();
-                  // add targetCloneEl margin to wrapEl
-                  var targetCloneStyles = getStyle(targetCloneEl);
-                  var cloneMargin = targetCloneStyles[MARGIN];
-                  var cloneMarginBottom = targetCloneStyles[MARGIN_BOTTOM];
-                  var cloneMarginLeft = targetCloneStyles[MARGIN_LEFT];
-                  var cloneMarginRight = targetCloneStyles[MARGIN_RIGHT];
-                  var cloneMarginTop = targetCloneStyles[MARGIN_TOP];
-                  if (cloneMargin) {
-                      setStyleProp(MARGIN, cloneMargin, wrapEl);
-                  }
-                  if (cloneMarginBottom) {
-                      setStyleProp(MARGIN_BOTTOM, cloneMarginBottom, wrapEl);
-                  }
-                  if (cloneMarginLeft) {
-                      setStyleProp(MARGIN_LEFT, cloneMarginLeft, wrapEl);
-                  }
-                  if (cloneMarginRight) {
-                      setStyleProp(MARGIN_RIGHT, cloneMarginRight, wrapEl);
-                  }
-                  if (cloneMarginTop) {
-                      setStyleProp(MARGIN_TOP, cloneMarginTop, wrapEl);
-                  }
+                  // add targetEl margin to wrapEl
+                  setStyleProp(MARGIN, getCompStyle(targetEl)[MARGIN], wrapEl);
                   // remove margin from targetCloneEl
-                  setStyleProp(MARGIN, '', targetCloneEl);
-                  setStyleProp(MARGIN_BOTTOM, '', targetCloneEl);
-                  setStyleProp(MARGIN_LEFT, '', targetCloneEl);
-                  setStyleProp(MARGIN_RIGHT, '', targetCloneEl);
-                  setStyleProp(MARGIN_TOP, '', targetCloneEl);
+                  setStyleProp(MARGIN, ZERO, targetCloneEl);
                   // add targetCloneEl & openBtnEl to the wrapEl
                   appendChild(targetCloneEl, wrapEl);
                   appendChild(openBtnEl, wrapEl);
@@ -500,10 +473,10 @@ var ImageZoom = (function () {
           overlayEl = createElement(DIV);
           setAttribute(STYLE, getStyleOverlay(overlayBgColorStart, transitionDuration), overlayEl);
           boundaryDivFirst = createElement(DIV);
-          setAttribute(TABINDEX, '0', boundaryDivFirst);
+          setAttribute(TABINDEX, ZERO, boundaryDivFirst);
           addEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivFirst);
           boundaryDivLast = createElement(DIV);
-          setAttribute(TABINDEX, '0', boundaryDivLast);
+          setAttribute(TABINDEX, ZERO, boundaryDivLast);
           addEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivLast);
           closeBtnEl = createElement(BUTTON);
           setAttribute(STYLE, styleZoomBtnOut, closeBtnEl);
@@ -713,6 +686,7 @@ var ImageZoom = (function () {
   var setStyleProp = function (attr, value, el) {
       getStyle(el)[attr] = value;
   };
+  var getCompStyle = function (el) { return window.getComputedStyle(el); };
 
   return ImageZoom;
 
