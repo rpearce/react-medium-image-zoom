@@ -100,6 +100,7 @@ var ImageZoom = (function () {
   var ARIA_HIDDEN = 'aria-hidden';
   var ARIA_LABEL = 'aria-label';
   var ARIA_MODAL = 'aria-modal';
+  var BLOCK = 'block';
   var BUTTON = 'button';
   var CLASS = 'class';
   var CLICK = 'click';
@@ -107,22 +108,28 @@ var ImageZoom = (function () {
   var DATA_RMIZ_WRAP = 'data-rmiz-wrap';
   var DATA_RMIZ_ZOOMED = 'data-rmiz-zoomed';
   var DIALOG = 'dialog';
+  var DISPLAY = 'display';
   var DIV = 'div';
   var FOCUS = 'focus';
+  var HIDDEN = 'hidden';
+  var HUNDRED_PCT = '100%';
   var ID = 'id';
   var KEYDOWN = 'keydown';
   var LOAD = 'load';
+  var MAX_WIDTH = 'maxWidth';
   var NONE = 'none';
   var RESIZE = 'resize';
   var ROLE = 'role';
   var SCROLL = 'scroll';
   var STYLE = 'style';
   var TABINDEX = 'tabindex';
+  var TRANSFORM = 'transform';
   var TRANSITIONEND = 'transitionend';
   var TRUE_STR = 'true';
+  var VISIBILITY = 'visibility';
   var ImageZoom = function (_a, targetEl) {
       var _b = _a === void 0 ? {} : _a, _c = _b.closeText, closeText = _c === void 0 ? 'Unzoom image' : _c, _d = _b.isControlled, isControlled = _d === void 0 ? false : _d, _e = _b.modalText, modalText = _e === void 0 ? 'Zoomed item' : _e, onZoomChange = _b.onZoomChange, _f = _b.openText, openText = _f === void 0 ? 'Zoom image' : _f, _g = _b.overlayBgColorEnd, overlayBgColorEnd = _g === void 0 ? 'rgba(255,255,255,0.95)' : _g, _h = _b.overlayBgColorStart, overlayBgColorStart = _h === void 0 ? 'rgba(255,255,255,0)' : _h, _j = _b.transitionDuration, _transitionDuration = _j === void 0 ? 300 : _j, _k = _b.zoomMargin, zoomMargin = _k === void 0 ? 0 : _k, _l = _b.zoomZindex, zoomZindex = _l === void 0 ? 2147483647 : _l;
-      var isDisplayBlock = window.getComputedStyle(targetEl).display === 'block';
+      var isDisplayBlock = window.getComputedStyle(targetEl).display === BLOCK;
       var isImgEl = targetEl.tagName === 'IMG';
       var isSvgSrc = isImgEl && SVG_REGEX.test(targetEl.currentSrc);
       var isImg = !isSvgSrc && isImgEl;
@@ -197,18 +204,22 @@ var ImageZoom = (function () {
               if (!targetCloneEl) {
                   targetCloneEl = cloneElement(true, targetEl);
                   removeAttribute(TABINDEX, targetCloneEl);
+                  if (isImg) {
+                      setStyleProp(DISPLAY, BLOCK, targetCloneEl);
+                      setStyleProp(MAX_WIDTH, HUNDRED_PCT, targetCloneEl);
+                  }
                   wrapEl = createElement(DIV);
                   openBtnEl = createElement(BUTTON);
                   setAttribute(DATA_RMIZ_WRAP, '', wrapEl);
-                  setAttribute(STYLE, isDisplayBlock ? styleWrapDiv : styleWrap, wrapEl);
+                  setAttribute(STYLE, isDisplayBlock ? styleWrapBlock : styleWrapInline, wrapEl);
                   setAttribute(ARIA_LABEL, openText, openBtnEl);
                   setAttribute(STYLE, styleZoomBtnIn, openBtnEl);
                   addEventListener(CLICK, handleOpenBtnClick, openBtnEl);
                   appendChild(targetCloneEl, wrapEl);
                   appendChild(openBtnEl, wrapEl);
                   if (targetEl.parentNode) {
-                      originalStyleDisplay = targetEl.style.display;
-                      targetEl.style.display = NONE;
+                      originalStyleDisplay = getStyleProp(DISPLAY, targetEl);
+                      setStyleProp(DISPLAY, NONE, targetEl);
                       targetEl.parentNode.insertBefore(wrapEl, targetEl);
                   }
                   initMutationObserver();
@@ -266,7 +277,7 @@ var ImageZoom = (function () {
               removeEventListener(CLICK, handleOpenBtnClick, openBtnEl);
           }
           removeChild(wrapEl, wrapEl === null || wrapEl === void 0 ? void 0 : wrapEl.parentNode);
-          targetEl.style.display = originalStyleDisplay;
+          setStyleProp(DISPLAY, originalStyleDisplay, targetEl);
           openBtnEl = undefined;
           wrapEl = undefined;
           targetCloneEl = undefined;
@@ -333,7 +344,7 @@ var ImageZoom = (function () {
       };
       var handleZoomImgLoad = function () {
           if (targetCloneEl) {
-              targetCloneEl.style.visibility = 'hidden';
+              setStyleProp(VISIBILITY, HIDDEN, targetCloneEl);
           }
           if (overlayEl) {
               setAttribute(STYLE, getStyleOverlay(overlayBgColorEnd, transitionDuration), overlayEl);
@@ -348,7 +359,7 @@ var ImageZoom = (function () {
           // timeout for Safari flickering issue
           window.setTimeout(function () {
               if (targetCloneEl) {
-                  targetCloneEl.style.visibility = '';
+                  setStyleProp(VISIBILITY, '', targetCloneEl);
               }
               cleanupZoom();
               setState(State.UNLOADED);
@@ -503,19 +514,19 @@ var ImageZoom = (function () {
   //
   var styleAllDirsZero = 'top:0;right:0;bottom:0;left:0;';
   var styleAppearanceNone = '-webkit-appearance:none;-moz-appearance:none;appearance:none;';
-  var styleFastTap = 'touch-action:manipulation;';
-  var stylePosAbsolute = 'position:absolute;';
-  var stylePosRelative = 'position:relative;';
-  var styleTransitionTimingFn = 'cubic-bezier(0.2,0,0.2,1)';
-  var styleVisibilityHidden = 'visibility:hidden;';
-  var styleHeight100pct = 'height:100%;';
-  var styleWidth100pct = 'width:100%;';
-  var styleWrap = stylePosRelative +
-      'display:inline-flex;' +
-      'align-items:flex-start;';
-  var styleWrapDiv = styleWrap + styleWidth100pct;
   var styleCursorZoomIn = 'cursor:-webkit-zoom-in;cursor:zoom-in;';
   var styleCursorZoomOut = 'cursor:-webkit-zoom-out;cursor:zoom-out;';
+  var styleDisplayBlock = 'display:block;';
+  var styleFastTap = 'touch-action:manipulation;';
+  var styleHeight100pct = "height:" + HUNDRED_PCT + ";";
+  var styleMaxWidth100pct = "max-width:" + HUNDRED_PCT + ";";
+  var stylePosAbsolute = 'position:absolute;';
+  var stylePosRelative = 'position:relative;';
+  var styleTransitionTimingFn = 'cubic-bezier(.42,0,.58,1);';
+  var styleVisibilityHidden = 'visibility:hidden;';
+  var styleWidth100pct = "width:" + HUNDRED_PCT + ";";
+  var styleWrapInline = 'display:inline-block;' + stylePosRelative;
+  var styleWrapBlock = styleWrapInline + styleWidth100pct;
   var styleZoomBtn = stylePosAbsolute +
       styleAllDirsZero +
       styleHeight100pct +
@@ -528,7 +539,9 @@ var ImageZoom = (function () {
   var styleZoomBtnIn = styleZoomBtnBase + styleCursorZoomIn;
   var styleZoomBtnOut = styleZoomBtnBase + styleCursorZoomOut + 'z-index:1;';
   var styleZoomStart = stylePosAbsolute + styleVisibilityHidden;
-  var styleZoomImgContent = styleHeight100pct + 'max-width:100%;';
+  var styleZoomImgContent = styleDisplayBlock +
+      styleHeight100pct +
+      styleMaxWidth100pct;
   var getStyleOverlay = function (backgroundColor, transitionDuration) {
       var td = transitionDuration ? transitionDuration / 3 : transitionDuration;
       return stylePosAbsolute +
@@ -559,7 +572,7 @@ var ImageZoom = (function () {
           return getZoomImgStyleStr(0, 0, 0, 0, NONE, 0);
       }
       var _a = containerEl.getBoundingClientRect(), height = _a.height, left = _a.left, top = _a.top, width = _a.width;
-      var originalTransform = targetEl.style.transform;
+      var originalTransform = getStyleProp(TRANSFORM, targetEl);
       if (state !== State.LOADED) {
           var initTransform = 'scale(1) translate(0,0)' +
               (originalTransform ? " " + originalTransform : '');
@@ -639,9 +652,16 @@ var ImageZoom = (function () {
       if (useCapture === void 0) { useCapture = false; }
       el.removeEventListener(type, handler, useCapture);
   };
-  var removeAttribute = function (attr, el) { return el.removeAttribute(attr); };
+  var removeAttribute = function (attr, el) {
+      el.removeAttribute(attr);
+  };
   var setAttribute = function (attr, value, el) {
       return el.setAttribute(attr, value);
+  };
+  var getStyle = function (el) { return el.style; };
+  var getStyleProp = function (attr, el) { return getStyle(el)[attr]; };
+  var setStyleProp = function (attr, value, el) {
+      getStyle(el)[attr] = value;
   };
 
   return ImageZoom;

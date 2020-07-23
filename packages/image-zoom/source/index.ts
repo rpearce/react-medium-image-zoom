@@ -11,6 +11,7 @@ enum State {
 const ARIA_HIDDEN = 'aria-hidden'
 const ARIA_LABEL = 'aria-label'
 const ARIA_MODAL = 'aria-modal'
+const BLOCK = 'block'
 const BUTTON = 'button'
 const CLASS = 'class'
 const CLICK = 'click'
@@ -18,19 +19,25 @@ const DATA_RMIZ_OVERLAY = 'data-rmiz-overlay'
 const DATA_RMIZ_WRAP = 'data-rmiz-wrap'
 const DATA_RMIZ_ZOOMED = 'data-rmiz-zoomed'
 const DIALOG = 'dialog'
+const DISPLAY = 'display'
 const DIV = 'div'
 const FOCUS = 'focus'
+const HIDDEN = 'hidden'
+const HUNDRED_PCT = '100%'
 const ID = 'id'
 const KEYDOWN = 'keydown'
 const LOAD = 'load'
+const MAX_WIDTH = 'maxWidth'
 const NONE = 'none'
 const RESIZE = 'resize'
 const ROLE = 'role'
 const SCROLL = 'scroll'
 const STYLE = 'style'
 const TABINDEX = 'tabindex'
+const TRANSFORM = 'transform'
 const TRANSITIONEND = 'transitionend'
 const TRUE_STR = 'true'
+const VISIBILITY = 'visibility'
 
 export interface ImageZoomOpts {
   closeText?: string
@@ -73,7 +80,7 @@ const ImageZoom = (
   }: ImageZoomOpts = {},
   targetEl: HTMLElement
 ): ImageZoomReturnType => {
-  const isDisplayBlock = window.getComputedStyle(targetEl).display === 'block'
+  const isDisplayBlock = window.getComputedStyle(targetEl).display === BLOCK
   const isImgEl = targetEl.tagName === 'IMG'
   const isSvgSrc = isImgEl && SVG_REGEX.test(
     (targetEl as HTMLImageElement).currentSrc
@@ -173,13 +180,18 @@ const ImageZoom = (
         targetCloneEl = cloneElement(true, targetEl)
         removeAttribute(TABINDEX, targetCloneEl)
 
+        if (isImg) {
+          setStyleProp(DISPLAY, BLOCK, targetCloneEl)
+          setStyleProp(MAX_WIDTH, HUNDRED_PCT, targetCloneEl)
+        }
+
         wrapEl = createElement(DIV) as HTMLDivElement
         openBtnEl = createElement(BUTTON) as HTMLButtonElement
 
         setAttribute(DATA_RMIZ_WRAP, '', wrapEl)
         setAttribute(
           STYLE,
-          isDisplayBlock ? styleWrapDiv : styleWrap,
+          isDisplayBlock ? styleWrapBlock : styleWrapInline,
           wrapEl
         )
 
@@ -191,9 +203,9 @@ const ImageZoom = (
         appendChild(openBtnEl, wrapEl)
 
         if (targetEl.parentNode) {
-          originalStyleDisplay = targetEl.style.display
+          originalStyleDisplay = getStyleProp(DISPLAY, targetEl)
 
-          targetEl.style.display = NONE
+          setStyleProp(DISPLAY, NONE, targetEl)
           targetEl.parentNode.insertBefore(wrapEl, targetEl)
         }
         initMutationObserver()
@@ -249,7 +261,7 @@ const ImageZoom = (
     }
 
     removeChild(wrapEl, wrapEl?.parentNode as HTMLElement)
-    targetEl.style.display = originalStyleDisplay
+    setStyleProp(DISPLAY, originalStyleDisplay, targetEl)
 
     openBtnEl = undefined
     wrapEl = undefined
@@ -334,7 +346,7 @@ const ImageZoom = (
 
   const handleZoomImgLoad = (): void => {
     if (targetCloneEl) {
-      targetCloneEl.style.visibility = 'hidden'
+      setStyleProp(VISIBILITY, HIDDEN, targetCloneEl)
     }
 
     if (overlayEl) {
@@ -357,7 +369,7 @@ const ImageZoom = (
     // timeout for Safari flickering issue
     window.setTimeout(() => {
       if (targetCloneEl) {
-        targetCloneEl.style.visibility = ''
+        setStyleProp(VISIBILITY, '', targetCloneEl)
       }
       cleanupZoom()
       setState(State.UNLOADED)
@@ -579,23 +591,19 @@ export default ImageZoom
 
 const styleAllDirsZero = 'top:0;right:0;bottom:0;left:0;'
 const styleAppearanceNone = '-webkit-appearance:none;-moz-appearance:none;appearance:none;'
-const styleFastTap = 'touch-action:manipulation;'
-const stylePosAbsolute = 'position:absolute;'
-const stylePosRelative = 'position:relative;'
-const styleTransitionTimingFn = 'cubic-bezier(0.2,0,0.2,1)'
-const styleVisibilityHidden = 'visibility:hidden;'
-const styleHeight100pct = 'height:100%;'
-const styleWidth100pct = 'width:100%;'
-
-const styleWrap =
-  stylePosRelative +
-  'display:inline-flex;' +
-  'align-items:flex-start;'
-
-const styleWrapDiv = styleWrap + styleWidth100pct
-
 const styleCursorZoomIn = 'cursor:-webkit-zoom-in;cursor:zoom-in;'
 const styleCursorZoomOut = 'cursor:-webkit-zoom-out;cursor:zoom-out;'
+const styleDisplayBlock = 'display:block;'
+const styleFastTap = 'touch-action:manipulation;'
+const styleHeight100pct = `height:${HUNDRED_PCT};`
+const styleMaxWidth100pct = `max-width:${HUNDRED_PCT};`
+const stylePosAbsolute = 'position:absolute;'
+const stylePosRelative = 'position:relative;'
+const styleTransitionTimingFn = 'cubic-bezier(.42,0,.58,1);'
+const styleVisibilityHidden = 'visibility:hidden;'
+const styleWidth100pct = `width:${HUNDRED_PCT};`
+const styleWrapInline = 'display:inline-block;' + stylePosRelative
+const styleWrapBlock = styleWrapInline + styleWidth100pct
 
 const styleZoomBtn =
   stylePosAbsolute +
@@ -612,7 +620,11 @@ const styleZoomBtnIn = styleZoomBtnBase + styleCursorZoomIn
 const styleZoomBtnOut = styleZoomBtnBase + styleCursorZoomOut + 'z-index:1;'
 
 const styleZoomStart = stylePosAbsolute + styleVisibilityHidden
-const styleZoomImgContent = styleHeight100pct + 'max-width:100%;'
+
+const styleZoomImgContent =
+  styleDisplayBlock +
+  styleHeight100pct +
+  styleMaxWidth100pct
 
 interface GetStyleOverlay {
   (backgroundColor: string, transitionDuration: number): string
@@ -694,7 +706,7 @@ const getZoomImgStyle: GetZoomImgStyle = (
   }
 
   const { height, left, top, width } = containerEl.getBoundingClientRect()
-  const originalTransform = targetEl.style.transform
+  const originalTransform = getStyleProp(TRANSFORM, targetEl)
 
   if (state !== State.LOADED) {
     const initTransform =
@@ -922,7 +934,9 @@ interface RemoveAttribute {
   (attr: string, el: HTMLElement): void
 }
 
-const removeAttribute: RemoveAttribute = (attr, el) => el.removeAttribute(attr)
+const removeAttribute: RemoveAttribute = (attr, el) => {
+  el.removeAttribute(attr)
+}
 
 interface SetAttribute {
   (attr: string, value: string, el: HTMLElement): void
@@ -930,3 +944,30 @@ interface SetAttribute {
 
 const setAttribute: SetAttribute = (attr, value, el) =>
   el.setAttribute(attr, value)
+
+interface GetStyle {
+  (e: HTMLElement): CSSStyleDeclaration
+}
+
+const getStyle: GetStyle = (el) => el.style
+
+interface GetStyleProp {
+  (
+    attr: 'display' | 'maxWidth' | 'transform' | 'visibility',
+    el: HTMLElement
+  ): string
+}
+
+const getStyleProp: GetStyleProp = (attr, el) => getStyle(el)[attr]
+
+interface SetStyleProp {
+  (
+    attr: 'display' | 'maxWidth' | 'visibility',
+    value: string,
+    el: HTMLElement
+  ): void
+}
+
+const setStyleProp: SetStyleProp = (attr, value, el) => {
+  getStyle(el)[attr] = value
+}
