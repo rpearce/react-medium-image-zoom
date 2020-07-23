@@ -548,7 +548,7 @@ var ImageZoom = (function () {
   var styleTransitionTimingFn = 'cubic-bezier(.42,0,.58,1);';
   var styleVisibilityHidden = 'visibility:hidden;';
   var styleWidth100pct = "width:" + HUNDRED_PCT + ";";
-  var styleWrapInline = 'display:inline-block;' + stylePosRelative;
+  var styleWrapInline = 'display:inline-flex;' + stylePosRelative;
   var styleWrapBlock = styleWrapInline + styleWidth100pct;
   var styleZoomBtn = stylePosAbsolute +
       styleAllDirsZero +

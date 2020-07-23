@@ -630,7 +630,7 @@ const stylePosRelative = 'position:relative;'
 const styleTransitionTimingFn = 'cubic-bezier(.42,0,.58,1);'
 const styleVisibilityHidden = 'visibility:hidden;'
 const styleWidth100pct = `width:${HUNDRED_PCT};`
-const styleWrapInline = 'display:inline-block;' + stylePosRelative
+const styleWrapInline = 'display:inline-flex;' + stylePosRelative
 const styleWrapBlock = styleWrapInline + styleWidth100pct
 
 const styleZoomBtn =
