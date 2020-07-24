@@ -8,6 +8,12 @@ Accessible, progressive zooming for images.
 * Plain JavaScript: [@rpearce/image-zoom](./packages/image-zoom)
 * React.js: [react-medium-image-zoom](./packages/react-medium-image-zoom)
 
+## Browser Support
+* ie 11
+* firefox (latest)
+* safari (latest)
+* chrome (latest)
+
 ## Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
