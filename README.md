@@ -5,8 +5,8 @@
 Accessible, progressive zooming for images.
 
 ## Packages
-* [@rpearce/image-zoom](./packages/image-zoom)
-* [react-medium-image-zoom](./packages/react-medium-image-zoom)
+* Plain JavaScript: [@rpearce/image-zoom](./packages/image-zoom)
+* React.js: [react-medium-image-zoom](./packages/react-medium-image-zoom)
 
 ## Contributors
 
