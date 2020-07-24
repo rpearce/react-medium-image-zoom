@@ -878,10 +878,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:14.0.25":
-  version: 14.0.25
-  resolution: "@types/node@npm:14.0.25"
-  checksum: cb872904d38367d4dfa7904a2c1b3e429546bff8bc5c2e18846768aa7fd4408e06076ee1d9775f4ef629c6aef51c757978491c108069c67346848495fdaee876
+"@types/node@npm:14.0.26":
+  version: 14.0.26
+  resolution: "@types/node@npm:14.0.26"
+  checksum: fe900b9e9441d5c48ca854a5d6680689025767d0a4b6236512bcff44f443e380d1757ca2c6d5e96eac2a4a360be0af446b4d50b8f94348c1942e5cd7865a2499
   languageName: node
   linkType: hard
 
@@ -6098,7 +6098,7 @@ resolve@1.15.1:
     "@testing-library/jest-dom": 5.11.1
     "@testing-library/react": 10.4.7
     "@types/jest": 26.0.7
-    "@types/node": 14.0.25
+    "@types/node": 14.0.26
     "@types/react": 16.9.43
     "@types/react-dom": 16.9.8
     "@typescript-eslint/eslint-plugin": 3.7.0
