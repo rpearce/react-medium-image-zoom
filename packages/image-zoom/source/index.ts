@@ -30,6 +30,7 @@ const LOAD = 'load'
 const MARGIN = 'margin'
 const MAX_WIDTH = 'maxWidth'
 const NONE = 'none'
+const POSITION = 'position'
 const RESIZE = 'resize'
 const ROLE = 'role'
 const SCROLL = 'scroll'
@@ -82,7 +83,6 @@ const ImageZoom = (
   }: ImageZoomOpts = {},
   targetEl: HTMLElement
 ): ImageZoomReturnType => {
-  const isDisplayBlock = getCompStyle(targetEl).display === BLOCK
   const isImgEl = targetEl.tagName === 'IMG'
   const isSvgSrc = isImgEl && SVG_REGEX.test(
     (targetEl as HTMLImageElement).currentSrc
@@ -104,6 +104,7 @@ const ImageZoom = (
   let targetCloneEl: HTMLElement | undefined
   let transitionDuration = _transitionDuration
   let originalStyleDisplay = ''
+  let originalStyleMaxWidth = ''
   let wrapEl: HTMLDivElement | undefined
   let zoomWrapEl: HTMLDivElement | undefined
 
@@ -179,6 +180,10 @@ const ImageZoom = (
 
     if (currentScale > 1) {
       if (!targetCloneEl) {
+        // store the original display style & max-width
+        originalStyleDisplay = getComputedStyle(targetEl)[DISPLAY]
+        originalStyleMaxWidth = getComputedStyle(targetEl)[MAX_WIDTH]
+
         targetCloneEl = createTargetCloneEl()
         wrapEl = createWrapEl()
         openBtnEl = createOpenBtnEl()
@@ -193,12 +198,9 @@ const ImageZoom = (
         appendChild(targetCloneEl, wrapEl)
         appendChild(openBtnEl, wrapEl)
 
-        // store the original display style,
         // hide the targetEl, and insert wrapEl
         // just before targetEl
         if (targetEl.parentNode) {
-          originalStyleDisplay = getStyleProp(DISPLAY, targetEl)
-
           setStyleProp(DISPLAY, NONE, targetEl)
           targetEl.parentNode.insertBefore(wrapEl, targetEl)
         }
@@ -218,9 +220,9 @@ const ImageZoom = (
 
     removeAttribute(TABINDEX, el)
 
-    if (isImg) {
+    if (isImg || originalStyleDisplay !== BLOCK) {
       setStyleProp(DISPLAY, BLOCK, el)
-      setStyleProp(MAX_WIDTH, HUNDRED_PCT, el)
+      setStyleProp(MAX_WIDTH, originalStyleMaxWidth || HUNDRED_PCT, el)
     }
 
     return el
@@ -228,7 +230,9 @@ const ImageZoom = (
 
   const createWrapEl = (): HTMLDivElement => {
     const el = createElement(DIV) as HTMLDivElement
-    const styleStr = isDisplayBlock ? styleWrapBlock : styleWrapInline
+    const styleStr = originalStyleDisplay === BLOCK
+      ? styleWrapBlock
+      : styleWrapInline
 
     setAttribute(DATA_RMIZ_WRAP, '', el)
     setAttribute(STYLE, styleStr, el)
@@ -618,28 +622,34 @@ export default ImageZoom
 //
 
 const styleAllDirsZero = 'top:0;right:0;bottom:0;left:0;'
-const styleAppearanceNone = '-webkit-appearance:none;-moz-appearance:none;appearance:none;'
+const styleAppearanceNone = `-webkit-appearance:${NONE};-moz-appearance:${NONE};appearance:${NONE};`
 const styleCursorZoomIn = 'cursor:-webkit-zoom-in;cursor:zoom-in;'
 const styleCursorZoomOut = 'cursor:-webkit-zoom-out;cursor:zoom-out;'
-const styleDisplayBlock = 'display:block;'
+const styleDisplayBlock = `${DISPLAY}:${BLOCK};`
 const styleFastTap = 'touch-action:manipulation;'
 const styleHeight100pct = `height:${HUNDRED_PCT};`
 const styleMaxWidth100pct = `max-width:${HUNDRED_PCT};`
-const stylePosAbsolute = 'position:absolute;'
-const stylePosRelative = 'position:relative;'
+const stylePosAbsolute = `${POSITION}:absolute;`
+const stylePosRelative = `${POSITION}:relative;`
 const styleTransitionTimingFn = 'cubic-bezier(.42,0,.58,1);'
-const styleVisibilityHidden = 'visibility:hidden;'
+const styleVisibilityHidden = `${VISIBILITY}:${HIDDEN};`
 const styleWidth100pct = `width:${HUNDRED_PCT};`
-const styleWrapInline = 'display:inline-flex;' + stylePosRelative
-const styleWrapBlock = styleWrapInline + styleWidth100pct
+const styleDisplayInlineBlock = `${DISPLAY}:inline-block;`
+
+const styleWrapInline =
+  stylePosRelative +
+  styleDisplayInlineBlock +
+  `vertical-align:top;`
+
+const styleWrapBlock = stylePosRelative + styleDisplayBlock
 
 const styleZoomBtn =
   stylePosAbsolute +
   styleAllDirsZero +
   styleHeight100pct +
   styleWidth100pct +
-  'background:none;' +
-  'border:none;' +
+  `background:${NONE};` +
+  `border:${NONE};` +
   'margin:0;' +
   'padding:0;'
 
@@ -988,6 +998,7 @@ type CSSProps =
   | 'marginTop'
   | 'maxWidth'
   | 'transform'
+  | 'verticalAlign'
   | 'visibility'
 
 interface GetStyleProp {
