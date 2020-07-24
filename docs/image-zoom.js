@@ -544,9 +544,11 @@ var ImageZoom = (function () {
   //
   var styleAllDirsZero = 'top:0;right:0;bottom:0;left:0;';
   var styleAppearanceNone = "-webkit-appearance:" + NONE + ";-moz-appearance:" + NONE + ";appearance:" + NONE + ";";
-  var styleCursorZoomIn = 'cursor:-webkit-zoom-in;cursor:zoom-in;';
-  var styleCursorZoomOut = 'cursor:-webkit-zoom-out;cursor:zoom-out;';
+  var styleCursorPointer = 'cursor:pointer;';
+  var styleCursorZoomIn = styleCursorPointer + 'cursor:-webkit-zoom-in;cursor:zoom-in;';
+  var styleCursorZoomOut = styleCursorPointer + 'cursor:-webkit-zoom-out;cursor:zoom-out;';
   var styleDisplayBlock = DISPLAY + ":" + BLOCK + ";";
+  var styleDisplayInlineBlock = DISPLAY + ":inline-block;";
   var styleFastTap = 'touch-action:manipulation;';
   var styleHeight100pct = "height:" + HUNDRED_PCT + ";";
   var styleMaxWidth100pct = "max-width:" + HUNDRED_PCT + ";";
@@ -555,11 +557,10 @@ var ImageZoom = (function () {
   var styleTransitionTimingFn = 'cubic-bezier(.42,0,.58,1);';
   var styleVisibilityHidden = VISIBILITY + ":" + HIDDEN + ";";
   var styleWidth100pct = "width:" + HUNDRED_PCT + ";";
-  var styleDisplayInlineBlock = DISPLAY + ":inline-block;";
+  var styleWrapBlock = stylePosRelative + styleDisplayBlock;
   var styleWrapInline = stylePosRelative +
       styleDisplayInlineBlock +
       "vertical-align:top;";
-  var styleWrapBlock = stylePosRelative + styleDisplayBlock;
   var styleZoomBtn = stylePosAbsolute +
       styleAllDirsZero +
       styleHeight100pct +

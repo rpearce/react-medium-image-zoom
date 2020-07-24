@@ -626,9 +626,11 @@ export default ImageZoom
 
 const styleAllDirsZero = 'top:0;right:0;bottom:0;left:0;'
 const styleAppearanceNone = `-webkit-appearance:${NONE};-moz-appearance:${NONE};appearance:${NONE};`
-const styleCursorZoomIn = 'cursor:-webkit-zoom-in;cursor:zoom-in;'
-const styleCursorZoomOut = 'cursor:-webkit-zoom-out;cursor:zoom-out;'
+const styleCursorPointer = 'cursor:pointer;'
+const styleCursorZoomIn = styleCursorPointer + 'cursor:-webkit-zoom-in;cursor:zoom-in;'
+const styleCursorZoomOut = styleCursorPointer + 'cursor:-webkit-zoom-out;cursor:zoom-out;'
 const styleDisplayBlock = `${DISPLAY}:${BLOCK};`
+const styleDisplayInlineBlock = `${DISPLAY}:inline-block;`
 const styleFastTap = 'touch-action:manipulation;'
 const styleHeight100pct = `height:${HUNDRED_PCT};`
 const styleMaxWidth100pct = `max-width:${HUNDRED_PCT};`
@@ -637,14 +639,12 @@ const stylePosRelative = `${POSITION}:relative;`
 const styleTransitionTimingFn = 'cubic-bezier(.42,0,.58,1);'
 const styleVisibilityHidden = `${VISIBILITY}:${HIDDEN};`
 const styleWidth100pct = `width:${HUNDRED_PCT};`
-const styleDisplayInlineBlock = `${DISPLAY}:inline-block;`
+const styleWrapBlock = stylePosRelative + styleDisplayBlock
 
 const styleWrapInline =
   stylePosRelative +
   styleDisplayInlineBlock +
   `vertical-align:top;`
-
-const styleWrapBlock = stylePosRelative + styleDisplayBlock
 
 const styleZoomBtn =
   stylePosAbsolute +
