@@ -331,6 +331,29 @@
 
       <section>
         <h2 class="l-constrained">
+          Example: Usage with a <code>&lt;picture&gt;</code> element
+        </h2>
+        <div  class="l-constrained">
+          <p>
+            Instead of initializing the zoom on the <code>&lt;img&gt;</code>
+            element, we do so on the <code>&lt;picture&gt;</code> element.
+          </p>
+          <div>
+            <picture data-uncontrolled>
+              <source media="(max-width: 800px)" srcSet="/andres-iga-7XKkJVw1d8c-unsplash-1600w.jpg" />
+              <img
+                alt="A pretty place in New Zealand"
+                src="/roell-de-ram-2DM7eOR5iyc-unsplash-1600w.jpg"
+                style="height:100%;max-width:100%;"
+                width="500"
+              />
+            </picture>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="l-constrained">
           Example: Image with SVG source
         </h2>
         <div  class="l-constrained">
