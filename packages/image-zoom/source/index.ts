@@ -104,7 +104,8 @@ const ImageZoom = (
   let targetCloneEl: HTMLElement | undefined
   let transitionDuration = _transitionDuration
   let originalStyleDisplay = ''
-  let originalStyleMaxWidth = ''
+  let originalCompDisplay = ''
+  let originalCompMaxWidth = ''
   let wrapEl: HTMLDivElement | undefined
   let zoomWrapEl: HTMLDivElement | undefined
 
@@ -181,8 +182,10 @@ const ImageZoom = (
     if (currentScale > 1) {
       if (!targetCloneEl) {
         // store the original display style & max-width
-        originalStyleDisplay = getComputedStyle(targetEl)[DISPLAY]
-        originalStyleMaxWidth = getComputedStyle(targetEl)[MAX_WIDTH]
+        const compStyle = getComputedStyle(targetEl)
+        originalCompDisplay = compStyle[DISPLAY]
+        originalCompMaxWidth = compStyle[MAX_WIDTH]
+        originalStyleDisplay = getStyleProp(DISPLAY, targetEl)
 
         targetCloneEl = createTargetCloneEl()
         wrapEl = createWrapEl()
@@ -220,9 +223,9 @@ const ImageZoom = (
 
     removeAttribute(TABINDEX, el)
 
-    if (isImg || originalStyleDisplay !== BLOCK) {
+    if (isImg || originalCompDisplay !== BLOCK) {
       setStyleProp(DISPLAY, BLOCK, el)
-      setStyleProp(MAX_WIDTH, originalStyleMaxWidth || HUNDRED_PCT, el)
+      setStyleProp(MAX_WIDTH, originalCompMaxWidth || HUNDRED_PCT, el)
     }
 
     return el
@@ -230,7 +233,7 @@ const ImageZoom = (
 
   const createWrapEl = (): HTMLDivElement => {
     const el = createElement(DIV) as HTMLDivElement
-    const styleStr = originalStyleDisplay === BLOCK
+    const styleStr = originalCompDisplay === BLOCK
       ? styleWrapBlock
       : styleWrapInline
 

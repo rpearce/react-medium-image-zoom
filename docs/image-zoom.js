@@ -150,7 +150,8 @@ var ImageZoom = (function () {
       var targetCloneEl;
       var transitionDuration = _transitionDuration;
       var originalStyleDisplay = '';
-      var originalStyleMaxWidth = '';
+      var originalCompDisplay = '';
+      var originalCompMaxWidth = '';
       var wrapEl;
       var zoomWrapEl;
       var init = function () {
@@ -206,8 +207,10 @@ var ImageZoom = (function () {
           if (currentScale > 1) {
               if (!targetCloneEl) {
                   // store the original display style & max-width
-                  originalStyleDisplay = getComputedStyle(targetEl)[DISPLAY];
-                  originalStyleMaxWidth = getComputedStyle(targetEl)[MAX_WIDTH];
+                  var compStyle = getComputedStyle(targetEl);
+                  originalCompDisplay = compStyle[DISPLAY];
+                  originalCompMaxWidth = compStyle[MAX_WIDTH];
+                  originalStyleDisplay = getStyleProp(DISPLAY, targetEl);
                   targetCloneEl = createTargetCloneEl();
                   wrapEl = createWrapEl();
                   openBtnEl = createOpenBtnEl();
@@ -237,15 +240,15 @@ var ImageZoom = (function () {
       var createTargetCloneEl = function () {
           var el = cloneElement(true, targetEl);
           removeAttribute(TABINDEX, el);
-          if (isImg || originalStyleDisplay !== BLOCK) {
+          if (isImg || originalCompDisplay !== BLOCK) {
               setStyleProp(DISPLAY, BLOCK, el);
-              setStyleProp(MAX_WIDTH, originalStyleMaxWidth || HUNDRED_PCT, el);
+              setStyleProp(MAX_WIDTH, originalCompMaxWidth || HUNDRED_PCT, el);
           }
           return el;
       };
       var createWrapEl = function () {
           var el = createElement(DIV);
-          var styleStr = originalStyleDisplay === BLOCK
+          var styleStr = originalCompDisplay === BLOCK
               ? styleWrapBlock
               : styleWrapInline;
           setAttribute(DATA_RMIZ_WRAP, '', el);
