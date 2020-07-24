@@ -1182,9 +1182,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"all-contributors-cli@npm:6.16.1":
-  version: 6.16.1
-  resolution: "all-contributors-cli@npm:6.16.1"
+"all-contributors-cli@npm:6.17.0":
+  version: 6.17.0
+  resolution: "all-contributors-cli@npm:6.17.0"
   dependencies:
     "@babel/runtime": ^7.7.6
     async: ^3.0.1
@@ -1198,7 +1198,7 @@ __metadata:
     yargs: ^15.0.1
   bin:
     all-contributors: dist/cli.js
-  checksum: 762bcfb8b42f67eb864897325f9d2e7227430d5e978c133df80b0f55cd3c964a6d5a6908cefd94a98fd077a58d598dd6fca4aa35489e6176a459e76545fe414f
+  checksum: 374c121e62595222eea543c9ccabc99fa6bf9d08d82bfcfb9c2638b0a8469af9296322f0bbf815b1f6afd704f5283c8b39eb12dbdebd7ef33e57905776133530
   languageName: node
   linkType: hard
 
@@ -6103,7 +6103,7 @@ resolve@1.15.1:
     "@types/react-dom": 16.9.8
     "@typescript-eslint/eslint-plugin": 3.7.0
     "@typescript-eslint/parser": 3.7.0
-    all-contributors-cli: 6.16.1
+    all-contributors-cli: 6.17.0
     axe-core: 3.5.5
     chokidar-cli: 2.1.0
     coveralls: 3.1.0
