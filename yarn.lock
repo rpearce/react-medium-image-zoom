@@ -2531,14 +2531,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jest@npm:23.18.0":
-  version: 23.18.0
-  resolution: "eslint-plugin-jest@npm:23.18.0"
+"eslint-plugin-jest@npm:23.18.2":
+  version: 23.18.2
+  resolution: "eslint-plugin-jest@npm:23.18.2"
   dependencies:
     "@typescript-eslint/experimental-utils": ^2.5.0
   peerDependencies:
     eslint: ">=5"
-  checksum: 56bb63ff745c228288407e820369587b88bb47077139f425892a3629591c5e0d28372a17cfb976e2413b748521b01df05bde196017f9dcdd79902a182828b96b
+  checksum: 7333b24c911a214144f19538627609ef9c6128bd29ee6cddcbeb7553286ccbe8eb3c3b611f230936af1692014a1324c6c2669312d84ff0647e5348a6cb3e2ff5
   languageName: node
   linkType: hard
 
@@ -2572,9 +2572,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:7.20.3":
-  version: 7.20.3
-  resolution: "eslint-plugin-react@npm:7.20.3"
+"eslint-plugin-react@npm:7.20.4":
+  version: 7.20.4
+  resolution: "eslint-plugin-react@npm:7.20.4"
   dependencies:
     array-includes: ^3.1.1
     array.prototype.flatmap: ^1.2.3
@@ -2589,7 +2589,7 @@ __metadata:
     string.prototype.matchall: ^4.0.2
   peerDependencies:
     eslint: ^3 || ^4 || ^5 || ^6 || ^7
-  checksum: 00b1e5045e490515bf79912d8658cc9bba5f299a07df29e2dc4c643c15f821132a6fdade7b7525882dcf8ee37ecf1b3f93f23ad413f1bcce8b09f62e46264e09
+  checksum: 91162b67b5bea65e818b7f04f2336ffeb0bdccaf87d7520a235bb3857bf7c7781a2073088f9dd56cf149c801f3d84a12d4c88d3e6e65f8bb2508dce9f58257dd
   languageName: node
   linkType: hard
 
@@ -6108,9 +6108,9 @@ resolve@1.15.1:
     chokidar-cli: 2.1.0
     coveralls: 3.1.0
     eslint: 7.5.0
-    eslint-plugin-jest: 23.18.0
+    eslint-plugin-jest: 23.18.2
     eslint-plugin-jsx-a11y: 6.3.1
-    eslint-plugin-react: 7.20.3
+    eslint-plugin-react: 7.20.4
     eslint-plugin-react-hooks: 4.0.8
     jest: 26.1.0
     npm-run-all: 4.1.5

@@ -8,7 +8,7 @@ cache: yarn
 before_install:
   - npm i -g yarn@berry
   - yarn set version berry
-  - yarn set version latest
+  - yarn set version 2.1.1
 
 install:
   - yarn install --immutable
