@@ -406,6 +406,8 @@ const ImageZoom = (
     }
 
     setState(State.LOADED)
+
+    ariaHideOtherContent()
   }
 
   const handleUnzoomTransitionEnd = (): void => {
@@ -487,7 +489,6 @@ const ImageZoom = (
     }
 
     blur(openBtnEl)
-    ariaHideOtherContent()
   }
 
   const zoomImg = (): void => {
@@ -572,25 +573,25 @@ const ImageZoom = (
   }
 
   const ariaHideOtherContent = (): void => {
-    if (!modalEl) return
+    if (modalEl) {
+      forEachSibling((el) => {
+        const ariaHiddenValue = el.getAttribute(ARIA_HIDDEN)
 
-    forEachSibling((el) => {
-      const ariaHiddenValue = el.getAttribute(ARIA_HIDDEN)
+        if (ariaHiddenValue) {
+          ariaHiddenSiblings.push([el, ariaHiddenValue])
+        }
 
-      if (ariaHiddenValue) {
-        ariaHiddenSiblings.push([el, ariaHiddenValue])
-      }
-
-      el.setAttribute(ARIA_HIDDEN, TRUE_STR)
-    }, modalEl)
+        el.setAttribute(ARIA_HIDDEN, TRUE_STR)
+      }, modalEl)
+    }
   }
 
   const ariaResetOtherContent = (): void => {
-    if (!modalEl) return
-
-    forEachSibling((el) => {
-      removeAttribute(ARIA_HIDDEN, el)
-    }, modalEl)
+    if (modalEl) {
+      forEachSibling((el) => {
+        removeAttribute(ARIA_HIDDEN, el)
+      }, modalEl)
+    }
 
     ariaHiddenSiblings.forEach(([el, ariaHiddenValue]) => {
       if (el) {
@@ -604,6 +605,8 @@ const ImageZoom = (
   const unzoom = (): void => {
     if (state === State.LOADED) {
       blur(closeBtnEl)
+
+      ariaResetOtherContent()
 
       if (zoomWrapEl) {
         addEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, zoomWrapEl)
@@ -621,8 +624,6 @@ const ImageZoom = (
     if (state !== State.UNLOADED) {
       setState(State.UNLOADING)
     }
-
-    ariaResetOtherContent()
   }
 
   init()

@@ -391,6 +391,7 @@ var ImageZoom = (function () {
               setAttribute(STYLE, stylePosAbsolute, zoomWrapEl);
           }
           setState(State.LOADED);
+          ariaHideOtherContent();
       };
       var handleUnzoomTransitionEnd = function () {
           // timeout for Safari flickering issue
@@ -450,7 +451,6 @@ var ImageZoom = (function () {
               zoomNonImg();
           }
           blur(openBtnEl);
-          ariaHideOtherContent();
       };
       var zoomImg = function () {
           if (!targetCloneEl || state !== State.UNLOADED)
@@ -509,22 +509,22 @@ var ImageZoom = (function () {
           return el;
       };
       var ariaHideOtherContent = function () {
-          if (!modalEl)
-              return;
-          forEachSibling(function (el) {
-              var ariaHiddenValue = el.getAttribute(ARIA_HIDDEN);
-              if (ariaHiddenValue) {
-                  ariaHiddenSiblings.push([el, ariaHiddenValue]);
-              }
-              el.setAttribute(ARIA_HIDDEN, TRUE_STR);
-          }, modalEl);
+          if (modalEl) {
+              forEachSibling(function (el) {
+                  var ariaHiddenValue = el.getAttribute(ARIA_HIDDEN);
+                  if (ariaHiddenValue) {
+                      ariaHiddenSiblings.push([el, ariaHiddenValue]);
+                  }
+                  el.setAttribute(ARIA_HIDDEN, TRUE_STR);
+              }, modalEl);
+          }
       };
       var ariaResetOtherContent = function () {
-          if (!modalEl)
-              return;
-          forEachSibling(function (el) {
-              removeAttribute(ARIA_HIDDEN, el);
-          }, modalEl);
+          if (modalEl) {
+              forEachSibling(function (el) {
+                  removeAttribute(ARIA_HIDDEN, el);
+              }, modalEl);
+          }
           ariaHiddenSiblings.forEach(function (_a) {
               var el = _a[0], ariaHiddenValue = _a[1];
               if (el) {
@@ -536,6 +536,7 @@ var ImageZoom = (function () {
       var unzoom = function () {
           if (state === State.LOADED) {
               blur(closeBtnEl);
+              ariaResetOtherContent();
               if (zoomWrapEl) {
                   addEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, zoomWrapEl);
               }
@@ -546,7 +547,6 @@ var ImageZoom = (function () {
           if (state !== State.UNLOADED) {
               setState(State.UNLOADING);
           }
-          ariaResetOtherContent();
       };
       init();
       return { cleanup: cleanup, update: update };
