@@ -39,6 +39,7 @@ const TABINDEX = 'tabindex'
 const TRANSFORM = 'transform'
 const TRANSITIONEND = 'transitionend'
 const TRUE_STR = 'true'
+const TYPE = 'type'
 const VISIBILITY = 'visibility'
 const ZERO = '0'
 
@@ -92,6 +93,7 @@ const ImageZoom = (
   const scrollableEl = window
 
   let ariaHiddenSiblings: [HTMLElement, string][] = []
+  let cloneImgEl: HTMLImageElement | undefined
   let closeBtnEl: HTMLButtonElement | undefined
   let boundaryDivFirst: HTMLDivElement | undefined
   let boundaryDivLast: HTMLDivElement | undefined
@@ -248,6 +250,7 @@ const ImageZoom = (
 
     setAttribute(ARIA_LABEL, openText, el)
     setAttribute(STYLE, styleZoomBtnIn, el)
+    setAttribute(TYPE, BUTTON, el)
     addEventListener(CLICK, handleOpenBtnClick, el)
 
     return el
@@ -307,6 +310,10 @@ const ImageZoom = (
     removeEventListener(SCROLL, handleScroll, scrollableEl)
     removeEventListener(KEYDOWN, handleDocumentKeyDown, document)
 
+    if (cloneImgEl) {
+      removeEventListener(LOAD, handleZoomImgLoad, cloneImgEl)
+    }
+
     if (zoomWrapEl) {
       removeEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, zoomWrapEl)
       removeEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomWrapEl)
@@ -329,6 +336,7 @@ const ImageZoom = (
       removeChild(modalEl, documentBody)
     }
 
+    cloneImgEl = undefined
     closeBtnEl = undefined
     boundaryDivFirst = undefined
     boundaryDivLast = undefined
@@ -485,18 +493,17 @@ const ImageZoom = (
   const zoomImg = (): void => {
     if (!targetCloneEl || state !== State.UNLOADED) return
 
-    const cloneEl = cloneElement(true, targetCloneEl)
-    removeAttribute(ID, cloneEl)
-    removeAttribute(CLASS, cloneEl)
-    setAttribute(STYLE, styleZoomImgContent, cloneEl)
+    cloneImgEl = cloneElement(true, targetCloneEl) as HTMLImageElement
+    addEventListener(LOAD, handleZoomImgLoad, cloneImgEl)
+    removeAttribute(ID, cloneImgEl)
+    removeAttribute(CLASS, cloneImgEl)
+    setAttribute(STYLE, styleZoomImgContent, cloneImgEl)
 
-    modalEl = createModal(cloneEl)
+    modalEl = createModal(cloneImgEl)
     appendChild(modalEl, documentBody)
 
     addEventListener(KEYDOWN, handleDocumentKeyDown, document)
     addEventListener(SCROLL, handleScroll, scrollableEl)
-
-    handleZoomImgLoad()
   }
 
   const zoomNonImg = (): void => {
@@ -544,8 +551,9 @@ const ImageZoom = (
     addEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivLast)
 
     closeBtnEl = createElement(BUTTON) as HTMLButtonElement
-    setAttribute(STYLE, styleZoomBtnOut, closeBtnEl)
     setAttribute(ARIA_LABEL, closeText, closeBtnEl)
+    setAttribute(STYLE, styleZoomBtnOut, closeBtnEl)
+    setAttribute(TYPE, BUTTON, el)
     addEventListener(CLICK, handleCloseBtnClick, closeBtnEl)
 
     zoomWrapEl = createElement(DIV) as HTMLDivElement
@@ -564,6 +572,8 @@ const ImageZoom = (
   }
 
   const ariaHideOtherContent = (): void => {
+    if (!modalEl) return
+
     forEachSibling((el) => {
       const ariaHiddenValue = el.getAttribute(ARIA_HIDDEN)
 
@@ -572,13 +582,15 @@ const ImageZoom = (
       }
 
       el.setAttribute(ARIA_HIDDEN, TRUE_STR)
-    }, documentBody)
+    }, modalEl)
   }
 
   const ariaResetOtherContent = (): void => {
+    if (!modalEl) return
+
     forEachSibling((el) => {
       removeAttribute(ARIA_HIDDEN, el)
-    }, documentBody)
+    }, modalEl)
 
     ariaHiddenSiblings.forEach(([el, ariaHiddenValue]) => {
       if (el) {
@@ -918,6 +930,7 @@ const forEachSibling: ForEachSibling = (handler, target) => {
   for (let i = 0; i < nodes.length; i++) {
     const el = nodes[i] as HTMLElement
 
+    console.log(el)
     if (!el) return
 
     const { tagName } = el

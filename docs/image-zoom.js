@@ -128,6 +128,7 @@ var ImageZoom = (function () {
   var TRANSFORM = 'transform';
   var TRANSITIONEND = 'transitionend';
   var TRUE_STR = 'true';
+  var TYPE = 'type';
   var VISIBILITY = 'visibility';
   var ZERO = '0';
   var ImageZoom = function (_a, targetEl) {
@@ -138,6 +139,7 @@ var ImageZoom = (function () {
       var documentBody = document.body;
       var scrollableEl = window;
       var ariaHiddenSiblings = [];
+      var cloneImgEl;
       var closeBtnEl;
       var boundaryDivFirst;
       var boundaryDivLast;
@@ -259,6 +261,7 @@ var ImageZoom = (function () {
           var el = createElement(BUTTON);
           setAttribute(ARIA_LABEL, openText, el);
           setAttribute(STYLE, styleZoomBtnIn, el);
+          setAttribute(TYPE, BUTTON, el);
           addEventListener(CLICK, handleOpenBtnClick, el);
           return el;
       };
@@ -315,6 +318,9 @@ var ImageZoom = (function () {
       var cleanupZoom = function () {
           removeEventListener(SCROLL, handleScroll, scrollableEl);
           removeEventListener(KEYDOWN, handleDocumentKeyDown, document);
+          if (cloneImgEl) {
+              removeEventListener(LOAD, handleZoomImgLoad, cloneImgEl);
+          }
           if (zoomWrapEl) {
               removeEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, zoomWrapEl);
               removeEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomWrapEl);
@@ -332,6 +338,7 @@ var ImageZoom = (function () {
               removeEventListener(CLICK, handleModalClick, modalEl);
               removeChild(modalEl, documentBody);
           }
+          cloneImgEl = undefined;
           closeBtnEl = undefined;
           boundaryDivFirst = undefined;
           boundaryDivLast = undefined;
@@ -448,15 +455,15 @@ var ImageZoom = (function () {
       var zoomImg = function () {
           if (!targetCloneEl || state !== State.UNLOADED)
               return;
-          var cloneEl = cloneElement(true, targetCloneEl);
-          removeAttribute(ID, cloneEl);
-          removeAttribute(CLASS, cloneEl);
-          setAttribute(STYLE, styleZoomImgContent, cloneEl);
-          modalEl = createModal(cloneEl);
+          cloneImgEl = cloneElement(true, targetCloneEl);
+          addEventListener(LOAD, handleZoomImgLoad, cloneImgEl);
+          removeAttribute(ID, cloneImgEl);
+          removeAttribute(CLASS, cloneImgEl);
+          setAttribute(STYLE, styleZoomImgContent, cloneImgEl);
+          modalEl = createModal(cloneImgEl);
           appendChild(modalEl, documentBody);
           addEventListener(KEYDOWN, handleDocumentKeyDown, document);
           addEventListener(SCROLL, handleScroll, scrollableEl);
-          handleZoomImgLoad();
       };
       var zoomNonImg = function () {
           if (!targetCloneEl || state !== State.UNLOADED)
@@ -486,8 +493,9 @@ var ImageZoom = (function () {
           setAttribute(TABINDEX, ZERO, boundaryDivLast);
           addEventListener(FOCUS, handleFocusBoundaryDiv, boundaryDivLast);
           closeBtnEl = createElement(BUTTON);
-          setAttribute(STYLE, styleZoomBtnOut, closeBtnEl);
           setAttribute(ARIA_LABEL, closeText, closeBtnEl);
+          setAttribute(STYLE, styleZoomBtnOut, closeBtnEl);
+          setAttribute(TYPE, BUTTON, el);
           addEventListener(CLICK, handleCloseBtnClick, closeBtnEl);
           zoomWrapEl = createElement(DIV);
           setAttribute(DATA_RMIZ_ZOOMED, '', zoomWrapEl);
@@ -501,18 +509,22 @@ var ImageZoom = (function () {
           return el;
       };
       var ariaHideOtherContent = function () {
+          if (!modalEl)
+              return;
           forEachSibling(function (el) {
               var ariaHiddenValue = el.getAttribute(ARIA_HIDDEN);
               if (ariaHiddenValue) {
                   ariaHiddenSiblings.push([el, ariaHiddenValue]);
               }
               el.setAttribute(ARIA_HIDDEN, TRUE_STR);
-          }, documentBody);
+          }, modalEl);
       };
       var ariaResetOtherContent = function () {
+          if (!modalEl)
+              return;
           forEachSibling(function (el) {
               removeAttribute(ARIA_HIDDEN, el);
-          }, documentBody);
+          }, modalEl);
           ariaHiddenSiblings.forEach(function (_a) {
               var el = _a[0], ariaHiddenValue = _a[1];
               if (el) {
@@ -666,6 +678,7 @@ var ImageZoom = (function () {
       var nodes = ((_a = target.parentNode) === null || _a === void 0 ? void 0 : _a.children) || [];
       for (var i = 0; i < nodes.length; i++) {
           var el = nodes[i];
+          console.log(el);
           if (!el)
               return;
           var tagName = el.tagName;
