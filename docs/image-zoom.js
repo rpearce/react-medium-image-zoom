@@ -678,7 +678,6 @@ var ImageZoom = (function () {
       var nodes = ((_a = target.parentNode) === null || _a === void 0 ? void 0 : _a.children) || [];
       for (var i = 0; i < nodes.length; i++) {
           var el = nodes[i];
-          console.log(el);
           if (!el)
               return;
           var tagName = el.tagName;
@@ -686,7 +685,7 @@ var ImageZoom = (function () {
               tagName === 'NOSCRIPT' ||
               tagName === 'STYLE' ||
               el === target) {
-              return;
+              continue;
           }
           handler(el);
       }

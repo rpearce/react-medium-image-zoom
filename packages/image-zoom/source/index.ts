@@ -930,7 +930,6 @@ const forEachSibling: ForEachSibling = (handler, target) => {
   for (let i = 0; i < nodes.length; i++) {
     const el = nodes[i] as HTMLElement
 
-    console.log(el)
     if (!el) return
 
     const { tagName } = el
@@ -941,7 +940,7 @@ const forEachSibling: ForEachSibling = (handler, target) => {
       tagName === 'STYLE' ||
       el === target
     ) {
-      return
+      continue
     }
 
     handler(el)
