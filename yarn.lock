@@ -6117,7 +6117,7 @@ resolve@1.15.1:
     react: 16.13.1
     react-dom: 16.13.1
     serve: 11.3.2
-    ts-jest: 26.1.3
+    ts-jest: 26.1.4
     typescript: 3.9.7
   languageName: unknown
   linkType: soft
@@ -7003,9 +7003,9 @@ resolve@1.15.1:
   languageName: node
   linkType: hard
 
-"ts-jest@npm:26.1.3":
-  version: 26.1.3
-  resolution: "ts-jest@npm:26.1.3"
+"ts-jest@npm:26.1.4":
+  version: 26.1.4
+  resolution: "ts-jest@npm:26.1.4"
   dependencies:
     bs-logger: 0.x
     buffer-from: 1.x
@@ -7022,7 +7022,7 @@ resolve@1.15.1:
     typescript: ">=3.8 <4.0"
   bin:
     ts-jest: cli.js
-  checksum: f47aa8a9766a80158f428c44c9dea4cda1d6376826c4a704590fa1e636112b523a8c739f28aa9fc58d3fd33e18b6222951312fab181a84d40ef1827a47758460
+  checksum: e69d84f07e4c2fe8ccb7556c00ff5f72fa41c18cb0ba38544265a62702556309d1cea59cef6297a2deef8042b45dcbd8b8493e3f8449372db563f2c4cef5b1d6
   languageName: node
   linkType: hard
 
