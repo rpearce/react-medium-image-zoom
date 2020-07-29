@@ -31,7 +31,6 @@ const LOAD = 'load'
 const MARGIN = 'margin'
 const MAX_HEIGHT = 'maxHeight'
 const MAX_WIDTH = 'maxWidth'
-const MIN_WIDTH = 'minWidth'
 const NONE = 'none'
 const POSITION = 'position'
 const RESIZE = 'resize'
@@ -234,13 +233,23 @@ const ImageZoom = (
 
     if (isImg || originalCompDisplay !== BLOCK) {
       setStyleProp(DISPLAY, BLOCK, el)
-      setStyleProp(MIN_WIDTH, '40px', el)
       setStyleProp(
         MAX_WIDTH,
         originalCompMaxWidth && originalCompMaxWidth !== NONE
           ? originalCompMaxWidth : HUNDRED_PCT,
         el
       )
+    }
+
+    if (isSvgSrc) {
+      const widthAttr = getAttribute(WIDTH, targetEl)
+      const heightAttr = getAttribute(HEIGHT, targetEl)
+      const widthStyle = getStyleProp(WIDTH, targetEl)
+      const heightStyle = getStyleProp(HEIGHT, targetEl)
+
+      if (!widthAttr && !heightAttr && !widthStyle && !heightStyle) {
+        setStyleProp(WIDTH, HUNDRED_PCT, el)
+      }
     }
 
     return el
@@ -254,6 +263,10 @@ const ImageZoom = (
 
     setAttribute(DATA_RMIZ_WRAP, '', el)
     setAttribute(STYLE, styleStr, el)
+
+    if (isSvgSrc) {
+      setStyleProp(DISPLAY, BLOCK, el)
+    }
 
     return el
   }
@@ -1034,7 +1047,6 @@ type CSSProps =
   | 'marginTop'
   | 'maxHeight'
   | 'maxWidth'
-  | 'minWidth'
   | 'transform'
   | 'verticalAlign'
   | 'visibility'
