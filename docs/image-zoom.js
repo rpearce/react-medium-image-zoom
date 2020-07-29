@@ -111,6 +111,7 @@ var ImageZoom = (function () {
   var DISPLAY = 'display';
   var DIV = 'div';
   var FOCUS = 'focus';
+  var HEIGHT = 'height';
   var HIDDEN = 'hidden';
   var HUNDRED_PCT = '100%';
   var ID = 'id';
@@ -118,6 +119,7 @@ var ImageZoom = (function () {
   var LOAD = 'load';
   var MARGIN = 'margin';
   var MAX_WIDTH = 'maxWidth';
+  var MIN_WIDTH = 'minWidth';
   var NONE = 'none';
   var POSITION = 'position';
   var RESIZE = 'resize';
@@ -130,6 +132,7 @@ var ImageZoom = (function () {
   var TRUE_STR = 'true';
   var TYPE = 'type';
   var VISIBILITY = 'visibility';
+  var WIDTH = 'width';
   var ZERO = '0';
   var ImageZoom = function (_a, targetEl) {
       var _b = _a === void 0 ? {} : _a, _c = _b.closeText, closeText = _c === void 0 ? 'Unzoom image' : _c, _d = _b.isControlled, isControlled = _d === void 0 ? false : _d, _e = _b.modalText, modalText = _e === void 0 ? 'Zoomed item' : _e, onZoomChange = _b.onZoomChange, _f = _b.openText, openText = _f === void 0 ? 'Zoom image' : _f, _g = _b.overlayBgColorEnd, overlayBgColorEnd = _g === void 0 ? 'rgba(255,255,255,0.95)' : _g, _h = _b.overlayBgColorStart, overlayBgColorStart = _h === void 0 ? 'rgba(255,255,255,0)' : _h, _j = _b.transitionDuration, _transitionDuration = _j === void 0 ? 300 : _j, _k = _b.zoomMargin, zoomMargin = _k === void 0 ? 0 : _k, _l = _b.zoomZindex, zoomZindex = _l === void 0 ? 2147483647 : _l;
@@ -244,7 +247,18 @@ var ImageZoom = (function () {
           removeAttribute(TABINDEX, el);
           if (isImg || originalCompDisplay !== BLOCK) {
               setStyleProp(DISPLAY, BLOCK, el);
-              setStyleProp(MAX_WIDTH, originalCompMaxWidth || HUNDRED_PCT, el);
+              setStyleProp(MIN_WIDTH, '300px', el);
+              setStyleProp(MAX_WIDTH, originalCompMaxWidth && originalCompMaxWidth !== NONE
+                  ? originalCompMaxWidth : HUNDRED_PCT, el);
+          }
+          if (isSvgSrc) {
+              var widthAttr = getAttribute(WIDTH, targetEl);
+              var heightAttr = getAttribute(HEIGHT, targetEl);
+              var widthStyle = getStyleProp(WIDTH, targetEl);
+              var heightStyle = getStyleProp(HEIGHT, targetEl);
+              if (!widthAttr && !heightAttr && !widthStyle && !heightStyle) {
+                  setStyleProp(WIDTH, HUNDRED_PCT, el);
+              }
           }
           return el;
       };
@@ -511,7 +525,7 @@ var ImageZoom = (function () {
       var ariaHideOtherContent = function () {
           if (modalEl) {
               forEachSibling(function (el) {
-                  var ariaHiddenValue = el.getAttribute(ARIA_HIDDEN);
+                  var ariaHiddenValue = getAttribute(ARIA_HIDDEN, el);
                   if (ariaHiddenValue) {
                       ariaHiddenSiblings.push([el, ariaHiddenValue]);
                   }
@@ -698,6 +712,7 @@ var ImageZoom = (function () {
       if (useCapture === void 0) { useCapture = false; }
       el.removeEventListener(type, handler, useCapture);
   };
+  var getAttribute = function (attr, el) { return el.getAttribute(attr); };
   var removeAttribute = function (attr, el) {
       el.removeAttribute(attr);
   };

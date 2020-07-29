@@ -15,10 +15,10 @@
     "watch": "./make watch"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "5.11.1",
+    "@testing-library/jest-dom": "5.11.2",
     "@testing-library/react": "10.4.7",
     "@types/jest": "26.0.7",
-    "@types/node": "14.0.26",
+    "@types/node": "14.0.27",
     "@types/react": "16.9.43",
     "@types/react-dom": "16.9.8",
     "@typescript-eslint/eslint-plugin": "3.7.1",
@@ -30,7 +30,7 @@
     "eslint": "7.5.0",
     "eslint-plugin-jest": "23.19.0",
     "eslint-plugin-jsx-a11y": "6.3.1",
-    "eslint-plugin-react": "7.20.4",
+    "eslint-plugin-react": "7.20.5",
     "eslint-plugin-react-hooks": "4.0.8",
     "jest": "26.1.0",
     "npm-run-all": "4.1.5",

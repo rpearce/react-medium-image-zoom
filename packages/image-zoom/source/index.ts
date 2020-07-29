@@ -22,6 +22,7 @@ const DIALOG = 'dialog'
 const DISPLAY = 'display'
 const DIV = 'div'
 const FOCUS = 'focus'
+const HEIGHT = 'height'
 const HIDDEN = 'hidden'
 const HUNDRED_PCT = '100%'
 const ID = 'id'
@@ -29,6 +30,7 @@ const KEYDOWN = 'keydown'
 const LOAD = 'load'
 const MARGIN = 'margin'
 const MAX_WIDTH = 'maxWidth'
+const MIN_WIDTH = 'minWidth'
 const NONE = 'none'
 const POSITION = 'position'
 const RESIZE = 'resize'
@@ -41,6 +43,7 @@ const TRANSITIONEND = 'transitionend'
 const TRUE_STR = 'true'
 const TYPE = 'type'
 const VISIBILITY = 'visibility'
+const WIDTH = 'width'
 const ZERO = '0'
 
 export interface ImageZoomOpts {
@@ -227,7 +230,24 @@ const ImageZoom = (
 
     if (isImg || originalCompDisplay !== BLOCK) {
       setStyleProp(DISPLAY, BLOCK, el)
-      setStyleProp(MAX_WIDTH, originalCompMaxWidth || HUNDRED_PCT, el)
+      setStyleProp(MIN_WIDTH, '300px', el)
+      setStyleProp(
+        MAX_WIDTH,
+        originalCompMaxWidth && originalCompMaxWidth !== NONE
+          ? originalCompMaxWidth : HUNDRED_PCT,
+        el
+      )
+    }
+
+    if (isSvgSrc) {
+      const widthAttr = getAttribute(WIDTH, targetEl)
+      const heightAttr = getAttribute(HEIGHT, targetEl)
+      const widthStyle = getStyleProp(WIDTH, targetEl)
+      const heightStyle = getStyleProp(HEIGHT, targetEl)
+
+      if (!widthAttr && !heightAttr && !widthStyle && !heightStyle) {
+        setStyleProp(WIDTH, HUNDRED_PCT, el)
+      }
     }
 
     return el
@@ -575,7 +595,7 @@ const ImageZoom = (
   const ariaHideOtherContent = (): void => {
     if (modalEl) {
       forEachSibling((el) => {
-        const ariaHiddenValue = el.getAttribute(ARIA_HIDDEN)
+        const ariaHiddenValue = getAttribute(ARIA_HIDDEN, el)
 
         if (ariaHiddenValue) {
           ariaHiddenSiblings.push([el, ariaHiddenValue])
@@ -984,6 +1004,12 @@ const removeEventListener: RemoveEventListener = (
   el.removeEventListener(type, handler as (e: Event) => void, useCapture)
 }
 
+interface GetAttribute {
+  (attr: string, el: HTMLElement): string | null
+}
+
+const getAttribute: GetAttribute = (attr, el) => el.getAttribute(attr)
+
 interface RemoveAttribute {
   (attr: string, el: HTMLElement): void
 }
@@ -1007,15 +1033,18 @@ const getStyle: GetStyle = (el) => el.style
 
 type CSSProps =
   'display'
+  | 'height'
   | 'margin'
   | 'marginBottom'
   | 'marginLeft'
   | 'marginRight'
   | 'marginTop'
   | 'maxWidth'
+  | 'minWidth'
   | 'transform'
   | 'verticalAlign'
   | 'visibility'
+  | 'width'
 
 interface GetStyleProp {
   (attr: CSSProps, el: HTMLElement): string

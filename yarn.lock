@@ -702,9 +702,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:5.11.1":
-  version: 5.11.1
-  resolution: "@testing-library/jest-dom@npm:5.11.1"
+"@testing-library/jest-dom@npm:5.11.2":
+  version: 5.11.2
+  resolution: "@testing-library/jest-dom@npm:5.11.2"
   dependencies:
     "@babel/runtime": ^7.9.2
     "@types/testing-library__jest-dom": ^5.9.1
@@ -716,7 +716,7 @@ __metadata:
     jest-matcher-utils: ^25.1.0
     lodash: ^4.17.15
     redent: ^3.0.0
-  checksum: 15151fde17fc75dacc1a8c065cf23495286afd6605dc3ec39ef54d41b8880b689036976f0f0efd0c8f1cc2ee99bc2ce5d487fdb7cd3e2da9f6b27574684fca72
+  checksum: 21b7cca436e24bb7cd9240eab63819d6fc5076fd5617b5114da420e69c08026ad09e6ce921a980fd6fa05ba167a4c764db967315735a511b585563e6544dc0e0
   languageName: node
   linkType: hard
 
@@ -878,10 +878,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:14.0.26":
-  version: 14.0.26
-  resolution: "@types/node@npm:14.0.26"
-  checksum: fe900b9e9441d5c48ca854a5d6680689025767d0a4b6236512bcff44f443e380d1757ca2c6d5e96eac2a4a360be0af446b4d50b8f94348c1942e5cd7865a2499
+"@types/node@npm:14.0.27":
+  version: 14.0.27
+  resolution: "@types/node@npm:14.0.27"
+  checksum: 54ecf408eb94f44685e12ef395d8d9d5789cb9e209f171153b6b951272af6b8da099778d09d66454aa5d35ce246f3922ebd7476ed768bf3bd4267306c12a6703
   languageName: node
   linkType: hard
 
@@ -2572,9 +2572,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:7.20.4":
-  version: 7.20.4
-  resolution: "eslint-plugin-react@npm:7.20.4"
+"eslint-plugin-react@npm:7.20.5":
+  version: 7.20.5
+  resolution: "eslint-plugin-react@npm:7.20.5"
   dependencies:
     array-includes: ^3.1.1
     array.prototype.flatmap: ^1.2.3
@@ -2589,7 +2589,7 @@ __metadata:
     string.prototype.matchall: ^4.0.2
   peerDependencies:
     eslint: ^3 || ^4 || ^5 || ^6 || ^7
-  checksum: 91162b67b5bea65e818b7f04f2336ffeb0bdccaf87d7520a235bb3857bf7c7781a2073088f9dd56cf149c801f3d84a12d4c88d3e6e65f8bb2508dce9f58257dd
+  checksum: 389568417db3f3974db23eb2adfe814fa67190cd134f4d7549867f8d654863d572ba2ef7782a5698b3a6e34b469113174c328f2f6dcc08b1a5899131a07580a5
   languageName: node
   linkType: hard
 
@@ -6095,10 +6095,10 @@ resolve@1.15.1:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@testing-library/jest-dom": 5.11.1
+    "@testing-library/jest-dom": 5.11.2
     "@testing-library/react": 10.4.7
     "@types/jest": 26.0.7
-    "@types/node": 14.0.26
+    "@types/node": 14.0.27
     "@types/react": 16.9.43
     "@types/react-dom": 16.9.8
     "@typescript-eslint/eslint-plugin": 3.7.1
@@ -6110,7 +6110,7 @@ resolve@1.15.1:
     eslint: 7.5.0
     eslint-plugin-jest: 23.19.0
     eslint-plugin-jsx-a11y: 6.3.1
-    eslint-plugin-react: 7.20.4
+    eslint-plugin-react: 7.20.5
     eslint-plugin-react-hooks: 4.0.8
     jest: 26.1.0
     npm-run-all: 4.1.5

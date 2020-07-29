@@ -12,11 +12,6 @@
       margin-left: 2rem;
       margin-right: 2rem;
     }
-    .l-separator {
-      border-top: 5px solid #686de0;
-      margin-top: 3em;
-      padding-top: 1em;
-    }
     @media (max-width: 400px) {
       .l-constrained-fw-sm {
         margin-left: 0;
@@ -311,10 +306,10 @@
           </p>
           <div>
             <svg
-              xmlns="http://www.w3.org/2000/svg"
+              data-uncontrolled
               viewBox="0 0 187.14 186.64"
               width="200"
-              data-uncontrolled
+              xmlns="http://www.w3.org/2000/svg"
             >
               <title>Pearce Software, LLC logo</title>
               <desc>The letter P with multi-colored, horizontal lines in the middle that form an S shape</desc>
@@ -325,6 +320,67 @@
               <path fill="#b76470" d="M128.57 129h-70a5 5 0 010-10h70a5 5 0 110 10z"/>
               <path fill="#8fb16c" d="M103.57 69h-60a5 5 0 010-10h60a5 5 0 010 10z"/>
             </svg>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="l-constrained">
+          Example: Image with SVG source
+        </h2>
+        <div  class="l-constrained">
+          <p>
+            This example is of a zoomable image with an SVG (scalable vector
+            graphic) source.
+          </p>
+          <div>
+            <img
+              alt="react.js logo"
+              data-uncontrolled
+              src="/react-logo.svg"
+              width="300"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="l-constrained">
+          Example: Image with SVG source that has no width nor height attributes
+        </h2>
+        <div  class="l-constrained">
+          <p>
+            This example is of a zoomable SVG (scalable vector graphic) that is
+            the <code>src</code> for an <code>&lt;img&gt;</code> element. This
+            example has no width nor height attributes set on the image nor on
+            the SVG.
+          </p>
+          <div style="max-width:500px;">
+            <img
+              alt="sales pipeline"
+              data-uncontrolled
+              src="/tragt.svg"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="l-constrained">
+          Example: Image with SVG source that has width and height attributes
+        </h2>
+        <div  class="l-constrained">
+          <p>
+            This example is of a zoomable SVG (scalable vector graphic) that is
+            the <code>src</code> for an <code>&lt;img&gt;</code> element. This
+            example has width nor height attributes set on the SVG source only.
+          </p>
+          <div>
+            <img
+              alt="linux penguinin in a seated position"
+              data-uncontrolled
+              src="/NewTux.svg"
+            />
           </div>
         </div>
       </section>
@@ -354,26 +410,6 @@
 
       <section>
         <h2 class="l-constrained">
-          Example: Image with SVG source
-        </h2>
-        <div  class="l-constrained">
-          <p>
-            This example is of a zoomable image with an SVG (scalable vector
-            graphic) source.
-          </p>
-          <div>
-            <img
-              alt="react.js logo"
-              data-uncontrolled
-              src="/react-logo.svg"
-              width="300"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <h2 class="l-constrained">
           Example: Zooming Text (not that you should...)
         </h2>
         <div class="l-constrained">
@@ -394,7 +430,7 @@
         <h2 class="l-constrained">
           Whitespace section
         </h2>
-        <div class="l-constrained l-separator">
+        <div class="l-constrained">
           <p style="margin-bottom: 800px">
             The whitespace below exists to aid you in testing the close on
             scroll functionality (click on the image and then scroll).
