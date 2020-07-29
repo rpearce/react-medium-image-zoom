@@ -162,7 +162,7 @@ var ImageZoom = (function () {
       var init = function () {
           addEventListener(RESIZE, handleResize, window);
           initMotionPref();
-          if (isImg && !targetEl.complete) {
+          if (isImgEl && !targetEl.complete) {
               addEventListener(LOAD, initImg, targetEl);
           }
           else {
@@ -271,7 +271,13 @@ var ImageZoom = (function () {
           setAttribute(DATA_RMIZ_WRAP, '', el);
           setAttribute(STYLE, styleStr, el);
           if (isSvgSrc) {
-              setStyleProp(DISPLAY, BLOCK, el);
+              var widthAttr = getAttribute(WIDTH, targetEl);
+              var heightAttr = getAttribute(HEIGHT, targetEl);
+              var widthStyle = getStyleProp(WIDTH, targetEl);
+              var heightStyle = getStyleProp(HEIGHT, targetEl);
+              if (!widthAttr && !heightAttr && !widthStyle && !heightStyle) {
+                  setStyleProp(DISPLAY, BLOCK, el);
+              }
           }
           return el;
       };
@@ -462,7 +468,7 @@ var ImageZoom = (function () {
           }
       };
       var zoom = function () {
-          if (isImg) {
+          if (isImgEl) {
               zoomImg();
           }
           else {

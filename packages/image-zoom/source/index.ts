@@ -119,7 +119,7 @@ const ImageZoom = (
 
     initMotionPref()
 
-    if (isImg && !(targetEl as HTMLImageElement).complete) {
+    if (isImgEl && !(targetEl as HTMLImageElement).complete) {
       addEventListener(LOAD, initImg, targetEl)
     } else {
       initImg()
@@ -265,7 +265,14 @@ const ImageZoom = (
     setAttribute(STYLE, styleStr, el)
 
     if (isSvgSrc) {
-      setStyleProp(DISPLAY, BLOCK, el)
+      const widthAttr = getAttribute(WIDTH, targetEl)
+      const heightAttr = getAttribute(HEIGHT, targetEl)
+      const widthStyle = getStyleProp(WIDTH, targetEl)
+      const heightStyle = getStyleProp(HEIGHT, targetEl)
+
+      if (!widthAttr && !heightAttr && !widthStyle && !heightStyle) {
+        setStyleProp(DISPLAY, BLOCK, el)
+      }
     }
 
     return el
@@ -508,7 +515,7 @@ const ImageZoom = (
   }
 
   const zoom = (): void => {
-    if (isImg) {
+    if (isImgEl) {
       zoomImg()
     } else {
       zoomNonImg()
