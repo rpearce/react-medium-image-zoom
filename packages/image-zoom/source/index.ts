@@ -29,6 +29,7 @@ const ID = 'id'
 const KEYDOWN = 'keydown'
 const LOAD = 'load'
 const MARGIN = 'margin'
+const MAX_HEIGHT = 'maxHeight'
 const MAX_WIDTH = 'maxWidth'
 const MIN_WIDTH = 'minWidth'
 const NONE = 'none'
@@ -228,26 +229,18 @@ const ImageZoom = (
 
     removeAttribute(TABINDEX, el)
 
+    setStyleProp(MAX_WIDTH, NONE, el)
+    setStyleProp(MAX_HEIGHT, NONE, el)
+
     if (isImg || originalCompDisplay !== BLOCK) {
       setStyleProp(DISPLAY, BLOCK, el)
-      setStyleProp(MIN_WIDTH, '300px', el)
+      setStyleProp(MIN_WIDTH, '40px', el)
       setStyleProp(
         MAX_WIDTH,
         originalCompMaxWidth && originalCompMaxWidth !== NONE
           ? originalCompMaxWidth : HUNDRED_PCT,
         el
       )
-    }
-
-    if (isSvgSrc) {
-      const widthAttr = getAttribute(WIDTH, targetEl)
-      const heightAttr = getAttribute(HEIGHT, targetEl)
-      const widthStyle = getStyleProp(WIDTH, targetEl)
-      const heightStyle = getStyleProp(HEIGHT, targetEl)
-
-      if (!widthAttr && !heightAttr && !widthStyle && !heightStyle) {
-        setStyleProp(WIDTH, HUNDRED_PCT, el)
-      }
     }
 
     return el
@@ -1039,6 +1032,7 @@ type CSSProps =
   | 'marginLeft'
   | 'marginRight'
   | 'marginTop'
+  | 'maxHeight'
   | 'maxWidth'
   | 'minWidth'
   | 'transform'
