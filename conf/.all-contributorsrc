@@ -410,6 +410,27 @@
       "contributions": [
         "review"
       ]
+    },
+    {
+      "login": "evilsoft",
+      "name": "Ian Hofmann-Hicks",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/3665793?v=4",
+      "profile": "https://github.com/evilsoft",
+      "contributions": [
+        "test",
+        "ideas"
+      ]
+    },
+    {
+      "login": "mcabantug",
+      "name": "Marvie Mulder",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/2529894?v=4",
+      "profile": "https://github.com/mcabantug",
+      "contributions": [
+        "test",
+        "ideas",
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
