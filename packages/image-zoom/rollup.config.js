@@ -117,7 +117,11 @@ const iife = [
       format: 'iife',
       name: 'ImageZoom',
     },
-    plugins: [typescript({ tsconfig: './tsconfig.iife.json' })],
+    plugins: [
+      resolve(),
+      commonjs(cjsConfig),
+      typescript({ tsconfig: './tsconfig.iife.json' })
+    ],
   },
   {
     input: './source/index.ts',
@@ -126,7 +130,12 @@ const iife = [
       format: 'iife',
       name: 'ImageZoom',
     },
-    plugins: [typescript({ tsconfig: './tsconfig.iife.json' }), terser()],
+    plugins: [
+      resolve(),
+      commonjs(cjsConfig),
+      typescript({ tsconfig: './tsconfig.iife.json' }),
+      terser()
+    ],
   },
 ]
 

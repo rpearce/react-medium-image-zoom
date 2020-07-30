@@ -1,4 +1,21 @@
 import 'focus-options-polyfill'
+import {
+  addEventListener,
+  appendChild,
+  blur,
+  cloneElement,
+  createElement,
+  focus,
+  forEachSibling,
+  getAttribute,
+  getComputedStyle,
+  getStyleProperty,
+  removeAttribute,
+  removeChild,
+  removeEventListener,
+  setAttribute,
+  setStyleProperty,
+} from '@rpearce/ts-dom-fns'
 
 type PossibleElement = HTMLElement | null | undefined
 
@@ -7,6 +24,8 @@ enum State {
   UNLOADED = 'UNLOADED',
   UNLOADING = 'UNLOADING',
 }
+
+const focusPreventScroll = focus.bind(null, { preventScroll: true })
 
 const ARIA_HIDDEN = 'aria-hidden'
 const ARIA_LABEL = 'aria-label'
@@ -190,17 +209,17 @@ const ImageZoom = (
         const compStyle = getComputedStyle(targetEl)
         originalCompDisplay = compStyle[DISPLAY]
         originalCompMaxWidth = compStyle[MAX_WIDTH]
-        originalStyleDisplay = getStyleProp(DISPLAY, targetEl)
+        originalStyleDisplay = getStyleProperty(DISPLAY, targetEl)
 
         targetCloneEl = createTargetCloneEl()
         wrapEl = createWrapEl()
         openBtnEl = createOpenBtnEl()
 
         // add targetEl margin to wrapEl
-        setStyleProp(MARGIN, getCompStyle(targetEl)[MARGIN], wrapEl)
+        setStyleProperty(MARGIN, getComputedStyle(targetEl)[MARGIN], wrapEl)
 
         // remove margin from targetCloneEl
-        setStyleProp(MARGIN, ZERO, targetCloneEl)
+        setStyleProperty(MARGIN, ZERO, targetCloneEl)
 
         // add targetCloneEl & openBtnEl to the wrapEl
         appendChild(targetCloneEl, wrapEl)
@@ -209,7 +228,7 @@ const ImageZoom = (
         // hide the targetEl, and insert wrapEl
         // just before targetEl
         if (targetEl.parentNode) {
-          setStyleProp(DISPLAY, NONE, targetEl)
+          setStyleProperty(DISPLAY, NONE, targetEl)
           targetEl.parentNode.insertBefore(wrapEl, targetEl)
         }
 
@@ -228,12 +247,12 @@ const ImageZoom = (
 
     removeAttribute(TABINDEX, el)
 
-    setStyleProp(MAX_WIDTH, NONE, el)
-    setStyleProp(MAX_HEIGHT, NONE, el)
+    setStyleProperty(MAX_WIDTH, NONE, el)
+    setStyleProperty(MAX_HEIGHT, NONE, el)
 
     if (isImg || originalCompDisplay !== BLOCK) {
-      setStyleProp(DISPLAY, BLOCK, el)
-      setStyleProp(
+      setStyleProperty(DISPLAY, BLOCK, el)
+      setStyleProperty(
         MAX_WIDTH,
         originalCompMaxWidth && originalCompMaxWidth !== NONE
           ? originalCompMaxWidth : HUNDRED_PCT,
@@ -244,11 +263,11 @@ const ImageZoom = (
     if (isSvgSrc) {
       const widthAttr = getAttribute(WIDTH, targetEl)
       const heightAttr = getAttribute(HEIGHT, targetEl)
-      const widthStyle = getStyleProp(WIDTH, targetEl)
-      const heightStyle = getStyleProp(HEIGHT, targetEl)
+      const widthStyle = getStyleProperty(WIDTH, targetEl)
+      const heightStyle = getStyleProperty(HEIGHT, targetEl)
 
       if (!widthAttr && !heightAttr && !widthStyle && !heightStyle) {
-        setStyleProp(WIDTH, HUNDRED_PCT, el)
+        setStyleProperty(WIDTH, HUNDRED_PCT, el)
       }
     }
 
@@ -267,11 +286,11 @@ const ImageZoom = (
     if (isSvgSrc) {
       const widthAttr = getAttribute(WIDTH, targetEl)
       const heightAttr = getAttribute(HEIGHT, targetEl)
-      const widthStyle = getStyleProp(WIDTH, targetEl)
-      const heightStyle = getStyleProp(HEIGHT, targetEl)
+      const widthStyle = getStyleProperty(WIDTH, targetEl)
+      const heightStyle = getStyleProperty(HEIGHT, targetEl)
 
       if (!widthAttr && !heightAttr && !widthStyle && !heightStyle) {
-        setStyleProp(DISPLAY, BLOCK, el)
+        setStyleProperty(DISPLAY, BLOCK, el)
       }
     }
 
@@ -331,8 +350,11 @@ const ImageZoom = (
       removeEventListener(CLICK, handleOpenBtnClick, openBtnEl)
     }
 
-    removeChild(wrapEl, wrapEl?.parentNode as HTMLElement)
-    setStyleProp(DISPLAY, originalStyleDisplay, targetEl)
+    if (wrapEl) {
+      removeChild(wrapEl, wrapEl?.parentNode as HTMLElement)
+    }
+
+    setStyleProperty(DISPLAY, originalStyleDisplay, targetEl)
 
     openBtnEl = undefined
     wrapEl = undefined
@@ -405,7 +427,7 @@ const ImageZoom = (
   }
 
   const handleFocusBoundaryDiv = (): void => {
-    focus(closeBtnEl)
+    focusPreventScroll(closeBtnEl)
   }
 
   const handleResize = (): void => {
@@ -417,12 +439,12 @@ const ImageZoom = (
   }
 
   const handleZoomTransitionEnd = (): void => {
-    focus(closeBtnEl)
+    focusPreventScroll(closeBtnEl)
   }
 
   const handleZoomImgLoad = (): void => {
     if (targetCloneEl) {
-      setStyleProp(VISIBILITY, HIDDEN, targetCloneEl)
+      setStyleProperty(VISIBILITY, HIDDEN, targetCloneEl)
     }
 
     if (overlayEl) {
@@ -447,11 +469,11 @@ const ImageZoom = (
     // timeout for Safari flickering issue
     window.setTimeout(() => {
       if (targetCloneEl) {
-        setStyleProp(VISIBILITY, '', targetCloneEl)
+        setStyleProperty(VISIBILITY, '', targetCloneEl)
       }
       cleanupZoom()
       setState(State.UNLOADED)
-      focus(openBtnEl)
+      focusPreventScroll(openBtnEl)
     }, 0)
   }
 
@@ -608,6 +630,8 @@ const ImageZoom = (
   const ariaHideOtherContent = (): void => {
     if (modalEl) {
       forEachSibling((el) => {
+        if (isIgnoredElement(el)) return
+
         const ariaHiddenValue = getAttribute(ARIA_HIDDEN, el)
 
         if (ariaHiddenValue) {
@@ -622,6 +646,8 @@ const ImageZoom = (
   const ariaResetOtherContent = (): void => {
     if (modalEl) {
       forEachSibling((el) => {
+        if (isIgnoredElement(el)) return
+
         removeAttribute(ARIA_HIDDEN, el)
       }, modalEl)
     }
@@ -793,7 +819,7 @@ const getZoomImgStyle: GetZoomImgStyle = (
   }
 
   const { height, left, top, width } = containerEl.getBoundingClientRect()
-  const originalTransform = getStyleProp(TRANSFORM, targetEl)
+  const originalTransform = getStyleProperty(TRANSFORM, targetEl)
 
   if (state !== State.LOADED) {
     const initTransform =
@@ -903,178 +929,9 @@ const getMaxDimensionScale: GetMaxDimensionScale = (
 
 const SVG_REGEX = /\.svg$/i
 
-//
-// DOM
-//
-
-interface AppendChild {
-  (child: HTMLElement, parent: HTMLElement): void
+interface IsIgnoredElement {
+  (el: HTMLElement): boolean
 }
 
-const appendChild: AppendChild = (child, parent) => parent.appendChild(child)
-
-interface RemoveChild {
-  (child: PossibleElement, parent: PossibleElement): void
-}
-
-const removeChild: RemoveChild = (child, parent) => {
-  if (child && parent) {
-    parent.removeChild(child)
-  }
-}
-
-interface CreateElement {
-  (type: string): HTMLElement
-}
-
-const createElement: CreateElement = (type) => document.createElement(type)
-
-interface CloneElement {
-  (deep: boolean, el: HTMLElement): HTMLElement
-}
-
-const cloneElement: CloneElement = (deep, el) =>
-  el.cloneNode(deep) as HTMLElement
-
-interface Blur {
-  (el: PossibleElement): void
-}
-
-const blur: Blur = (el) => {
-  el?.blur()
-}
-
-interface Focus {
-  (el: PossibleElement): void
-}
-
-const focus: Focus = (el) => {
-  if (el) {
-    el.focus({ preventScroll: true })
-  }
-}
-
-interface ForEachSibling {
-  (handler: (el: HTMLElement) => void, target: HTMLElement): void
-}
-
-const forEachSibling: ForEachSibling = (handler, target) => {
-  const nodes = target.parentNode?.children || []
-
-  for (let i = 0; i < nodes.length; i++) {
-    const el = nodes[i] as HTMLElement
-
-    if (!el) return
-
-    const { tagName } = el
-
-    if (
-      tagName === 'SCRIPT' ||
-      tagName === 'NOSCRIPT' ||
-      tagName === 'STYLE' ||
-      el === target
-    ) {
-      continue
-    }
-
-    handler(el)
-  }
-}
-
-interface AddEventListener {
-  <A extends EventTarget, E extends Event>(
-    type: string,
-    cb: (this: A, evt: E) => void,
-    el: A,
-    useCapture?: boolean
-  ): void
-}
-
-const addEventListener: AddEventListener = (
-  type,
-  cb,
-  el,
-  useCapture = false
-) => {
-  el.addEventListener(type, cb as (e: Event) => void, useCapture)
-}
-
-interface RemoveEventListener {
-  <A extends EventTarget, E extends Event>(
-    type: string,
-    handler: (this: A, evt: E) => void,
-    el: A,
-    useCapture?: boolean
-  ): void
-}
-
-const removeEventListener: RemoveEventListener = (
-  type,
-  handler,
-  el,
-  useCapture = false
-) => {
-  el.removeEventListener(type, handler as (e: Event) => void, useCapture)
-}
-
-interface GetAttribute {
-  (attr: string, el: HTMLElement): string | null
-}
-
-const getAttribute: GetAttribute = (attr, el) => el.getAttribute(attr)
-
-interface RemoveAttribute {
-  (attr: string, el: HTMLElement): void
-}
-
-const removeAttribute: RemoveAttribute = (attr, el) => {
-  el.removeAttribute(attr)
-}
-
-interface SetAttribute {
-  (attr: string, value: string, el: HTMLElement): void
-}
-
-const setAttribute: SetAttribute = (attr, value, el) =>
-  el.setAttribute(attr, value)
-
-interface GetStyle {
-  (e: HTMLElement): CSSStyleDeclaration
-}
-
-const getStyle: GetStyle = (el) => el.style
-
-type CSSProps =
-  'display'
-  | 'height'
-  | 'margin'
-  | 'marginBottom'
-  | 'marginLeft'
-  | 'marginRight'
-  | 'marginTop'
-  | 'maxHeight'
-  | 'maxWidth'
-  | 'transform'
-  | 'verticalAlign'
-  | 'visibility'
-  | 'width'
-
-interface GetStyleProp {
-  (attr: CSSProps, el: HTMLElement): string
-}
-
-const getStyleProp: GetStyleProp = (attr, el) => getStyle(el)[attr]
-
-interface SetStyleProp {
-  (attr: CSSProps, value: string, el: HTMLElement): void
-}
-
-const setStyleProp: SetStyleProp = (attr, value, el) => {
-  getStyle(el)[attr] = value
-}
-
-interface GetCompStyle {
-  (el: HTMLElement): CSSStyleDeclaration
-}
-
-const getCompStyle: GetCompStyle = (el) => window.getComputedStyle(el)
+const isIgnoredElement: IsIgnoredElement = ({ tagName }) =>
+  tagName === 'SCRIPT' || tagName === 'NOSCRIPT' || tagName === 'STYLE'

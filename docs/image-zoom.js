@@ -91,12 +91,90 @@ var ImageZoom = (function () {
     }
   })();
 
+  var addEventListener = function (type, cb, el, useCapture) {
+      if (useCapture === void 0) { useCapture = false; }
+      el.addEventListener(type, cb, useCapture);
+  };
+
+  var appendChild = function (child, parent) {
+      return parent.appendChild(child);
+  };
+
+  var blur = function (el) {
+      el === null || el === void 0 ? void 0 : el.blur();
+  };
+
+  var cloneElement = function (deep, el) {
+      if (deep === void 0) { deep = true; }
+      return el.cloneNode(deep);
+  };
+
+  var createElement = function (type) {
+      return document.createElement(type);
+  };
+
+  var focus = function (opts, el) {
+      if (opts === void 0) { opts = { preventScroll: false }; }
+      el === null || el === void 0 ? void 0 : el.focus(opts);
+  };
+
+  var forEachSibling = function (handler, target) {
+      var _a;
+      var nodes = ((_a = target.parentNode) === null || _a === void 0 ? void 0 : _a.children) || [];
+      for (var i = 0; i < nodes.length; i++) {
+          var el = nodes[i];
+          if (el && el !== target) {
+              handler(el);
+          }
+      }
+  };
+
+  var getAttribute = function (attr, el) { return el.getAttribute(attr); };
+
+  var getComputedStyle = function (el) {
+      return window.getComputedStyle(el);
+  };
+
+  var getStyle = function (el) { return el.style; };
+
+  var getStyleProperty = function (attr, el) {
+      // any type because of https://github.com/Microsoft/TypeScript/issues/17827
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return getStyle(el)[attr];
+  };
+
+  var removeAttribute = function (attr, el) {
+      el.removeAttribute(attr);
+  };
+
+  var removeChild = function (child, parent) {
+      if (parent.contains(child)) {
+          parent.removeChild(child);
+      }
+  };
+
+  var removeEventListener = function (type, handler, el, useCapture) {
+      if (useCapture === void 0) { useCapture = false; }
+      el.removeEventListener(type, handler, useCapture);
+  };
+
+  var setAttribute = function (attr, value, el) {
+      return el.setAttribute(attr, value);
+  };
+
+  var setStyleProperty = function (attr, value, el) {
+      // any type because of https://github.com/Microsoft/TypeScript/issues/17827
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      getStyle(el)[attr] = value;
+  };
+
   var State;
   (function (State) {
       State["LOADED"] = "LOADED";
       State["UNLOADED"] = "UNLOADED";
       State["UNLOADING"] = "UNLOADING";
   })(State || (State = {}));
+  var focusPreventScroll = focus.bind(null, { preventScroll: true });
   var ARIA_HIDDEN = 'aria-hidden';
   var ARIA_LABEL = 'aria-label';
   var ARIA_MODAL = 'aria-modal';
@@ -215,21 +293,21 @@ var ImageZoom = (function () {
                   var compStyle = getComputedStyle(targetEl);
                   originalCompDisplay = compStyle[DISPLAY];
                   originalCompMaxWidth = compStyle[MAX_WIDTH];
-                  originalStyleDisplay = getStyleProp(DISPLAY, targetEl);
+                  originalStyleDisplay = getStyleProperty(DISPLAY, targetEl);
                   targetCloneEl = createTargetCloneEl();
                   wrapEl = createWrapEl();
                   openBtnEl = createOpenBtnEl();
                   // add targetEl margin to wrapEl
-                  setStyleProp(MARGIN, getCompStyle(targetEl)[MARGIN], wrapEl);
+                  setStyleProperty(MARGIN, getComputedStyle(targetEl)[MARGIN], wrapEl);
                   // remove margin from targetCloneEl
-                  setStyleProp(MARGIN, ZERO, targetCloneEl);
+                  setStyleProperty(MARGIN, ZERO, targetCloneEl);
                   // add targetCloneEl & openBtnEl to the wrapEl
                   appendChild(targetCloneEl, wrapEl);
                   appendChild(openBtnEl, wrapEl);
                   // hide the targetEl, and insert wrapEl
                   // just before targetEl
                   if (targetEl.parentNode) {
-                      setStyleProp(DISPLAY, NONE, targetEl);
+                      setStyleProperty(DISPLAY, NONE, targetEl);
                       targetEl.parentNode.insertBefore(wrapEl, targetEl);
                   }
                   initMutationObserver();
@@ -245,20 +323,20 @@ var ImageZoom = (function () {
       var createTargetCloneEl = function () {
           var el = cloneElement(true, targetEl);
           removeAttribute(TABINDEX, el);
-          setStyleProp(MAX_WIDTH, NONE, el);
-          setStyleProp(MAX_HEIGHT, NONE, el);
+          setStyleProperty(MAX_WIDTH, NONE, el);
+          setStyleProperty(MAX_HEIGHT, NONE, el);
           if (isImg || originalCompDisplay !== BLOCK) {
-              setStyleProp(DISPLAY, BLOCK, el);
-              setStyleProp(MAX_WIDTH, originalCompMaxWidth && originalCompMaxWidth !== NONE
+              setStyleProperty(DISPLAY, BLOCK, el);
+              setStyleProperty(MAX_WIDTH, originalCompMaxWidth && originalCompMaxWidth !== NONE
                   ? originalCompMaxWidth : HUNDRED_PCT, el);
           }
           if (isSvgSrc) {
               var widthAttr = getAttribute(WIDTH, targetEl);
               var heightAttr = getAttribute(HEIGHT, targetEl);
-              var widthStyle = getStyleProp(WIDTH, targetEl);
-              var heightStyle = getStyleProp(HEIGHT, targetEl);
+              var widthStyle = getStyleProperty(WIDTH, targetEl);
+              var heightStyle = getStyleProperty(HEIGHT, targetEl);
               if (!widthAttr && !heightAttr && !widthStyle && !heightStyle) {
-                  setStyleProp(WIDTH, HUNDRED_PCT, el);
+                  setStyleProperty(WIDTH, HUNDRED_PCT, el);
               }
           }
           return el;
@@ -273,10 +351,10 @@ var ImageZoom = (function () {
           if (isSvgSrc) {
               var widthAttr = getAttribute(WIDTH, targetEl);
               var heightAttr = getAttribute(HEIGHT, targetEl);
-              var widthStyle = getStyleProp(WIDTH, targetEl);
-              var heightStyle = getStyleProp(HEIGHT, targetEl);
+              var widthStyle = getStyleProperty(WIDTH, targetEl);
+              var heightStyle = getStyleProperty(HEIGHT, targetEl);
               if (!widthAttr && !heightAttr && !widthStyle && !heightStyle) {
-                  setStyleProp(DISPLAY, BLOCK, el);
+                  setStyleProperty(DISPLAY, BLOCK, el);
               }
           }
           return el;
@@ -333,8 +411,10 @@ var ImageZoom = (function () {
           if (openBtnEl) {
               removeEventListener(CLICK, handleOpenBtnClick, openBtnEl);
           }
-          removeChild(wrapEl, wrapEl === null || wrapEl === void 0 ? void 0 : wrapEl.parentNode);
-          setStyleProp(DISPLAY, originalStyleDisplay, targetEl);
+          if (wrapEl) {
+              removeChild(wrapEl, wrapEl === null || wrapEl === void 0 ? void 0 : wrapEl.parentNode);
+          }
+          setStyleProperty(DISPLAY, originalStyleDisplay, targetEl);
           openBtnEl = undefined;
           wrapEl = undefined;
           targetCloneEl = undefined;
@@ -390,7 +470,7 @@ var ImageZoom = (function () {
           }
       };
       var handleFocusBoundaryDiv = function () {
-          focus(closeBtnEl);
+          focusPreventScroll(closeBtnEl);
       };
       var handleResize = function () {
           if (state === State.LOADED) {
@@ -401,11 +481,11 @@ var ImageZoom = (function () {
           }
       };
       var handleZoomTransitionEnd = function () {
-          focus(closeBtnEl);
+          focusPreventScroll(closeBtnEl);
       };
       var handleZoomImgLoad = function () {
           if (targetCloneEl) {
-              setStyleProp(VISIBILITY, HIDDEN, targetCloneEl);
+              setStyleProperty(VISIBILITY, HIDDEN, targetCloneEl);
           }
           if (overlayEl) {
               setAttribute(STYLE, getStyleOverlay(overlayBgColorEnd, transitionDuration), overlayEl);
@@ -421,11 +501,11 @@ var ImageZoom = (function () {
           // timeout for Safari flickering issue
           window.setTimeout(function () {
               if (targetCloneEl) {
-                  setStyleProp(VISIBILITY, '', targetCloneEl);
+                  setStyleProperty(VISIBILITY, '', targetCloneEl);
               }
               cleanupZoom();
               setState(State.UNLOADED);
-              focus(openBtnEl);
+              focusPreventScroll(openBtnEl);
           }, 0);
       };
       var handleModalClick = function () {
@@ -535,6 +615,8 @@ var ImageZoom = (function () {
       var ariaHideOtherContent = function () {
           if (modalEl) {
               forEachSibling(function (el) {
+                  if (isIgnoredElement(el))
+                      return;
                   var ariaHiddenValue = getAttribute(ARIA_HIDDEN, el);
                   if (ariaHiddenValue) {
                       ariaHiddenSiblings.push([el, ariaHiddenValue]);
@@ -546,6 +628,8 @@ var ImageZoom = (function () {
       var ariaResetOtherContent = function () {
           if (modalEl) {
               forEachSibling(function (el) {
+                  if (isIgnoredElement(el))
+                      return;
                   removeAttribute(ARIA_HIDDEN, el);
               }, modalEl);
           }
@@ -642,7 +726,7 @@ var ImageZoom = (function () {
           return getZoomImgStyleStr(0, 0, 0, 0, NONE, 0);
       }
       var _a = containerEl.getBoundingClientRect(), height = _a.height, left = _a.left, top = _a.top, width = _a.width;
-      var originalTransform = getStyleProp(TRANSFORM, targetEl);
+      var originalTransform = getStyleProperty(TRANSFORM, targetEl);
       if (state !== State.LOADED) {
           var initTransform = 'scale(1) translate(0,0)' +
               (originalTransform ? " " + originalTransform : '');
@@ -679,62 +763,10 @@ var ImageZoom = (function () {
       return scale > 1 ? ratio : scale * ratio;
   };
   var SVG_REGEX = /\.svg$/i;
-  var appendChild = function (child, parent) { return parent.appendChild(child); };
-  var removeChild = function (child, parent) {
-      if (child && parent) {
-          parent.removeChild(child);
-      }
+  var isIgnoredElement = function (_a) {
+      var tagName = _a.tagName;
+      return tagName === 'SCRIPT' || tagName === 'NOSCRIPT' || tagName === 'STYLE';
   };
-  var createElement = function (type) { return document.createElement(type); };
-  var cloneElement = function (deep, el) {
-      return el.cloneNode(deep);
-  };
-  var blur = function (el) {
-      el === null || el === void 0 ? void 0 : el.blur();
-  };
-  var focus = function (el) {
-      if (el) {
-          el.focus({ preventScroll: true });
-      }
-  };
-  var forEachSibling = function (handler, target) {
-      var _a;
-      var nodes = ((_a = target.parentNode) === null || _a === void 0 ? void 0 : _a.children) || [];
-      for (var i = 0; i < nodes.length; i++) {
-          var el = nodes[i];
-          if (!el)
-              return;
-          var tagName = el.tagName;
-          if (tagName === 'SCRIPT' ||
-              tagName === 'NOSCRIPT' ||
-              tagName === 'STYLE' ||
-              el === target) {
-              continue;
-          }
-          handler(el);
-      }
-  };
-  var addEventListener = function (type, cb, el, useCapture) {
-      if (useCapture === void 0) { useCapture = false; }
-      el.addEventListener(type, cb, useCapture);
-  };
-  var removeEventListener = function (type, handler, el, useCapture) {
-      if (useCapture === void 0) { useCapture = false; }
-      el.removeEventListener(type, handler, useCapture);
-  };
-  var getAttribute = function (attr, el) { return el.getAttribute(attr); };
-  var removeAttribute = function (attr, el) {
-      el.removeAttribute(attr);
-  };
-  var setAttribute = function (attr, value, el) {
-      return el.setAttribute(attr, value);
-  };
-  var getStyle = function (el) { return el.style; };
-  var getStyleProp = function (attr, el) { return getStyle(el)[attr]; };
-  var setStyleProp = function (attr, value, el) {
-      getStyle(el)[attr] = value;
-  };
-  var getCompStyle = function (el) { return window.getComputedStyle(el); };
 
   return ImageZoom;
 

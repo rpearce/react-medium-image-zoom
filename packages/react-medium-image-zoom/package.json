@@ -23,16 +23,12 @@
     "type": "git",
     "url": "git@github.com:rpearce/image-zoom.git"
   },
-  "homepage": "https://github.com/rpearce/image-zoom/packages/image-zoom",
+  "homepage": "https://github.com/rpearce/image-zoom/packages/react-medium-image-zoom",
   "bugs": "https://github.com/rpearce/image-zoom/issues",
   "funding": [
     {
       "type": "github",
       "url": "https://github.com/sponsors/rpearce"
-    },
-    {
-      "type": "opencollective",
-      "url": "https://opencollective.com/image-zoom"
     }
   ],
   "keywords": [
