@@ -8,6 +8,7 @@ import {
   focus,
   forEachSibling,
   getAttribute,
+  getBoundingClientRect,
   getComputedStyle,
   getParentNode,
   getStyleProperty,
@@ -867,15 +868,3 @@ interface IsIgnoredElement {
 
 const isIgnoredElement: IsIgnoredElement = ({ tagName }) =>
   tagName === 'SCRIPT' || tagName === 'NOSCRIPT' || tagName === 'STYLE'
-
-interface GetBoundingClientRect {
-  (el: PossibleElement): ClientRect | { height: 0, width: 0 }
-}
-
-const getBoundingClientRect: GetBoundingClientRect = (el) => {
-  if (el) {
-    return el.getBoundingClientRect()
-  }
-
-  return { height: 0, width: 0 }
-}

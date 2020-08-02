@@ -1,10 +1,12 @@
 # @rpearce/image-zoom
 
-[![npm version](https://img.shields.io/npm/v/@rpearce/image-zoom.svg)](https://www.npmjs.com/package/@rpearce/image-zoom) [![npm downloads](https://img.shields.io/npm/dm/@rpearce/image-zoom.svg)](https://www.npmjs.com/package/@rpearce/image-zoom) [![bundlephobia size](https://flat.badgen.net/bundlephobia/minzip/@rpearce/image-zoom)](https://bundlephobia.com/result?p=@rpearce/image-zoom) [![Build Status](https://travis-ci.org/rpearce/@rpearce/image-zoom.svg?branch=master)](https://travis-ci.org/rpearce/@rpearce/image-zoom) [![Coverage Status](https://coveralls.io/repos/github/rpearce/@rpearce/image-zoom/badge.svg?branch=master)](https://coveralls.io/github/rpearce/@rpearce/image-zoom?branch=master) [![Maintainability](https://api.codeclimate.com/v1/badges/8e4debef4b9f0e8acd6e/maintainability)](https://codeclimate.com/github/rpearce/@rpearce/image-zoom/maintainability)
+[![npm version](https://img.shields.io/npm/v/@rpearce/image-zoom.svg?style=flat-square)](https://www.npmjs.com/package/@rpearce/image-zoom) [![npm downloads](https://img.shields.io/npm/dm/@rpearce/image-zoom.svg?style=flat-square)](https://www.npmjs.com/package/@rpearce/image-zoom) [![bundlephobia size](https://flat.badgen.net/bundlephobia/minzip/@rpearce/image-zoom)](https://bundlephobia.com/result?p=@rpearce/image-zoom)
 
 Accessible, progressive zooming for images.
 
-As an added bonus, it should let you zoom _anything_.
+As an added bonus, it should let you zoom _anything_, regardless of whether or
+not it is inside parent elements with `overflow: hidden;` or [parents with
+transform properties](https://codepen.io/rpearce/pen/MEyOmb).
 
 Links:
 * [Installation](#installation)

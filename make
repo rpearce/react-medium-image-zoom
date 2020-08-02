@@ -23,7 +23,6 @@ Usage: $pname <COMMAND>
   lint                   Run the linter
   publish                Publish a package
   test                   Run the tests
-  test_cov_ci            Generate test coverage for CI
   watch                  Watch for changes and rebuild output
 EOF
 
@@ -192,11 +191,6 @@ function publish {
 
 function test {
   yarn jest "$PWD/packages"
-}
-
-function test_cov_ci {
-  yarn jest "$PWD/packages" --coverage --coverageReporters=text-lcov | \
-    yarn coveralls
 }
 
 function unknown-cmd {

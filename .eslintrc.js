@@ -44,8 +44,8 @@ module.exports = {
     {
       files: ['packages/react-medium-image-zoom/**/*.{ts,tsx}'],
       extends: [
-        'plugin:jsx-a11y/recommended',
         'plugin:react/recommended',
+        'plugin:jsx-a11y/recommended',
       ],
       plugins: ['react', 'react-hooks'],
       rules: {

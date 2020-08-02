@@ -665,7 +665,7 @@ __metadata:
   dependencies:
     "@rollup/plugin-commonjs": 14.0.0
     "@rollup/plugin-node-resolve": 8.4.0
-    "@rpearce/ts-dom-fns": ^0.2.1
+    "@rpearce/ts-dom-fns": ^0.3.1
     focus-options-polyfill: ^1.5.0
     rollup: 2.23.0
     rollup-plugin-terser: 6.1.0
@@ -676,12 +676,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rpearce/ts-dom-fns@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "@rpearce/ts-dom-fns@npm:0.2.1"
+"@rpearce/ts-dom-fns@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@rpearce/ts-dom-fns@npm:0.3.1"
   dependencies:
     tslib: ^2.0.0
-  checksum: 2726672a86223c4f3fb227c9d7ef68ee90c3bf32613c527e5edf62b5ca9252163c488ca00dc76a03cfc883157d26aa56583fb6976b80550f6ef0a37c4d745a1a
+  checksum: 3d74c5ca327dce772cfc0308b41427c53905780c9c22ec3a599d3701333307f6400e66725cc93343a4bbf91ef1cbc16237a859b6a2922bd70a0c1020d7b32765
   languageName: node
   linkType: hard
 
@@ -2087,21 +2087,6 @@ __metadata:
   version: 1.0.2
   resolution: "core-util-is@npm:1.0.2"
   checksum: 089015ee3c462dfceba70faa1df83b42a7bb35db26dae6af283247b06fe3216c65fccd9f00eebcaf98300dc31e981d56aae9f90b624f8f6ff1153e235ff88b65
-  languageName: node
-  linkType: hard
-
-"coveralls@npm:3.1.0":
-  version: 3.1.0
-  resolution: "coveralls@npm:3.1.0"
-  dependencies:
-    js-yaml: ^3.13.1
-    lcov-parse: ^1.0.0
-    log-driver: ^1.2.7
-    minimist: ^1.2.5
-    request: ^2.88.2
-  bin:
-    coveralls: ./bin/coveralls.js
-  checksum: bac2998bf30432827b982d9a098db396d99f3763d473fccba0599c77ec1b67124804a37e2a5dbedf4915917627ed3814c0582e334c382f31ab4c156e9ca2dd69
   languageName: node
   linkType: hard
 
@@ -4577,15 +4562,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lcov-parse@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "lcov-parse@npm:1.0.0"
-  bin:
-    lcov-parse: ./bin/cli.js
-  checksum: 7747ea686f77cf0c7f5d2d4c5bf95549ed7b966623e0d006941934ab7d9ffd97bc6fe9b1e33a38371b262a71c5ff5ae45dac08f7baa91132f31f6b78fb576356
-  languageName: node
-  linkType: hard
-
 "leven@npm:^3.1.0":
   version: 3.1.0
   resolution: "leven@npm:3.1.0"
@@ -4683,13 +4659,6 @@ __metadata:
   version: 4.17.19
   resolution: "lodash@npm:4.17.19"
   checksum: ff2b7a95f0129dba9101e346d44e0eda0f159d76bbbf23721eec1969b87a32bde3de0cfef0733218c64620e9be08040a973278d46a686540233b356115f3527c
-  languageName: node
-  linkType: hard
-
-"log-driver@npm:^1.2.7":
-  version: 1.2.7
-  resolution: "log-driver@npm:1.2.7"
-  checksum: b4355545c33328fc022f49a48f68a834191efedf7a8279f51aefdc1b3b387e20db41c0ce0124db84d170da9d8443ad66d1869325336630ba376a89bc83c357a6
   languageName: node
   linkType: hard
 
@@ -6120,7 +6089,6 @@ resolve@1.15.1:
     all-contributors-cli: 6.17.0
     axe-core: 3.5.5
     chokidar-cli: 2.1.0
-    coveralls: 3.1.0
     eslint: 7.6.0
     eslint-plugin-jest: 23.20.0
     eslint-plugin-jsx-a11y: 6.3.1

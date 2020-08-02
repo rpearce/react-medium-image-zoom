@@ -6,7 +6,6 @@
   "scripts": {
     "build": "./make build",
     "clean": "./make clean",
-    "coverage": "./make test_cov_ci",
     "init": "./make init",
     "lint": "./make lint",
     "serve:docs": "serve docs",
@@ -26,7 +25,6 @@
     "all-contributors-cli": "6.17.0",
     "axe-core": "3.5.5",
     "chokidar-cli": "2.1.0",
-    "coveralls": "3.1.0",
     "eslint": "7.6.0",
     "eslint-plugin-jest": "23.20.0",
     "eslint-plugin-jsx-a11y": "6.3.1",

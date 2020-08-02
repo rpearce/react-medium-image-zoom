@@ -131,6 +131,22 @@ var ImageZoom = (function () {
 
   var getAttribute = function (attr, el) { return el.getAttribute(attr); };
 
+  var getBoundingClientRect = function (el) {
+      if (el) {
+          return el.getBoundingClientRect();
+      }
+      return {
+          bottom: 0,
+          height: 0,
+          left: 0,
+          right: 0,
+          top: 0,
+          width: 0,
+          x: 0,
+          y: 0,
+      };
+  };
+
   var getComputedStyle = function (el) {
       return window.getComputedStyle(el);
   };
@@ -730,12 +746,6 @@ var ImageZoom = (function () {
   var isIgnoredElement = function (_a) {
       var tagName = _a.tagName;
       return tagName === 'SCRIPT' || tagName === 'NOSCRIPT' || tagName === 'STYLE';
-  };
-  var getBoundingClientRect = function (el) {
-      if (el) {
-          return el.getBoundingClientRect();
-      }
-      return { height: 0, width: 0 };
   };
 
   return ImageZoom;
