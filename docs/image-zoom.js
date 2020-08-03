@@ -153,20 +153,32 @@ var ImageZoom = (function () {
 
   var getParentNode = function (target) { return target.parentNode; };
 
-  var getStyle = function (el) { return el.style; };
-
-  var getStyleProperty = function (attr, el) {
-      // any type because of https://github.com/Microsoft/TypeScript/issues/17827
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return getStyle(el)[attr];
-  };
-
   var getWindowInnerHeight = function () {
       return window.innerHeight;
   };
 
   var getWindowInnerWidth = function () {
       return window.innerWidth;
+  };
+
+  var getScaleToWindow = function (width, height, offset) {
+      var scaleX = getWindowInnerWidth() / (width + offset);
+      var scaleY = getWindowInnerHeight() / (height + offset);
+      return Math.min(scaleX, scaleY);
+  };
+
+  var getScaleToWindowMax = function (width, naturalWidth, height, naturalHeight, offset) {
+      var scale = getScaleToWindow(naturalWidth, naturalHeight, offset);
+      var ratio = naturalWidth > naturalHeight ? naturalWidth / width : naturalHeight / height;
+      return scale > 1 ? ratio : scale * ratio;
+  };
+
+  var getStyle = function (el) { return el.style; };
+
+  var getStyleProperty = function (attr, el) {
+      // any type because of https://github.com/Microsoft/TypeScript/issues/17827
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return getStyle(el)[attr];
   };
 
   var removeAttribute = function (attr, el) {
@@ -200,6 +212,7 @@ var ImageZoom = (function () {
       State["UNLOADED"] = "UNLOADED";
       State["UNLOADING"] = "UNLOADING";
   })(State || (State = {}));
+  var LOADED = State.LOADED, UNLOADED = State.UNLOADED, UNLOADING = State.UNLOADING;
   var focusPreventScroll = focus.bind(null, { preventScroll: true });
   var ABSOLUTE = 'absolute';
   var ARIA_HIDDEN = 'aria-hidden';
@@ -259,7 +272,7 @@ var ImageZoom = (function () {
       var observer;
       var openBtnEl;
       var overlayEl;
-      var state = State.UNLOADED;
+      var state = UNLOADED;
       var transitionDuration = _transitionDuration;
       var zoomWrapEl;
       var init = function () {
@@ -306,13 +319,13 @@ var ImageZoom = (function () {
       };
       // END MOTION PREFS
       var initImg = function () {
-          if (!targetEl || state !== State.UNLOADED)
+          if (!targetEl || state !== UNLOADED)
               return;
           var _a = getBoundingClientRect(targetEl), height = _a.height, width = _a.width;
           var _b = targetEl, naturalHeight = _b.naturalHeight, naturalWidth = _b.naturalWidth;
           var currentScale = isImg && naturalHeight && naturalWidth
-              ? getMaxDimensionScale(height, width, zoomMargin, naturalHeight, naturalWidth)
-              : getScale(height, width, zoomMargin);
+              ? getScaleToWindowMax(width, naturalWidth, height, naturalHeight, zoomMargin)
+              : getScaleToWindow(width, height, zoomMargin);
           if (currentScale > 1) {
               // create openBtnEl
               openBtnEl = createElement(BUTTON);
@@ -365,10 +378,10 @@ var ImageZoom = (function () {
           if (opts.zoomZindex)
               zoomZindex = opts.zoomZindex;
           setZoomImgStyle();
-          if (state === State.UNLOADED && opts.isZoomed) {
+          if (state === UNLOADED && opts.isZoomed) {
               zoom();
           }
-          else if (state === State.LOADED && opts.isZoomed === false) {
+          else if (state === LOADED && opts.isZoomed === false) {
               unzoom();
           }
       };
@@ -447,7 +460,7 @@ var ImageZoom = (function () {
           focusPreventScroll(closeBtnEl);
       };
       var handleResize = function () {
-          if (state === State.LOADED) {
+          if (state === LOADED) {
               setZoomImgStyle(true);
           }
           else {
@@ -468,19 +481,21 @@ var ImageZoom = (function () {
               addEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomWrapEl);
               setAttribute(STYLE, stylePosAbsolute, zoomWrapEl);
           }
-          setState(State.LOADED);
+          state = LOADED;
+          setZoomImgStyle();
           ariaHideOtherContent();
       };
       var handleUnzoomTransitionEnd = function () {
           // timeout for Safari flickering issue
-          win.setTimeout(function () {
-              if (targetEl) {
-                  setStyleProperty(VISIBILITY, '', targetEl);
-              }
-              cleanupZoom();
-              setState(State.UNLOADED);
-              focusPreventScroll(openBtnEl);
-          }, 0);
+          //win.setTimeout(() => {
+          if (targetEl) {
+              setStyleProperty(VISIBILITY, '', targetEl);
+          }
+          state = UNLOADED;
+          setZoomImgStyle(true);
+          cleanupZoom();
+          focusPreventScroll(openBtnEl);
+          //}, 0)
       };
       var handleModalClick = function () {
           if (onZoomChange) {
@@ -490,13 +505,41 @@ var ImageZoom = (function () {
               unzoom();
           }
       };
+      //let lastOffset = window.pageYOffset
+      //let delta = 0
+      //let start: number
+      //const step = (timestamp: number) => {
+      //  if (start === undefined) {
+      //    start = timestamp
+      //  }
+      //  const elapsed = timestamp - start
+      //  //// `Math.min()` is used here to make sure that the element stops at exactly 200px.
+      //  //element.style.transform = 'translateX(' + Math.min(0.1 * elapsed, 200) + 'px)';
+      //  if (state !== UNLOADED && zoomWrapEl) {
+      //    const pageOffset = window.pageYOffset
+      //    delta = pageOffset - lastOffset
+      //    lastOffset = pageOffset
+      //    console.log(delta)
+      //    if (delta > 0) {
+      //      const top = parseFloat(zoomWrapEl.style.top)
+      //      console.log('top', top)
+      //      zoomWrapEl.style.top = `${top + delta}px`
+      //    }
+      //  }
+      //  if (elapsed < transitionDuration) { // Stop the animation after 2 seconds
+      //    window.requestAnimationFrame(step)
+      //  }
+      //}
       var handleScroll = function () {
-          if (onZoomChange) {
-              onZoomChange(false);
+          if (state === LOADED) {
+              if (onZoomChange) {
+                  onZoomChange(false);
+              }
+              if (!isControlled) {
+                  unzoom();
+              }
           }
-          if (!isControlled) {
-              unzoom();
-          }
+          //window.requestAnimationFrame(step)
       };
       var handleDocumentKeyDown = function (e) {
           if (isEscapeKey(e)) {
@@ -508,10 +551,6 @@ var ImageZoom = (function () {
                   unzoom();
               }
           }
-      };
-      var setState = function (s) {
-          state = s;
-          setZoomImgStyle();
       };
       var setZoomImgStyle = function (instant) {
           if (instant === void 0) { instant = false; }
@@ -531,7 +570,7 @@ var ImageZoom = (function () {
           blur(openBtnEl);
       };
       var zoomImg = function () {
-          if (!targetEl || state !== State.UNLOADED)
+          if (!targetEl || state !== UNLOADED)
               return;
           cloneImgEl = cloneElement(true, targetEl);
           addEventListener(LOAD, handleZoomImgLoad, cloneImgEl);
@@ -543,7 +582,7 @@ var ImageZoom = (function () {
           addEventListener(SCROLL, handleScroll, scrollableEl);
       };
       var zoomNonImg = function () {
-          if (!targetEl || state !== State.UNLOADED)
+          if (!targetEl || state !== UNLOADED)
               return;
           var cloneEl = cloneElement(true, targetEl);
           removeAttribute(ID, cloneEl);
@@ -617,7 +656,7 @@ var ImageZoom = (function () {
           ariaHiddenSiblings = [];
       };
       var unzoom = function () {
-          if (state === State.LOADED) {
+          if (state === LOADED) {
               blur(closeBtnEl);
               ariaResetOtherContent();
               if (zoomWrapEl) {
@@ -626,10 +665,13 @@ var ImageZoom = (function () {
               if (overlayEl) {
                   setAttribute(STYLE, getStyleOverlay(overlayBgColorStart, transitionDuration), overlayEl);
               }
+              state = UNLOADING;
+              setZoomImgStyle();
           }
-          if (state !== State.UNLOADED) {
-              setState(State.UNLOADING);
-          }
+          //if (state !== UNLOADED) {
+          //  state = UNLOADING
+          //  setZoomImgStyle()
+          //}
       };
       init();
       return { cleanup: cleanup, update: update };
@@ -643,21 +685,14 @@ var ImageZoom = (function () {
   var styleCursorZoomIn = styleCursorPointer + 'cursor:-webkit-zoom-in;cursor:zoom-in;';
   var styleCursorZoomOut = styleCursorPointer + 'cursor:-webkit-zoom-out;cursor:zoom-out;';
   var styleDisplayBlock = DISPLAY + ":" + BLOCK + ";";
-  //const styleDisplayInlineBlock = `${DISPLAY}:${INLINE_BLOCK};`
   var styleFastTap = 'touch-action:manipulation;';
   var styleHeight100pct = "height:" + HUNDRED_PCT + ";";
   var styleMaxHeight100pct = "max-height:" + HUNDRED_PCT + ";";
   var styleMaxWidth100pct = "max-width:" + HUNDRED_PCT + ";";
   var stylePosAbsolute = POSITION + ":" + ABSOLUTE + ";";
-  //const stylePosRelative = `${POSITION}:${RELATIVE};`
   var styleTransitionTimingFn = 'cubic-bezier(.42,0,.58,1);';
   var styleVisibilityHidden = VISIBILITY + ":" + HIDDEN + ";";
   var styleWidth100pct = "width:" + HUNDRED_PCT + ";";
-  //const styleWrapBlock = stylePosRelative + styleDisplayBlock
-  //const styleWrapInline =
-  //  stylePosRelative
-  //  styleDisplayInlineBlock +
-  //  `vertical-align:${TOP};`
   var styleZoomBtnBase = stylePosAbsolute +
       styleFastTap +
       styleAppearanceNone +
@@ -677,7 +712,6 @@ var ImageZoom = (function () {
       styleMaxWidth100pct +
       styleMaxHeight100pct;
   var getStyleOverlay = function (backgroundColor, transitionDuration) {
-      //const td = transitionDuration ? transitionDuration / 3 : transitionDuration
       return stylePosAbsolute +
           styleAllDirsZero +
           ("transition:background " + transitionDuration + "ms " + styleTransitionTimingFn + ";") +
@@ -707,7 +741,7 @@ var ImageZoom = (function () {
       }
       var _a = targetEl.getBoundingClientRect(), height = _a.height, left = _a.left, top = _a.top, width = _a.width;
       var originalTransform = getStyleProperty(TRANSFORM, targetEl);
-      if (state !== State.LOADED) {
+      if (state !== LOADED) {
           var initTransform = 'scale(1) translate(0,0)' +
               (originalTransform ? " " + originalTransform : '');
           return getZoomImgStyleStr(height, width, left, top, initTransform, transitionDuration);
@@ -715,8 +749,8 @@ var ImageZoom = (function () {
       var _b = targetEl, naturalHeight = _b.naturalHeight, naturalWidth = _b.naturalWidth;
       // Get amount to scale item
       var scale = isImg && naturalHeight && naturalWidth
-          ? getMaxDimensionScale(height, width, zoomMargin, naturalHeight, naturalWidth)
-          : getScale(height, width, zoomMargin);
+          ? getScaleToWindowMax(width, naturalWidth, height, naturalHeight, zoomMargin)
+          : getScaleToWindow(width, height, zoomMargin);
       // Get the the coords for center of the viewport
       var viewportX = getWindowInnerWidth() / 2;
       var viewportY = getWindowInnerHeight() / 2;
@@ -731,18 +765,11 @@ var ImageZoom = (function () {
           (originalTransform ? " " + originalTransform : '');
       return getZoomImgStyleStr(height, width, left, top, transform, transitionDuration);
   };
-  var isEscapeKey = function (e) { return e.key === 'Escape' || e.keyCode === 27; };
-  var getScale = function (height, width, zoomMargin) {
-      var scaleX = getWindowInnerWidth() / (width + zoomMargin);
-      var scaleY = getWindowInnerHeight() / (height + zoomMargin);
-      return Math.min(scaleX, scaleY);
-  };
-  var getMaxDimensionScale = function (height, width, zoomMargin, naturalHeight, naturalWidth) {
-      var scale = getScale(naturalHeight, naturalWidth, zoomMargin);
-      var ratio = naturalWidth > naturalHeight ? naturalWidth / width : naturalHeight / height;
-      return scale > 1 ? ratio : scale * ratio;
-  };
+  //
+  // HELPERS
+  //
   var SVG_REGEX = /\.svg$/i;
+  var isEscapeKey = function (e) { return e.key === 'Escape' || e.keyCode === 27; };
   var isIgnoredElement = function (_a) {
       var tagName = _a.tagName;
       return tagName === 'SCRIPT' || tagName === 'NOSCRIPT' || tagName === 'STYLE';

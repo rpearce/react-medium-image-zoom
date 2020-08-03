@@ -665,7 +665,7 @@ __metadata:
   dependencies:
     "@rollup/plugin-commonjs": 14.0.0
     "@rollup/plugin-node-resolve": 8.4.0
-    "@rpearce/ts-dom-fns": ^0.3.1
+    "@rpearce/ts-dom-fns": ^0.4.0
     focus-options-polyfill: ^1.5.0
     rollup: 2.23.0
     rollup-plugin-terser: 6.1.0
@@ -676,12 +676,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@rpearce/ts-dom-fns@npm:^0.3.1":
-  version: 0.3.1
-  resolution: "@rpearce/ts-dom-fns@npm:0.3.1"
+"@rpearce/ts-dom-fns@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@rpearce/ts-dom-fns@npm:0.4.0"
   dependencies:
     tslib: ^2.0.0
-  checksum: 3d74c5ca327dce772cfc0308b41427c53905780c9c22ec3a599d3701333307f6400e66725cc93343a4bbf91ef1cbc16237a859b6a2922bd70a0c1020d7b32765
+  checksum: f3743c9e0c75d0ea3ccc72ca65bb827c1fac6d7db4f9d6f6c3572a9409ba2360897e55ba4912c0f884f526fb2138f320b8f449447081b8a3353e40082d3b7ba3
   languageName: node
   linkType: hard
 
