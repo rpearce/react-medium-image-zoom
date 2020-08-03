@@ -467,6 +467,10 @@ var ImageZoom = (function () {
               setZoomImgStyle(true);
           }
           else {
+              cleanupZoom();
+              cleanupMutationObserver();
+              cleanupTargetLoad();
+              cleanupDOMMutations();
               initImg();
           }
       };
@@ -487,7 +491,6 @@ var ImageZoom = (function () {
           }
           if (zoomableEl) {
               addEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomableEl);
-              setAttribute(STYLE, stylePosAbsolute, zoomableEl);
           }
           state = LOADED;
           setZoomImgStyle(false);
@@ -575,6 +578,9 @@ var ImageZoom = (function () {
                       (originalTransform ? " " + originalTransform : '');
           }
           setAttribute(STYLE, stylePosAbsolute +
+              styleDisplayBlock +
+              styleMaxWidth100pct +
+              styleMaxHeight100pct +
               (WIDTH + ":" + width + "px;") +
               (HEIGHT + ":" + height + "px;") +
               (LEFT + ":" + left + "px;") +
@@ -599,7 +605,6 @@ var ImageZoom = (function () {
           zoomableEl = cloneElement(true, targetEl);
           removeAttribute(ID, zoomableEl);
           setAttribute(DATA_RMIZ_ZOOMED, '', zoomableEl);
-          setAttribute(STYLE, styleZoomImgContent, zoomableEl);
           addEventListener(LOAD, handleZoomImgLoad, zoomableEl);
       };
       var zoomNonImg = function () {
@@ -729,9 +734,6 @@ var ImageZoom = (function () {
       styleCursorZoomOut +
       (Z_INDEX_CSS + ":1;");
   var styleZoomStart = stylePosAbsolute + styleVisibilityHidden;
-  var styleZoomImgContent = styleDisplayBlock +
-      styleMaxWidth100pct +
-      styleMaxHeight100pct;
   //
   // HELPERS
   //

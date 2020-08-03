@@ -371,6 +371,11 @@ const ImageZoom = (
     if (state === LOADED) {
       setZoomImgStyle(true)
     } else {
+      cleanupZoom()
+      cleanupMutationObserver()
+      cleanupTargetLoad()
+      cleanupDOMMutations()
+
       initImg()
     }
   }
@@ -397,7 +402,6 @@ const ImageZoom = (
 
     if (zoomableEl) {
       addEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomableEl)
-      setAttribute(STYLE, stylePosAbsolute, zoomableEl)
     }
 
     state = LOADED
@@ -519,7 +523,10 @@ const ImageZoom = (
 
     setAttribute(
       STYLE,
-        stylePosAbsolute +
+      stylePosAbsolute +
+        styleDisplayBlock +
+        styleMaxWidth100pct +
+        styleMaxHeight100pct +
           `${WIDTH}:${width}px;` +
           `${HEIGHT}:${height}px;` +
           `${LEFT}:${left}px;` +
@@ -548,7 +555,6 @@ const ImageZoom = (
     zoomableEl = cloneElement(true, targetEl) as HTMLImageElement
     removeAttribute(ID, zoomableEl)
     setAttribute(DATA_RMIZ_ZOOMED, '', zoomableEl)
-    setAttribute(STYLE, styleZoomImgContent, zoomableEl)
 
     addEventListener(LOAD, handleZoomImgLoad, zoomableEl)
   }
@@ -716,11 +722,6 @@ const styleZoomBtnOut =
   `${Z_INDEX_CSS}:1;`
 
 const styleZoomStart = stylePosAbsolute + styleVisibilityHidden
-
-const styleZoomImgContent =
-  styleDisplayBlock +
-  styleMaxWidth100pct +
-  styleMaxHeight100pct
 
 //
 // HELPERS
