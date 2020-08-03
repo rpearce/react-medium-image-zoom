@@ -157,15 +157,26 @@ const ImageZoom = (
 
   // START TARGET MUTATION OBSERVER
 
+  let oldWidth = targetEl.offsetWidth
+  let oldHeight = targetEl.offsetHeight
+
   const initMutationObserver = (): void => {
-    const cb = (mutationsList: MutationRecord[]): void => {
-      if (targetEl && mutationsList.length > 0) {
-        adjustOpenBtnEl()
+    const cb = (): void => {
+      if (targetEl) {
+        const newWidth = targetEl.offsetWidth
+        const newHeight = targetEl.offsetHeight
+
+        if (oldWidth !== newWidth || oldHeight !== newHeight) {
+          adjustOpenBtnEl()
+
+          oldWidth = newWidth
+          oldHeight = newHeight
+        }
       }
     }
 
     observer = new MutationObserver(cb)
-    observer.observe(targetEl, {
+    observer.observe(documentBody, {
       attributes: true,
       characterData: true,
       childList: true,

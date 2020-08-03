@@ -289,14 +289,22 @@ var ImageZoom = (function () {
           }
       };
       // START TARGET MUTATION OBSERVER
+      var oldWidth = targetEl.offsetWidth;
+      var oldHeight = targetEl.offsetHeight;
       var initMutationObserver = function () {
-          var cb = function (mutationsList) {
-              if (targetEl && mutationsList.length > 0) {
-                  adjustOpenBtnEl();
+          var cb = function () {
+              if (targetEl) {
+                  var newWidth = targetEl.offsetWidth;
+                  var newHeight = targetEl.offsetHeight;
+                  if (oldWidth !== newWidth || oldHeight !== newHeight) {
+                      adjustOpenBtnEl();
+                      oldWidth = newWidth;
+                      oldHeight = newHeight;
+                  }
               }
           };
           observer = new MutationObserver(cb);
-          observer.observe(targetEl, {
+          observer.observe(documentBody, {
               attributes: true,
               characterData: true,
               childList: true,
