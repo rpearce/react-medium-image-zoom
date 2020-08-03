@@ -39,9 +39,12 @@ const ABSOLUTE = 'absolute'
 const ARIA_HIDDEN = 'aria-hidden'
 const ARIA_LABEL = 'aria-label'
 const ARIA_MODAL = 'aria-modal'
+const BG_COLOR_CSS = 'background-color'
+const BG_COLOR = 'backgroundColor'
 const BLOCK = 'block'
 const BUTTON = 'button'
 const CLICK = 'click'
+const CURSOR = 'cursor'
 const DATA_RMIZ_OVERLAY = 'data-rmiz-overlay'
 const DATA_RMIZ_ZOOMED = 'data-rmiz-zoomed'
 const DIALOG = 'dialog'
@@ -53,10 +56,11 @@ const HIDDEN = 'hidden'
 const HUNDRED_PCT = '100%'
 const ID = 'id'
 const KEYDOWN = 'keydown'
+const LEFT = 'left'
 const LOAD = 'load'
 const MARGIN = 'margin'
-const MARGIN_LEFT = `${MARGIN}Left`
-const MARGIN_TOP = `${MARGIN}Top`
+const MARGIN_LEFT_JS = `${MARGIN}Left`
+const MARGIN_TOP_JS = `${MARGIN}Top`
 const MAX_HEIGHT = 'maxHeight'
 const MAX_WIDTH = 'maxWidth'
 const NONE = 'none'
@@ -66,14 +70,16 @@ const ROLE = 'role'
 const SCROLL = 'scroll'
 const STYLE = 'style'
 const TABINDEX = 'tabindex'
+const TOP = 'top'
 const TRANSFORM = 'transform'
+const TRANSITION = 'transition'
 const TRANSITIONEND = 'transitionend'
 const TRUE_STR = 'true'
 const TYPE = 'type'
 const VISIBILITY = 'visibility'
 const WIDTH = 'width'
 const ZERO = '0'
-const Z_INDEX = 'z-index'
+const Z_INDEX_CSS = 'z-index'
 
 export interface ImageZoomOpts {
   closeText?: string
@@ -121,13 +127,11 @@ const ImageZoom = (
     (targetEl as HTMLImageElement).currentSrc
   )
   const isImg = !isSvgSrc && isImgEl
-  const win = window
-  const doc = document
-  const documentBody = doc.body
-  const scrollableEl = win
+  const documentBody = document.body
+  const scrollableEl = window
 
   let ariaHiddenSiblings: [HTMLElement, string][] = []
-  let cloneImgEl: HTMLImageElement | undefined
+  let zoomableEl: HTMLElement | undefined
   let closeBtnEl: HTMLButtonElement | undefined
   let boundaryDivFirst: HTMLDivElement | undefined
   let boundaryDivLast: HTMLDivElement | undefined
@@ -138,10 +142,9 @@ const ImageZoom = (
   let overlayEl: HTMLDivElement | undefined
   let state: State = UNLOADED
   let transitionDuration = _transitionDuration
-  let zoomWrapEl: HTMLDivElement | undefined
 
   const init = (): void => {
-    addEventListener(RESIZE, handleResize, win)
+    addEventListener(RESIZE, handleResize, window)
 
     initMotionPref()
 
@@ -180,7 +183,7 @@ const ImageZoom = (
   // START MOTION PREFS
 
   const initMotionPref = (): void => {
-    motionPref = win.matchMedia('(prefers-reduced-motion:reduce)')
+    motionPref = window.matchMedia('(prefers-reduced-motion:reduce)')
     motionPref.addListener(handleMotionPref) // NOT addEventListener because compatibility
   }
 
@@ -236,15 +239,20 @@ const ImageZoom = (
     if (!openBtnEl) return
 
     const { height, width } = getBoundingClientRect(targetEl)
-    const compStyleDisplay = getComputedStyle(targetEl)[DISPLAY]
+    const type = getComputedStyle(targetEl)[DISPLAY]
 
     setStyleProperty(WIDTH, `${width}px`, openBtnEl)
     setStyleProperty(HEIGHT, `${height}px`, openBtnEl)
 
-    if (compStyleDisplay === BLOCK) {
-      setStyleProperty(MARGIN_TOP, `-${height}px`, openBtnEl)
+    if (
+      type === BLOCK ||
+      type === 'flex' ||
+      type === 'grid' ||
+      type === 'table'
+    ) {
+      setStyleProperty(MARGIN_TOP_JS, `-${height}px`, openBtnEl)
     } else {
-      setStyleProperty(MARGIN_LEFT, `-${width}px`, openBtnEl)
+      setStyleProperty(MARGIN_LEFT_JS, `-${width}px`, openBtnEl)
     }
   }
 
@@ -258,7 +266,7 @@ const ImageZoom = (
     if (opts.zoomMargin) zoomMargin = opts.zoomMargin
     if (opts.zoomZindex) zoomZindex = opts.zoomZindex
 
-    setZoomImgStyle()
+    setZoomImgStyle(false)
 
     if (state === UNLOADED && opts.isZoomed) {
       zoom()
@@ -276,10 +284,10 @@ const ImageZoom = (
     cleanupDOMMutations()
     cleanupMotionPref()
 
-    removeEventListener(RESIZE, handleResize, win)
+    removeEventListener(RESIZE, handleResize, window)
   }
 
-  const cleanupTargetLoad = ():void => {
+  const cleanupTargetLoad = (): void => {
     if (isImg && targetEl) {
       removeEventListener(LOAD, initImg, targetEl)
     }
@@ -296,15 +304,12 @@ const ImageZoom = (
 
   const cleanupZoom = (): void => {
     removeEventListener(SCROLL, handleScroll, scrollableEl)
-    removeEventListener(KEYDOWN, handleDocumentKeyDown, doc)
+    removeEventListener(KEYDOWN, handleDocumentKeyDown, document)
 
-    if (cloneImgEl) {
-      removeEventListener(LOAD, handleZoomImgLoad, cloneImgEl)
-    }
-
-    if (zoomWrapEl) {
-      removeEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, zoomWrapEl)
-      removeEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomWrapEl)
+    if (zoomableEl) {
+      removeEventListener(LOAD, handleZoomImgLoad, zoomableEl)
+      removeEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, zoomableEl)
+      removeEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomableEl)
     }
 
     if (closeBtnEl) {
@@ -324,11 +329,10 @@ const ImageZoom = (
       removeChild(modalEl, documentBody)
     }
 
-    cloneImgEl = undefined
+    zoomableEl = undefined
     closeBtnEl = undefined
     boundaryDivFirst = undefined
     boundaryDivLast = undefined
-    zoomWrapEl = undefined
     overlayEl = undefined
     modalEl = undefined
   }
@@ -376,32 +380,47 @@ const ImageZoom = (
   }
 
   const handleZoomImgLoad = (): void => {
+    if (!zoomableEl) return
+
+    modalEl = createModal()
+
+    if (!modalEl) return
+
+    appendChild(modalEl, documentBody)
+
+    addEventListener(KEYDOWN, handleDocumentKeyDown, document)
+    addEventListener(SCROLL, handleScroll, scrollableEl)
+
     if (targetEl) {
       setStyleProperty(VISIBILITY, HIDDEN, targetEl)
     }
 
-    if (overlayEl) {
-      setAttribute(
-        STYLE,
-        getStyleOverlay(overlayBgColorEnd, transitionDuration),
-        overlayEl
-      )
-    }
-
-    if (zoomWrapEl) {
-      addEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomWrapEl)
-      setAttribute(STYLE, stylePosAbsolute, zoomWrapEl)
+    if (zoomableEl) {
+      addEventListener(TRANSITIONEND, handleZoomTransitionEnd, zoomableEl)
+      setAttribute(STYLE, stylePosAbsolute, zoomableEl)
     }
 
     state = LOADED
-    setZoomImgStyle()
+    setZoomImgStyle(false)
 
     ariaHideOtherContent()
+
+    if (overlayEl) {
+      setAttribute(
+        STYLE,
+        stylePosAbsolute +
+          styleAllDirsZero +
+          `${TRANSITION}:${BG_COLOR_CSS} ${transitionDuration}ms ${styleTransitionTimingFn};` +
+          `${BG_COLOR_CSS}:${overlayBgColorStart};` +
+          `will-change:${BG_COLOR_CSS};`,
+        overlayEl
+      )
+
+      setStyleProperty(BG_COLOR, overlayBgColorEnd, overlayEl)
+    }
   }
 
   const handleUnzoomTransitionEnd = (): void => {
-    // timeout for Safari flickering issue
-    //win.setTimeout(() => {
     if (targetEl) {
       setStyleProperty(VISIBILITY, '', targetEl)
     }
@@ -412,7 +431,6 @@ const ImageZoom = (
     cleanupZoom()
 
     focusPreventScroll(openBtnEl)
-    //}, 0)
   }
 
   const handleModalClick = (): void => {
@@ -425,39 +443,6 @@ const ImageZoom = (
     }
   }
 
-  //let lastOffset = window.pageYOffset
-  //let delta = 0
-  //let start: number
-
-  //const step = (timestamp: number) => {
-  //  if (start === undefined) {
-  //    start = timestamp
-  //  }
-
-  //  const elapsed = timestamp - start
-
-  //  //// `Math.min()` is used here to make sure that the element stops at exactly 200px.
-  //  //element.style.transform = 'translateX(' + Math.min(0.1 * elapsed, 200) + 'px)';
-
-  //  if (state !== UNLOADED && zoomWrapEl) {
-  //    const pageOffset = window.pageYOffset
-
-  //    delta = pageOffset - lastOffset
-  //    lastOffset = pageOffset
-
-  //    console.log(delta)
-  //    if (delta > 0) {
-  //      const top = parseFloat(zoomWrapEl.style.top)
-  //      console.log('top', top)
-  //      zoomWrapEl.style.top = `${top + delta}px`
-  //    }
-  //  }
-
-  //  if (elapsed < transitionDuration) { // Stop the animation after 2 seconds
-  //    window.requestAnimationFrame(step)
-  //  }
-  //}
-
   const handleScroll = (): void => {
     if (state === LOADED) {
       if (onZoomChange) {
@@ -467,9 +452,9 @@ const ImageZoom = (
       if (!isControlled) {
         unzoom()
       }
+    } else if (state === UNLOADING) {
+      setZoomImgStyle(false)
     }
-
-    //window.requestAnimationFrame(step)
   }
 
   const handleDocumentKeyDown = (e: KeyboardEvent): void => {
@@ -486,22 +471,65 @@ const ImageZoom = (
     }
   }
 
-  const setZoomImgStyle = (instant = false): void => {
-    if (!targetEl) return
+  const setZoomImgStyle = (instant: boolean): void => {
+    if (!targetEl || !zoomableEl) return
 
-    if (zoomWrapEl) {
-      setAttribute(
-        STYLE,
-        getZoomImgStyle(
-          instant ? 0 : transitionDuration,
-          zoomMargin,
-          targetEl,
-          isImg,
-          state
-        ),
-        zoomWrapEl
-      )
+    const td = instant ? 0 : transitionDuration
+    const { height, left, top, width } = targetEl.getBoundingClientRect()
+    const originalTransform = getStyleProperty(TRANSFORM, targetEl)
+
+    let transform: string
+
+    if (state !== LOADED) {
+      transform = 'scale(1) translate(0,0)' + (originalTransform ? ` ${originalTransform}` : '')
+    } else {
+      let scale = getScaleToWindow(width, height, zoomMargin)
+
+      if (isImg) {
+        const { naturalHeight, naturalWidth } = targetEl as HTMLImageElement
+
+        if (naturalHeight && naturalWidth) {
+          scale = getScaleToWindowMax(
+            width,
+            naturalWidth,
+            height,
+            naturalHeight,
+            zoomMargin
+          )
+        }
+      }
+
+      // Get the the coords for center of the viewport
+      const viewportX = getWindowInnerWidth() / 2
+      const viewportY = getWindowInnerHeight() / 2
+
+      // Get the coords for center of the parent item
+      const childCenterX = left + width / 2
+      const childCenterY = top + height / 2
+
+      // Get offset amounts for item coords to be centered on screen
+      const translateX = (viewportX - childCenterX) / scale
+      const translateY = (viewportY - childCenterY) / scale
+
+      // Build transform style, including any original transform
+      transform =
+        `scale(${scale}) translate(${translateX}px,${translateY}px)` +
+        (originalTransform ? ` ${originalTransform}` : '')
     }
+
+    setAttribute(
+      STYLE,
+        stylePosAbsolute +
+          `${WIDTH}:${width}px;` +
+          `${HEIGHT}:${height}px;` +
+          `${LEFT}:${left}px;` +
+          `${TOP}:${top}px;` +
+          `${TRANSITION}:transform ${td}ms ${styleTransitionTimingFn};` +
+          `-webkit-transform:${transform};` +
+          `-ms-transform:${transform};` +
+          `transform:${transform};`,
+      zoomableEl
+    )
   }
 
   const zoom = (): void => {
@@ -517,55 +545,52 @@ const ImageZoom = (
   const zoomImg = (): void => {
     if (!targetEl || state !== UNLOADED) return
 
-    cloneImgEl = cloneElement(true, targetEl) as HTMLImageElement
-    addEventListener(LOAD, handleZoomImgLoad, cloneImgEl)
-    removeAttribute(ID, cloneImgEl)
-    setAttribute(STYLE, styleZoomImgContent, cloneImgEl)
+    zoomableEl = cloneElement(true, targetEl) as HTMLImageElement
+    removeAttribute(ID, zoomableEl)
+    setAttribute(DATA_RMIZ_ZOOMED, '', zoomableEl)
+    setAttribute(STYLE, styleZoomImgContent, zoomableEl)
 
-    modalEl = createModal(cloneImgEl)
-    appendChild(modalEl, documentBody)
-
-    addEventListener(KEYDOWN, handleDocumentKeyDown, doc)
-    addEventListener(SCROLL, handleScroll, scrollableEl)
+    addEventListener(LOAD, handleZoomImgLoad, zoomableEl)
   }
 
   const zoomNonImg = (): void => {
     if (!targetEl || state !== UNLOADED) return
+
+    zoomableEl = createElement(DIV) as HTMLDivElement
+    setAttribute(DATA_RMIZ_ZOOMED, '', zoomableEl)
+    setAttribute(STYLE, styleZoomStart, zoomableEl)
 
     const cloneEl = cloneElement(true, targetEl)
     removeAttribute(ID, cloneEl)
     setStyleProperty(MAX_WIDTH, NONE, cloneEl)
     setStyleProperty(MAX_HEIGHT, NONE, cloneEl)
 
-    modalEl = createModal(cloneEl)
-    appendChild(modalEl, documentBody)
-
-    addEventListener(KEYDOWN, handleDocumentKeyDown, doc)
-    addEventListener(SCROLL, handleScroll, scrollableEl)
+    appendChild(cloneEl, zoomableEl)
 
     handleZoomImgLoad()
   }
 
-  interface CreateModal {
-    (contentEl: HTMLElement): HTMLDivElement
-  }
+  const createModal = (): HTMLDivElement | undefined => {
+    if (!zoomableEl) return
 
-  const createModal: CreateModal = (contentEl) => {
     const el = createElement(DIV) as HTMLDivElement
 
     setAttribute(ARIA_LABEL, modalText, el)
     setAttribute(ARIA_MODAL, TRUE_STR, el)
     setAttribute(DATA_RMIZ_OVERLAY, '', el)
     setAttribute(ROLE, DIALOG, el)
-    setAttribute(STYLE, getStyleDialog(String(zoomZindex)), el)
+    setAttribute(
+      STYLE,
+      `${POSITION}:fixed;` +
+        styleAllDirsZero +
+        styleWidth100pct +
+        styleHeight100pct +
+        `${Z_INDEX_CSS}:${zoomZindex};`,
+      el
+    )
     addEventListener(CLICK, handleModalClick, el)
 
     overlayEl = createElement(DIV) as HTMLDivElement
-    setAttribute(
-      STYLE,
-      getStyleOverlay(overlayBgColorStart, transitionDuration),
-      overlayEl
-    )
 
     boundaryDivFirst = createElement(DIV) as HTMLDivElement
     setAttribute(TABINDEX, ZERO, boundaryDivFirst)
@@ -581,15 +606,10 @@ const ImageZoom = (
     setAttribute(TYPE, BUTTON, el)
     addEventListener(CLICK, handleCloseBtnClick, closeBtnEl)
 
-    zoomWrapEl = createElement(DIV) as HTMLDivElement
-    setAttribute(DATA_RMIZ_ZOOMED, '', zoomWrapEl)
-    setAttribute(STYLE, styleZoomStart, zoomWrapEl)
-
-    appendChild(contentEl, zoomWrapEl)
     appendChild(overlayEl, el)
     appendChild(boundaryDivFirst, el)
     appendChild(closeBtnEl, el)
-    appendChild(zoomWrapEl, el)
+    appendChild(zoomableEl, el)
     appendChild(boundaryDivLast, el)
 
     return el
@@ -635,26 +655,19 @@ const ImageZoom = (
 
       ariaResetOtherContent()
 
-      if (zoomWrapEl) {
-        addEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, zoomWrapEl)
-      }
-
-      if (overlayEl) {
-        setAttribute(
-          STYLE,
-          getStyleOverlay(overlayBgColorStart, transitionDuration),
-          overlayEl
-        )
+      if (zoomableEl) {
+        addEventListener(TRANSITIONEND, handleUnzoomTransitionEnd, zoomableEl)
       }
 
       state = UNLOADING
-      setZoomImgStyle()
-    }
+      setZoomImgStyle(false)
 
-    //if (state !== UNLOADED) {
-    //  state = UNLOADING
-    //  setZoomImgStyle()
-    //}
+      if (overlayEl) {
+        setStyleProperty(BG_COLOR, overlayBgColorStart, overlayEl)
+      }
+    } else {
+      setZoomImgStyle(false)
+    }
   }
 
   init()
@@ -668,20 +681,20 @@ export default ImageZoom
 // STYLING
 //
 
-const styleAllDirsZero = 'top:0;right:0;bottom:0;left:0;'
+const styleAllDirsZero = `${TOP}:0;right:0;bottom:0;${LEFT}:0;`
 const styleAppearanceNone = `-webkit-appearance:${NONE};-moz-appearance:${NONE};appearance:${NONE};`
-const styleCursorPointer = 'cursor:pointer;'
-const styleCursorZoomIn = styleCursorPointer + 'cursor:-webkit-zoom-in;cursor:zoom-in;'
-const styleCursorZoomOut = styleCursorPointer + 'cursor:-webkit-zoom-out;cursor:zoom-out;'
+const styleCursorPointer = `${CURSOR}:pointer;`
+const styleCursorZoomIn = styleCursorPointer + `${CURSOR}:-webkit-zoom-in;cursor:zoom-in;`
+const styleCursorZoomOut = styleCursorPointer + `${CURSOR}:-webkit-zoom-out;cursor:zoom-out;`
 const styleDisplayBlock = `${DISPLAY}:${BLOCK};`
 const styleFastTap = 'touch-action:manipulation;'
-const styleHeight100pct = `height:${HUNDRED_PCT};`
+const styleHeight100pct = `${HEIGHT}:${HUNDRED_PCT};`
 const styleMaxHeight100pct = `max-height:${HUNDRED_PCT};`
 const styleMaxWidth100pct = `max-width:${HUNDRED_PCT};`
 const stylePosAbsolute = `${POSITION}:${ABSOLUTE};`
-const styleTransitionTimingFn = 'cubic-bezier(.42,0,.58,1);'
+const styleTransitionTimingFn = 'ease'
 const styleVisibilityHidden = `${VISIBILITY}:${HIDDEN};`
-const styleWidth100pct = `width:${HUNDRED_PCT};`
+const styleWidth100pct = `${WIDTH}:${HUNDRED_PCT};`
 
 const styleZoomBtnBase =
   stylePosAbsolute +
@@ -689,7 +702,7 @@ const styleZoomBtnBase =
   styleAppearanceNone +
   `background:${NONE};` +
   `border:${NONE};` +
-  'margin:0;' +
+  `${MARGIN}:0;` +
   'padding:0;'
 
 const styleZoomBtnIn = styleZoomBtnBase + styleCursorZoomIn
@@ -700,7 +713,7 @@ const styleZoomBtnOut =
   styleHeight100pct +
   styleWidth100pct +
   styleCursorZoomOut +
-  `${Z_INDEX}:1;`
+  `${Z_INDEX_CSS}:1;`
 
 const styleZoomStart = stylePosAbsolute + styleVisibilityHidden
 
@@ -708,139 +721,6 @@ const styleZoomImgContent =
   styleDisplayBlock +
   styleMaxWidth100pct +
   styleMaxHeight100pct
-
-interface GetStyleOverlay {
-  (backgroundColor: string, transitionDuration: number): string
-}
-
-const getStyleOverlay: GetStyleOverlay = (
-  backgroundColor,
-  transitionDuration
-) =>
-  stylePosAbsolute +
-  styleAllDirsZero +
-  `transition:background ${transitionDuration}ms ${styleTransitionTimingFn};` +
-  `background:${backgroundColor};`
-
-interface GetStyleDialog {
-  (zIndex: string): string
-}
-
-const getStyleDialog: GetStyleDialog = (zIndex) =>
-  'position:fixed;' +
-  styleAllDirsZero +
-  styleWidth100pct +
-  styleHeight100pct +
-  `${Z_INDEX}:${zIndex};`
-
-interface GetZoomImgStyleStr {
-  (
-    height: number,
-    width: number,
-    left: number,
-    top: number,
-    transform: string,
-    transitionDuration: number
-  ): string
-}
-
-const getZoomImgStyleStr: GetZoomImgStyleStr = (
-  height,
-  width,
-  left,
-  top,
-  transform,
-  transitionDuration
-) =>
-  stylePosAbsolute  +
-  `height:${height}px;` +
-  `width:${width}px;` +
-  `left:${left}px;` +
-  `top:${top}px;` +
-  `transition:transform ${transitionDuration}ms ${styleTransitionTimingFn};` +
-  `-webkit-transform:${transform};` +
-  `-ms-transform:${transform};` +
-  `transform:${transform};`
-
-interface GetZoomImgStyle {
-  (
-    transitionDuration: number,
-    zoomMargin: number,
-    targetEl: HTMLElement | undefined,
-    isImg: boolean,
-    state: State
-  ): string
-}
-
-const getZoomImgStyle: GetZoomImgStyle = (
-  transitionDuration,
-  zoomMargin,
-  targetEl,
-  isImg,
-  state
-) => {
-  if (!targetEl) {
-    return getZoomImgStyleStr(0, 0, 0, 0, NONE, 0)
-  }
-
-  const { height, left, top, width } = targetEl.getBoundingClientRect()
-  const originalTransform = getStyleProperty(TRANSFORM, targetEl)
-
-  if (state !== LOADED) {
-    const initTransform =
-      'scale(1) translate(0,0)' +
-      (originalTransform ? ` ${originalTransform}` : '')
-
-    return getZoomImgStyleStr(
-      height,
-      width,
-      left,
-      top,
-      initTransform,
-      transitionDuration
-    )
-  }
-
-  const { naturalHeight, naturalWidth } = targetEl as HTMLImageElement
-
-  // Get amount to scale item
-  const scale =
-    isImg && naturalHeight && naturalWidth
-      ? getScaleToWindowMax(
-          width,
-          naturalWidth,
-          height,
-          naturalHeight,
-          zoomMargin
-        )
-      : getScaleToWindow(width, height, zoomMargin)
-
-  // Get the the coords for center of the viewport
-  const viewportX = getWindowInnerWidth() / 2
-  const viewportY = getWindowInnerHeight() / 2
-
-  // Get the coords for center of the parent item
-  const childCenterX = left + width / 2
-  const childCenterY = top + height / 2
-
-  // Get offset amounts for item coords to be centered on screen
-  const translateX = (viewportX - childCenterX) / scale
-  const translateY = (viewportY - childCenterY) / scale
-
-  // Build transform style, including any original transform
-  const transform =
-    `scale(${scale}) translate(${translateX}px,${translateY}px)` +
-    (originalTransform ? ` ${originalTransform}` : '')
-
-  return getZoomImgStyleStr(
-    height,
-    width,
-    left,
-    top,
-    transform,
-    transitionDuration
-  )
-}
 
 //
 // HELPERS
