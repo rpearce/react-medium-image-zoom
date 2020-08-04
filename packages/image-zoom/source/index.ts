@@ -40,7 +40,6 @@ const ARIA_HIDDEN = 'aria-hidden'
 const ARIA_LABEL = 'aria-label'
 const ARIA_MODAL = 'aria-modal'
 const BG_COLOR_CSS = 'background-color'
-const BG_COLOR = 'backgroundColor'
 const BLOCK = 'block'
 const BUTTON = 'button'
 const CLICK = 'click'
@@ -64,6 +63,7 @@ const MARGIN_TOP_JS = `${MARGIN}Top`
 const MAX_HEIGHT = 'maxHeight'
 const MAX_WIDTH = 'maxWidth'
 const NONE = 'none'
+const OPACITY = 'opacity'
 const POSITION = 'position'
 const RESIZE = 'resize'
 const ROLE = 'role'
@@ -87,8 +87,8 @@ export interface ImageZoomOpts {
   modalText?: string
   onZoomChange?: (isZoomed: boolean) => void
   openText?: string
-  overlayBgColorEnd?: string
-  overlayBgColorStart?: string
+  overlayBgColor?: string
+  overlayOpacity?: number
   transitionDuration?: number
   zoomMargin?: number
   zoomZindex?: number
@@ -114,8 +114,8 @@ const ImageZoom = (
     modalText = 'Zoomed item',
     onZoomChange,
     openText = 'Zoom image',
-    overlayBgColorEnd = 'rgba(255,255,255,0.95)',
-    overlayBgColorStart = 'rgba(255,255,255,0)',
+    overlayBgColor = '#fff',
+    overlayOpacity = 0.95,
     transitionDuration: _transitionDuration = 300,
     zoomMargin = 0,
     zoomZindex = 2147483647,
@@ -131,17 +131,16 @@ const ImageZoom = (
   const scrollableEl = window
 
   let ariaHiddenSiblings: [HTMLElement, string][] = []
-  let zoomableEl: HTMLElement | undefined
-  let closeBtnEl: HTMLButtonElement | undefined
   let boundaryDivFirst: HTMLDivElement | undefined
   let boundaryDivLast: HTMLDivElement | undefined
+  let closeBtnEl: HTMLButtonElement | undefined
   let modalEl: HTMLDivElement | undefined
   let motionPref: MediaQueryList | undefined
-  let observer: MutationObserver | undefined
   let openBtnEl: HTMLButtonElement | undefined
   let overlayEl: HTMLDivElement | undefined
   let state: State = UNLOADED
   let transitionDuration = _transitionDuration
+  let zoomableEl: HTMLElement | undefined
 
   const init = (): void => {
     addEventListener(RESIZE, handleResize, window)
@@ -149,44 +148,41 @@ const ImageZoom = (
     initMotionPref()
 
     if (isImgEl && !(targetEl as HTMLImageElement).complete) {
-      addEventListener(LOAD, initImg, targetEl)
+      addEventListener(LOAD, handleLoad, targetEl)
     } else {
-      initImg()
+      handleLoad()
     }
   }
 
   // START TARGET MUTATION OBSERVER
 
-  let oldWidth = targetEl.offsetWidth
-  let oldHeight = targetEl.offsetHeight
+  let bodyObserver: MutationObserver | undefined
+  let oldTargetEl = targetEl.cloneNode(true)
 
-  const initMutationObserver = (): void => {
-    const cb = (): void => {
-      if (targetEl) {
-        const newWidth = targetEl.offsetWidth
-        const newHeight = targetEl.offsetHeight
-
-        if (oldWidth !== newWidth || oldHeight !== newHeight) {
-          adjustOpenBtnEl()
-
-          oldWidth = newWidth
-          oldHeight = newHeight
-        }
-      }
-    }
-
-    observer = new MutationObserver(cb)
-    observer.observe(documentBody, {
+  const initMutationObservers = (): void => {
+    const opts = {
       attributes: true,
       characterData: true,
       childList: true,
       subtree: true,
-    })
+    }
+
+    const bodyCb = (): void => {
+      if (targetEl) {
+        if (state === UNLOADED && !oldTargetEl.isEqualNode(targetEl)) {
+          reset()
+          oldTargetEl = targetEl.cloneNode(true)
+        }
+      }
+    }
+
+    bodyObserver = new MutationObserver(bodyCb)
+    bodyObserver.observe(documentBody, opts)
   }
 
-  const cleanupMutationObserver = (): void => {
-    observer?.disconnect()
-    observer = undefined
+  const cleanupMutationObservers = (): void => {
+    bodyObserver?.disconnect()
+    bodyObserver = undefined
   }
 
   // END TARGET MUTATION OBSERVER
@@ -209,7 +205,7 @@ const ImageZoom = (
 
   // END MOTION PREFS
 
-  const initImg = (): void => {
+  const handleLoad = (): void => {
     if (!targetEl || state !== UNLOADED) return
 
     const { height, width } = getBoundingClientRect(targetEl)
@@ -237,23 +233,31 @@ const ImageZoom = (
       // insert openBtnEl after targetEl
       targetEl.insertAdjacentElement('afterend', openBtnEl)
 
-      initMutationObserver()
     } else {
       cleanupZoom()
-      cleanupMutationObserver()
-      cleanupTargetLoad()
       cleanupDOMMutations()
     }
+
+    initMutationObservers()
+  }
+
+  const reset = (): void => {
+    cleanup()
+    init()
   }
 
   const adjustOpenBtnEl = () => {
     if (!openBtnEl) return
 
     const { height, width } = getBoundingClientRect(targetEl)
-    const type = getComputedStyle(targetEl)[DISPLAY]
+    const style = getComputedStyle(targetEl)
+    const type = style[DISPLAY]
+    const marginLeft = parseFloat(style[MARGIN_LEFT_JS as any]) // eslint-disable-line @typescript-eslint/no-explicit-any
+    const marginTop = parseFloat(style[MARGIN_TOP_JS as any]) // eslint-disable-line @typescript-eslint/no-explicit-any
 
     setStyleProperty(WIDTH, `${width}px`, openBtnEl)
     setStyleProperty(HEIGHT, `${height}px`, openBtnEl)
+    setStyleProperty(MARGIN_LEFT_JS, `${marginLeft}px`, openBtnEl)
 
     if (
       type === BLOCK ||
@@ -261,9 +265,9 @@ const ImageZoom = (
       type === 'grid' ||
       type === 'table'
     ) {
-      setStyleProperty(MARGIN_TOP_JS, `-${height}px`, openBtnEl)
+      setStyleProperty(MARGIN_TOP_JS, `-${marginTop + height}px`, openBtnEl)
     } else {
-      setStyleProperty(MARGIN_LEFT_JS, `-${width}px`, openBtnEl)
+      setStyleProperty(MARGIN_LEFT_JS, `${marginLeft - width}px`, openBtnEl)
     }
   }
 
@@ -271,8 +275,8 @@ const ImageZoom = (
     if (opts.closeText) closeText = opts.closeText
     if (opts.modalText) modalText = opts.modalText
     if (opts.openText) openText = opts.openText
-    if (opts.overlayBgColorEnd) overlayBgColorEnd = opts.overlayBgColorEnd
-    if (opts.overlayBgColorStart) overlayBgColorStart = opts.overlayBgColorStart
+    if (opts.overlayBgColor) overlayBgColor = opts.overlayBgColor
+    if (opts.overlayOpacity) overlayOpacity = opts.overlayOpacity
     if (opts.transitionDuration) transitionDuration = opts.transitionDuration
     if (opts.zoomMargin) zoomMargin = opts.zoomMargin
     if (opts.zoomZindex) zoomZindex = opts.zoomZindex
@@ -290,17 +294,16 @@ const ImageZoom = (
 
   const cleanup = (): void => {
     cleanupZoom()
-    cleanupMutationObserver()
+    cleanupMutationObservers()
     cleanupTargetLoad()
     cleanupDOMMutations()
     cleanupMotionPref()
-
     removeEventListener(RESIZE, handleResize, window)
   }
 
   const cleanupTargetLoad = (): void => {
     if (isImg && targetEl) {
-      removeEventListener(LOAD, initImg, targetEl)
+      removeEventListener(LOAD, handleLoad, targetEl)
     }
   }
 
@@ -350,9 +353,7 @@ const ImageZoom = (
 
   // END CLEANUP
 
-  const handleOpenBtnClick = (e: MouseEvent): void => {
-    e.preventDefault()
-
+  const handleOpenBtnClick = (): void => {
     if (onZoomChange) {
       onZoomChange(true)
     }
@@ -362,9 +363,7 @@ const ImageZoom = (
     }
   }
 
-  const handleCloseBtnClick = (e: MouseEvent): void => {
-    e.preventDefault()
-
+  const handleCloseBtnClick = (): void => {
     if (onZoomChange) {
       onZoomChange(false)
     }
@@ -382,12 +381,7 @@ const ImageZoom = (
     if (state === LOADED) {
       setZoomImgStyle(true)
     } else {
-      cleanupZoom()
-      cleanupMutationObserver()
-      cleanupTargetLoad()
-      cleanupDOMMutations()
-
-      initImg()
+      reset()
     }
   }
 
@@ -425,13 +419,13 @@ const ImageZoom = (
         STYLE,
         stylePosAbsolute +
           styleAllDirsZero +
-          `${TRANSITION}:${BG_COLOR_CSS} ${transitionDuration}ms ${styleTransitionTimingFn};` +
-          `${BG_COLOR_CSS}:${overlayBgColorStart};` +
-          `will-change:${BG_COLOR_CSS};`,
+          `${BG_COLOR_CSS}:${overlayBgColor};` +
+          `${TRANSITION}:${OPACITY} ${transitionDuration}ms ${styleTransitionTimingFn};` +
+          `${OPACITY}:0;`,
         overlayEl
       )
 
-      setStyleProperty(BG_COLOR, overlayBgColorEnd, overlayEl)
+      setStyleProperty(OPACITY, `${overlayOpacity}`, overlayEl)
     }
   }
 
@@ -538,14 +532,14 @@ const ImageZoom = (
         styleDisplayBlock +
         styleMaxWidth100pct +
         styleMaxHeight100pct +
-          `${WIDTH}:${width}px;` +
-          `${HEIGHT}:${height}px;` +
-          `${LEFT}:${left}px;` +
-          `${TOP}:${top}px;` +
-          `${TRANSITION}:transform ${td}ms ${styleTransitionTimingFn};` +
-          `-webkit-transform:${transform};` +
-          `-ms-transform:${transform};` +
-          `transform:${transform};`,
+        `${WIDTH}:${width}px;` +
+        `${HEIGHT}:${height}px;` +
+        `${LEFT}:${left}px;` +
+        `${TOP}:${top}px;` +
+        `${TRANSITION}:${TRANSFORM} ${td}ms ${styleTransitionTimingFn};` +
+        `-webkit-${TRANSFORM}:${transform};` +
+        `-ms-${TRANSFORM}:${transform};` +
+        `${TRANSFORM}:${transform};`,
       zoomableEl
     )
   }
@@ -680,7 +674,7 @@ const ImageZoom = (
       setZoomImgStyle(false)
 
       if (overlayEl) {
-        setStyleProperty(BG_COLOR, overlayBgColorStart, overlayEl)
+        setStyleProperty(OPACITY, ZERO, overlayEl)
       }
     } else {
       setZoomImgStyle(false)

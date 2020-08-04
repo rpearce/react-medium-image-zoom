@@ -109,8 +109,8 @@ interface ImageZoomOpts {
   modalText?: string
   onZoomChange?: (isZoomed: boolean) => void
   openText?: string
-  overlayBgColorEnd?: string
-  overlayBgColorStart?: string
+  overlayBgColor?: string
+  overlayOpacity?: number
   transitionDuration?: number
   zoomMargin?: number
   zoomZindex?: number
@@ -133,12 +133,12 @@ interface ImageZoomOpts {
 * `openText`
   * accessible text for zooming
   * default: `'Zoom image'`
-* `overlayBgColorEnd`
-  * modal dialog overlay ending background color
-  * default: `'rgba(255, 255, 255, 0.95)'`
-* `overlayBgColorStart`
-  * modal dialog overlay starting background color
-  * default: `'rgba(255, 255, 255, 0)'`
+* `overlayBgColor`
+  * modal dialog overlay background color
+  * default: `'#fff'`
+* `overlayOpacity`
+  * modal dialog overlay opacity
+  * default: `0.95`
 * `transitionDuration`
   * length of time in milliseconds for the zoom animation to run
   * default: `300`

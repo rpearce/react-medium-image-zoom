@@ -219,7 +219,6 @@ var ImageZoom = (function () {
   var ARIA_LABEL = 'aria-label';
   var ARIA_MODAL = 'aria-modal';
   var BG_COLOR_CSS = 'background-color';
-  var BG_COLOR = 'backgroundColor';
   var BLOCK = 'block';
   var BUTTON = 'button';
   var CLICK = 'click';
@@ -243,6 +242,7 @@ var ImageZoom = (function () {
   var MAX_HEIGHT = 'maxHeight';
   var MAX_WIDTH = 'maxWidth';
   var NONE = 'none';
+  var OPACITY = 'opacity';
   var POSITION = 'position';
   var RESIZE = 'resize';
   var ROLE = 'role';
@@ -260,60 +260,57 @@ var ImageZoom = (function () {
   var ZERO = '0';
   var Z_INDEX_CSS = 'z-index';
   var ImageZoom = function (_a, targetEl) {
-      var _b = _a === void 0 ? {} : _a, _c = _b.closeText, closeText = _c === void 0 ? 'Unzoom image' : _c, _d = _b.isControlled, isControlled = _d === void 0 ? false : _d, _e = _b.modalText, modalText = _e === void 0 ? 'Zoomed item' : _e, onZoomChange = _b.onZoomChange, _f = _b.openText, openText = _f === void 0 ? 'Zoom image' : _f, _g = _b.overlayBgColorEnd, overlayBgColorEnd = _g === void 0 ? 'rgba(255,255,255,0.95)' : _g, _h = _b.overlayBgColorStart, overlayBgColorStart = _h === void 0 ? 'rgba(255,255,255,0)' : _h, _j = _b.transitionDuration, _transitionDuration = _j === void 0 ? 300 : _j, _k = _b.zoomMargin, zoomMargin = _k === void 0 ? 0 : _k, _l = _b.zoomZindex, zoomZindex = _l === void 0 ? 2147483647 : _l;
+      var _b = _a === void 0 ? {} : _a, _c = _b.closeText, closeText = _c === void 0 ? 'Unzoom image' : _c, _d = _b.isControlled, isControlled = _d === void 0 ? false : _d, _e = _b.modalText, modalText = _e === void 0 ? 'Zoomed item' : _e, onZoomChange = _b.onZoomChange, _f = _b.openText, openText = _f === void 0 ? 'Zoom image' : _f, _g = _b.overlayBgColor, overlayBgColor = _g === void 0 ? '#fff' : _g, _h = _b.overlayOpacity, overlayOpacity = _h === void 0 ? 0.95 : _h, _j = _b.transitionDuration, _transitionDuration = _j === void 0 ? 300 : _j, _k = _b.zoomMargin, zoomMargin = _k === void 0 ? 0 : _k, _l = _b.zoomZindex, zoomZindex = _l === void 0 ? 2147483647 : _l;
       var isImgEl = targetEl.tagName === 'IMG';
       var isSvgSrc = isImgEl && SVG_REGEX.test(targetEl.currentSrc);
       var isImg = !isSvgSrc && isImgEl;
       var documentBody = document.body;
       var scrollableEl = window;
       var ariaHiddenSiblings = [];
-      var zoomableEl;
-      var closeBtnEl;
       var boundaryDivFirst;
       var boundaryDivLast;
+      var closeBtnEl;
       var modalEl;
       var motionPref;
-      var observer;
       var openBtnEl;
       var overlayEl;
       var state = UNLOADED;
       var transitionDuration = _transitionDuration;
+      var zoomableEl;
       var init = function () {
           addEventListener(RESIZE, handleResize, window);
           initMotionPref();
           if (isImgEl && !targetEl.complete) {
-              addEventListener(LOAD, initImg, targetEl);
+              addEventListener(LOAD, handleLoad, targetEl);
           }
           else {
-              initImg();
+              handleLoad();
           }
       };
       // START TARGET MUTATION OBSERVER
-      var oldWidth = targetEl.offsetWidth;
-      var oldHeight = targetEl.offsetHeight;
-      var initMutationObserver = function () {
-          var cb = function () {
-              if (targetEl) {
-                  var newWidth = targetEl.offsetWidth;
-                  var newHeight = targetEl.offsetHeight;
-                  if (oldWidth !== newWidth || oldHeight !== newHeight) {
-                      adjustOpenBtnEl();
-                      oldWidth = newWidth;
-                      oldHeight = newHeight;
-                  }
-              }
-          };
-          observer = new MutationObserver(cb);
-          observer.observe(documentBody, {
+      var bodyObserver;
+      var oldTargetEl = targetEl.cloneNode(true);
+      var initMutationObservers = function () {
+          var opts = {
               attributes: true,
               characterData: true,
               childList: true,
               subtree: true,
-          });
+          };
+          var bodyCb = function () {
+              if (targetEl) {
+                  if (state === UNLOADED && !oldTargetEl.isEqualNode(targetEl)) {
+                      reset();
+                      oldTargetEl = targetEl.cloneNode(true);
+                  }
+              }
+          };
+          bodyObserver = new MutationObserver(bodyCb);
+          bodyObserver.observe(documentBody, opts);
       };
-      var cleanupMutationObserver = function () {
-          observer === null || observer === void 0 ? void 0 : observer.disconnect();
-          observer = undefined;
+      var cleanupMutationObservers = function () {
+          bodyObserver === null || bodyObserver === void 0 ? void 0 : bodyObserver.disconnect();
+          bodyObserver = undefined;
       };
       // END TARGET MUTATION OBSERVER
       // START MOTION PREFS
@@ -329,7 +326,7 @@ var ImageZoom = (function () {
           motionPref = undefined;
       };
       // END MOTION PREFS
-      var initImg = function () {
+      var handleLoad = function () {
           if (!targetEl || state !== UNLOADED)
               return;
           var _a = getBoundingClientRect(targetEl), height = _a.height, width = _a.width;
@@ -347,30 +344,36 @@ var ImageZoom = (function () {
               addEventListener(CLICK, handleOpenBtnClick, openBtnEl);
               // insert openBtnEl after targetEl
               targetEl.insertAdjacentElement('afterend', openBtnEl);
-              initMutationObserver();
           }
           else {
               cleanupZoom();
-              cleanupMutationObserver();
-              cleanupTargetLoad();
               cleanupDOMMutations();
           }
+          initMutationObservers();
+      };
+      var reset = function () {
+          cleanup();
+          init();
       };
       var adjustOpenBtnEl = function () {
           if (!openBtnEl)
               return;
           var _a = getBoundingClientRect(targetEl), height = _a.height, width = _a.width;
-          var type = getComputedStyle(targetEl)[DISPLAY];
+          var style = getComputedStyle(targetEl);
+          var type = style[DISPLAY];
+          var marginLeft = parseFloat(style[MARGIN_LEFT_JS]); // eslint-disable-line @typescript-eslint/no-explicit-any
+          var marginTop = parseFloat(style[MARGIN_TOP_JS]); // eslint-disable-line @typescript-eslint/no-explicit-any
           setStyleProperty(WIDTH, width + "px", openBtnEl);
           setStyleProperty(HEIGHT, height + "px", openBtnEl);
+          setStyleProperty(MARGIN_LEFT_JS, marginLeft + "px", openBtnEl);
           if (type === BLOCK ||
               type === 'flex' ||
               type === 'grid' ||
               type === 'table') {
-              setStyleProperty(MARGIN_TOP_JS, "-" + height + "px", openBtnEl);
+              setStyleProperty(MARGIN_TOP_JS, "-" + (marginTop + height) + "px", openBtnEl);
           }
           else {
-              setStyleProperty(MARGIN_LEFT_JS, "-" + width + "px", openBtnEl);
+              setStyleProperty(MARGIN_LEFT_JS, marginLeft - width + "px", openBtnEl);
           }
       };
       var update = function (opts) {
@@ -381,10 +384,10 @@ var ImageZoom = (function () {
               modalText = opts.modalText;
           if (opts.openText)
               openText = opts.openText;
-          if (opts.overlayBgColorEnd)
-              overlayBgColorEnd = opts.overlayBgColorEnd;
-          if (opts.overlayBgColorStart)
-              overlayBgColorStart = opts.overlayBgColorStart;
+          if (opts.overlayBgColor)
+              overlayBgColor = opts.overlayBgColor;
+          if (opts.overlayOpacity)
+              overlayOpacity = opts.overlayOpacity;
           if (opts.transitionDuration)
               transitionDuration = opts.transitionDuration;
           if (opts.zoomMargin)
@@ -402,7 +405,7 @@ var ImageZoom = (function () {
       // START CLEANUP
       var cleanup = function () {
           cleanupZoom();
-          cleanupMutationObserver();
+          cleanupMutationObservers();
           cleanupTargetLoad();
           cleanupDOMMutations();
           cleanupMotionPref();
@@ -410,7 +413,7 @@ var ImageZoom = (function () {
       };
       var cleanupTargetLoad = function () {
           if (isImg && targetEl) {
-              removeEventListener(LOAD, initImg, targetEl);
+              removeEventListener(LOAD, handleLoad, targetEl);
           }
       };
       var cleanupDOMMutations = function () {
@@ -449,8 +452,7 @@ var ImageZoom = (function () {
           modalEl = undefined;
       };
       // END CLEANUP
-      var handleOpenBtnClick = function (e) {
-          e.preventDefault();
+      var handleOpenBtnClick = function () {
           if (onZoomChange) {
               onZoomChange(true);
           }
@@ -458,8 +460,7 @@ var ImageZoom = (function () {
               zoom();
           }
       };
-      var handleCloseBtnClick = function (e) {
-          e.preventDefault();
+      var handleCloseBtnClick = function () {
           if (onZoomChange) {
               onZoomChange(false);
           }
@@ -475,11 +476,7 @@ var ImageZoom = (function () {
               setZoomImgStyle(true);
           }
           else {
-              cleanupZoom();
-              cleanupMutationObserver();
-              cleanupTargetLoad();
-              cleanupDOMMutations();
-              initImg();
+              reset();
           }
       };
       var handleZoomTransitionEnd = function () {
@@ -506,10 +503,10 @@ var ImageZoom = (function () {
           if (overlayEl) {
               setAttribute(STYLE, stylePosAbsolute +
                   styleAllDirsZero +
-                  (TRANSITION + ":" + BG_COLOR_CSS + " " + transitionDuration + "ms " + styleTransitionTimingFn + ";") +
-                  (BG_COLOR_CSS + ":" + overlayBgColorStart + ";") +
-                  ("will-change:" + BG_COLOR_CSS + ";"), overlayEl);
-              setStyleProperty(BG_COLOR, overlayBgColorEnd, overlayEl);
+                  (BG_COLOR_CSS + ":" + overlayBgColor + ";") +
+                  (TRANSITION + ":" + OPACITY + " " + transitionDuration + "ms " + styleTransitionTimingFn + ";") +
+                  (OPACITY + ":0;"), overlayEl);
+              setStyleProperty(OPACITY, "" + overlayOpacity, overlayEl);
           }
       };
       var handleUnzoomTransitionEnd = function () {
@@ -593,10 +590,10 @@ var ImageZoom = (function () {
               (HEIGHT + ":" + height + "px;") +
               (LEFT + ":" + left + "px;") +
               (TOP + ":" + top + "px;") +
-              (TRANSITION + ":transform " + td + "ms " + styleTransitionTimingFn + ";") +
-              ("-webkit-transform:" + transform + ";") +
-              ("-ms-transform:" + transform + ";") +
-              ("transform:" + transform + ";"), zoomableEl);
+              (TRANSITION + ":" + TRANSFORM + " " + td + "ms " + styleTransitionTimingFn + ";") +
+              ("-webkit-" + TRANSFORM + ":" + transform + ";") +
+              ("-ms-" + TRANSFORM + ":" + transform + ";") +
+              (TRANSFORM + ":" + transform + ";"), zoomableEl);
       };
       var zoom = function () {
           if (isImgEl) {
@@ -700,7 +697,7 @@ var ImageZoom = (function () {
               state = UNLOADING;
               setZoomImgStyle(false);
               if (overlayEl) {
-                  setStyleProperty(BG_COLOR, overlayBgColorStart, overlayEl);
+                  setStyleProperty(OPACITY, ZERO, overlayEl);
               }
           }
           else {
