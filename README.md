@@ -11,7 +11,7 @@ parent elements that have `overflow: hidden` or
 [parents with transform properties](https://codepen.io/rpearce/pen/MEyOmb).
 
 As an added bonus, it will let you zoom _anything_ (see the [`Storybook
-Examples`](https://rpearce.github.io/react-medium-image-zoom/) for more).
+Examples`](https://rpearce.github.io/image-zoom/) for more).
 
 [Blog post announcing `v4`](https://robertwpearce.com/announcing-react-medium-image-zoom-v4.html)
 
@@ -21,7 +21,7 @@ Examples`](https://rpearce.github.io/react-medium-image-zoom/) for more).
 * [API](#api)
 * [Migrating From v3 to v4](#migrating-from-v3-to-v4)
 * [Contributors](#contributors)
-* [Storybook Examples](https://rpearce.github.io/react-medium-image-zoom/)
+* [Storybook Examples](https://rpearce.github.io/image-zoom/)
 * [Changelog](./CHANGELOG.md)
 * [Contributing](./CONTRIBUTING.md)
 * [Code of Conduct](./CODE_OF_CONDUCT.md)
