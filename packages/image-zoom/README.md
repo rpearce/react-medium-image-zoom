@@ -9,6 +9,7 @@ not it is inside parent elements with `overflow: hidden;` or [parents with
 transform properties](https://codepen.io/rpearce/pen/MEyOmb).
 
 Links:
+
 * [Installation](#installation)
 * [Usage In a Build System](#usage-in-a-build-system)
 * [HTML Usage](#html-usage)
@@ -16,20 +17,20 @@ Links:
 * [Examples](#examples)
 
 ## Installation
+
 ```bash
 $ npm i @rpearce/image-zoom
 ```
+
 or
-```bash
-$ yarn add @rpearce/image-zoom
-```
-or
+
 ```html
 <script src="https://unpkg.com/@rpearce/image-zoom"></script>
 ```
 
 
 ## Usage In a Build System
+
 ```js
 import ImageZoom from '@rpearce/image-zoom'
 
@@ -41,9 +42,11 @@ for (let i = 0; i < images.length; i++) {
 ```
 
 ## HTML Usage
+
 Add the following HTML before the closing `</body>` tag on your web page.
 
 ### Asynchronous, non-blocking way:
+
 ```html
 <script>
 ;(function () {
@@ -69,6 +72,7 @@ Add the following HTML before the closing `</body>` tag on your web page.
 ```
 
 ### Synchronous, blocking way:
+
 ```html
 <script src="https://unpkg.com/@rpearce/image-zoom"></script>
 <script>
@@ -83,6 +87,7 @@ Add the following HTML before the closing `</body>` tag on your web page.
 ```
 
 ## Methods
+
 There are two methods, `update` and `cleanup`, that can be called on the result
 of initializing an `ImageZoom`:
 
@@ -99,6 +104,7 @@ imgZoom.cleanup()
 ```
 
 ## Options
+
 The first argument to `ImageZoom` is an object that contains whatever options
 you would like to control.
 
@@ -150,6 +156,7 @@ interface ImageZoomOpts {
   * default: `2147483647`
 
 ### Update Options
+
 When updating options, you can pass all the same options as `ImageZoomOpts`,
 and if you are using the `isControlled` flag already, you can also specify that
 you'd like to zoom or unzoom the item.
@@ -166,9 +173,11 @@ interface ImageZoomUpdateOpts extends ImageZoomOpts {
   * default: `false`
 
 ## Examples
+
 This code is from [the examples webpage](https://rpearce.github.io/image-zoom/).
 
 ### Uncontrolled
+
 Let's say you have a number of things you would like to zoom that all have
 `data-uncontrolled` attributes, and you want this to manage its own zoomed and
 unzoomed states.
@@ -182,6 +191,7 @@ for (var i = 0; i < uncontrolledEls.length; i++) {
 ```
 
 ### Controlled By Listening for `onZoomChange`
+
 If you want to control the zoom state yourself and have `ImageZoom` guide you on
 when it should be zooming or unzooming, you can do so like this:
 
@@ -205,6 +215,7 @@ our `ImageZoom` instance and call the `update` method, passing `isZoomed` with
 `true` or `false`.
 
 ### Controlled With Special Zooming Keys
+
 If we want only certain keys to trigger to zoom and unzoom state of a zoomable
 item, we can do that, as well.
 
@@ -232,4 +243,5 @@ document.addEventListener('keydown', function (e) {
 ```
 
 ### Got Your Own Example?
+
 Create a pull request and share it with the `image-zoom` world!

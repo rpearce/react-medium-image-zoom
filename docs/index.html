@@ -118,7 +118,7 @@
           <figure>
             <img
               alt="A lone tree in the water near the shore with mountains in the background on a mostly sunny day."
-              data-uncontrolled
+              data-iz
               src="/laura-smetsers-H-TW2CoNtTk-unsplash-500w.jpg"
               srcset="/laura-smetsers-H-TW2CoNtTk-unsplash-500w.jpg 500w,
                       /laura-smetsers-H-TW2CoNtTk-unsplash-1600w.jpg 1600w,
@@ -141,7 +141,7 @@
           <figure>
             <img
               alt="A woman sitting on a bench amongst trees at the end of a boardwalk leading to a pond with mountains in the background"
-              data-uncontrolled
+              data-iz
               src="/robert-pearce-UwHN0jU_YqQ-unsplash-800w.jpg"
               srcset="/robert-pearce-UwHN0jU_YqQ-unsplash-800w.jpg 800w,
                       /robert-pearce-UwHN0jU_YqQ-unsplash-1600w.jpg 1600w,
@@ -166,7 +166,7 @@
           <figure>
             <img
               alt="A photo of lilac shot with a shallow depth of field"
-              data-uncontrolled
+              data-iz
               src="/lilac.jpg"
               style="max-width:100%;"
               width="920"
@@ -269,7 +269,6 @@
               <div
                 aria-label="Hobbit home in a grassy hill with a blue door and flowers outside on a sunny day"
                 class="grid-img"
-                data-uncontrolled
                 role="img"
                 style="background-image: url('/andres-iga-7XKkJVw1d8c-unsplash-1600w.jpg')"
               ></div>
@@ -278,7 +277,6 @@
               <div
                 aria-label="Boardwalk leading through a small, grassy valley and near a stream amidst snow-capped mountains"
                 class="grid-img"
-                data-uncontrolled
                 role="img"
                 style="background-image: url('/roell-de-ram-2DM7eOR5iyc-unsplash-1600w.jpg')"
               ></div>
@@ -287,7 +285,6 @@
               <div
                 aria-label="View from a mountain of a lake, a small town on the water, and mountains rising up from the lake on all sides"
                 class="grid-img"
-                data-uncontrolled
                 role="img"
                 style="background-image: url('/omer-faruk-bekdemir-5BuxuWIJF1Q-unsplash-1600w.jpg')"
               ></div>
@@ -306,7 +303,7 @@
           </p>
           <div>
             <svg
-              data-uncontrolled
+              data-iz-svg
               viewBox="0 0 187.14 186.64"
               width="200"
               xmlns="http://www.w3.org/2000/svg"
@@ -336,7 +333,7 @@
           <div>
             <img
               alt="react.js logo"
-              data-uncontrolled
+              data-iz
               src="/react-logo.svg"
               width="300"
             />
@@ -358,7 +355,7 @@
           <div style="max-width:500px;">
             <img
               alt="sales pipeline"
-              data-uncontrolled
+              data-iz
               src="/tragt.svg"
             />
           </div>
@@ -378,7 +375,7 @@
           <div>
             <img
               alt="linux penguinin in a seated position"
-              data-uncontrolled
+              data-iz
               src="/NewTux.svg"
               style="max-height:380px;display:block;margin:auto;"
             />
@@ -400,31 +397,13 @@
               <source media="(max-width: 800px)" srcSet="/andres-iga-7XKkJVw1d8c-unsplash-1600w.jpg" />
               <img
                 alt="A pretty place in New Zealand"
-                data-uncontrolled
+                data-iz
                 src="/roell-de-ram-2DM7eOR5iyc-unsplash-1600w.jpg"
                 style="height:100%;max-width:100%;"
                 width="500"
               />
             </picture>
           </div>
-        </div>
-      </section>
-
-      <section>
-        <h2 class="l-constrained">
-          Example: Zooming Text (not that you should...)
-        </h2>
-        <div class="l-constrained">
-          <p>
-            This example demonstrates zooming a paragraph with text in it. It
-            should be noted that this is not what the library is intended to
-            zoom, but you can do so, nonetheless.
-          </p>
-          <p class="txt-zoom" data-uncontrolled>
-            This is a paragraph that you can zoom because my author wanted to
-            demonstrate that it is possible (though it would be a bit weird for
-            you to do so).
-          </p>
         </div>
       </section>
 
@@ -460,21 +439,23 @@
       }
 
       function izOnload () {
+        var iz = window.imageZoom();
+
         //
         // UNCONTROLLED
         //
-        var uncontrolleds = document.querySelectorAll('[data-uncontrolled]');
-        var i;
+        var imgs = document.querySelectorAll('[data-iz]');
+        var svgs = document.querySelectorAll('[data-iz-svg]');
+        iz.attach([imgs, svgs]);
 
-        for (i = 0; i < uncontrolleds.length; i++) {
-          ImageZoom({}, uncontrolleds[i]);
-        }
 
+
+        /**
         //
         // CONTROLLED - j & k triggers
         //
         var controlledJk = document.querySelector('[data-jk]');
-        var controlledJkWithOpts = ImageZoom(
+        var controlledJkWithOpts = imageZoom(
           {
             isControlled: true,
             closeText: 'Press k to unzoom',
@@ -495,7 +476,7 @@
         // CONTROLLED - onZoomChange callback
         //
         var controlledCb = document.querySelector('[data-cb]');
-        var controlledCbWithOpts = ImageZoom(
+        var controlledCbWithOpts = imageZoom(
           {
             isControlled: true,
             onZoomChange: function onZoomChange(isZoomed) {
@@ -504,6 +485,7 @@
           },
           controlledCb
         );
+        */
       }
     })();
     </script>

@@ -12,12 +12,8 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: '14.x'
-    - run: npm i -g yarn@berry
-    - run: yarn set version berry
-    - run: yarn set version 2.1.1
-    - run: yarn install --immutable
-    - run: yarn test
-    - run: yarn build
+        node-version: '15.x'
+    - run: npm install
+    - run: npm run ci
       env:
         CI: true

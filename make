@@ -6,6 +6,7 @@ set -o nounset
 set -eou pipefail
 
 pname="./make"
+binsPath="$PWD/node_modules/.bin"
 izPath="$PWD/packages/image-zoom"
 rmizPath="$PWD/packages/react-medium-image-zoom"
 docsPath="$PWD/docs"
@@ -15,6 +16,7 @@ function usage {
 Usage: $pname <COMMAND>
 
   build                  Build the project and documentation
+  ci                     Run checks for a CI environment
   clean                  Run all clean commands
   contrib                Use the all-contributors CLI
   dev                    Watch for changes and run the docs server
@@ -37,6 +39,13 @@ function build {
   return 0
 }
 
+function ci {
+  test_pkgs
+  build
+
+  return 0
+}
+
 function build_docs {
   echo -n "Building docs... "
 
@@ -55,7 +64,7 @@ function build_iz {
 
   cd "$pkg"
 
-  yarn rollup -c "$pkg/rollup.config.js"
+  "$binsPath/rollup" -c "$pkg/rollup.config.js"
 
   echo "Done"
 
@@ -69,9 +78,9 @@ function build_rmiz {
 
   cd "$pkg"
 
-  yarn tsc -p "$pkg/tsconfig.cjs.json" & CJS_PID=$!
-  yarn tsc -p "$pkg/tsconfig.esm.json" & ESM_PID=$!
-  yarn tsc -p "$pkg/tsconfig.umd.json" & UMD_PID=$!
+  "$binsPath/tsc" -p "$pkg/tsconfig.cjs.json" & CJS_PID=$!
+  "$binsPath/tsc" -p "$pkg/tsconfig.esm.json" & ESM_PID=$!
+  "$binsPath/tsc" -p "$pkg/tsconfig.umd.json" & UMD_PID=$!
 
   wait $CJS_PID
   wait $ESM_PID
@@ -89,7 +98,7 @@ function build_pkgs {
     build_iz
   else
     build_iz
-    build_rmiz
+    #build_rmiz
   fi
 
   return 0
@@ -129,7 +138,7 @@ function clearscreen {
 }
 
 function contrib {
-  yarn all-contributors --config "$PWD/conf/.all-contributorsrc" "$@"
+  "$binsPath/all-contributors" --config "$PWD/conf/.all-contributorsrc" "$@"
 }
 
 function dev {
@@ -140,7 +149,7 @@ function dev {
 
   #build
   #watch & WATCH_PID=$!
-  #yarn serve docs & SERVE_PID=$!
+  #"$binsPath/serve" docs & SERVE_PID=$!
 
   #wait $WATCH_PID
   #wait $SERVE_PID
@@ -151,7 +160,7 @@ function dev {
 function init {
   echo "Installing and linking dependencies..."
 
-  yarn
+  npm i --legacy-peer-deps
 
   build
 
@@ -161,7 +170,7 @@ function init {
 }
 
 function lint {
-  yarn eslint . \
+  "$binsPath/eslint" . \
     -c "$PWD/.eslintrc.js" \
     --ignore-path "$PWD/.eslintignore" \
     "$@"
@@ -171,7 +180,7 @@ function publish {
   echo "publish: Not yet implemented"
   # local pkg="$1"
   # cd "$pkg"
-  # lint & test then yarn npm publish with args
+  # lint & test then npm publish with args
 }
 
 #function spin {
@@ -189,8 +198,8 @@ function publish {
 #  done
 #}
 
-function test {
-  yarn jest "$PWD/packages"
+function test_pkgs {
+  "$binsPath/jest" "$PWD/packages"
 }
 
 function unknown-cmd {
@@ -202,7 +211,7 @@ function unknown-cmd {
 }
 
 function watch {
-  yarn chokidar "packages/*/source/**/*" -c "./make build"
+  "$binsPath/chokidar" "packages/*/source/**/*" -c "./make build"
 }
 
 # Check if no command is provided
@@ -216,6 +225,7 @@ shift
 
 case "$cmd" in
   build         ) build;;
+  ci            ) ci;;
   clean         ) clean;;
   contrib       ) contrib "$@";;
   dev           ) dev;;
@@ -223,7 +233,7 @@ case "$cmd" in
   init          ) init;;
   lint          ) lint "$@";;
   publish       ) publish "$@";;
-  test          ) test;;
+  test          ) test_pkgs;;
   test_cov_ci   ) test_cov_ci;;
   watch         ) watch;;
                *) unknown-cmd;;

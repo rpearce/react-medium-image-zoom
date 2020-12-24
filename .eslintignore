@@ -2,7 +2,6 @@
 .git
 .github
 .pnp.js
-.yarn
 coverage
 dist
 docs

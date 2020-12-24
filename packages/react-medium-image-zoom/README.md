@@ -23,12 +23,9 @@ As an added bonus, it should let you zoom _anything_.
 * [Code of Conduct](./CODE_OF_CONDUCT.md)
 
 ## Installation
+
 ```bash
 $ npm i react-medium-image-zoom
-```
-or
-```bash
-$ yarn add react-medium-image-zoom
 ```
 
 ## Options

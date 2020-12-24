@@ -7,7 +7,6 @@
 .eslintcache
 .node_repl_history
 .npm
-.yarn-integrity
 coverage
 dist
 logs

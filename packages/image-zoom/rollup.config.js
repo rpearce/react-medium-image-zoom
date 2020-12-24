@@ -115,7 +115,7 @@ const iife = [
     output: {
       file: './dist/iife/image-zoom.js',
       format: 'iife',
-      name: 'ImageZoom',
+      name: 'imageZoom',
     },
     plugins: [
       resolve(),
@@ -128,7 +128,7 @@ const iife = [
     output: {
       file: './dist/iife/image-zoom.min.js',
       format: 'iife',
-      name: 'ImageZoom',
+      name: 'imageZoom',
     },
     plugins: [
       resolve(),
