@@ -36,18 +36,18 @@
 Tests are located in the `test/` folder. Here's how to run them:
 
 ```
-$ yarn test
+$ npm run test
 ```
 
 To test in watch mode:
 
 ```
-$ yarn test --watch
+$ npm run test --watch
 ```
 
 To generate a local coverage report:
 
 ```
-$ yarn test --coverage
+$ npm run test --coverage
 $ open coverage/lcov-report/index.html
 ```
