@@ -3,3 +3,4 @@
 !.storybook/
 dist/
 docs/
+node_modules/
