@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 * `react` and `react-dom` `peerDependencies` moved from `>= 16.8.0` to `^16.8.0
   || ^17.0.0`
-* upgraded `focus-options-polyfill` and `react-use`
+* upgraded `react-use`
 
 ### Fixed
 * set all dependencies to use compatibility `^` selectors
