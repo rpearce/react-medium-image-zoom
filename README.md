@@ -27,11 +27,11 @@ Examples`](https://rpearce.github.io/image-zoom/) for more).
 
 ## Installation
 ```bash
-$ npm i react-medium-image-zoom
+npm i react-medium-image-zoom
 ```
 or
 ```bash
-$ yarn add react-medium-image-zoom
+yarn add react-medium-image-zoom
 ```
 or
 ```html
