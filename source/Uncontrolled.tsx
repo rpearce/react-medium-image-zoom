@@ -11,6 +11,7 @@ import React, {
   useRef,
   useState
 } from 'react'
+import { GetScaleFn } from './helpers'
 import './styles.css'
 import UncontrolledActivated from './UncontrolledActivated'
 
@@ -27,6 +28,7 @@ interface Props {
   wrapStyle?: CSSProperties
   zoomMargin?: number
   zoomZindex?: number
+  getScale?: GetScaleFn
 }
 
 const Uncontrolled: FC<Props> = ({
@@ -41,7 +43,8 @@ const Uncontrolled: FC<Props> = ({
   wrapElement: WrapElement = 'div',
   wrapStyle,
   zoomMargin = 0,
-  zoomZindex = 2147483647
+  zoomZindex = 2147483647,
+  getScale
 }: Props) => {
   const [isActive, setIsActive] = useState<boolean>(false)
   const [isChildLoaded, setIsChildLoaded] = useState<boolean>(false)
@@ -101,6 +104,7 @@ const Uncontrolled: FC<Props> = ({
             transitionDuration={transitionDuration}
             zoomMargin={zoomMargin}
             zoomZindex={zoomZindex}
+            getScale={getScale}
           >
             {children}
           </UncontrolledActivated>

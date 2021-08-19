@@ -16,6 +16,8 @@
   width: 100%;
   height: 100%;
   transition-property: background-color;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 [data-rmiz-btn-open],
 [data-rmiz-btn-close] {

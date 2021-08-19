@@ -14,6 +14,7 @@ import useWindowSize from 'react-use/lib/useWindowSize'
 import {
   getModalContentStyle,
   getModalOverlayStyle,
+  GetScaleFn,
   pseudoParentEl
 } from './helpers'
 import './styles.css'
@@ -31,6 +32,7 @@ interface Props {
   transitionDuration?: number
   zoomMargin?: number
   zoomZindex?: number
+  getScale?: GetScaleFn
 }
 
 const UncontrolledActivated: FC<Props> = ({
@@ -45,7 +47,8 @@ const UncontrolledActivated: FC<Props> = ({
   scrollableEl = window,
   transitionDuration = 300,
   zoomMargin = 0,
-  zoomZindex = 2147483647
+  zoomZindex = 2147483647,
+  getScale
 }: Props) => {
   const btnRef = useRef<HTMLButtonElement>(null)
   const [, forceUpdate] = useState<number>(0)
@@ -130,7 +133,8 @@ const UncontrolledActivated: FC<Props> = ({
     top,
     transitionDuration,
     width,
-    zoomMargin
+    zoomMargin,
+    getScale
   })
 
   return createPortal(

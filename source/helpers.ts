@@ -1,6 +1,6 @@
 const toDurationString = (duration: number): string => `${duration}ms`
 
-interface GetScale {
+export interface GetScales {
   height: number
   innerHeight: number
   innerWidth: number
@@ -8,18 +8,26 @@ interface GetScale {
   zoomMargin: number
 }
 
-export const getScale = ({
+export interface GetScalesResult {
+  scaleX: number
+  scaleY: number
+  scale: number
+}
+
+export type GetScaleFn = (props: GetScales & GetScalesResult) => number
+
+export const getScales = ({
   height,
   innerHeight,
   innerWidth,
   width,
   zoomMargin
-}: GetScale): number => {
+}: GetScales): GetScalesResult => {
   const scaleX = innerWidth / (width + zoomMargin)
   const scaleY = innerHeight / (height + zoomMargin)
   const scale = Math.min(scaleX, scaleY)
 
-  return scale
+  return { scaleX, scaleY, scale }
 }
 
 interface GetModalContentStyle {
@@ -34,6 +42,7 @@ interface GetModalContentStyle {
   transitionDuration: number
   width: number
   zoomMargin: number
+  getScale?: GetScaleFn
 }
 
 type GetModalContentStyleReturnType = {
@@ -57,7 +66,8 @@ export const getModalContentStyle = ({
   top,
   transitionDuration,
   width,
-  zoomMargin
+  zoomMargin,
+  getScale
 }: GetModalContentStyle): GetModalContentStyleReturnType => {
   const transitionDurationString = toDurationString(transitionDuration)
 
@@ -80,13 +90,15 @@ export const getModalContentStyle = ({
   }
 
   // Get amount to scale item
-  const scale = getScale({
+  const scalesArgs = {
     height,
     innerWidth,
     innerHeight,
     width,
     zoomMargin
-  })
+  }
+  const scales = getScales(scalesArgs)
+  const scale = getScale ? getScale({ ...scalesArgs, ...scales }) : scales.scale
 
   // Get the the coords for center of the viewport
   const viewportX = innerWidth / 2

@@ -168,6 +168,7 @@ You can pass these options to either the default or controlled components.
 | `wrapStyle` | `Object` | no | `null` | Optional style object to pass to the wrapper element. Useful when you want the `<Zoom>` container to be `width: '100%'`, for example |
 | `zoomMargin` | `Number` | no | `0` | Offset in pixels the zoomed image should be from the `window`' boundaries |
 | `zoomZindex` | `Number` | no | `2147483647` | `z-index` value for the zoom overlay |
+| `getScale` | `Function` | no | `null` | `Function that returns the amount of zoom` |
 
 ## Only the controlled component
 You can pass these options to only the controlled component.

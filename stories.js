@@ -621,3 +621,47 @@ stories.add('larger image size', () => (
     </ImgStory>
   </div>
 ))
+
+stories.add('max width zoom', () => (
+  <ImgStory title="Max width zoom">
+    <Zoom
+      closeText={text('Unzoom label', 'Unzoom image')}
+      openText={text('Zoom label', 'Zoom image')}
+      overlayBgColorEnd={color(
+        'Overlay bgColor end',
+        'rgba(255, 255, 255, 0.95)'
+      )}
+      overlayBgColorStart={color(
+        'Overlay bgColor start',
+        'rgba(255, 255, 255, 0)'
+      )}
+      transitionDuration={number('Transition duration', 300, {
+        min: 0,
+        max: 5000,
+        range: true,
+        step: 100
+      })}
+      wrapElement={text('Wrapper element', 'div')}
+      zoomMargin={number('Zoom margin', 0, {
+        min: 0,
+        max: 500,
+        range: true,
+        step: 50
+      })}
+      zoomZindex={number('Zoom z-index', 2147483647, {
+        min: 0,
+        max: 2147483647,
+        range: true,
+        step: 1
+      })}
+      getScale={({ scaleX }) => scaleX}
+    >
+      <img
+        alt={imgThatWanakaTree.alt}
+        src={imgThatWanakaTree.src}
+        style={{ height: '100%', maxWidth: '100%' }}
+        width="500"
+      />
+    </Zoom>
+  </ImgStory>
+))

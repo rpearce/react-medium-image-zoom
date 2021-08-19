@@ -12,6 +12,7 @@ import React, {
   useState
 } from 'react'
 import ControlledActivated from './ControlledActivated'
+import { GetScaleFn } from './helpers'
 import './styles.css'
 
 interface Props {
@@ -29,6 +30,7 @@ interface Props {
   wrapStyle?: CSSProperties
   zoomMargin?: number
   zoomZindex?: number
+  getScale?: GetScaleFn
 }
 
 const Controlled: FC<Props> = ({
@@ -45,7 +47,8 @@ const Controlled: FC<Props> = ({
   wrapElement: WrapElement = 'div',
   wrapStyle,
   zoomMargin = 0,
-  zoomZindex = 2147483647
+  zoomZindex = 2147483647,
+  getScale
 }: Props) => {
   const [isChildLoaded, setIsChildLoaded] = useState<boolean>(false)
   const wrapRef = useRef<HTMLElement>(null)
@@ -105,6 +108,7 @@ const Controlled: FC<Props> = ({
             transitionDuration={transitionDuration}
             zoomMargin={zoomMargin}
             zoomZindex={zoomZindex}
+            getScale={getScale}
           >
             {children}
           </ControlledActivated>
