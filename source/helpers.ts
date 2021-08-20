@@ -30,6 +30,15 @@ export const getScales = ({
   return { scaleX, scaleY, scale }
 }
 
+export const getScale = (
+  dimensions: GetScales,
+  getScaleFn?: GetScaleFn
+): number => {
+  // Get amount to scale item
+  const scales = getScales(dimensions)
+  return getScaleFn ? getScaleFn({ ...dimensions, ...scales }) : scales.scale
+}
+
 interface GetModalContentStyle {
   height: number
   innerHeight: number
@@ -41,8 +50,7 @@ interface GetModalContentStyle {
   top: number
   transitionDuration: number
   width: number
-  zoomMargin: number
-  getScale?: GetScaleFn
+  scale: number
 }
 
 type GetModalContentStyleReturnType = {
@@ -66,8 +74,7 @@ export const getModalContentStyle = ({
   top,
   transitionDuration,
   width,
-  zoomMargin,
-  getScale
+  scale
 }: GetModalContentStyle): GetModalContentStyleReturnType => {
   const transitionDurationString = toDurationString(transitionDuration)
 
@@ -89,17 +96,6 @@ export const getModalContentStyle = ({
     }
   }
 
-  // Get amount to scale item
-  const scalesArgs = {
-    height,
-    innerWidth,
-    innerHeight,
-    width,
-    zoomMargin
-  }
-  const scales = getScales(scalesArgs)
-  const scale = getScale ? getScale({ ...scalesArgs, ...scales }) : scales.scale
-
   // Get the the coords for center of the viewport
   const viewportX = innerWidth / 2
   const viewportY = innerHeight / 2
@@ -110,7 +106,10 @@ export const getModalContentStyle = ({
 
   // Get offset amounts for item coords to be centered on screen
   const translateX = (viewportX - childCenterX) / scale
-  const translateY = (viewportY - childCenterY) / scale
+  const translateY = Math.max(
+    (viewportY - childCenterY) / scale,
+    height / 2 - childCenterY / scale
+  )
 
   // Build transform style, including any original transform
   const transform = [

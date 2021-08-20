@@ -15,6 +15,7 @@ import useWindowSize from 'react-use/lib/useWindowSize'
 import {
   getModalContentStyle,
   getModalOverlayStyle,
+  getScale,
   GetScaleFn,
   pseudoParentEl
 } from './helpers'
@@ -53,7 +54,7 @@ const ControlledActivated: FC<Props> = ({
   transitionDuration = 300,
   zoomMargin = 0,
   zoomZindex = 2147483647,
-  getScale
+  getScale: getScaleFn
 }: Props) => {
   const btnRef = useRef<HTMLButtonElement>(null)
   const [, forceUpdate] = useState<number>(0)
@@ -168,6 +169,17 @@ const ControlledActivated: FC<Props> = ({
     zoomZindex
   })
 
+  const scale = getScale(
+    {
+      height,
+      innerHeight,
+      innerWidth,
+      width,
+      zoomMargin
+    },
+    getScaleFn
+  )
+
   const contentStyle = getModalContentStyle({
     height,
     isLoaded,
@@ -179,9 +191,13 @@ const ControlledActivated: FC<Props> = ({
     top,
     transitionDuration,
     width,
-    zoomMargin,
-    getScale
+    scale
   })
+
+  const buttonStyle = {
+    width: `${width * scale}px`,
+    height: `${height * scale}px`
+  }
 
   return isActive
     ? createPortal(
@@ -192,6 +208,7 @@ const ControlledActivated: FC<Props> = ({
           <button
             aria-label={closeText}
             data-rmiz-btn-close
+            style={buttonStyle}
             onClick={handleClick}
             ref={btnRef}
             type="button"
