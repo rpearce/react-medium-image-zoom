@@ -14,7 +14,7 @@ import React, {
 import './styles.css'
 import UncontrolledActivated from './UncontrolledActivated'
 
-interface Props {
+export interface Props {
   children: ReactNode
   closeText?: string
   openText?: string
