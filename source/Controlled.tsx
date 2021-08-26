@@ -14,7 +14,7 @@ import React, {
 import ControlledActivated from './ControlledActivated'
 import './styles.css'
 
-export interface Props {
+export interface ControlledProps {
   children: ReactNode
   closeText?: string
   isZoomed: boolean
@@ -31,7 +31,7 @@ export interface Props {
   zoomZindex?: number
 }
 
-const Controlled: FC<Props> = ({
+const Controlled: FC<ControlledProps> = ({
   children,
   closeText = 'Unzoom image',
   isZoomed: isActive,
@@ -46,7 +46,7 @@ const Controlled: FC<Props> = ({
   wrapStyle,
   zoomMargin = 0,
   zoomZindex = 2147483647
-}: Props) => {
+}: ControlledProps) => {
   const [isChildLoaded, setIsChildLoaded] = useState<boolean>(false)
   const wrapRef = useRef<HTMLElement>(null)
   const btnRef = useRef<HTMLButtonElement>(null)

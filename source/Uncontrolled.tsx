@@ -14,7 +14,7 @@ import React, {
 import './styles.css'
 import UncontrolledActivated from './UncontrolledActivated'
 
-export interface Props {
+export interface UncontrolledProps {
   children: ReactNode
   closeText?: string
   openText?: string
@@ -29,7 +29,7 @@ export interface Props {
   zoomZindex?: number
 }
 
-const Uncontrolled: FC<Props> = ({
+const Uncontrolled: FC<UncontrolledProps> = ({
   children,
   closeText = 'Unzoom image',
   overlayBgColorEnd = 'rgba(255, 255, 255, 0.95)',
@@ -42,7 +42,7 @@ const Uncontrolled: FC<Props> = ({
   wrapStyle,
   zoomMargin = 0,
   zoomZindex = 2147483647
-}: Props) => {
+}: UncontrolledProps) => {
   const [isActive, setIsActive] = useState<boolean>(false)
   const [isChildLoaded, setIsChildLoaded] = useState<boolean>(false)
   const wrapRef = useRef<HTMLElement>(null)

@@ -19,7 +19,7 @@ import {
 } from './helpers'
 import './styles.css'
 
-export interface Props {
+export interface ControlledActivatedProps {
   children: ReactNode
   closeText?: string
   isActive: boolean
@@ -36,7 +36,7 @@ export interface Props {
   zoomZindex?: number
 }
 
-const ControlledActivated: FC<Props> = ({
+const ControlledActivated: FC<ControlledActivatedProps> = ({
   children,
   closeText = 'Unzoom Image',
   isActive: isActiveFromParent,
@@ -51,7 +51,7 @@ const ControlledActivated: FC<Props> = ({
   transitionDuration = 300,
   zoomMargin = 0,
   zoomZindex = 2147483647
-}: Props) => {
+}: ControlledActivatedProps) => {
   const btnRef = useRef<HTMLButtonElement>(null)
   const [, forceUpdate] = useState<number>(0)
   const [isActive, setIsActive] = useState<boolean>(isActiveFromParent)
