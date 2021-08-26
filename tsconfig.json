@@ -4,16 +4,16 @@
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "esModuleInterop": true,
+    "importHelpers": true,
     "jsx": "react",
     "lib": ["es2020", "dom"],
-    "module": "es6",
     "moduleResolution": "node",
     "noImplicitAny": true,
-    "outDir": "./dist/",
-    "sourceMap": true,
+    "sourceMap": false,
     "strict": true,
     "target": "es5"
   },
-  "exclude": ["node_modules/"],
-  "include": ["./source/**/*", "./__tests__/**/*"]
+  "include": [
+    "source/index.ts"
+  ]
 }

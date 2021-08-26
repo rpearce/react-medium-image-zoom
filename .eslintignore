@@ -1,6 +1,7 @@
-!.eslintrc.js
-!.prettierrc.js
-!.storybook/
-dist/
-docs/
-node_modules/
+!.*
+.git
+.github
+coverage
+dist
+docs
+node_modules

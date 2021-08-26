@@ -1,7 +1,7 @@
 import { act, fireEvent, render } from '@testing-library/react'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
-import { Controlled as ControlledZoom } from '../source'
+import ControlledZoom from './Controlled'
 
 test('when closed and then open', () => {
   jest.useFakeTimers()

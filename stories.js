@@ -1,8 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import useEvent from 'react-use/lib/useEvent'
-import { storiesOf } from '@storybook/react'
-import { withA11y } from '@storybook/addon-a11y'
-import { color, number, text, withKnobs } from '@storybook/addon-knobs'
+import { color, number, text } from '@storybook/addon-knobs'
 import './.storybook/base.css'
 import glenorchyLagoon from './static/glenorchy-lagoon.jpg'
 import hobbiton from './static/andres-iga-7XKkJVw1d8c-unsplash-smaller.jpg'
@@ -64,12 +62,7 @@ const imgPortWaikato = {
   src: portWaikato
 }
 
-const stories = storiesOf('react-medium-image-zoom', module)
-
-stories.addDecorator(withA11y)
-stories.addDecorator(withKnobs)
-
-stories.add('<img />', () => (
+export const Img = () => (
   <ImgStory title="Zoom an `img`">
     <Zoom
       closeText={text('Unzoom label', 'Unzoom image')}
@@ -110,9 +103,9 @@ stories.add('<img />', () => (
       />
     </Zoom>
   </ImgStory>
-))
+)
 
-stories.add('<picture />', () => (
+export const Picture = () => (
   <ImgStory title="Zoom a `picture` element with `img` and `source`">
     <Zoom
       closeText={text('Unzoom label', 'Unzoom image')}
@@ -156,9 +149,9 @@ stories.add('<picture />', () => (
       </picture>
     </Zoom>
   </ImgStory>
-))
+)
 
-stories.add('<figure />', () => (
+export const Figure = () => (
   <ImgStory title="Zoom a `figure` element">
     <figure>
       <Zoom
@@ -202,9 +195,9 @@ stories.add('<figure />', () => (
       <figcaption>Hobbiton</figcaption>
     </figure>
   </ImgStory>
-))
+)
 
-stories.add('blue circle div', () => (
+export const BlueCircleDiv = () => (
   <ImgStory title="Zoom a blue circle `div`, if you want">
     <Zoom
       closeText={text('Unzoom label', 'Unzoom image')}
@@ -248,9 +241,9 @@ stories.add('blue circle div', () => (
       />
     </Zoom>
   </ImgStory>
-))
+)
 
-stories.add('image gallery using divs & background images', () => {
+export const ImgGalleryBgImages = () => {
   const images = [
     imgGlenorchyLagoon,
     imgThatWanakaTree,
@@ -301,9 +294,9 @@ stories.add('image gallery using divs & background images', () => {
       </ul>
     </div>
   )
-})
+}
 
-stories.add('image gallery + slideshow-style images', () => {
+export const ImgGallerySlideshowStyle = () => {
   const images = [
     imgGlenorchyLagoon,
     imgThatWanakaTree,
@@ -394,9 +387,9 @@ stories.add('image gallery + slideshow-style images', () => {
       </ul>
     </div>
   )
-})
+}
 
-stories.add('controlled: zooms when image loads', () => {
+export const ControlledZoomOnLoad = () => {
   const [isZoomed, setIsZoomed] = useState(false)
 
   const handleBtnClick = useCallback(() => {
@@ -461,9 +454,9 @@ stories.add('controlled: zooms when image loads', () => {
       </ControlledZoom>
     </ImgStory>
   )
-})
+}
 
-stories.add('controlled: specific keys', () => {
+export const ControlledSpecificKeys = () => {
   const [isZoomed, setIsZoomed] = useState(false)
 
   const handleKeyDown = useCallback(e => {
@@ -523,7 +516,7 @@ stories.add('controlled: specific keys', () => {
       </ControlledZoom>
     </ImgStory>
   )
-})
+}
 
 const ImgStory = ({ desc, title, ...props }) => {
   return (
@@ -582,7 +575,7 @@ const ImgStory = ({ desc, title, ...props }) => {
   )
 }
 
-stories.add('larger image size', () => (
+export const LargerImageSize = () => (
   <div style={{ width: '720px', margin: '0 auto' }}>
     <ImgStory title="Larger image size">
       <Zoom
@@ -620,4 +613,4 @@ stories.add('larger image size', () => (
       </Zoom>
     </ImgStory>
   </div>
-))
+)

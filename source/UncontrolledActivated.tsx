@@ -6,7 +6,7 @@ import React, {
   useCallback,
   useEffect,
   useRef,
-  useState
+  useState,
 } from 'react'
 import { createPortal } from 'react-dom'
 import useEvent from 'react-use/lib/useEvent'
@@ -14,9 +14,8 @@ import useWindowSize from 'react-use/lib/useWindowSize'
 import {
   getModalContentStyle,
   getModalOverlayStyle,
-  pseudoParentEl
+  pseudoParentEl,
 } from './helpers'
-import './styles.css'
 
 export interface UncontrolledActivatedProps {
   children: ReactNode
@@ -45,7 +44,7 @@ const UncontrolledActivated: FC<UncontrolledActivatedProps> = ({
   scrollableEl = window,
   transitionDuration = 300,
   zoomMargin = 0,
-  zoomZindex = 2147483647
+  zoomZindex = 2147483647,
 }: UncontrolledActivatedProps) => {
   const btnRef = useRef<HTMLButtonElement>(null)
   const [, forceUpdate] = useState<number>(0)
@@ -116,7 +115,7 @@ const UncontrolledActivated: FC<UncontrolledActivatedProps> = ({
     overlayBgColorEnd,
     overlayBgColorStart,
     transitionDuration,
-    zoomZindex
+    zoomZindex,
   })
 
   const contentStyle = getModalContentStyle({
@@ -130,7 +129,7 @@ const UncontrolledActivated: FC<UncontrolledActivatedProps> = ({
     top,
     transitionDuration,
     width,
-    zoomMargin
+    zoomMargin,
   })
 
   return createPortal(

@@ -9,9 +9,8 @@ import React, {
   memo,
   useCallback,
   useRef,
-  useState
+  useState,
 } from 'react'
-import './styles.css'
 import UncontrolledActivated from './UncontrolledActivated'
 
 export interface UncontrolledProps {
@@ -41,7 +40,7 @@ const Uncontrolled: FC<UncontrolledProps> = ({
   wrapElement: WrapElement = 'div',
   wrapStyle,
   zoomMargin = 0,
-  zoomZindex = 2147483647
+  zoomZindex = 2147483647,
 }: UncontrolledProps) => {
   const [isActive, setIsActive] = useState<boolean>(false)
   const [isChildLoaded, setIsChildLoaded] = useState<boolean>(false)

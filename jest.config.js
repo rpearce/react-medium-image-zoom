@@ -8,5 +8,6 @@ module.exports = {
   },
   preset: 'ts-jest',
   setupFilesAfterEnv: ['<rootDir>/testSetup.ts'],
+  testEnvironment: 'jsdom',
   verbose: true
 }

@@ -6,7 +6,7 @@ import React, {
   useCallback,
   useEffect,
   useRef,
-  useState
+  useState,
 } from 'react'
 import { createPortal } from 'react-dom'
 import useEvent from 'react-use/lib/useEvent'
@@ -15,9 +15,8 @@ import useWindowSize from 'react-use/lib/useWindowSize'
 import {
   getModalContentStyle,
   getModalOverlayStyle,
-  pseudoParentEl
+  pseudoParentEl,
 } from './helpers'
-import './styles.css'
 
 export interface ControlledActivatedProps {
   children: ReactNode
@@ -50,7 +49,7 @@ const ControlledActivated: FC<ControlledActivatedProps> = ({
   scrollableEl = window,
   transitionDuration = 300,
   zoomMargin = 0,
-  zoomZindex = 2147483647
+  zoomZindex = 2147483647,
 }: ControlledActivatedProps) => {
   const btnRef = useRef<HTMLButtonElement>(null)
   const [, forceUpdate] = useState<number>(0)
@@ -162,7 +161,7 @@ const ControlledActivated: FC<ControlledActivatedProps> = ({
     overlayBgColorEnd,
     overlayBgColorStart,
     transitionDuration,
-    zoomZindex
+    zoomZindex,
   })
 
   const contentStyle = getModalContentStyle({
@@ -176,25 +175,25 @@ const ControlledActivated: FC<ControlledActivatedProps> = ({
     top,
     transitionDuration,
     width,
-    zoomMargin
+    zoomMargin,
   })
 
   return isActive
     ? createPortal(
-        <div aria-modal data-rmiz-overlay role="dialog" style={overlayStyle}>
-          <div data-rmiz-modal-content style={contentStyle}>
-            {children}
-          </div>
-          <button
-            aria-label={closeText}
-            data-rmiz-btn-close
-            onClick={handleClick}
-            ref={btnRef}
-            type="button"
-          />
-        </div>,
-        portalEl
-      )
+      <div aria-modal data-rmiz-overlay role="dialog" style={overlayStyle}>
+        <div data-rmiz-modal-content style={contentStyle}>
+          {children}
+        </div>
+        <button
+          aria-label={closeText}
+          data-rmiz-btn-close
+          onClick={handleClick}
+          ref={btnRef}
+          type="button"
+        />
+      </div>,
+      portalEl
+    )
     : null
 }
 

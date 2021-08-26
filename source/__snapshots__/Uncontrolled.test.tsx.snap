@@ -370,26 +370,6 @@ exports[`unzooms using ESC key 3`] = `
 </body>
 `;
 
-exports[`unzooms using ESC key 4`] = `
-<body>
-  <div>
-    <div
-      data-rmiz-wrap="visible"
-    >
-      <img
-        alt="foo"
-        src="foo.jpg"
-        width="500"
-      />
-      <button
-        aria-label="Zoom image"
-        data-rmiz-btn-open="true"
-      />
-    </div>
-  </div>
-</body>
-`;
-
 exports[`zooms/unzooms with custom open/close text & <img /> 1`] = `
 <body>
   <div>
