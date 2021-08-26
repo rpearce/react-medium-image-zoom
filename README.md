@@ -281,6 +281,9 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
     <td align="center"><a href="http://rokoroku.github.io"><img src="https://avatars1.githubusercontent.com/u/5208632?v=4" width="100px;" alt=""/><br /><sub><b>Youngrok Kim</b></sub></a><br /><a href="https://github.com/rpearce/image-zoom/commits?author=rokoroku" title="Code">💻</a> <a href="https://github.com/rpearce/image-zoom/issues?q=author%3Arokoroku" title="Bug reports">🐛</a></td>
     <td align="center"><a href="http://nandhae.me"><img src="https://avatars1.githubusercontent.com/u/11366094?v=4" width="100px;" alt=""/><br /><sub><b>Nandhagopal Ezhilmaran</b></sub></a><br /><a href="https://github.com/rpearce/image-zoom/issues?q=author%3Anandhae" title="Bug reports">🐛</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://equinusocio.dev"><img src="https://avatars.githubusercontent.com/u/10454741?v=4" width="100px;" alt=""/><br /><sub><b>Mattia Astorino</b></sub></a><br /><a href="https://github.com/rpearce/image-zoom/issues?q=author%3Aequinusocio" title="Bug reports">🐛</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-enable -->

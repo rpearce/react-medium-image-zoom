@@ -374,6 +374,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "equinusocio",
+      "name": "Mattia Astorino",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10454741?v=4",
+      "profile": "https://equinusocio.dev",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
