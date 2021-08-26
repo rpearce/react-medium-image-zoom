@@ -392,6 +392,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "zacherygentry",
+      "name": "Zachery C Gentry",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14227467?v=4",
+      "profile": "https://github.com/zacherygentry",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
