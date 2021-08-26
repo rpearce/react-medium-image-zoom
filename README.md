@@ -283,6 +283,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
   </tr>
   <tr>
     <td align="center"><a href="https://equinusocio.dev"><img src="https://avatars.githubusercontent.com/u/10454741?v=4" width="100px;" alt=""/><br /><sub><b>Mattia Astorino</b></sub></a><br /><a href="https://github.com/rpearce/image-zoom/issues?q=author%3Aequinusocio" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="http://valtism.com"><img src="https://avatars.githubusercontent.com/u/1286001?v=4" width="100px;" alt=""/><br /><sub><b>Dan Wood</b></sub></a><br /><a href="https://github.com/rpearce/image-zoom/commits?author=valtism" title="Documentation">📖</a></td>
   </tr>
 </table>
 

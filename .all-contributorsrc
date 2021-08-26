@@ -383,6 +383,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "valtism",
+      "name": "Dan Wood",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1286001?v=4",
+      "profile": "http://valtism.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "repoType": "github",
