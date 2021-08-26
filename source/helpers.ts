@@ -1,6 +1,6 @@
 const toDurationString = (duration: number): string => `${duration}ms`
 
-interface GetScale {
+export interface GetScale {
   height: number
   innerHeight: number
   innerWidth: number
@@ -22,7 +22,7 @@ export const getScale = ({
   return scale
 }
 
-interface GetModalContentStyle {
+export interface GetModalContentStyle {
   height: number
   innerHeight: number
   innerWidth: number
@@ -36,7 +36,7 @@ interface GetModalContentStyle {
   zoomMargin: number
 }
 
-type GetModalContentStyleReturnType = {
+export type GetModalContentStyleReturnType = {
   height: number
   left: number
   top: number
@@ -118,7 +118,7 @@ export const getModalContentStyle = ({
   }
 }
 
-interface GetModalOverlayStyle {
+export interface GetModalOverlayStyle {
   isLoaded: boolean
   isUnloading: boolean
   overlayBgColorEnd: string
@@ -127,7 +127,7 @@ interface GetModalOverlayStyle {
   zoomZindex: number
 }
 
-type GetModalOverlayStyleReturnType = {
+export type GetModalOverlayStyleReturnType = {
   backgroundColor: string
   transitionDuration: string
   zIndex: number
@@ -157,7 +157,7 @@ export const getModalOverlayStyle = ({
 // @TODO: test
 // if parentRef.current is not available yet,
 // we can fall back to these defaults
-type GetBoundingClientRectReturnType = {
+export type GetBoundingClientRectReturnType = {
   height: number
   left: number
   top: number

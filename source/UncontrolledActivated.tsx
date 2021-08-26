@@ -18,7 +18,7 @@ import {
 } from './helpers'
 import './styles.css'
 
-interface Props {
+export interface UncontrolledActivatedProps {
   children: ReactNode
   closeText?: string
   onUnload: () => void
@@ -33,7 +33,7 @@ interface Props {
   zoomZindex?: number
 }
 
-const UncontrolledActivated: FC<Props> = ({
+const UncontrolledActivated: FC<UncontrolledActivatedProps> = ({
   children,
   closeText = 'Unzoom Image',
   onUnload,
@@ -46,7 +46,7 @@ const UncontrolledActivated: FC<Props> = ({
   transitionDuration = 300,
   zoomMargin = 0,
   zoomZindex = 2147483647
-}: Props) => {
+}: UncontrolledActivatedProps) => {
   const btnRef = useRef<HTMLButtonElement>(null)
   const [, forceUpdate] = useState<number>(0)
   const [isLoaded, setIsLoaded] = useState<boolean>(false)
