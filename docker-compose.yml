@@ -1,0 +1,7 @@
+services:
+  app:
+    build: .
+    container_name: rpearce/rmiz
+    image: rpearce/rmiz
+    ports:
+      - "6006:6006"

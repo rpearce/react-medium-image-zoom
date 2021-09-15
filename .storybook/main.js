@@ -1,7 +1,8 @@
 module.exports = {
   addons: [
-    '@storybook/addon-knobs',
-    '@storybook/addon-notes/register-panel',
+    `@storybook/addon-a11y`,
+    `@storybook/addon-knobs`,
+    //`@storybook/addon-notes/register-panel`,
   ],
-  stories: ['../stories/*.js'],
+  stories: [`../stories.js`],
 }

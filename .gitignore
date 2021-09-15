@@ -7,10 +7,10 @@
 .eslintcache
 .node_repl_history
 .npm
-coverage
-dist
-logs
-node_modules
+/coverage
+/dist
+/docs
+/logs
+/node_modules
+/public
 npm-debug.log*
-public
-typings
