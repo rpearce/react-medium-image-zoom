@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, memo, useState } from 'react'
+import React, { FC, ReactNode, memo, useState, Fragment } from 'react'
 import Base from './Base'
 
 export interface UncontrolledProps {
@@ -25,4 +25,4 @@ const Uncontrolled: FC<UncontrolledProps> = (props: UncontrolledProps) => {
 // there is no need to zoom images.
 export default typeof window !== 'undefined'
   ? memo(Uncontrolled)
-  : (props: UncontrolledProps) => props.children
+  : (props: UncontrolledProps) => <Fragment>props.children</Fragment>
