@@ -1,3 +1,3 @@
 test('<Base /> works', () => {
-	expect(true).toEqual(true)
+  expect(true).toEqual(true)
 })
