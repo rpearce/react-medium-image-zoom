@@ -410,6 +410,16 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "iamwill123",
+      "name": "Will.iam",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15272175?v=4",
+      "profile": "https://supwill.dev/",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "repoType": "github",
