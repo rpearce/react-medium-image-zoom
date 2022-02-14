@@ -63,7 +63,7 @@ const MyComponent = () => (
 export default MyComponent
 ```
 
-You can zoom _anything_, so `<picture>`, `<figure>`, and even `<div>` elements
+You can zoom _anything_, so `<picture>`, `<figure>`, `<video>` and even `<div>` elements
 are all valid:
 
 ```js
@@ -90,6 +90,16 @@ are all valid:
   </Zoom>
   <figcaption>That Wanaka Tree</figcaption>
 </figure>
+
+// <video>
+<Zoom>
+  <video
+    src="/path/to/thatwanakatree.mp4"
+    autoPlay={true}
+    muted={true}
+    loop={true}
+  />
+</Zoom>
 
 // <div> that looks like a circle
 <Zoom>
