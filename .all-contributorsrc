@@ -420,6 +420,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "GorvGoyl",
+      "name": "Gourav Goyal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7106086?v=4",
+      "profile": "https://Gourav.io",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "repoType": "github",
