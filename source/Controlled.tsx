@@ -3,7 +3,7 @@ import React, {
   CSSProperties,
   FC,
   ReactNode,
-  ReactType,
+  ElementType,
   RefObject,
   StrictMode,
   memo,
@@ -25,7 +25,7 @@ export interface ControlledProps {
   portalEl?: HTMLElement
   scrollableEl?: HTMLElement | Window
   transitionDuration?: number
-  wrapElement?: ReactType
+  wrapElement?: ElementType
   wrapStyle?: CSSProperties
   zoomMargin?: number
   zoomZindex?: number
