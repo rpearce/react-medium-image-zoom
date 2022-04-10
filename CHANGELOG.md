@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.3.7] - 2022-04-09
+### Fixed
+* Fix Incompatible types with types/react v18 (#302)
+
 ## [4.3.6] - 2022-04-04
 ### Fixed
 * Allow React 18 (#300)
