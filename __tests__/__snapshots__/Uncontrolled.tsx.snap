@@ -20,6 +20,7 @@ exports[`is accessible with custom open/close text & <img /> 1`] = `
     </main>
   </div>
   <div
+    aria-label="Zoomed image"
     aria-modal="true"
     data-rmiz-overlay="true"
     role="dialog"
@@ -85,6 +86,7 @@ exports[`is accessible with defaults & <img /> 2`] = `
     </main>
   </div>
   <div
+    aria-label="Zoomed image"
     aria-modal="true"
     data-rmiz-overlay="true"
     role="dialog"
@@ -148,6 +150,7 @@ exports[`passes on original transform style 2`] = `
     </div>
   </div>
   <div
+    aria-label="Zoomed image"
     aria-modal="true"
     data-rmiz-overlay="true"
     role="dialog"
@@ -225,6 +228,7 @@ exports[`unzooms on scroll 1`] = `
     </div>
   </div>
   <div
+    aria-label="Zoomed image"
     aria-modal="true"
     data-rmiz-overlay="true"
     role="dialog"
@@ -286,6 +290,7 @@ exports[`unzooms using ESC key 1`] = `
     </div>
   </div>
   <div
+    aria-label="Zoomed image"
     aria-modal="true"
     data-rmiz-overlay="true"
     role="dialog"
@@ -327,6 +332,7 @@ exports[`unzooms using ESC key 2`] = `
     </div>
   </div>
   <div
+    aria-label="Zoomed image"
     aria-modal="true"
     data-rmiz-overlay="true"
     role="dialog"
@@ -408,6 +414,7 @@ exports[`zooms/unzooms with custom open/close text & <img /> 1`] = `
     </div>
   </div>
   <div
+    aria-label="Zoomed image"
     aria-modal="true"
     data-rmiz-overlay="true"
     role="dialog"
@@ -489,6 +496,7 @@ exports[`zooms/unzooms with defaults & <img /> 2`] = `
     </div>
   </div>
   <div
+    aria-label="Zoomed image"
     aria-modal="true"
     data-rmiz-overlay="true"
     role="dialog"

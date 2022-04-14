@@ -40,6 +40,7 @@ exports[`custom open/close text 2`] = `
     </div>
   </div>
   <div
+    aria-label="Zoomed image"
     aria-modal="true"
     data-rmiz-overlay="true"
     role="dialog"
@@ -142,6 +143,7 @@ exports[`when closed and then open 2`] = `
     </div>
   </div>
   <div
+    aria-label="Zoomed image"
     aria-modal="true"
     data-rmiz-overlay="true"
     role="dialog"
@@ -185,6 +187,7 @@ exports[`when closed and then open 3`] = `
     </div>
   </div>
   <div
+    aria-label="Zoomed image"
     aria-modal="true"
     data-rmiz-overlay="true"
     role="dialog"
@@ -249,6 +252,7 @@ exports[`when open and then closed 1`] = `
     </div>
   </div>
   <div
+    aria-label="Zoomed image"
     aria-modal="true"
     data-rmiz-overlay="true"
     role="dialog"

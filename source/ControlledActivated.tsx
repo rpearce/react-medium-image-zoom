@@ -9,15 +9,13 @@ import React, {
   useState
 } from 'react'
 import { createPortal } from 'react-dom'
-import useEvent from 'react-use/lib/useEvent'
-import usePrevious from 'react-use/lib/usePrevious'
-import useWindowSize from 'react-use/lib/useWindowSize'
+import usePrevious from './hooks/usePrevious'
+import useWindowSize from './hooks/useWindowSize'
 import {
   getModalContentStyle,
   getModalOverlayStyle,
   pseudoParentEl
 } from './helpers'
-import './styles.css'
 
 export interface ControlledActivatedProps {
   children: ReactNode
@@ -64,7 +62,7 @@ const ControlledActivated: FC<ControlledActivatedProps> = ({
 
   // on click, tell caller it should zoom
   const handleClick = useCallback(
-    e => {
+    (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault()
       if (onZoomChange) {
         onZoomChange(false)
@@ -75,7 +73,7 @@ const ControlledActivated: FC<ControlledActivatedProps> = ({
 
   // on escape, tell caller it should unzoom
   const handleKeyDown = useCallback(
-    e => {
+    (e: KeyboardEvent) => {
       if (isActive && (e.key === 'Escape' || e.keyCode === 27)) {
         e.stopPropagation()
         if (onZoomChange) {
@@ -95,10 +93,22 @@ const ControlledActivated: FC<ControlledActivatedProps> = ({
   }, [isUnloading, onZoomChange])
 
   // listen for keydown on the document
-  useEvent('keydown', handleKeyDown, document)
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [handleKeyDown])
 
   // listen for scroll and close
-  useEvent('scroll', handleScroll, scrollableEl)
+  useEffect(() => {
+    scrollableEl?.addEventListener?.('scroll', handleScroll)
+
+    return () => {
+      scrollableEl?.removeEventListener?.('scroll', handleScroll)
+    }
+  }, [handleScroll, scrollableEl])
 
   // set loaded on mount and focus
   useEffect(() => {
@@ -181,7 +191,7 @@ const ControlledActivated: FC<ControlledActivatedProps> = ({
 
   return isActive
     ? createPortal(
-        <div aria-modal data-rmiz-overlay role="dialog" style={overlayStyle}>
+        <div aria-label="Zoomed image" aria-modal data-rmiz-overlay role="dialog" style={overlayStyle}>
           <div data-rmiz-modal-content style={contentStyle}>
             {children}
           </div>
