@@ -300,6 +300,9 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
     <td align="center"><a href="https://Gourav.io"><img src="https://avatars.githubusercontent.com/u/7106086?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Gourav Goyal</b></sub></a><br /><a href="https://github.com/rpearce/image-zoom/commits?author=GorvGoyl" title="Documentation">📖</a></td>
     <td align="center"><a href="https://joshcena.com/"><img src="https://avatars.githubusercontent.com/u/55398995?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Joshua Chen</b></sub></a><br /><a href="https://github.com/rpearce/image-zoom/issues?q=author%3AJosh-Cena" title="Bug reports">🐛</a> <a href="https://github.com/rpearce/image-zoom/commits?author=Josh-Cena" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/edlerd"><img src="https://avatars.githubusercontent.com/u/1155472?v=4?s=100" width="100px;" alt=""/><br /><sub><b>David Edler</b></sub></a><br /><a href="https://github.com/rpearce/image-zoom/issues?q=author%3Aedlerd" title="Bug reports">🐛</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
