@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.4.0] - 2022-05-13
+### Changed
+* Bumped minor version of `tslib` and made sure to actually use it (#306)
+* Adds an `aria-label` to the modal to satisfy `axe-core`; note that this is
+  still not an accessible component. It will be eventually! (#306)
+
+### Removed
+* Removed dependency on `react-use` (#306)
+
 ## [4.3.7] - 2022-04-09
 ### Fixed
 * Fix Incompatible types with types/react v18 (#302)
