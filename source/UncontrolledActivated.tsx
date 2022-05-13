@@ -9,14 +9,12 @@ import React, {
   useState
 } from 'react'
 import { createPortal } from 'react-dom'
-import useEvent from 'react-use/lib/useEvent'
-import useWindowSize from 'react-use/lib/useWindowSize'
+import useWindowSize from './hooks/useWindowSize'
 import {
   getModalContentStyle,
   getModalOverlayStyle,
   pseudoParentEl
 } from './helpers'
-import './styles.css'
 
 export interface UncontrolledActivatedProps {
   children: ReactNode
@@ -54,18 +52,24 @@ const UncontrolledActivated: FC<UncontrolledActivatedProps> = ({
   const { width: innerWidth, height: innerHeight } = useWindowSize()
 
   // on click, begin unloading
-  const handleClick = useCallback(e => {
-    e.preventDefault()
-    setIsUnloading(true)
-  }, [])
+  const handleClick = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault()
+      setIsUnloading(true)
+    },
+    []
+  )
 
   // on escape, begin unloading
-  const handleKeyDown = useCallback(e => {
-    if (e.key === 'Escape' || e.keyCode === 27) {
-      e.stopPropagation()
-      setIsUnloading(true)
-    }
-  }, [])
+  const handleKeyDown = useCallback(
+     (e: KeyboardEvent) => {
+      if (e.key === 'Escape' || e.keyCode === 27) {
+        e.stopPropagation()
+        setIsUnloading(true)
+      }
+    },
+    []
+  )
 
   const handleScroll = useCallback(() => {
     forceUpdate(n => n + 1)
@@ -76,10 +80,22 @@ const UncontrolledActivated: FC<UncontrolledActivatedProps> = ({
   }, [isUnloading])
 
   // listen for keydown on the document
-  useEvent('keydown', handleKeyDown, document)
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [handleKeyDown])
 
   // listen for scroll and close
-  useEvent('scroll', handleScroll, scrollableEl)
+  useEffect(() => {
+    scrollableEl?.addEventListener?.('scroll', handleScroll)
+
+    return () => {
+      scrollableEl?.removeEventListener?.('scroll', handleScroll)
+    }
+  }, [handleScroll, scrollableEl])
 
   // set loaded on mount and focus
   useEffect(() => {
@@ -134,7 +150,7 @@ const UncontrolledActivated: FC<UncontrolledActivatedProps> = ({
   })
 
   return createPortal(
-    <div aria-modal data-rmiz-overlay role="dialog" style={overlayStyle}>
+    <div aria-label="Zoomed image" aria-modal data-rmiz-overlay role="dialog" style={overlayStyle}>
       <div data-rmiz-modal-content style={contentStyle}>
         {children}
       </div>

@@ -1,5 +1,4 @@
-import React, { useCallback, useState } from 'react'
-import useEvent from 'react-use/lib/useEvent'
+import React, { useCallback, useEffect, useState } from 'react'
 import { storiesOf } from '@storybook/react'
 import { withA11y } from '@storybook/addon-a11y'
 import { color, number, text, withKnobs } from '@storybook/addon-knobs'
@@ -16,8 +15,8 @@ import teAraiPoint from './static/douglas-bagg-wRwa3Z6GtRI-unsplash-smaller.jpg'
 import tekapo from './static/tobias-keller-73F4pKoUkM0-unsplash-smaller.jpg'
 import thatWanakaTree from './static/laura-smetsers-H-TW2CoNtTk-unsplash-smaller.jpg'
 
-import './dist/styles.css'
-import Zoom, { Controlled as ControlledZoom } from './dist/esm'
+import './source/styles.css'
+import Zoom, { Controlled as ControlledZoom } from './source'
 
 const imgGlenorchyLagoon = {
   alt: 'Glenorchy lagoon, New Zealand by Robert Pearce',
@@ -332,7 +331,13 @@ stories.add('image gallery + slideshow-style images', () => {
     [activeIndex, images.length]
   )
 
-  useEvent('keydown', handleKeyDown, document)
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [handleKeyDown])
 
   return (
     <div>
@@ -474,7 +479,13 @@ stories.add('controlled: specific keys', () => {
     }
   }, [])
 
-  useEvent('keydown', handleKeyDown, document)
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [handleKeyDown])
 
   return (
     <ImgStory

@@ -127,7 +127,7 @@ test('unzooms using ESC key', () => {
   expect(openTrigger).toBeVisible()
 
   fireEvent.click(openTrigger)
-  const modal = getByRole('dialog')
+  let modal = getByRole('dialog')
   expect(modal).toBeVisible()
 
   expect(document.body).toMatchSnapshot()
@@ -152,6 +152,7 @@ test('unzooms using ESC key', () => {
   expect(document.body).toMatchSnapshot()
 
   fireEvent.click(openTrigger)
+  modal = getByRole('dialog')
   expect(modal).toBeVisible()
 
   fireEvent.keyDown(document, { keyCode: 27 })

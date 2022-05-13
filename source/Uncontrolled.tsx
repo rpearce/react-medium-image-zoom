@@ -11,7 +11,6 @@ import React, {
   useRef,
   useState
 } from 'react'
-import './styles.css'
 import UncontrolledActivated from './UncontrolledActivated'
 
 export interface UncontrolledProps {
@@ -49,7 +48,7 @@ const Uncontrolled: FC<UncontrolledProps> = ({
   const btnRef = useRef<HTMLButtonElement>(null)
 
   const handleClickTrigger = useCallback(
-    e => {
+    (e: React.MouseEvent<HTMLButtonElement>) => {
       if (!isActive) {
         e.preventDefault()
         setIsActive(true)

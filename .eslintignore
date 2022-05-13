@@ -1,5 +1,4 @@
 !.eslintrc.js
-!.prettierrc.js
 !.storybook/
 dist/
 docs/

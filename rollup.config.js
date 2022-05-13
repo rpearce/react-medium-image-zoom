@@ -1,25 +1,12 @@
 import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
-import { dirname } from 'path'
-import React from 'react'
-import reactDom from 'react-dom'
-import postcss from 'rollup-plugin-postcss'
+import path from 'path'
 import { terser } from 'rollup-plugin-terser'
 import typescript from 'rollup-plugin-typescript2'
 import pkg from './package.json'
 
-const postCssConfig = {
-  extract: './dist/styles.css',
-  modules: false,
-  sourceMap: false
-}
-
 const cjsConfig = {
   include: /node_modules/,
-  namedExports: {
-    react: Object.keys(React),
-    'react-dom': Object.keys(reactDom)
-  }
 }
 
 const buildModules = [
@@ -35,7 +22,7 @@ const esm = [
   {
     input: buildModules,
     output: {
-      dir: dirname(pkg.module),
+      dir: path.dirname(pkg.module),
       exports: 'named',
       format: 'esm',
       name: 'rmiz-esm',
@@ -44,7 +31,6 @@ const esm = [
     external: isExternal,
     plugins: [
       resolve(),
-      postcss(postCssConfig),
       typescript({ tsconfig: './tsconfig.build.json' })
     ]
   }
@@ -55,7 +41,7 @@ const cjs = [
   {
     input: buildModules,
     output: {
-      dir: dirname(pkg.main),
+      dir: path.dirname(pkg.main),
       exports: 'named',
       format: 'cjs',
       globals: { react: 'React', 'react-dom': 'ReactDOM' },
@@ -66,7 +52,6 @@ const cjs = [
     plugins: [
       resolve(),
       commonjs(cjsConfig),
-      postcss(postCssConfig),
       typescript({ tsconfig: './tsconfig.build.json' })
     ]
   },
@@ -75,7 +60,7 @@ const cjs = [
   {
     input: './source/index.ts',
     output: {
-      file: `${dirname(pkg.main)}/${pkg.name}.min.js`,
+      file: `${path.dirname(pkg.main)}/${pkg.name}.min.js`,
       exports: 'named',
       format: 'cjs',
       name: 'rmiz-cjs-min',
@@ -85,7 +70,6 @@ const cjs = [
     plugins: [
       resolve(),
       commonjs(cjsConfig),
-      postcss(postCssConfig),
       typescript({ tsconfig: './tsconfig.build.json' }),
       terser()
     ]
@@ -109,7 +93,6 @@ const umd = [
       resolve(),
       commonjs(cjsConfig),
       typescript({ tsconfig: './tsconfig.build.json' }),
-      postcss(postCssConfig)
     ]
   },
 
@@ -128,7 +111,6 @@ const umd = [
     plugins: [
       resolve(),
       commonjs(cjsConfig),
-      postcss(postCssConfig),
       typescript({ tsconfig: './tsconfig.build.json' }),
       terser()
     ]

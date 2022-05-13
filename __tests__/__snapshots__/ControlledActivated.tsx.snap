@@ -4,6 +4,7 @@ exports[`render with default props 1`] = `
 <body>
   <div />
   <div
+    aria-label="Zoomed image"
     aria-modal="true"
     data-rmiz-overlay="true"
     role="dialog"
@@ -32,6 +33,7 @@ exports[`uses pseudo-parent when no parentRef.current 1`] = `
 <body>
   <div />
   <div
+    aria-label="Zoomed image"
     aria-modal="true"
     data-rmiz-overlay="true"
     role="dialog"

@@ -12,7 +12,6 @@ import React, {
   useState
 } from 'react'
 import ControlledActivated from './ControlledActivated'
-import './styles.css'
 
 export interface ControlledProps {
   children: ReactNode
@@ -52,7 +51,7 @@ const Controlled: FC<ControlledProps> = ({
   const btnRef = useRef<HTMLButtonElement>(null)
 
   const handleClickTrigger = useCallback(
-    e => {
+    (e: React.MouseEvent<HTMLButtonElement>) => {
       if (!isActive && onZoomChange) {
         e.preventDefault()
         onZoomChange(true)
