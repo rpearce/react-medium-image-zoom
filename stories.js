@@ -1,7 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { storiesOf } from '@storybook/react'
-import { withA11y } from '@storybook/addon-a11y'
-import { color, number, text, withKnobs } from '@storybook/addon-knobs'
 import './.storybook/base.css'
 import glenorchyLagoon from './static/glenorchy-lagoon.jpg'
 import hobbiton from './static/andres-iga-7XKkJVw1d8c-unsplash-smaller.jpg'
@@ -63,480 +60,7 @@ const imgPortWaikato = {
   src: portWaikato
 }
 
-const stories = storiesOf('react-medium-image-zoom', module)
-
-stories.addDecorator(withA11y)
-stories.addDecorator(withKnobs)
-
-stories.add('<img />', () => (
-  <ImgStory title="Zoom an `img`">
-    <Zoom
-      closeText={text('Unzoom label', 'Unzoom image')}
-      openText={text('Zoom label', 'Zoom image')}
-      overlayBgColorEnd={color(
-        'Overlay bgColor end',
-        'rgba(255, 255, 255, 0.95)'
-      )}
-      overlayBgColorStart={color(
-        'Overlay bgColor start',
-        'rgba(255, 255, 255, 0)'
-      )}
-      transitionDuration={number('Transition duration', 300, {
-        min: 0,
-        max: 5000,
-        range: true,
-        step: 100
-      })}
-      wrapElement={text('Wrapper element', 'div')}
-      zoomMargin={number('Zoom margin', 0, {
-        min: 0,
-        max: 500,
-        range: true,
-        step: 50
-      })}
-      zoomZindex={number('Zoom z-index', 2147483647, {
-        min: 0,
-        max: 2147483647,
-        range: true,
-        step: 1
-      })}
-    >
-      <img
-        alt={imgThatWanakaTree.alt}
-        src={imgThatWanakaTree.src}
-        style={{ height: '100%', maxWidth: '100%' }}
-        width="500"
-      />
-    </Zoom>
-  </ImgStory>
-))
-
-stories.add('<picture />', () => (
-  <ImgStory title="Zoom a `picture` element with `img` and `source`">
-    <Zoom
-      closeText={text('Unzoom label', 'Unzoom image')}
-      openText={text('Zoom label', 'Zoom image')}
-      overlayBgColorEnd={color(
-        'Overlay bgColor end',
-        'rgba(255, 255, 255, 0.95)'
-      )}
-      overlayBgColorStart={color(
-        'Overlay bgColor start',
-        'rgba(255, 255, 255, 0)'
-      )}
-      transitionDuration={number('Transition duration', 300, {
-        min: 0,
-        max: 5000,
-        range: true,
-        step: 100
-      })}
-      wrapElement={text('Wrapper element', 'div')}
-      zoomMargin={number('Zoom margin', 0, {
-        min: 0,
-        max: 500,
-        range: true,
-        step: 50
-      })}
-      zoomZindex={number('Zoom z-index', 2147483647, {
-        min: 0,
-        max: 2147483647,
-        range: true,
-        step: 1
-      })}
-    >
-      <picture>
-        <source media="(max-width: 800px)" srcSet={imgTeAraiPoint.src} />
-        <img
-          alt={imgNzBeach.alt}
-          src={imgNzBeach.src}
-          style={{ height: '100%', maxWidth: '100%' }}
-          width="500"
-        />
-      </picture>
-    </Zoom>
-  </ImgStory>
-))
-
-stories.add('<figure />', () => (
-  <ImgStory title="Zoom a `figure` element">
-    <figure>
-      <Zoom
-        closeText={text('Unzoom label', 'Unzoom image')}
-        openText={text('Zoom label', 'Zoom image')}
-        overlayBgColorEnd={color(
-          'Overlay bgColor end',
-          'rgba(255, 255, 255, 0.95)'
-        )}
-        overlayBgColorStart={color(
-          'Overlay bgColor start',
-          'rgba(255, 255, 255, 0)'
-        )}
-        transitionDuration={number('Transition duration', 300, {
-          min: 0,
-          max: 5000,
-          range: true,
-          step: 100
-        })}
-        wrapElement={text('Wrapper element', 'div')}
-        zoomMargin={number('Zoom margin', 0, {
-          min: 0,
-          max: 500,
-          range: true,
-          step: 50
-        })}
-        zoomZindex={number('Zoom z-index', 2147483647, {
-          min: 0,
-          max: 2147483647,
-          range: true,
-          step: 1
-        })}
-      >
-        <img
-          alt={imgHobbiton.alt}
-          src={imgHobbiton.src}
-          style={{ height: '100%', maxWidth: '100%' }}
-          width="500"
-        />
-      </Zoom>
-      <figcaption>Hobbiton</figcaption>
-    </figure>
-  </ImgStory>
-))
-
-stories.add('blue circle div', () => (
-  <ImgStory title="Zoom a blue circle `div`, if you want">
-    <Zoom
-      closeText={text('Unzoom label', 'Unzoom image')}
-      openText={text('Zoom label', 'Zoom image')}
-      overlayBgColorEnd={color(
-        'Overlay bgColor end',
-        'rgba(255, 255, 255, 0.95)'
-      )}
-      overlayBgColorStart={color(
-        'Overlay bgColor start',
-        'rgba(255, 255, 255, 0)'
-      )}
-      transitionDuration={number('Transition duration', 300, {
-        min: 0,
-        max: 5000,
-        range: true,
-        step: 100
-      })}
-      wrapElement={text('Wrapper element', 'div')}
-      zoomMargin={number('Zoom margin', 0, {
-        min: 0,
-        max: 500,
-        range: true,
-        step: 50
-      })}
-      zoomZindex={number('Zoom z-index', 2147483647, {
-        min: 0,
-        max: 2147483647,
-        range: true,
-        step: 1
-      })}
-    >
-      <div
-        aria-label="A blue circle"
-        style={{
-          width: 300,
-          height: 300,
-          borderRadius: '50%',
-          backgroundColor: '#0099ff'
-        }}
-      />
-    </Zoom>
-  </ImgStory>
-))
-
-stories.add('image gallery using divs & background images', () => {
-  const images = [
-    imgGlenorchyLagoon,
-    imgThatWanakaTree,
-    imgNzBeach,
-    imgHobbiton,
-    imgHookerValleyTrack,
-    imgQueenstown,
-    imgTekapo,
-    imgPortWaikato,
-    imgKea
-  ]
-
-  return (
-    <div>
-      <h1>Image gallery using divs & background images</h1>
-      <ul
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          listStyle: 'none',
-          margin: 0,
-          padding: 0
-        }}
-      >
-        {images.map((img, i) => (
-          <li
-            key={i}
-            style={{ margin: '0 1rem 1rem 0', width: 'calc(33% - 1rem)' }}
-          >
-            <Zoom wrapStyle={{ width: '100%' }}>
-              <div
-                aria-label={img.alt}
-                role="img"
-                style={{
-                  backgroundColor: '#c2c2c2',
-                  backgroundImage: `url(${img.src})`,
-                  backgroundPosition: 'center center',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundSize: 'cover',
-                  height: '0',
-                  paddingBottom: '66%',
-                  width: 'calc(100%)'
-                }}
-              />
-            </Zoom>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-})
-
-stories.add('image gallery + slideshow-style images', () => {
-  const images = [
-    imgGlenorchyLagoon,
-    imgThatWanakaTree,
-    imgNzBeach,
-    imgHobbiton,
-    imgHookerValleyTrack,
-    imgQueenstown,
-    imgTekapo,
-    imgPortWaikato,
-    imgKea
-  ]
-  const [activeIndex, setActiveIndex] = useState(null)
-
-  const handleKeyDown = useCallback(
-    e => {
-      if (activeIndex === null) {
-        return
-      }
-
-      if (e.key === 'ArrowLeft' || e.keyCode === 37) {
-        setActiveIndex(Math.max(activeIndex - 1, 0))
-      } else if (e.key === 'ArrowRight' || e.keyCode === 39) {
-        setActiveIndex(Math.min(activeIndex + 1, images.length - 1))
-      }
-    },
-    [activeIndex, images.length]
-  )
-
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [handleKeyDown])
-
-  return (
-    <div>
-      <h1>Image gallery and slideshow-style images</h1>
-      <p>
-        Once you click on an image, use the left and right arrows to navigate
-        the images.
-      </p>
-      <ul
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          listStyle: 'none',
-          margin: 0,
-          padding: 0
-        }}
-      >
-        {images.map((img, i) => {
-          const handleZoomChange = useCallback(
-            isZoomed => {
-              if (isZoomed) {
-                setActiveIndex(i)
-                return
-              }
-              setActiveIndex(null)
-            },
-            [i]
-          )
-
-          return (
-            <li
-              key={`${i}-${img.src}`}
-              style={{ margin: '0 1rem 1rem 0', width: 'calc(33% - 1rem)' }}
-            >
-              <ControlledZoom
-                isZoomed={activeIndex === i}
-                onZoomChange={handleZoomChange}
-                transitionDuration={0}
-                wrapStyle={{ width: '100%' }}
-              >
-                <div
-                  aria-label={img.alt}
-                  role="img"
-                  style={{
-                    backgroundColor: '#c2c2c2',
-                    backgroundImage: `url(${img.src})`,
-                    backgroundPosition: 'center center',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: 'cover',
-                    height: '0',
-                    paddingBottom: '66%',
-                    width: 'calc(100%)'
-                  }}
-                />
-              </ControlledZoom>
-            </li>
-          )
-        })}
-      </ul>
-    </div>
-  )
-})
-
-stories.add('controlled: zooms when image loads', () => {
-  const [isZoomed, setIsZoomed] = useState(false)
-
-  const handleBtnClick = useCallback(() => {
-    setIsZoomed(true)
-  }, [])
-
-  const handleImgLoad = useCallback(() => {
-    setIsZoomed(true)
-  }, [])
-
-  const handleZoomChange = useCallback(shouldZoom => {
-    setIsZoomed(shouldZoom)
-  }, [])
-
-  return (
-    <ImgStory title="Controlled Component – zooms when image loads">
-      <div>
-        <button onClick={handleBtnClick} type="button">
-          Zoom image
-        </button>
-      </div>
-      <ControlledZoom
-        closeText={text('Unzoom label', 'Unzoom image')}
-        openText={text('Zoom label', 'Zoom image')}
-        overlayBgColorEnd={color(
-          'Overlay bgColor end',
-          'rgba(255, 255, 255, 0.95)'
-        )}
-        overlayBgColorStart={color(
-          'Overlay bgColor start',
-          'rgba(255, 255, 255, 0)'
-        )}
-        transitionDuration={number('Transition duration', 300, {
-          min: 0,
-          max: 5000,
-          range: true,
-          step: 100
-        })}
-        wrapElement={text('Wrapper element', 'div')}
-        zoomMargin={number('Zoom margin', 0, {
-          min: 0,
-          max: 500,
-          range: true,
-          step: 50
-        })}
-        zoomZindex={number('Zoom z-index', 2147483647, {
-          min: 0,
-          max: 2147483647,
-          range: true,
-          step: 1
-        })}
-        isZoomed={isZoomed}
-        onZoomChange={handleZoomChange}
-      >
-        <img
-          alt={imgThatWanakaTree.alt}
-          onLoad={handleImgLoad}
-          src={imgThatWanakaTree.src}
-          style={{ height: '100%', maxWidth: '100%' }}
-          width="500"
-        />
-      </ControlledZoom>
-    </ImgStory>
-  )
-})
-
-stories.add('controlled: specific keys', () => {
-  const [isZoomed, setIsZoomed] = useState(false)
-
-  const handleKeyDown = useCallback(e => {
-    if (e.key === 'j' || e.keyCode === 74) {
-      setIsZoomed(true)
-    } else if (e.key === 'k' || e.keyCode === 75) {
-      setIsZoomed(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [handleKeyDown])
-
-  return (
-    <ImgStory
-      desc="Use `j` to open and `k` to close"
-      title="Image zoom using specific keys"
-    >
-      <ControlledZoom
-        closeText={text('Unzoom label', 'Unzoom image')}
-        openText={text('Zoom label', 'Zoom image')}
-        overlayBgColorEnd={color(
-          'Overlay bgColor end',
-          'rgba(255, 255, 255, 0.95)'
-        )}
-        overlayBgColorStart={color(
-          'Overlay bgColor start',
-          'rgba(255, 255, 255, 0)'
-        )}
-        transitionDuration={number('Transition duration', 300, {
-          min: 0,
-          max: 5000,
-          range: true,
-          step: 100
-        })}
-        wrapElement={text('Wrapper element', 'div')}
-        zoomMargin={number('Zoom margin', 0, {
-          min: 0,
-          max: 500,
-          range: true,
-          step: 50
-        })}
-        zoomZindex={number('Zoom z-index', 2147483647, {
-          min: 0,
-          max: 2147483647,
-          range: true,
-          step: 1
-        })}
-        isZoomed={isZoomed}
-        onZoomChange={Function.prototype /* do nothing */}
-      >
-        <img
-          alt={imgThatWanakaTree.alt}
-          src={imgThatWanakaTree.src}
-          style={{ height: '100%', maxWidth: '100%' }}
-          width="500"
-        />
-      </ControlledZoom>
-    </ImgStory>
-  )
-})
-
-const ImgStory = ({ desc, title, ...props }) => {
+function ImgStory ({ desc, title, ...props }) {
   return (
     <div>
       {title && <h1>{title}</h1>}
@@ -593,42 +117,366 @@ const ImgStory = ({ desc, title, ...props }) => {
   )
 }
 
-stories.add('larger image size', () => (
+export default {
+  title: 'Zoom',
+  component: Zoom,
+  parameters: {},
+}
+
+const defaultArgs = {
+  closeText: 'Unzoom image',
+  openText: 'Zoom image',
+  overlayBgColorEnd: 'rgba(255, 255, 255, 0.95)',
+  overlayBgColorStart: 'rgba(255, 255, 255, 0)',
+  transitionDuration: 300,
+  wrapElement: 'div',
+  zoomMargin: 0,
+  zoomZIndex: Number.MAX_SAFE_INTEGER,
+}
+
+const defaultArgTypes = {
+  transitionDuration: {
+    control: {
+      type: 'range',
+      min: 0,
+      max: 5000,
+      step: 100,
+    },
+  },
+  zoomMargin: {
+    control: {
+      type: 'range',
+      min: 0,
+      max: 500,
+      step: 50,
+    },
+  },
+  zoomZIndex: {
+    control: {
+      type: 'range',
+      min: 0,
+      max: Number.MAX_SAFE_INTEGER,
+      step: 1,
+    },
+  },
+}
+
+export const Image = props => (
+  <ImgStory title="Zoom an `img`">
+    <Zoom {...props}>
+      <img
+        alt={imgThatWanakaTree.alt}
+        src={imgThatWanakaTree.src}
+        style={{ height: '100%', maxWidth: '100%' }}
+        width="500"
+      />
+    </Zoom>
+  </ImgStory>
+)
+
+Image.args     = defaultArgs
+Image.argTypes = defaultArgTypes
+
+export const Picture = props => (
+  <ImgStory title="Zoom a `picture` element with `img` and `source`">
+    <Zoom {...props}>
+      <picture>
+        <source media="(max-width: 800px)" srcSet={imgTeAraiPoint.src} />
+        <img
+          alt={imgNzBeach.alt}
+          src={imgNzBeach.src}
+          style={{ height: '100%', maxWidth: '100%' }}
+          width="500"
+        />
+      </picture>
+    </Zoom>
+  </ImgStory>
+)
+
+Picture.args     = defaultArgs
+Picture.argTypes = defaultArgTypes
+
+export const Figure = props => (
+  <ImgStory title="Zoom a `figure` element">
+    <figure>
+      <Zoom {...props}>
+        <img
+          alt={imgHobbiton.alt}
+          src={imgHobbiton.src}
+          style={{ height: '100%', maxWidth: '100%' }}
+          width="500"
+        />
+      </Zoom>
+      <figcaption>Hobbiton</figcaption>
+    </figure>
+  </ImgStory>
+)
+
+Figure.args     = defaultArgs
+Figure.argTypes = defaultArgTypes
+
+export const BlueCircleDiv = props => (
+  <ImgStory title="Zoom a blue circle `div`, if you want">
+    <Zoom {...props}>
+      <div
+        aria-label="A blue circle"
+        style={{
+          width: 300,
+          height: 300,
+          borderRadius: '50%',
+          backgroundColor: '#0099ff'
+        }}
+      />
+    </Zoom>
+  </ImgStory>
+)
+
+BlueCircleDiv.args     = defaultArgs
+BlueCircleDiv.argTypes = defaultArgTypes
+
+export const Gallery = () => {
+  const images = [
+    imgGlenorchyLagoon,
+    imgThatWanakaTree,
+    imgNzBeach,
+    imgHobbiton,
+    imgHookerValleyTrack,
+    imgQueenstown,
+    imgTekapo,
+    imgPortWaikato,
+    imgKea,
+  ]
+
+  return (
+    <div>
+      <h1>Image gallery using divs & background images</h1>
+      <ul
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          listStyle: 'none',
+          margin: 0,
+          padding: 0
+        }}
+      >
+        {images.map((img, i) => (
+          <li
+            key={i}
+            style={{ margin: '0 1rem 1rem 0', width: 'calc(33% - 1rem)' }}
+          >
+            <Zoom wrapStyle={{ width: '100%' }}>
+              <div
+                aria-label={img.alt}
+                role="img"
+                style={{
+                  backgroundColor: '#c2c2c2',
+                  backgroundImage: `url(${img.src})`,
+                  backgroundPosition: 'center center',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: 'cover',
+                  height: '0',
+                  paddingBottom: '66%',
+                  width: '100%',
+                }}
+              />
+            </Zoom>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+export const GallerySlideshow = () => {
+  const images = [
+    imgGlenorchyLagoon,
+    imgThatWanakaTree,
+    imgNzBeach,
+    imgHobbiton,
+    imgHookerValleyTrack,
+    imgQueenstown,
+    imgTekapo,
+    imgPortWaikato,
+    imgKea
+  ]
+  const [activeIndex, setActiveIndex] = useState(null)
+
+  const handleKeyDown = useCallback(
+    e => {
+      if (activeIndex === null) {
+        return
+      }
+
+      if (e.key === 'ArrowLeft' || e.keyCode === 37) {
+        setActiveIndex(Math.max(activeIndex - 1, 0))
+      } else if (e.key === 'ArrowRight' || e.keyCode === 39) {
+        setActiveIndex(Math.min(activeIndex + 1, images.length - 1))
+      }
+    },
+    [activeIndex, images.length]
+  )
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [handleKeyDown])
+
+  return (
+    <div>
+      <h1>Image gallery and slideshow-style images</h1>
+      <p>
+        Once you click on an image, use the left and right arrows to navigate
+        the images.
+      </p>
+      <ul
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          listStyle: 'none',
+          margin: 0,
+          padding: 0
+        }}
+      >
+        {images.map((img, i) => {
+          const handleZoomChange = isZoomed => {
+            if (isZoomed) {
+              setActiveIndex(i)
+            } else {
+              setActiveIndex(null)
+            }
+          }
+
+          return (
+            <li
+              key={`${i}-${img.src}`}
+              style={{ margin: '0 1rem 1rem 0', width: 'calc(33% - 1rem)' }}
+            >
+              <ControlledZoom
+                isZoomed={activeIndex === i}
+                onZoomChange={handleZoomChange}
+                transitionDuration={0}
+                wrapStyle={{ width: '100%' }}
+              >
+                <div
+                  aria-label={img.alt}
+                  role="img"
+                  style={{
+                    backgroundColor: '#c2c2c2',
+                    backgroundImage: `url(${img.src})`,
+                    backgroundPosition: 'center center',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
+                    height: '0',
+                    paddingBottom: '66%',
+                    width: '100%',
+                  }}
+                />
+              </ControlledZoom>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
+
+export const ZoomOnLoad = props => {
+  const [isZoomed, setIsZoomed] = useState(false)
+
+  const handleBtnClick = useCallback(() => {
+    setIsZoomed(true)
+  }, [])
+
+  const handleImgLoad = useCallback(() => {
+    setIsZoomed(true)
+  }, [])
+
+  const handleZoomChange = useCallback(shouldZoom => {
+    setIsZoomed(shouldZoom)
+  }, [])
+
+  return (
+    <ImgStory title="Controlled Component – zooms when image loads">
+      <div>
+        <button onClick={handleBtnClick} type="button">
+          Zoom image
+        </button>
+      </div>
+      <ControlledZoom
+        {...props}
+        isZoomed={isZoomed}
+        onZoomChange={handleZoomChange}
+      >
+        <img
+          alt={imgThatWanakaTree.alt}
+          onLoad={handleImgLoad}
+          src={imgThatWanakaTree.src}
+          style={{ height: '100%', maxWidth: '100%' }}
+          width="500"
+        />
+      </ControlledZoom>
+    </ImgStory>
+  )
+}
+
+ZoomOnLoad.args     = defaultArgs
+ZoomOnLoad.argTypes = defaultArgTypes
+
+export const SpecificKeys = props => {
+  const [isZoomed, setIsZoomed] = useState(false)
+
+  const handleKeyDown = useCallback(e => {
+    if (e.key === 'j' || e.keyCode === 74) {
+      setIsZoomed(true)
+    } else if (e.key === 'k' || e.keyCode === 75) {
+      setIsZoomed(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [handleKeyDown])
+
+  return (
+    <ImgStory
+      desc="Use `j` to open and `k` to close"
+      title="Image zoom using specific keys"
+    >
+      <ControlledZoom
+        {...props}
+        isZoomed={isZoomed}
+        onZoomChange={Function.prototype /* do nothing */}
+      >
+        <img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          style={{ height: '100%', maxWidth: '100%' }}
+          width="500"
+        />
+      </ControlledZoom>
+    </ImgStory>
+  )
+}
+
+SpecificKeys.args     = defaultArgs
+SpecificKeys.argTypes = defaultArgTypes
+
+export const LargerImageSize = props => (
   <div style={{ width: '720px', margin: '0 auto' }}>
     <ImgStory title="Larger image size">
-      <Zoom
-        closeText={text('Unzoom label', 'Unzoom image')}
-        openText={text('Zoom label', 'Zoom image')}
-        overlayBgColorEnd={color(
-          'Overlay bgColor end',
-          'rgba(255, 255, 255, 0.95)'
-        )}
-        overlayBgColorStart={color(
-          'Overlay bgColor start',
-          'rgba(255, 255, 255, 0)'
-        )}
-        transitionDuration={number('Transition duration', 300, {
-          min: 0,
-          max: 5000,
-          range: true,
-          step: 100
-        })}
-        wrapElement={text('Wrapper element', 'div')}
-        zoomMargin={number('Zoom margin', 0, {
-          min: 0,
-          max: 500,
-          range: true,
-          step: 50
-        })}
-        zoomZindex={number('Zoom z-index', 2147483647, {
-          min: 0,
-          max: 2147483647,
-          range: true,
-          step: 1
-        })}
-      >
+      <Zoom {...props}>
         <img alt={imgNvidiaCard.alt} src={imgNvidiaCard.src} width="100%" />
       </Zoom>
     </ImgStory>
   </div>
-))
+)
+
+LargerImageSize.args     = defaultArgs
+LargerImageSize.argTypes = defaultArgTypes
