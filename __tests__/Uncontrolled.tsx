@@ -1,8 +1,8 @@
 import { act, fireEvent, render } from '@testing-library/react'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
+import axe from 'axe-core'
 import Zoom from '../source'
-import testA11y from '../testA11y'
 
 test('is accessible with defaults & <img />', async () => {
   const { getByLabelText } = render(
@@ -16,7 +16,7 @@ test('is accessible with defaults & <img />', async () => {
   expect(openTrigger).toBeVisible()
 
   expect(document.body).toMatchSnapshot()
-  expect(await testA11y(document.body)).toEqual(true)
+  expect((await axe.run(document.body)).violations.length).toEqual(0)
 
   fireEvent.click(openTrigger)
 
@@ -27,7 +27,7 @@ test('is accessible with defaults & <img />', async () => {
   expect(closeTrigger).toBeVisible()
 
   expect(document.body).toMatchSnapshot()
-  expect(await testA11y(document.body)).toEqual(true)
+  expect((await axe.run(document.body)).violations.length).toEqual(0)
 })
 
 test('is accessible with custom open/close text & <img />', async () => {
@@ -41,7 +41,7 @@ test('is accessible with custom open/close text & <img />', async () => {
   const openTrigger = getByLabelText('Open me')
 
   expect(openTrigger).toBeVisible()
-  expect(await testA11y(container)).toEqual(true)
+  expect((await axe.run(container)).violations.length).toEqual(0)
 
   fireEvent.click(openTrigger)
 
@@ -49,7 +49,7 @@ test('is accessible with custom open/close text & <img />', async () => {
   expect(closeTrigger).toBeVisible()
 
   expect(document.body).toMatchSnapshot()
-  expect(await testA11y(document.body)).toEqual(true)
+  expect((await axe.run(document.body)).violations.length).toEqual(0)
 })
 
 test('zooms/unzooms with defaults & <img />', () => {
