@@ -1,8 +1,8 @@
-module.exports = {
+export default {
   clearMocks: true,
   collectCoverage: true,
   collectCoverageFrom: ['<rootDir>/source/**/*.{ts,tsx}'],
-  coveragePathIgnorePatterns: ['/node_modules/', '<rootDir>/source/@types'],
+  coveragePathIgnorePatterns: ['/node_modules/'],
   moduleNameMapper: {
     '\\.css$': 'identity-obj-proxy'
   },
