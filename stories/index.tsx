@@ -5,6 +5,10 @@ import React, {
   useEffect,
   useState,
 } from 'react'
+
+import Zoom, { Controlled as ControlledZoom } from '../source'
+import '../source/styles.css'
+
 import './base.css'
 import glenorchyLagoon from './static/glenorchy-lagoon.jpg'
 import hobbiton from './static/andres-iga-7XKkJVw1d8c-unsplash-smaller.jpg'
@@ -17,9 +21,6 @@ import queenstown from './static/omer-faruk-bekdemir-5BuxuWIJF1Q-unsplash-smalle
 import teAraiPoint from './static/douglas-bagg-wRwa3Z6GtRI-unsplash-smaller.jpg'
 import tekapo from './static/tobias-keller-73F4pKoUkM0-unsplash-smaller.jpg'
 import thatWanakaTree from './static/laura-smetsers-H-TW2CoNtTk-unsplash-smaller.jpg'
-
-import '../source/styles.css'
-import Zoom, { Controlled as ControlledZoom } from '../source'
 
 const imgGlenorchyLagoon = {
   alt: 'Glenorchy lagoon, New Zealand by Robert Pearce',
