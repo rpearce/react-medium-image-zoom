@@ -12,7 +12,7 @@ const cjsConfig = {
 const buildModules = [
   './source/index.ts',
   './source/Controlled.tsx',
-  './source/helpers.ts'
+  './source/helpers.ts',
 ]
 
 const isExternal = id => !id.startsWith('.') && !id.startsWith('/')
@@ -26,14 +26,14 @@ const esm = [
       exports: 'named',
       format: 'esm',
       name: 'rmiz-esm',
-      sourcemap: false
+      sourcemap: false,
     },
     external: isExternal,
     plugins: [
       resolve(),
-      typescript({ tsconfig: './tsconfig.build.json' })
-    ]
-  }
+      typescript({ tsconfig: './tsconfig.build.json' }),
+    ],
+  },
 ]
 
 const cjs = [
@@ -46,14 +46,14 @@ const cjs = [
       format: 'cjs',
       globals: { react: 'React', 'react-dom': 'ReactDOM' },
       name: 'rmiz-cjs',
-      sourcemap: false
+      sourcemap: false,
     },
     external: isExternal,
     plugins: [
       resolve(),
       commonjs(cjsConfig),
-      typescript({ tsconfig: './tsconfig.build.json' })
-    ]
+      typescript({ tsconfig: './tsconfig.build.json' }),
+    ],
   },
 
   // Minified cjs build
@@ -64,16 +64,16 @@ const cjs = [
       exports: 'named',
       format: 'cjs',
       name: 'rmiz-cjs-min',
-      sourcemap: false
+      sourcemap: false,
     },
     external: isExternal,
     plugins: [
       resolve(),
       commonjs(cjsConfig),
       typescript({ tsconfig: './tsconfig.build.json' }),
-      terser()
-    ]
-  }
+      terser(),
+    ],
+  },
 ]
 
 const umd = [
@@ -86,14 +86,14 @@ const umd = [
       format: 'umd',
       globals: { react: 'React', 'react-dom': 'ReactDOM' },
       name: 'rmiz-umd',
-      sourcemap: false
+      sourcemap: false,
     },
     external: ['react', 'react-dom'],
     plugins: [
       resolve(),
       commonjs(cjsConfig),
       typescript({ tsconfig: './tsconfig.build.json' }),
-    ]
+    ],
   },
 
   // Minified (UMD) build
@@ -105,16 +105,16 @@ const umd = [
       format: 'umd',
       globals: { react: 'React', 'react-dom': 'ReactDOM' },
       name: 'rmiz-umd',
-      sourcemap: false
+      sourcemap: false,
     },
     external: ['react', 'react-dom'],
     plugins: [
       resolve(),
       commonjs(cjsConfig),
       typescript({ tsconfig: './tsconfig.build.json' }),
-      terser()
-    ]
-  }
+      terser(),
+    ],
+  },
 ]
 
 let config

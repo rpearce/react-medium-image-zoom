@@ -23,47 +23,47 @@ import Zoom, { Controlled as ControlledZoom } from '../source'
 
 const imgGlenorchyLagoon = {
   alt: 'Glenorchy lagoon, New Zealand by Robert Pearce',
-  src: glenorchyLagoon
+  src: glenorchyLagoon,
 }
 const imgHobbiton = {
   alt: 'Hobbiton, Matamata, New Zealand by Andres Iga',
-  src: hobbiton
+  src: hobbiton,
 }
 const imgHookerValleyTrack = {
   alt: 'Hooker Valley Track , New Zealand by Roll de Ram',
-  src: hookerValleyTrack
+  src: hookerValleyTrack,
 }
 const imgKea = {
   alt: 'Kea (alpine parrot) in Arthur\'s Pass, New Zealand by Pablo Heimplatz',
-  src: kea
+  src: kea,
 }
 const imgNvidiaCard = {
   alt: 'NVIDIA Graphics Card',
-  src: nvidiaCard
+  src: nvidiaCard,
 }
 const imgNzBeach = {
   alt: 'New Zealand Beach by Rod Long',
-  src: nzBeach
+  src: nzBeach,
 }
 const imgQueenstown = {
   alt: 'Queenstown, New Zealand by Omer Faruk',
-  src: queenstown
+  src: queenstown,
 }
 const imgTeAraiPoint = {
   alt: 'Te Arai Point, New Zealand by Douglas Bagg',
-  src: teAraiPoint
+  src: teAraiPoint,
 }
 const imgTekapo = {
   alt: 'Lake Tekapo, New Zealand by Tobias Keller',
-  src: tekapo
+  src: tekapo,
 }
 const imgThatWanakaTree = {
   alt: 'That Wanaka Tree, New Zealand by Laura Smetsers',
-  src: thatWanakaTree
+  src: thatWanakaTree,
 }
 const imgPortWaikato = {
   alt: 'Port Waikato, Tuakau, Auckland, New Zealand by Petr Vysohlid',
-  src: portWaikato
+  src: portWaikato,
 }
 
 interface ImgStoryProps {
@@ -130,7 +130,7 @@ const ImgStory: FC<ImgStoryProps> = ({ children, desc, title }) => (
 export default {
   title: 'Zoom',
   component: Zoom,
-  parameters: {}
+  parameters: {},
 }
 
 const defaultArgs = {
@@ -141,7 +141,7 @@ const defaultArgs = {
   transitionDuration: 300,
   wrapElement: 'div',
   zoomMargin: 0,
-  zoomZIndex: Number.MAX_SAFE_INTEGER
+  zoomZIndex: Number.MAX_SAFE_INTEGER,
 }
 
 const defaultArgTypes = {
@@ -150,25 +150,25 @@ const defaultArgTypes = {
       type: 'range',
       min: 0,
       max: 5000,
-      step: 100
-    }
+      step: 100,
+    },
   },
   zoomMargin: {
     control: {
       type: 'range',
       min: 0,
       max: 500,
-      step: 50
-    }
+      step: 50,
+    },
   },
   zoomZIndex: {
     control: {
       type: 'range',
       min: 0,
       max: Number.MAX_SAFE_INTEGER,
-      step: 1
-    }
-  }
+      step: 1,
+    },
+  },
 }
 
 export const Image = props => (
@@ -234,7 +234,7 @@ export const BlueCircleDiv = props => (
           width: 300,
           height: 300,
           borderRadius: '50%',
-          backgroundColor: '#0099ff'
+          backgroundColor: '#0099ff',
         }}
       />
     </Zoom>
@@ -254,7 +254,7 @@ export const Gallery = () => {
     imgQueenstown,
     imgTekapo,
     imgPortWaikato,
-    imgKea
+    imgKea,
   ]
 
   return (
@@ -266,7 +266,7 @@ export const Gallery = () => {
           flexWrap: 'wrap',
           listStyle: 'none',
           margin: 0,
-          padding: 0
+          padding: 0,
         }}
       >
         {images.map((img, i) => (
@@ -286,7 +286,7 @@ export const Gallery = () => {
                   backgroundSize: 'cover',
                   height: '0',
                   paddingBottom: '66%',
-                  width: '100%'
+                  width: '100%',
                 }}
               />
             </Zoom>
@@ -307,7 +307,7 @@ export const GallerySlideshow = () => {
     imgQueenstown,
     imgTekapo,
     imgPortWaikato,
-    imgKea
+    imgKea,
   ]
   const [activeIndex, setActiveIndex] = useState(null)
 
@@ -347,7 +347,7 @@ export const GallerySlideshow = () => {
           flexWrap: 'wrap',
           listStyle: 'none',
           margin: 0,
-          padding: 0
+          padding: 0,
         }}
       >
         {images.map((img, i) => {
@@ -381,7 +381,7 @@ export const GallerySlideshow = () => {
                     backgroundSize: 'cover',
                     height: '0',
                     paddingBottom: '66%',
-                    width: '100%'
+                    width: '100%',
                   }}
                 />
               </ControlledZoom>

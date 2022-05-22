@@ -9,7 +9,7 @@ import React, {
   memo,
   useCallback,
   useRef,
-  useState
+  useState,
 } from 'react'
 import ControlledActivated from './ControlledActivated'
 
@@ -44,7 +44,7 @@ const Controlled: FC<ControlledProps> = ({
   wrapElement: WrapElement = 'div',
   wrapStyle,
   zoomMargin = 0,
-  zoomZindex = 2147483647
+  zoomZindex = 2147483647,
 }: ControlledProps) => {
   const [isChildLoaded, setIsChildLoaded] = useState<boolean>(false)
   const wrapRef = useRef<HTMLElement>(null)

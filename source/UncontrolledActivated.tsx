@@ -6,14 +6,14 @@ import React, {
   useCallback,
   useEffect,
   useRef,
-  useState
+  useState,
 } from 'react'
 import { createPortal } from 'react-dom'
 import useWindowSize from './hooks/useWindowSize'
 import {
   getModalContentStyle,
   getModalOverlayStyle,
-  pseudoParentEl
+  pseudoParentEl,
 } from './helpers'
 
 export interface UncontrolledActivatedProps {
@@ -43,7 +43,7 @@ const UncontrolledActivated: FC<UncontrolledActivatedProps> = ({
   scrollableEl = window,
   transitionDuration = 300,
   zoomMargin = 0,
-  zoomZindex = 2147483647
+  zoomZindex = 2147483647,
 }: UncontrolledActivatedProps) => {
   const btnRef = useRef<HTMLButtonElement>(null)
   const [, forceUpdate] = useState<number>(0)
@@ -62,7 +62,7 @@ const UncontrolledActivated: FC<UncontrolledActivatedProps> = ({
 
   // on escape, begin unloading
   const handleKeyDown = useCallback(
-     (e: KeyboardEvent) => {
+    (e: KeyboardEvent) => {
       if (e.key === 'Escape' || e.keyCode === 27) {
         e.stopPropagation()
         setIsUnloading(true)
@@ -132,7 +132,7 @@ const UncontrolledActivated: FC<UncontrolledActivatedProps> = ({
     overlayBgColorEnd,
     overlayBgColorStart,
     transitionDuration,
-    zoomZindex
+    zoomZindex,
   })
 
   const contentStyle = getModalContentStyle({
@@ -146,7 +146,7 @@ const UncontrolledActivated: FC<UncontrolledActivatedProps> = ({
     top,
     transitionDuration,
     width,
-    zoomMargin
+    zoomMargin,
   })
 
   return createPortal(
