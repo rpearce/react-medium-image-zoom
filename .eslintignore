@@ -1,5 +1,7 @@
-!.eslintrc.js
-!.storybook/
+.*
+.git/
+.github/
+coverage/
 dist/
 docs/
 node_modules/
