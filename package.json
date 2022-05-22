@@ -63,15 +63,12 @@
     "dist/"
   ],
   "scripts": {
-    "build": "run-s clean build:js build:css build:docs",
+    "build": "rm -rf ./dist && run-s build:js build:css",
     "build:css": "cp ./source/styles.css ./dist/styles.css",
-    "build:docs": "mkdir -p docs && build-storybook -o docs",
+    "build:docs": "rm -rf ./docs && mkdir -p docs && build-storybook -o docs",
     "build:js": "rollup -c ./rollup.config.js",
     "build:js:watch": "npm run build:js -- -w",
-    "ci": "run-p lint build test",
-    "clean": "run-p clean:dist clean:docs",
-    "clean:dist": "rm -rf ./dist",
-    "clean:docs": "rm -rf ./docs",
+    "ci": "run-p lint test build build:docs",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
     "coverage": "jest --coverage --coverageReporters=text-lcov | coveralls",
