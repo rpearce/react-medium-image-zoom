@@ -1,5 +1,5 @@
 html {
-  font-size: 16px;
+  font-size: 62.5%;
   box-sizing: border-box;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
@@ -15,7 +15,7 @@ body {
 }
 body {
   margin: 2em;
-  font-size: 1rem;
+  font-size: 1.6rem;
   font-family: monospace;
   color: #333;
 }

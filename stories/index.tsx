@@ -1,5 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import './.storybook/base.css'
+import React, {
+  FC,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react'
+import './base.css'
 import glenorchyLagoon from './static/glenorchy-lagoon.jpg'
 import hobbiton from './static/andres-iga-7XKkJVw1d8c-unsplash-smaller.jpg'
 import hookerValleyTrack from './static/roell-de-ram-2DM7eOR5iyc-unsplash-smaller.jpg'
@@ -12,8 +18,8 @@ import teAraiPoint from './static/douglas-bagg-wRwa3Z6GtRI-unsplash-smaller.jpg'
 import tekapo from './static/tobias-keller-73F4pKoUkM0-unsplash-smaller.jpg'
 import thatWanakaTree from './static/laura-smetsers-H-TW2CoNtTk-unsplash-smaller.jpg'
 
-import './source/styles.css'
-import Zoom, { Controlled as ControlledZoom } from './source'
+import '../source/styles.css'
+import Zoom, { Controlled as ControlledZoom } from '../source'
 
 const imgGlenorchyLagoon = {
   alt: 'Glenorchy lagoon, New Zealand by Robert Pearce',
@@ -28,7 +34,7 @@ const imgHookerValleyTrack = {
   src: hookerValleyTrack
 }
 const imgKea = {
-  alt: `Kea (alpine parrot) in Arthur's Pass, New Zealand by Pablo Heimplatz`,
+  alt: 'Kea (alpine parrot) in Arthur\'s Pass, New Zealand by Pablo Heimplatz',
   src: kea
 }
 const imgNvidiaCard = {
@@ -60,67 +66,71 @@ const imgPortWaikato = {
   src: portWaikato
 }
 
-function ImgStory ({ desc, title, ...props }) {
-  return (
-    <div>
-      {title && <h1>{title}</h1>}
-      {desc && <h2>{desc}</h2>}
-      <p>
-        Trust fund seitan chia, wolf lomo letterpress Bushwick before they sold
-        out. Carles kogi fixie, squid twee Tonx readymade cred typewriter
-        scenester locavore kale chips vegan organic. Meggings pug wolf
-        Shoreditch typewriter skateboard. McSweeney&apos;s iPhone chillwave,
-        food truck direct trade disrupt flannel irony tousled Cosby sweater
-        single-origin coffee. Organic disrupt bicycle rights, tattooed messenger
-        bag flannel craft beer fashion axe bitters. Readymade sartorial craft
-        beer, quinoa sustainable butcher Marfa Echo Park Terry Richardson
-        gluten-free flannel retro cred mlkshk banjo. Salvia 90&apos;s art party
-        Blue Bottle, PBR&B cardigan 8-bit.
-      </p>
-      <p>
-        Meggings irony fashion axe, tattooed master cleanse Blue Bottle
-        stumptown bitters authentic flannel freegan paleo letterpress ugh
-        sriracha. Wolf PBR&B art party aesthetic meh cliche. Sartorial before
-        they sold out deep v, aesthetic PBR&B craft beer post-ironic synth
-        keytar pork belly skateboard pour-over. Tonx cray pug Etsy, gastropub
-        ennui wolf ethnic Odd Future viral master cleanse skateboard banjo.
-        Pitchfork scenester cornhole, whatever try-hard ethnic banjo +1
-        gastropub American Apparel vinyl skateboard Shoreditch seitan. Blue
-        Bottle keffiyeh Austin Helvetica art party. Portland ethnic fixie, beard
-        retro direct trade ugh scenester Tumblr readymade authentic plaid
-        pickled hashtag biodiesel.
-      </p>
-      {props.children}
-      <p>
-        Thundercats freegan Truffaut, four loko twee Austin scenester lo-fi
-        seitan High Life paleo quinoa cray. Schlitz butcher ethical Tumblr,
-        pop-up DIY keytar ethnic iPhone PBR sriracha. Tonx direct trade bicycle
-        rights gluten-free flexitarian asymmetrical. Whatever drinking vinegar
-        PBR XOXO Bushwick gentrify. Cliche semiotics banjo retro squid Wes
-        Anderson. Fashion axe dreamcatcher you probably haven&apos;t heard of
-        them bicycle rights. Tote bag organic four loko ethical selfies
-        gastropub, PBR fingerstache tattooed bicycle rights.
-      </p>
-      <p>
-        Ugh Portland Austin, distillery tattooed typewriter polaroid pug Banksy
-        Neutra keffiyeh. Shoreditch mixtape wolf PBR&B, tote bag dreamcatcher
-        literally bespoke Odd Future selfies 90&apos;s master cleanse vegan.
-        Flannel tofu deep v next level pickled, authentic Etsy Shoreditch
-        literally swag photo booth iPhone pug semiotics banjo. Bicycle rights
-        butcher Blue Bottle, actually DIY semiotics Banksy banjo mixtape Austin
-        pork belly post-ironic. American Apparel gastropub hashtag,
-        McSweeney&apos;s master cleanse occupy High Life bitters wayfarers next
-        level bicycle rights. Wolf chia Terry Richardson, pop-up plaid kitsch
-        ugh. Butcher +1 Carles, swag selfies Blue Bottle viral.
-      </p>
-    </div>
-  )
+interface ImgStoryProps {
+  children: ReactNode
+  desc?: string
+  title?: string
 }
+
+const ImgStory: FC<ImgStoryProps> = ({ children, desc, title }) => (
+  <div>
+    {title && <h1>{title}</h1>}
+    {desc && <h2>{desc}</h2>}
+    <p>
+      Trust fund seitan chia, wolf lomo letterpress Bushwick before they sold
+      out. Carles kogi fixie, squid twee Tonx readymade cred typewriter
+      scenester locavore kale chips vegan organic. Meggings pug wolf
+      Shoreditch typewriter skateboard. McSweeney&apos;s iPhone chillwave,
+      food truck direct trade disrupt flannel irony tousled Cosby sweater
+      single-origin coffee. Organic disrupt bicycle rights, tattooed messenger
+      bag flannel craft beer fashion axe bitters. Readymade sartorial craft
+      beer, quinoa sustainable butcher Marfa Echo Park Terry Richardson
+      gluten-free flannel retro cred mlkshk banjo. Salvia 90&apos;s art party
+      Blue Bottle, PBR&B cardigan 8-bit.
+    </p>
+    <p>
+      Meggings irony fashion axe, tattooed master cleanse Blue Bottle
+      stumptown bitters authentic flannel freegan paleo letterpress ugh
+      sriracha. Wolf PBR&B art party aesthetic meh cliche. Sartorial before
+      they sold out deep v, aesthetic PBR&B craft beer post-ironic synth
+      keytar pork belly skateboard pour-over. Tonx cray pug Etsy, gastropub
+      ennui wolf ethnic Odd Future viral master cleanse skateboard banjo.
+      Pitchfork scenester cornhole, whatever try-hard ethnic banjo +1
+      gastropub American Apparel vinyl skateboard Shoreditch seitan. Blue
+      Bottle keffiyeh Austin Helvetica art party. Portland ethnic fixie, beard
+      retro direct trade ugh scenester Tumblr readymade authentic plaid
+      pickled hashtag biodiesel.
+    </p>
+    {children}
+    <p>
+      Thundercats freegan Truffaut, four loko twee Austin scenester lo-fi
+      seitan High Life paleo quinoa cray. Schlitz butcher ethical Tumblr,
+      pop-up DIY keytar ethnic iPhone PBR sriracha. Tonx direct trade bicycle
+      rights gluten-free flexitarian asymmetrical. Whatever drinking vinegar
+      PBR XOXO Bushwick gentrify. Cliche semiotics banjo retro squid Wes
+      Anderson. Fashion axe dreamcatcher you probably haven&apos;t heard of
+      them bicycle rights. Tote bag organic four loko ethical selfies
+      gastropub, PBR fingerstache tattooed bicycle rights.
+    </p>
+    <p>
+      Ugh Portland Austin, distillery tattooed typewriter polaroid pug Banksy
+      Neutra keffiyeh. Shoreditch mixtape wolf PBR&B, tote bag dreamcatcher
+      literally bespoke Odd Future selfies 90&apos;s master cleanse vegan.
+      Flannel tofu deep v next level pickled, authentic Etsy Shoreditch
+      literally swag photo booth iPhone pug semiotics banjo. Bicycle rights
+      butcher Blue Bottle, actually DIY semiotics Banksy banjo mixtape Austin
+      pork belly post-ironic. American Apparel gastropub hashtag,
+      McSweeney&apos;s master cleanse occupy High Life bitters wayfarers next
+      level bicycle rights. Wolf chia Terry Richardson, pop-up plaid kitsch
+      ugh. Butcher +1 Carles, swag selfies Blue Bottle viral.
+    </p>
+  </div>
+)
 
 export default {
   title: 'Zoom',
   component: Zoom,
-  parameters: {},
+  parameters: {}
 }
 
 const defaultArgs = {
@@ -131,7 +141,7 @@ const defaultArgs = {
   transitionDuration: 300,
   wrapElement: 'div',
   zoomMargin: 0,
-  zoomZIndex: Number.MAX_SAFE_INTEGER,
+  zoomZIndex: Number.MAX_SAFE_INTEGER
 }
 
 const defaultArgTypes = {
@@ -140,25 +150,25 @@ const defaultArgTypes = {
       type: 'range',
       min: 0,
       max: 5000,
-      step: 100,
-    },
+      step: 100
+    }
   },
   zoomMargin: {
     control: {
       type: 'range',
       min: 0,
       max: 500,
-      step: 50,
-    },
+      step: 50
+    }
   },
   zoomZIndex: {
     control: {
       type: 'range',
       min: 0,
       max: Number.MAX_SAFE_INTEGER,
-      step: 1,
-    },
-  },
+      step: 1
+    }
+  }
 }
 
 export const Image = props => (
@@ -174,7 +184,7 @@ export const Image = props => (
   </ImgStory>
 )
 
-Image.args     = defaultArgs
+Image.args = defaultArgs
 Image.argTypes = defaultArgTypes
 
 export const Picture = props => (
@@ -193,7 +203,7 @@ export const Picture = props => (
   </ImgStory>
 )
 
-Picture.args     = defaultArgs
+Picture.args = defaultArgs
 Picture.argTypes = defaultArgTypes
 
 export const Figure = props => (
@@ -212,7 +222,7 @@ export const Figure = props => (
   </ImgStory>
 )
 
-Figure.args     = defaultArgs
+Figure.args = defaultArgs
 Figure.argTypes = defaultArgTypes
 
 export const BlueCircleDiv = props => (
@@ -231,7 +241,7 @@ export const BlueCircleDiv = props => (
   </ImgStory>
 )
 
-BlueCircleDiv.args     = defaultArgs
+BlueCircleDiv.args = defaultArgs
 BlueCircleDiv.argTypes = defaultArgTypes
 
 export const Gallery = () => {
@@ -244,7 +254,7 @@ export const Gallery = () => {
     imgQueenstown,
     imgTekapo,
     imgPortWaikato,
-    imgKea,
+    imgKea
   ]
 
   return (
@@ -276,7 +286,7 @@ export const Gallery = () => {
                   backgroundSize: 'cover',
                   height: '0',
                   paddingBottom: '66%',
-                  width: '100%',
+                  width: '100%'
                 }}
               />
             </Zoom>
@@ -371,7 +381,7 @@ export const GallerySlideshow = () => {
                     backgroundSize: 'cover',
                     height: '0',
                     paddingBottom: '66%',
-                    width: '100%',
+                    width: '100%'
                   }}
                 />
               </ControlledZoom>
@@ -422,7 +432,7 @@ export const ZoomOnLoad = props => {
   )
 }
 
-ZoomOnLoad.args     = defaultArgs
+ZoomOnLoad.args = defaultArgs
 ZoomOnLoad.argTypes = defaultArgTypes
 
 export const SpecificKeys = props => {
@@ -465,7 +475,7 @@ export const SpecificKeys = props => {
   )
 }
 
-SpecificKeys.args     = defaultArgs
+SpecificKeys.args = defaultArgs
 SpecificKeys.argTypes = defaultArgTypes
 
 export const LargerImageSize = props => (
@@ -478,5 +488,5 @@ export const LargerImageSize = props => (
   </div>
 )
 
-LargerImageSize.args     = defaultArgs
+LargerImageSize.args = defaultArgs
 LargerImageSize.argTypes = defaultArgTypes
