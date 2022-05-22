@@ -24,3 +24,9 @@ input,
 button {
   -webkit-font-smoothing: antialiased;
 }
+figure {
+  margin: 0;
+}
+h2 {
+  margin-top: 4rem;
+}

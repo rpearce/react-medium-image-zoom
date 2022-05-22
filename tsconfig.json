@@ -5,16 +5,19 @@
     "allowUnreachableCode": false,
     "declaration": true,
     "esModuleInterop": true,
-    "importHelpers": true,
     "jsx": "react",
     "lib": ["esnext", "dom"],
     "module": "esnext",
     "moduleResolution": "node",
     "noImplicitAny": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "outDir": "./dist/",
+    "removeComments": true,
     "sourceMap": false,
     "strict": true,
-    "target": "es5"
+    "target": "es2020"
   },
   "include": ["./source/index.ts"]
 }
