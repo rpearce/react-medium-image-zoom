@@ -1,17 +1,15 @@
 FROM node:16-bullseye-slim
 
+USER node
+
 WORKDIR /service
 
-RUN chown -R node:node /service
-
-COPY --chown=node:node package*.json .
+COPY package*.json .
 
 RUN npm i --no-save && npm cache clean -f
 
-COPY --chown=node:node . /service
+COPY . /service
 
 EXPOSE 6006
-
-USER node
 
 CMD ["npm", "start"]
