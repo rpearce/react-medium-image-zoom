@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [4.4.1] - 2022-05-22
+### Changed
+* Switched project name back to `react-medium-image-zoom` and fixed links
+* I'm not even sure it was working, but turned off `sourceMaps: true` in the
+  tsconfig
+* Moved `AUTHORS` file into `contributors` key in `package.json`
+* Added `funding` info to `package.json`
+
 ## [4.4.0] - 2022-05-13
 ### Changed
 * Bumped minor version of `tslib` and made sure to actually use it (#306)
