@@ -63,17 +63,15 @@
     "dist/"
   ],
   "scripts": {
-    "build": "rm -rf ./dist && run-s build:js build:css",
+    "build": "rm -rf ./dist && mkdir ./dist && concurrently npm:build:js npm:build:css",
     "build:css": "cp ./source/styles.css ./dist/styles.css",
-    "build:docs": "rm -rf ./docs && mkdir -p docs && build-storybook -o docs",
+    "build:docs": "rm -rf ./docs && mkdir docs && build-storybook -o docs",
     "build:js": "rollup -c ./rollup.config.js",
-    "build:js:watch": "npm run build:js -- -w",
-    "ci": "run-p lint test build build:docs",
+    "ci": "concurrently npm:lint npm:test npm:build npm:build:docs",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
-    "coverage": "jest --coverage --coverageReporters=text-lcov | coveralls",
-    "lint": "eslint . --ext .js,.ts,.tsx",
-    "prepublishOnly": "run-p lint test && npm run build:js",
+    "lint": "eslint .",
+    "prepublishOnly": "concurrently npm:lint npm:test npm:build",
     "start": "start-storybook -p 6006",
     "test": "jest"
   },
@@ -94,8 +92,6 @@
     "@typescript-eslint/parser": "^5.25.0",
     "all-contributors-cli": "^6.20.0",
     "axe-core": "^4.4.2",
-    "babel-loader": "^8.2.5",
-    "coveralls": "^3.1.1",
     "eslint": "^8.16.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
@@ -122,6 +118,7 @@
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
   },
   "dependencies": {
+    "concurrently": "^7.2.1",
     "focus-options-polyfill": "1.5.1",
     "tslib": "^2.4.0"
   }
