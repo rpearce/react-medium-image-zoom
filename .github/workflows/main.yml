@@ -8,19 +8,13 @@ jobs:
 
     steps:
     - name: Checkout repo under GH workspace
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
-    - name: Use nodejs
-      uses: actions/setup-node@v2
-      with:
-        node-version: '16'
-        cache: 'npm'
-
-    - name: Install deps without updating package-lock.json
-      run: npm i --no-save
+    - name: Build docker image
+      run: docker compose build
 
     - name: Run the CI build
-      run: npm run ci
+      run: docker compose run --rm web npm run ci
 
     - name: Deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v3
