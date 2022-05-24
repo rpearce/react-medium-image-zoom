@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   clearMocks: true,
   collectCoverage: true,
   collectCoverageFrom: ['<rootDir>/source/**/*.{ts,tsx}'],
