@@ -1,11 +1,10 @@
 {
   "name": "react-medium-image-zoom",
-  "version": "4.4.2",
+  "version": "4.4.3",
   "license": "BSD-3-Clause",
   "description": "Accessible medium.com-style image zoom for React",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git@github.com:rpearce/react-medium-image-zoom.git"
@@ -67,13 +66,14 @@
     "build:css": "cp ./source/styles.css ./dist/styles.css",
     "build:docs": "rm -rf ./docs && mkdir docs && build-storybook -o docs",
     "build:js": "rollup -c ./rollup.config.js",
-    "ci": "concurrently npm:lint npm:test npm:build npm:build:docs",
+    "ci": "concurrently npm:lint npm:test:ci npm:build npm:build:docs",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
     "lint": "eslint .",
     "prepublishOnly": "concurrently npm:lint npm:test npm:build",
     "start": "start-storybook -p 6006",
-    "test": "jest"
+    "test": "jest",
+    "test:ci": "jest --collectCoverage=false"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.0",
