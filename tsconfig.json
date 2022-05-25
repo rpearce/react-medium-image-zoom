@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
     "declaration": true,
     "esModuleInterop": true,
     "importHelpers": true,
@@ -15,6 +16,5 @@
     "strict": true,
     "target": "es5"
   },
-  "exclude": ["node_modules/"],
-  "include": ["./source/**/*", "./__tests__/**/*"]
+  "include": ["./source/index.ts"]
 }
