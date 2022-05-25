@@ -63,13 +63,13 @@
   "scripts": {
     "build": "rm -rf ./dist && mkdir ./dist && concurrently npm:build:js npm:build:css",
     "build:css": "cp ./source/styles.css ./dist/styles.css",
-    "build:docs": "rm -rf ./docs && mkdir docs && build-storybook -o docs",
+    "build:docs": "rm -rf ./docs && mkdir ./docs && build-storybook -o docs",
     "build:js": "rollup -c ./rollup.config.js",
     "ci": "concurrently npm:lint npm:test:ci npm:build npm:build:docs",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
     "lint": "eslint .",
-    "prepublishOnly": "concurrently npm:lint npm:test npm:build",
+    "prepublishOnly": "concurrently npm:lint npm:test:ci npm:build",
     "start": "start-storybook -p 6006",
     "test": "jest",
     "test:ci": "jest --collectCoverage=false"

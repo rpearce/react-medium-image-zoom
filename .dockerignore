@@ -1,0 +1,13 @@
+**/.DS_Store
+.git/
+coverage/
+dist/
+docs/
+node_modules/
+Dockerfile
+CHANGELOG.md
+CODE_OF_CONDUCT.md
+LICENSE
+README.md
+docker-compose.yml
+npm-debug.log

@@ -1,0 +1,9 @@
+services:
+  web:
+    build: .
+    command: npm start
+    ports:
+      - "6006:6006"
+    volumes:
+      - '.:/service'
+      - '/service/node_modules'
