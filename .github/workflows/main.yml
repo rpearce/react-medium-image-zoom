@@ -10,11 +10,17 @@ jobs:
     - name: Checkout repo under GH workspace
       uses: actions/checkout@v3
 
-    - name: Build docker image
-      run: docker compose build
+    - name: Use nodejs
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+        cache: 'npm'
+
+    - name: Install deps without updating package-lock.json
+      run: npm i --no-save
 
     - name: Run the CI build
-      run: docker compose run --rm web npm run ci
+      run: npm run ci
 
     - name: Deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v3
