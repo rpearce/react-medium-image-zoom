@@ -302,6 +302,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/edlerd"><img src="https://avatars.githubusercontent.com/u/1155472?v=4?s=100" width="100px;" alt=""/><br /><sub><b>David Edler</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Aedlerd" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://rikusen.dev/"><img src="https://avatars.githubusercontent.com/u/19174234?v=4?s=100" width="100px;" alt=""/><br /><sub><b>rikusen0335</b></sub></a><br /><a href="#ideas-rikusen0335" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
