@@ -8,6 +8,23 @@
   "commit": true,
   "contributors": [
     {
+      "login": "rpearce",
+      "name": "Robert Pearce",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/592876?v=4",
+      "profile": "https://robertwpearce.com",
+      "contributions": [
+        "code",
+        "question",
+        "test",
+        "bug",
+        "example",
+        "design",
+        "review",
+        "ideas",
+        "doc"
+      ]
+    },
+    {
       "login": "cbothner",
       "name": "Cameron Bothner",
       "avatar_url": "https://avatars1.githubusercontent.com/u/4642599?v=4",
@@ -67,23 +84,6 @@
       "profile": "https://github.com/wtfdaemon",
       "contributions": [
         "bug"
-      ]
-    },
-    {
-      "login": "rpearce",
-      "name": "Robert Pearce",
-      "avatar_url": "https://avatars2.githubusercontent.com/u/592876?v=4",
-      "profile": "https://robertwpearce.com",
-      "contributions": [
-        "code",
-        "question",
-        "test",
-        "bug",
-        "example",
-        "design",
-        "review",
-        "ideas",
-        "doc"
       ]
     },
     {
