@@ -1,5 +1,6 @@
 import React, {
   CSSProperties,
+  ImgHTMLAttributes,
   KeyboardEvent,
   ReactNode,
   useCallback,
@@ -31,6 +32,7 @@ export interface BaseProps {
   isZoomed: boolean
   onZoomChange?: (value: boolean) => void
   scrollableEl?: HTMLElement | Window
+  zoomImg?: ImgHTMLAttributes<HTMLImageElement>
   zoomMargin?: number
 }
 
@@ -41,11 +43,13 @@ export default function Base ({
   isZoomed,
   onZoomChange,
   scrollableEl = window, // @TODO
+  zoomImg,
   zoomMargin = 0,
 }: BaseProps) {
   const idModalImg = useState(() => `rmiz-modal-img-${Math.random().toString(16).slice(-4)}`)[0]
   const [loadedImgEl, setLoadedImgEl] = useState<HTMLImageElement>()
   const [modalState, setModalState] = useState<ModalState>(() => ModalState.UNLOADED)
+  const [isZoomImgLoaded, setIsZoomImgLoaded] = useState(() => false)
   const [forceUpdateVal, forceUpdate] = useState(() => 0)
 
   const refContent = useRef<HTMLDivElement>(null)
@@ -70,6 +74,11 @@ export default function Base ({
   const imgAlt = getImgAlt(imgEl)
   const imgSrc = getImgSrc(imgEl)
 
+  const zoomImgSizes = zoomImg?.sizes
+  const zoomImgSrc = zoomImg?.src
+  const zoomImgSrcSet = zoomImg?.srcSet
+  const hasZoomImg = !!zoomImgSrc
+
   // ===========================================================================
 
   const styleContent: CSSProperties = {
@@ -84,6 +93,7 @@ export default function Base ({
     }
 
     return getStyleModalImg({
+      hasZoomImg,
       imgSrc,
       isZoomed: isZoomed && (modalState === ModalState.LOADING || modalState === ModalState.LOADED),
       loadedImgEl,
@@ -93,6 +103,7 @@ export default function Base ({
     })
   }, [
     forceUpdateVal, // Simply needed to break the memo cache on scroll
+    hasZoomImg,
     imgEl,
     imgSrc,
     isSvg,
@@ -134,10 +145,29 @@ export default function Base ({
     forceUpdate(n => n + 1)
   }, [])
 
+  const loadZoomImg = useCallback(() => {
+    if (!isZoomImgLoaded && zoomImgSrc) {
+      const img = new Image()
+      img.src = zoomImgSrc
+      img.sizes = zoomImgSizes || ''
+      img.srcset = zoomImgSrcSet || ''
+
+      img.decode().then(() => {
+        setIsZoomImgLoaded(true)
+      })
+    }
+  }, [
+    isZoomImgLoaded,
+    zoomImgSizes,
+    zoomImgSrc,
+    zoomImgSrcSet,
+  ])
+
   // Perform zoom actions
   const zoom = useCallback(() => {
     refDialog.current?.showModal?.()
     setModalState(ModalState.LOADING)
+    loadZoomImg()
 
     refModalImg.current?.addEventListener?.('transitionend', () => {
       setTimeout(() => {
@@ -146,7 +176,7 @@ export default function Base ({
         window.addEventListener('resize', handleResize)
       }, 0)
     }, { once: true })
-  }, [handleScroll, handleResize, scrollableEl])
+  }, [handleScroll, handleResize, loadZoomImg, scrollableEl])
 
   // Perform unzoom actions
   const unzoom = useCallback(() => {
@@ -233,13 +263,14 @@ export default function Base ({
         <div data-rmiz-modal-content>
           <img
             alt={imgAlt}
+            sizes={imgSizes}
+            src={imgSrc}
+            srcSet={imgSrcSet}
+            {...isZoomImgLoaded && modalState === ModalState.LOADED ? zoomImg : {}}
             data-rmiz-modal-img
             height={styleModalImg.height}
             id={idModalImg}
             ref={refModalImg}
-            sizes={imgSizes}
-            src={imgSrc}
-            srcSet={imgSrcSet}
             style={styleModalImg}
             width={styleModalImg.width}
           />

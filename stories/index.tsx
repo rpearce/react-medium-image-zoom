@@ -14,7 +14,9 @@ import {
   imgGlenorchyLagoon,
   imgHobbiton,
   imgHookerValleyTrack,
+  imgKeaSmall,
   imgKea,
+  imgKeaLarge,
   imgNzBeach,
   imgNzMap,
   imgPortWaikato,
@@ -33,6 +35,7 @@ export default {
 const defaultArgs = {
   a11yNameButtonUnzoom: 'Minimize image',
   a11yNameButtonZoom: 'Expand image',
+  zoomImg: undefined,
   zoomMargin: 0,
 }
 
@@ -59,7 +62,7 @@ export const Image = props => (
         width="400"
       />
     </Zoom>
-    <h2>A portrait image with a small width</h2>
+    <h2>A portrait image with a small width specified</h2>
     <p>Small widths scale well, too — even on mobile.</p>
     <Zoom {...props}>
       <img
@@ -78,6 +81,39 @@ export const Image = props => (
         width="150"
       />
     </Zoom>
+    <h2>An image with a larger <code>zoomImg</code></h2>
+    <p>
+      When zoomed, the original image will scale to as large as the window will
+      allow, and then it will be replaced by an image that is downloaded in the
+      background.
+    </p>
+    <Zoom
+      {...props}
+      zoomImg={{
+        alt: imgKeaLarge.alt,
+        src: imgKeaLarge.src,
+      }}
+    >
+      <img
+        alt={imgKeaSmall.alt}
+        src={imgKeaSmall.src}
+        style={{ height: '100%', maxWidth: '100%' }}
+        width="150"
+      />
+    </Zoom>
+    <h2>An image with a small size</h2>
+    <p>
+      In order to prevent blurry images, An image won&apos;t scale up larger
+      than its natural dimensions.
+    </p>
+    <Zoom {...props}>
+      <img
+        alt={imgKeaSmall.alt}
+        src={imgKeaSmall.src}
+        style={{ height: '100%', maxWidth: '100%' }}
+        width="150"
+      />
+    </Zoom>
   </div>
 )
 
@@ -87,6 +123,7 @@ Image.argTypes = defaultArgTypes
 export const Picture = props => (
   <div>
     <h1>{'Zoom an <img /> in a <picture> element with a <source />'}</h1>
+    <p>Hint: reduce the window&apos;s width to see a portrait picture, instead.</p>
     <Zoom {...props}>
       <picture>
         <source media="(max-width: 800px)" srcSet={imgTeAraiPoint.src} />

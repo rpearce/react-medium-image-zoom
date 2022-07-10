@@ -79,14 +79,14 @@ export interface GetScale {
   ({
     containerHeight,
     containerWidth,
-    isSvgSrc,
+    hasScalableSrc,
     offset,
     targetHeight,
     targetWidth,
   }: {
     containerHeight: number,
     containerWidth: number,
-    isSvgSrc: boolean,
+    hasScalableSrc: boolean,
     offset: number,
     targetHeight: number,
     targetWidth: number,
@@ -96,12 +96,12 @@ export interface GetScale {
 export const getScale: GetScale = ({
   containerHeight,
   containerWidth,
-  isSvgSrc,
+  hasScalableSrc,
   offset,
   targetHeight,
   targetWidth,
 }) => {
-  return !isSvgSrc && targetHeight && targetWidth
+  return !hasScalableSrc && targetHeight && targetWidth
     ? getScaleToWindowMax({
       containerHeight,
       containerWidth,
@@ -162,7 +162,7 @@ export interface GetImgRegularStyle {
     containerLeft,
     containerTop,
     containerWidth,
-    isSvgSrc,
+    hasScalableSrc,
     offset,
     targetHeight,
     targetWidth,
@@ -171,7 +171,7 @@ export interface GetImgRegularStyle {
     containerLeft: number,
     containerTop: number,
     containerWidth: number,
-    isSvgSrc: boolean,
+    hasScalableSrc: boolean,
     offset: number,
     targetHeight: number,
     targetWidth: number,
@@ -183,7 +183,7 @@ export const getImgRegularStyle: GetImgRegularStyle = ({
   containerLeft,
   containerTop,
   containerWidth,
-  isSvgSrc,
+  hasScalableSrc,
   offset,
   targetHeight,
   targetWidth,
@@ -191,7 +191,7 @@ export const getImgRegularStyle: GetImgRegularStyle = ({
   const scale = getScale({
     containerHeight,
     containerWidth,
-    isSvgSrc,
+    hasScalableSrc,
     offset,
     targetHeight,
     targetWidth,
@@ -234,7 +234,7 @@ export interface GetImgObjectFitStyle {
     containerLeft,
     containerTop,
     containerWidth,
-    isSvgSrc,
+    hasScalableSrc,
     objectFit,
     objectPosition,
     offset,
@@ -245,7 +245,7 @@ export interface GetImgObjectFitStyle {
     containerLeft: number,
     containerTop: number,
     containerWidth: number,
-    isSvgSrc: boolean,
+    hasScalableSrc: boolean,
     objectFit: string,
     objectPosition: string,
     offset: number,
@@ -259,7 +259,7 @@ export const getImgObjectFitStyle: GetImgObjectFitStyle = ({
   containerLeft,
   containerTop,
   containerWidth,
-  isSvgSrc,
+  hasScalableSrc,
   objectFit,
   objectPosition,
   offset,
@@ -289,7 +289,7 @@ export const getImgObjectFitStyle: GetImgObjectFitStyle = ({
     const scale = getScale({
       containerHeight: targetHeight * ratio,
       containerWidth: targetWidth * ratio,
-      isSvgSrc,
+      hasScalableSrc,
       offset,
       targetHeight,
       targetWidth,
@@ -310,7 +310,7 @@ export const getImgObjectFitStyle: GetImgObjectFitStyle = ({
     const scale = getScale({
       containerHeight: targetHeight,
       containerWidth: targetWidth,
-      isSvgSrc,
+      hasScalableSrc,
       offset,
       targetHeight,
       targetWidth,
@@ -331,7 +331,7 @@ export const getImgObjectFitStyle: GetImgObjectFitStyle = ({
     const scale = getScale({
       containerHeight: targetHeight * ratio,
       containerWidth: targetWidth * ratio,
-      isSvgSrc,
+      hasScalableSrc,
       offset,
       targetHeight,
       targetWidth,
@@ -357,7 +357,7 @@ export interface GetDivImgStyle {
     containerLeft,
     containerTop,
     containerWidth,
-    isSvgSrc,
+    hasScalableSrc,
     offset,
     targetHeight,
     targetWidth,
@@ -368,7 +368,7 @@ export interface GetDivImgStyle {
     containerLeft: number,
     containerTop: number,
     containerWidth: number,
-    isSvgSrc: boolean,
+    hasScalableSrc: boolean,
     offset: number,
     targetHeight: number,
     targetWidth: number,
@@ -382,7 +382,7 @@ export const getDivImgStyle: GetDivImgStyle = ({
   containerLeft,
   containerTop,
   containerWidth,
-  isSvgSrc,
+  hasScalableSrc,
   offset,
   targetHeight,
   targetWidth,
@@ -402,7 +402,7 @@ export const getDivImgStyle: GetDivImgStyle = ({
     const scale = getScale({
       containerHeight: targetHeight * ratio,
       containerWidth: targetWidth * ratio,
-      isSvgSrc,
+      hasScalableSrc,
       offset,
       targetHeight,
       targetWidth,
@@ -423,7 +423,7 @@ export const getDivImgStyle: GetDivImgStyle = ({
     const scale = getScale({
       containerHeight: targetHeight,
       containerWidth: targetWidth,
-      isSvgSrc,
+      hasScalableSrc,
       offset,
       targetHeight,
       targetWidth,
@@ -454,7 +454,7 @@ export const getDivImgStyle: GetDivImgStyle = ({
     const scale = getScale({
       containerHeight: targetHeight * ratio,
       containerWidth: targetWidth * ratio,
-      isSvgSrc,
+      hasScalableSrc,
       offset,
       targetHeight,
       targetWidth,
@@ -476,6 +476,7 @@ const SRC_SVG_REGEX = /\.svg$/i
 
 export interface GetStyleModalImg {
   ({
+    hasZoomImg,
     imgSrc,
     isZoomed,
     loadedImgEl,
@@ -483,6 +484,7 @@ export interface GetStyleModalImg {
     shouldRefresh,
     targetEl,
   }: {
+    hasZoomImg: boolean,
     imgSrc: string | undefined,
     isZoomed: boolean,
     loadedImgEl: HTMLImageElement,
@@ -493,6 +495,7 @@ export interface GetStyleModalImg {
 }
 
 export const getStyleModalImg: GetStyleModalImg = ({
+  hasZoomImg,
   imgSrc,
   isZoomed,
   loadedImgEl,
@@ -500,7 +503,7 @@ export const getStyleModalImg: GetStyleModalImg = ({
   shouldRefresh,
   targetEl,
 }) => {
-  const isSvgSrc = !!(imgSrc && SRC_SVG_REGEX.test(imgSrc))
+  const hasScalableSrc = hasZoomImg || !!(imgSrc && SRC_SVG_REGEX.test(imgSrc))
   const imgRect = targetEl.getBoundingClientRect()
   const targetElComputedStyle = window.getComputedStyle(targetEl)
 
@@ -509,7 +512,7 @@ export const getStyleModalImg: GetStyleModalImg = ({
     containerLeft: imgRect.left,
     containerTop: imgRect.top,
     containerWidth: imgRect.width,
-    isSvgSrc,
+    hasScalableSrc,
     offset,
     targetHeight: loadedImgEl?.naturalHeight,
     targetWidth: loadedImgEl?.naturalWidth,
@@ -521,7 +524,7 @@ export const getStyleModalImg: GetStyleModalImg = ({
       containerLeft: imgRect.left,
       containerTop: imgRect.top,
       containerWidth: imgRect.width,
-      isSvgSrc,
+      hasScalableSrc,
       objectFit: targetElComputedStyle.objectFit,
       objectPosition: targetElComputedStyle.objectPosition,
       offset,
@@ -538,7 +541,7 @@ export const getStyleModalImg: GetStyleModalImg = ({
       containerLeft: imgRect.left,
       containerTop: imgRect.top,
       containerWidth: imgRect.width,
-      isSvgSrc,
+      hasScalableSrc,
       offset,
       targetHeight: loadedImgEl.naturalHeight,
       targetWidth: loadedImgEl.naturalWidth,

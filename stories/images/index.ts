@@ -1,7 +1,9 @@
 import glenorchyLagoon from './glenorchy-lagoon.jpg'
 import hobbiton from './andres-iga-7XKkJVw1d8c-unsplash-smaller.jpg'
 import hookerValleyTrack from './roell-de-ram-2DM7eOR5iyc-unsplash-smaller.jpg'
+import keaSmall from './pablo-heimplatz-PSF2RhUBORs-unsplash-300w.jpg'
 import kea from './pablo-heimplatz-PSF2RhUBORs-unsplash-smaller.jpg'
+import keaLarge from './pablo-heimplatz-PSF2RhUBORs-unsplash.jpg'
 import nzBeach from './rod-long-4dcsLxQxSHY-unsplash-smaller.jpg'
 import portWaikato from './petr-vysohlid-9fqwGqGLUxc-unsplash-smaller.jpg'
 import queenstown from './omer-faruk-bekdemir-5BuxuWIJF1Q-unsplash-smaller.jpg'
@@ -25,9 +27,19 @@ export const imgHookerValleyTrack = {
   src: hookerValleyTrack,
 }
 
+export const imgKeaSmall = {
+  alt: 'Kea (alpine parrot) in Arthur\'s Pass, New Zealand by Pablo Heimplatz',
+  src: keaSmall,
+}
+
 export const imgKea = {
   alt: 'Kea (alpine parrot) in Arthur\'s Pass, New Zealand by Pablo Heimplatz',
   src: kea,
+}
+
+export const imgKeaLarge = {
+  alt: 'Kea (alpine parrot) in Arthur\'s Pass, New Zealand by Pablo Heimplatz',
+  src: keaLarge,
 }
 
 export const imgNzBeach = {
