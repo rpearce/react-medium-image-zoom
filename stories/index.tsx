@@ -144,17 +144,21 @@ Picture.argTypes = defaultArgTypes
 export const Figure = props => (
   <div>
     <h1>{'Zoom an <img /> in a <figure> element'}</h1>
-    <figure>
-      <Zoom {...props}>
+    <Zoom {...props}>
+      <figure>
         <img
           alt={imgHobbiton.alt}
           src={imgHobbiton.src}
           style={{ height: '100%', maxWidth: '100%' }}
           width="500"
         />
-      </Zoom>
-      <figcaption>Hobbiton</figcaption>
-    </figure>
+        <figcaption>
+          <a href="https://www.newzealand.com/in/plan/business/hobbiton-movie-set-tours/">
+            Hobbiton
+          </a>
+        </figcaption>
+      </figure>
+    </Zoom>
   </div>
 )
 

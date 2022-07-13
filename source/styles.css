@@ -17,6 +17,7 @@
   cursor: pointer;
   height: 40px;
   margin: 0;
+  outline-offset: 2px;
   padding: 9px;
   pointer-events: none;
   touch-action: manipulation;
