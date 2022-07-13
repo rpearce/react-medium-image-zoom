@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import React, { useState } from 'react'
 import Base, { BaseProps } from './Base'
 
 // =============================================================================
@@ -13,5 +13,5 @@ function Uncontrolled (props: UncontrolledProps) {
 }
 
 export default typeof window !== 'undefined'
-  ? memo(Uncontrolled)
+  ? Uncontrolled
   : (props: UncontrolledProps) => <>{props.children}</>

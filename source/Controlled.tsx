@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React from 'react'
 import Base, { BaseProps } from './Base'
 
 // =============================================================================
@@ -6,5 +6,5 @@ import Base, { BaseProps } from './Base'
 export type ControlledProps = BaseProps
 
 export default typeof window !== 'undefined'
-  ? memo(Base)
+  ? Base
   : (props: ControlledProps) => <>{props.children}</>
