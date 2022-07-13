@@ -62,7 +62,7 @@ export default function Base ({
   // ===========================================================================
 
   const findImgEl = useCallback(() => {
-    return refContent.current?.querySelector?.('img, [role="img"], [data-zoom]')
+    return refContent.current?.querySelector?.('img, svg, [role="img"], [data-zoom]')
   }, [])
 
   const imgEl = useDOMQueryObserver(findImgEl)
