@@ -58,7 +58,6 @@ export const Image = props => (
       <img
         alt={imgThatWanakaTree.alt}
         src={imgThatWanakaTree.src}
-        style={{ height: '100%', maxWidth: '100%' }}
         width="400"
       />
     </Zoom>
@@ -68,7 +67,6 @@ export const Image = props => (
       <img
         alt={imgTeAraiPoint.alt}
         src={imgTeAraiPoint.src}
-        style={{ height: '100%', maxWidth: '100%' }}
         width="75"
       />
     </Zoom>
@@ -77,7 +75,6 @@ export const Image = props => (
       <img
         alt={imgNzMap.alt}
         src={imgNzMap.src}
-        style={{ height: '100%', maxWidth: '100%' }}
         width="150"
       />
     </Zoom>
@@ -97,7 +94,6 @@ export const Image = props => (
       <img
         alt={imgKeaSmall.alt}
         src={imgKeaSmall.src}
-        style={{ height: '100%', maxWidth: '100%' }}
         width="150"
       />
     </Zoom>
@@ -110,7 +106,6 @@ export const Image = props => (
       <img
         alt={imgKeaSmall.alt}
         src={imgKeaSmall.src}
-        style={{ height: '100%', maxWidth: '100%' }}
         width="150"
       />
     </Zoom>
@@ -130,7 +125,6 @@ export const Picture = props => (
         <img
           alt={imgNzBeach.alt}
           src={imgNzBeach.src}
-          style={{ height: '100%', maxWidth: '100%' }}
           width="500"
         />
       </picture>
@@ -149,7 +143,6 @@ export const Figure = props => (
         <img
           alt={imgHobbiton.alt}
           src={imgHobbiton.src}
-          style={{ height: '100%', maxWidth: '100%' }}
           width="500"
         />
         <figcaption>
@@ -505,7 +498,6 @@ export const SpecificKeys = props => {
         <img
           alt={imgThatWanakaTree.alt}
           src={imgThatWanakaTree.src}
-          style={{ height: '100%', maxWidth: '100%' }}
           width="500"
         />
       </ControlledZoom>
@@ -548,7 +540,6 @@ export const ZoomOnLoad = props => {
           alt={imgThatWanakaTree.alt}
           onLoad={handleImgLoad}
           src={imgThatWanakaTree.src}
-          style={{ height: '100%', maxWidth: '100%' }}
           width="500"
         />
       </ControlledZoom>

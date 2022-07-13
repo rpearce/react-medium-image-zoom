@@ -30,3 +30,7 @@ figure {
 h2 {
   margin-top: 4rem;
 }
+img {
+  height: 100%;
+  max-width: 100%;
+}
