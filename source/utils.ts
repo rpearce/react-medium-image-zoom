@@ -128,7 +128,7 @@ export const getImgSrc: GetImgSrc = (imgEl) => {
   if (imgEl) {
     if (testImg(imgEl)) {
       return imgEl.currentSrc
-    } else {
+    } else if (testDiv(imgEl)) {
       const bgImg = window.getComputedStyle(imgEl).backgroundImage
 
       if (bgImg) {
@@ -486,8 +486,9 @@ export interface GetStyleModalImg {
   }: {
     hasZoomImg: boolean,
     imgSrc: string | undefined,
+    isSvg: boolean,
     isZoomed: boolean,
-    loadedImgEl: HTMLImageElement,
+    loadedImgEl: HTMLImageElement | undefined,
     offset: number,
     shouldRefresh: boolean,
     targetEl: SupportedImage,
@@ -497,13 +498,14 @@ export interface GetStyleModalImg {
 export const getStyleModalImg: GetStyleModalImg = ({
   hasZoomImg,
   imgSrc,
+  isSvg,
   isZoomed,
   loadedImgEl,
   offset,
   shouldRefresh,
   targetEl,
 }) => {
-  const hasScalableSrc = hasZoomImg || !!(imgSrc && SRC_SVG_REGEX.test(imgSrc))
+  const hasScalableSrc = isSvg || hasZoomImg || !!(imgSrc && SRC_SVG_REGEX.test(imgSrc))
   const imgRect = targetEl.getBoundingClientRect()
   const targetElComputedStyle = window.getComputedStyle(targetEl)
 
@@ -514,11 +516,11 @@ export const getStyleModalImg: GetStyleModalImg = ({
     containerWidth: imgRect.width,
     hasScalableSrc,
     offset,
-    targetHeight: loadedImgEl?.naturalHeight,
-    targetWidth: loadedImgEl?.naturalWidth,
+    targetHeight: loadedImgEl?.naturalHeight ?? imgRect.height,
+    targetWidth: loadedImgEl?.naturalWidth ?? imgRect.width,
   })
 
-  const styleImgObjectFit = targetElComputedStyle.objectFit
+  const styleImgObjectFit = loadedImgEl && targetElComputedStyle.objectFit
     ? getImgObjectFitStyle({
       containerHeight: imgRect.height,
       containerLeft: imgRect.left,
@@ -533,7 +535,7 @@ export const getStyleModalImg: GetStyleModalImg = ({
     })
     : undefined
 
-  const styleDivImg = testDiv(targetEl)
+  const styleDivImg = loadedImgEl && testDiv(targetEl)
     ? getDivImgStyle({
       backgroundPosition: targetElComputedStyle.backgroundPosition,
       backgroundSize: targetElComputedStyle.backgroundSize,

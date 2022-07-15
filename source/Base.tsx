@@ -11,8 +11,17 @@ import React, {
 } from 'react'
 
 import { IEnlarge, ICompress } from './icons'
-import { getImgAlt, getImgSrc, getStyleGhost, getStyleModalImg, testImg, testSvg } from './utils'
 import { usePrevious, useDOMQueryObserver } from './hooks'
+
+import {
+  getImgAlt,
+  getImgSrc,
+  getScaleToWindow,
+  getStyleGhost,
+  getStyleModalImg,
+  testImg,
+  testSvg,
+} from './utils'
 
 // =============================================================================
 
@@ -88,19 +97,18 @@ export default function Base ({
   const styleGhost = getStyleGhost(imgEl)
 
   const styleModalImg = useMemo(() => {
-    if (!imgEl || !loadedImgEl || isSvg) {
-      return {}
-    }
-
-    return getStyleModalImg({
-      hasZoomImg,
-      imgSrc,
-      isZoomed: isZoomed && (modalState === ModalState.LOADING || modalState === ModalState.LOADED),
-      loadedImgEl,
-      offset: zoomMargin,
-      shouldRefresh: forceUpdateVal > 0,
-      targetEl: imgEl,
-    })
+    return imgEl && (loadedImgEl || isSvg)
+      ? getStyleModalImg({
+        hasZoomImg,
+        imgSrc,
+        isSvg,
+        isZoomed: isZoomed && (modalState === ModalState.LOADING || modalState === ModalState.LOADED),
+        loadedImgEl,
+        offset: zoomMargin,
+        shouldRefresh: forceUpdateVal > 0,
+        targetEl: imgEl,
+      })
+      : {}
   }, [
     forceUpdateVal, // Simply needed to break the memo cache on scroll
     hasZoomImg,
@@ -115,9 +123,10 @@ export default function Base ({
 
   // ===========================================================================
 
-  const dataOverlayState = modalState === ModalState.UNLOADED || modalState === ModalState.UNLOADING
-    ? 'hidden'
-    : 'visible'
+  const dataOverlayState =
+    modalState === ModalState.UNLOADED || modalState === ModalState.UNLOADING
+      ? 'hidden'
+      : 'visible'
 
   // ===========================================================================
 
@@ -232,6 +241,21 @@ export default function Base ({
     }
   }, [imgSrc, loadedImgEl])
 
+  // Hackily deal with SVGs because of all of their unknowns.
+  useEffect(() => {
+    if (isSvg && imgEl) {
+      const tmp = document.createElement('div')
+      tmp.innerHTML = imgEl.outerHTML
+
+      const svg = tmp.firstChild as SVGSVGElement
+      svg.style.width = `${styleModalImg.width}px`
+      svg.style.height = `${styleModalImg.height}px`
+
+      refModalImg.current?.firstChild?.remove()
+      refModalImg.current?.appendChild(svg)
+    }
+  }, [imgEl, isSvg, styleModalImg.height, styleModalImg.width])
+
   // ===========================================================================
 
   return (
@@ -261,19 +285,30 @@ export default function Base ({
       >
         <div data-rmiz-modal-overlay={dataOverlayState} />
         <div data-rmiz-modal-content>
-          <img
-            alt={imgAlt}
-            sizes={imgSizes}
-            src={imgSrc}
-            srcSet={imgSrcSet}
-            {...isZoomImgLoaded && modalState === ModalState.LOADED ? zoomImg : {}}
+          {isImg
+            ? <img
+              alt={imgAlt}
+              sizes={imgSizes}
+              src={imgSrc}
+              srcSet={imgSrcSet}
+              {...isZoomImgLoaded && modalState === ModalState.LOADED ? zoomImg : {}}
+              data-rmiz-modal-img
+              height={styleModalImg.height}
+              id={idModalImg}
+              ref={refModalImg}
+              style={styleModalImg}
+              width={styleModalImg.width}
+            />
+            : undefined
+          }
+          {isSvg
+            ? <div
             data-rmiz-modal-img
-            height={styleModalImg.height}
-            id={idModalImg}
             ref={refModalImg}
             style={styleModalImg}
-            width={styleModalImg.width}
-          />
+            />
+            : undefined
+          }
           <button
             aria-label={a11yNameButtonUnzoom}
             data-rmiz-btn-unzoom
