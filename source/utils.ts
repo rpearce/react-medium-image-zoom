@@ -17,11 +17,7 @@ export const testSvg = (el: unknown): el is SVGElement => testElType('SVG', el)
 // =============================================================================
 
 export interface GetScaleToWindow {
-  ({
-    width,
-    height,
-    offset,
-  }:{
+  (data: {
     width: number,
     height: number,
     offset: number
@@ -38,13 +34,7 @@ export const getScaleToWindow: GetScaleToWindow = ({ height, offset, width }) =>
 // =============================================================================
 
 export interface GetScaleToWindowMax {
-  ({
-    containerHeight,
-    containerWidth,
-    offset,
-    targetHeight,
-    targetWidth,
-  }: {
+  (data: {
     containerHeight: number,
     containerWidth: number,
     offset: number,
@@ -76,14 +66,7 @@ export const getScaleToWindowMax: GetScaleToWindowMax = ({
 // =============================================================================
 
 export interface GetScale {
-  ({
-    containerHeight,
-    containerWidth,
-    hasScalableSrc,
-    offset,
-    targetHeight,
-    targetWidth,
-  }: {
+  (data: {
     containerHeight: number,
     containerWidth: number,
     hasScalableSrc: boolean,
@@ -157,16 +140,7 @@ export const getImgAlt: GetImgAlt = (imgEl) => {
 // =============================================================================
 
 export interface GetImgRegularStyle {
-  ({
-    containerHeight,
-    containerLeft,
-    containerTop,
-    containerWidth,
-    hasScalableSrc,
-    offset,
-    targetHeight,
-    targetWidth,
-  }: {
+  (data: {
     containerHeight: number,
     containerLeft: number,
     containerTop: number,
@@ -209,10 +183,7 @@ export const getImgRegularStyle: GetImgRegularStyle = ({
 // =============================================================================
 
 export interface ParsePosition {
-  ({
-    position,
-    relativeNum,
-  }: {
+  (data: {
     position: string,
     relativeNum: number
   }): number
@@ -229,18 +200,7 @@ export const parsePosition: ParsePosition = ({ position, relativeNum }) => {
 // =============================================================================
 
 export interface GetImgObjectFitStyle {
-  ({
-    containerHeight,
-    containerLeft,
-    containerTop,
-    containerWidth,
-    hasScalableSrc,
-    objectFit,
-    objectPosition,
-    offset,
-    targetHeight,
-    targetWidth,
-  }:{
+  (data: {
     containerHeight: number,
     containerLeft: number,
     containerTop: number,
@@ -350,18 +310,7 @@ export const getImgObjectFitStyle: GetImgObjectFitStyle = ({
 // =============================================================================
 
 export interface GetDivImgStyle {
-  ({
-    backgroundPosition,
-    backgroundSize,
-    containerHeight,
-    containerLeft,
-    containerTop,
-    containerWidth,
-    hasScalableSrc,
-    offset,
-    targetHeight,
-    targetWidth,
-  }: {
+  (data: {
     backgroundPosition: string,
     backgroundSize: string,
     containerHeight: number,
@@ -475,15 +424,7 @@ export const getDivImgStyle: GetDivImgStyle = ({
 const SRC_SVG_REGEX = /\.svg$/i
 
 export interface GetStyleModalImg {
-  ({
-    hasZoomImg,
-    imgSrc,
-    isZoomed,
-    loadedImgEl,
-    offset,
-    shouldRefresh,
-    targetEl,
-  }: {
+  (data: {
     hasZoomImg: boolean,
     imgSrc: string | undefined,
     isSvg: boolean,

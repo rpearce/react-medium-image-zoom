@@ -157,7 +157,7 @@ export default function Base ({
   }, [])
 
   const loadZoomImg = useCallback(() => {
-    if (!isZoomImgLoaded && zoomImgSrc) {
+    if (zoomImgSrc) {
       const img = new Image()
       img.src = zoomImgSrc
       img.sizes = zoomImgSizes || ''
@@ -167,12 +167,7 @@ export default function Base ({
         setIsZoomImgLoaded(true)
       })
     }
-  }, [
-    isZoomImgLoaded,
-    zoomImgSizes,
-    zoomImgSrc,
-    zoomImgSrcSet,
-  ])
+  }, [zoomImgSizes, zoomImgSrc, zoomImgSrcSet])
 
   // Perform zoom actions
   const zoom = useCallback(() => {
@@ -234,14 +229,14 @@ export default function Base ({
 
   // Load the image and store it
   useEffect(() => {
-    if (imgSrc && !loadedImgEl) {
+    if (imgSrc) {
       const img = new Image()
       img.src = imgSrc
       img.decode().then(() => {
         setLoadedImgEl(img)
       })
     }
-  }, [imgSrc, loadedImgEl])
+  }, [imgSrc])
 
   // Hackily deal with SVGs because of all of their unknowns.
   useEffect(() => {
