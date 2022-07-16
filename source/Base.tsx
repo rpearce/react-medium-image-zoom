@@ -90,6 +90,10 @@ export default function Base ({
   const zoomImgSrcSet = zoomImg?.srcSet
   const hasZoomImg = !!zoomImgSrc
 
+  const isModalZoomed = isZoomed && (
+    modalState === ModalState.LOADING || modalState === ModalState.LOADED
+  )
+
   // ===========================================================================
 
   const styleContent: CSSProperties = {
@@ -104,7 +108,7 @@ export default function Base ({
         hasZoomImg,
         imgSrc,
         isSvg,
-        isZoomed: isZoomed && (modalState === ModalState.LOADING || modalState === ModalState.LOADED),
+        isZoomed: isModalZoomed,
         loadedImgEl,
         offset: zoomMargin,
         shouldRefresh: forceUpdateVal > 0,
@@ -117,9 +121,8 @@ export default function Base ({
     imgEl,
     imgSrc,
     isSvg,
-    isZoomed,
+    isModalZoomed,
     loadedImgEl,
-    modalState,
     zoomMargin,
   ])
 
@@ -201,6 +204,32 @@ export default function Base ({
 
   // ===========================================================================
 
+  // Ensure we always have the latest img src value loaded
+  useEffect(() => {
+    if (imgSrc) {
+      const handleImgLoad = () => {
+        const img = new Image()
+        img.src = imgSrc
+
+        if (isImg) {
+          img.sizes = imgSizes || ''
+          img.srcset = imgSrcSet || ''
+        }
+
+        img.decode().then(() => {
+          setLoadedImgEl(img)
+        })
+      }
+
+      handleImgLoad()
+      imgEl?.addEventListener('load', handleImgLoad)
+
+      return () => {
+        imgEl?.removeEventListener('load', handleImgLoad)
+      }
+    }
+  }, [imgEl, imgSizes, imgSrc, imgSrcSet, isImg])
+
   // Show modal when zoomed; hide modal when unzoomed
   useEffect(() => {
     if (!prevIsZoomed && isZoomed) {
@@ -226,17 +255,6 @@ export default function Base ({
       window.removeEventListener('scroll', handleScroll)
     }
   }, [handleResize, handleScroll])
-
-  // Load the image and store it
-  useEffect(() => {
-    if (imgSrc) {
-      const img = new Image()
-      img.src = imgSrc
-      img.decode().then(() => {
-        setLoadedImgEl(img)
-      })
-    }
-  }, [imgSrc])
 
   // Hackily deal with SVGs because of all of their unknowns.
   useEffect(() => {
