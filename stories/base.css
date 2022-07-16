@@ -31,5 +31,6 @@ h2 {
   margin-top: 4rem;
 }
 img {
+  display: block;
   max-width: 100%;
 }
