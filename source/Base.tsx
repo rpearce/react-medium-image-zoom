@@ -66,12 +66,12 @@ export default function Base ({
   const refModalImg = useRef<HTMLImageElement>(null)
   const refWrap = useRef<HTMLDivElement>(null)
 
-  const prevIsZoomed = usePrevious(isZoomed)
-
   // ===========================================================================
 
   const findImgEl = useCallback(() => {
-    return refContent.current?.querySelector?.('img, svg, [role="img"], [data-zoom]')
+    return refContent.current?.querySelector?.(
+      'img, svg, [role="img"], [data-zoom]'
+    )
   }, [])
 
   const imgEl = useDOMQueryObserver(findImgEl)
@@ -90,9 +90,13 @@ export default function Base ({
   const zoomImgSrcSet = zoomImg?.srcSet
   const hasZoomImg = !!zoomImgSrc
 
-  const isModalZoomed = isZoomed && (
-    modalState === ModalState.LOADING || modalState === ModalState.LOADED
-  )
+  const isModalActive = modalState === ModalState.LOADING ||
+    modalState === ModalState.LOADED
+
+  // ===========================================================================
+
+  const prevIsZoomed = usePrevious(isZoomed)
+  const prevZoomImgSrc = usePrevious(zoomImgSrc)
 
   // ===========================================================================
 
@@ -108,7 +112,7 @@ export default function Base ({
         hasZoomImg,
         imgSrc,
         isSvg,
-        isZoomed: isModalZoomed,
+        isZoomed: isZoomed && isModalActive,
         loadedImgEl,
         offset: zoomMargin,
         shouldRefresh: forceUpdateVal > 0,
@@ -120,8 +124,9 @@ export default function Base ({
     hasZoomImg,
     imgEl,
     imgSrc,
+    isModalActive,
     isSvg,
-    isModalZoomed,
+    isZoomed,
     loadedImgEl,
     zoomMargin,
   ])
@@ -160,7 +165,7 @@ export default function Base ({
   }, [])
 
   const loadZoomImg = useCallback(() => {
-    if (zoomImgSrc) {
+    if (zoomImgSrc && (!isZoomImgLoaded || prevZoomImgSrc !== zoomImgSrc)) {
       const img = new Image()
       img.src = zoomImgSrc
       img.sizes = zoomImgSizes || ''
@@ -170,7 +175,7 @@ export default function Base ({
         setIsZoomImgLoaded(true)
       })
     }
-  }, [zoomImgSizes, zoomImgSrc, zoomImgSrcSet])
+  }, [isZoomImgLoaded, prevZoomImgSrc, zoomImgSizes, zoomImgSrc, zoomImgSrcSet])
 
   // Perform zoom actions
   const zoom = useCallback(() => {
@@ -206,29 +211,27 @@ export default function Base ({
 
   // Ensure we always have the latest img src value loaded
   useEffect(() => {
-    if (imgSrc) {
-      const handleImgLoad = () => {
-        const img = new Image()
-        img.src = imgSrc
+    const handleImgLoad = () => {
+      const img = new Image()
+      img.src = getImgSrc(imgEl) ?? ''
 
-        if (isImg) {
-          img.sizes = imgSizes || ''
-          img.srcset = imgSrcSet || ''
-        }
-
-        img.decode().then(() => {
-          setLoadedImgEl(img)
-        })
+      if (testImg(imgEl)) {
+        img.sizes = imgEl.sizes
+        img.srcset = imgEl.srcset
       }
 
-      handleImgLoad()
-      imgEl?.addEventListener('load', handleImgLoad)
-
-      return () => {
-        imgEl?.removeEventListener('load', handleImgLoad)
-      }
+      img.decode().then(() => {
+        setLoadedImgEl(img)
+      })
     }
-  }, [imgEl, imgSizes, imgSrc, imgSrcSet, isImg])
+
+    handleImgLoad()
+    imgEl?.addEventListener('load', handleImgLoad)
+
+    return () => {
+      imgEl?.removeEventListener('load', handleImgLoad)
+    }
+  }, [imgEl])
 
   // Show modal when zoomed; hide modal when unzoomed
   useEffect(() => {
