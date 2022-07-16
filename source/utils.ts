@@ -10,7 +10,7 @@ interface TestElType {
 const testElType: TestElType = (type, el) =>
   type === (el as Element)?.tagName?.toUpperCase?.()
 
-export const testDiv = (el: unknown): el is HTMLDivElement => testElType('DIV', el)
+export const testDiv = (el: unknown): el is HTMLDivElement | HTMLSpanElement => testElType('DIV', el) || testElType('SPAN', el)
 export const testImg = (el: unknown): el is HTMLImageElement => testElType('IMG', el)
 export const testSvg = (el: unknown): el is SVGElement => testElType('SVG', el)
 

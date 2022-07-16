@@ -16,9 +16,9 @@ import { usePrevious, useDOMQueryObserver } from './hooks'
 import {
   getImgAlt,
   getImgSrc,
-  getScaleToWindow,
   getStyleGhost,
   getStyleModalImg,
+  testDiv,
   testImg,
   testSvg,
 } from './utils'
@@ -75,6 +75,8 @@ export default function Base ({
   }, [])
 
   const imgEl = useDOMQueryObserver(findImgEl)
+
+  const isDiv = testDiv(imgEl)
   const isImg = testImg(imgEl)
   const isSvg = testSvg(imgEl)
 
@@ -285,7 +287,7 @@ export default function Base ({
       >
         <div data-rmiz-modal-overlay={dataOverlayState} />
         <div data-rmiz-modal-content>
-          {isImg
+          {isImg || isDiv
             ? <img
               alt={imgAlt}
               sizes={imgSizes}
