@@ -104,7 +104,7 @@ export const getScale: GetScale = ({
 const URL_REGEX = /url(?:\(['"]?)(.*?)(?:['"]?\))/
 
 export interface GetImgSrc {
-  (imgEl: SupportedImage | undefined): string | undefined
+  (imgEl: SupportedImage | null): string | undefined
 }
 
 export const getImgSrc: GetImgSrc = (imgEl) => {
@@ -124,7 +124,7 @@ export const getImgSrc: GetImgSrc = (imgEl) => {
 // =============================================================================
 
 export interface GetImgAlt {
-  (imgEl: SupportedImage | undefined): string | undefined
+  (imgEl: SupportedImage | null): string | undefined
 }
 
 export const getImgAlt: GetImgAlt = (imgEl) => {
@@ -522,7 +522,7 @@ export const getStyleModalImg: GetStyleModalImg = ({
 // =============================================================================
 
 export interface GetStyleGhost {
-  (imgEl: SupportedImage | undefined): CSSProperties
+  (imgEl: SupportedImage | null): CSSProperties
 }
 
 export const getStyleGhost: GetStyleGhost = (imgEl) => {

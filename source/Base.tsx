@@ -1,17 +1,14 @@
 import React, {
+  Component,
+  createRef,
   CSSProperties,
   ImgHTMLAttributes,
   KeyboardEvent,
   ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
 } from 'react'
 
+import { SupportedImage } from './types'
 import { IEnlarge, ICompress } from './icons'
-import { usePrevious, useDOMQueryObserver } from './hooks'
 
 import {
   getImgAlt,
@@ -40,74 +37,111 @@ export interface BaseProps {
   children: ReactNode
   isZoomed: boolean
   onZoomChange?: (value: boolean) => void
-  scrollableEl?: HTMLElement | Window
+  scrollableEl?: Window | HTMLElement
   zoomImg?: ImgHTMLAttributes<HTMLImageElement>
   zoomMargin?: number
 }
 
-export default function Base ({
-  a11yNameButtonUnzoom = 'Minimize image',
-  a11yNameButtonZoom = 'Expand image',
-  children,
-  isZoomed,
-  onZoomChange,
-  scrollableEl = window, // @TODO
-  zoomImg,
-  zoomMargin = 0,
-}: BaseProps) {
-  const idModalImg = useState(() => `rmiz-modal-img-${Math.random().toString(16).slice(-4)}`)[0]
-  const [loadedImgEl, setLoadedImgEl] = useState<HTMLImageElement>()
-  const [modalState, setModalState] = useState<ModalState>(() => ModalState.UNLOADED)
-  const [isZoomImgLoaded, setIsZoomImgLoaded] = useState(() => false)
-  const [forceUpdateVal, forceUpdate] = useState(() => 0)
+export interface BaseDefaultProps {
+  a11yNameButtonUnzoom: string
+  a11yNameButtonZoom: string
+  scrollableEl: Window | HTMLElement
+  zoomMargin: number
+}
 
-  const refContent = useRef<HTMLDivElement>(null)
-  const refDialog = useRef<HTMLDialogElement>(null)
-  const refModalImg = useRef<HTMLImageElement>(null)
-  const refWrap = useRef<HTMLDivElement>(null)
+export type BasePropsWithDefaults = BaseDefaultProps & BaseProps
 
-  // ===========================================================================
+interface BaseState {
+  shouldRefresh: boolean
+  isZoomImgLoaded: boolean
+  loadedImgEl: HTMLImageElement | undefined
+  modalState: ModalState
+}
 
-  const findImgEl = useCallback(() => {
-    return refContent.current?.querySelector?.(
-      'img, svg, [role="img"], [data-zoom]'
-    )
-  }, [])
-
-  const imgEl = useDOMQueryObserver(findImgEl)
-
-  const isDiv = testDiv(imgEl)
-  const isImg = testImg(imgEl)
-  const isSvg = testSvg(imgEl)
-
-  const imgSizes = isImg ? imgEl.sizes : undefined
-  const imgSrcSet = isImg ? imgEl.srcset : undefined
-  const imgAlt = getImgAlt(imgEl)
-  const imgSrc = getImgSrc(imgEl)
-
-  const zoomImgSizes = zoomImg?.sizes
-  const zoomImgSrc = zoomImg?.src
-  const zoomImgSrcSet = zoomImg?.srcSet
-  const hasZoomImg = !!zoomImgSrc
-
-  const isModalActive = modalState === ModalState.LOADING ||
-    modalState === ModalState.LOADED
-
-  // ===========================================================================
-
-  const prevIsZoomed = usePrevious(isZoomed)
-  const prevZoomImgSrc = usePrevious(zoomImgSrc)
-
-  // ===========================================================================
-
-  const styleContent: CSSProperties = {
-    visibility: modalState === ModalState.UNLOADED ? 'visible' : 'hidden',
+export default class Base extends Component<BasePropsWithDefaults, BaseState> {
+  static defaultProps: BaseDefaultProps = {
+    a11yNameButtonUnzoom: 'Minimize image',
+    a11yNameButtonZoom: 'Expand image',
+    scrollableEl: window,
+    zoomMargin: 0,
   }
 
-  const styleGhost = getStyleGhost(imgEl)
+  state: BaseState = {
+    shouldRefresh: false,
+    isZoomImgLoaded: false,
+    loadedImgEl: undefined,
+    modalState: ModalState.UNLOADED,
+  }
 
-  const styleModalImg = useMemo(() => {
-    return imgEl && (loadedImgEl || isSvg)
+  private refContent = createRef<HTMLDivElement>()
+  private refDialog = createRef<HTMLDialogElement>()
+  private refModalImg = createRef<HTMLImageElement>()
+  private refWrap = createRef<HTMLDivElement>()
+
+  private imgEl: SupportedImage | null = null
+  private imgElObserver: ResizeObserver | undefined
+  private styleModalImg: CSSProperties = {}
+  private idModalImg = `rmiz-modal-img-${Math.random().toString(16).slice(-4)}`
+
+  render() {
+    const {
+      handleClose,
+      handleDialogKeyDown,
+      handleOpen,
+      idModalImg,
+      imgEl,
+      props: {
+        a11yNameButtonUnzoom,
+        a11yNameButtonZoom,
+        children,
+        isZoomed,
+        zoomImg,
+        zoomMargin,
+      },
+      refContent,
+      refDialog,
+      refModalImg,
+      refWrap,
+      state: {
+        shouldRefresh,
+        isZoomImgLoaded,
+        loadedImgEl,
+        modalState,
+      },
+    } = this
+
+    // =========================================================================
+
+    const isDiv = testDiv(imgEl)
+    const isImg = testImg(imgEl)
+    const isSvg = testSvg(imgEl)
+
+    const imgAlt = getImgAlt(imgEl)
+    const imgSrc = getImgSrc(imgEl)
+    const imgSizes = isImg ? imgEl.sizes : undefined
+    const imgSrcSet = isImg ? imgEl.srcset : undefined
+
+    const hasZoomImg = !!zoomImg?.src
+
+    const isModalActive = modalState === ModalState.LOADING ||
+      modalState === ModalState.LOADED
+
+    const dataOverlayState =
+      modalState === ModalState.UNLOADED || modalState === ModalState.UNLOADING
+        ? 'hidden'
+        : 'visible'
+
+    // =========================================================================
+
+    const styleContent: CSSProperties = {
+      visibility: modalState === ModalState.UNLOADED ? 'visible' : 'hidden',
+    }
+
+    const styleGhost = getStyleGhost(imgEl)
+
+    // @TODO: Better way to share this with UNSAFE_handleSvg?
+    //        What ways can we optimize?
+    this.styleModalImg = imgEl && (loadedImgEl || isSvg)
       ? getStyleModalImg({
         hasZoomImg,
         imgSrc,
@@ -115,228 +149,286 @@ export default function Base ({
         isZoomed: isZoomed && isModalActive,
         loadedImgEl,
         offset: zoomMargin,
-        shouldRefresh: forceUpdateVal > 0,
+        shouldRefresh,
         targetEl: imgEl,
       })
       : {}
-  }, [
-    forceUpdateVal, // Simply needed to break the memo cache on scroll
-    hasZoomImg,
-    imgEl,
-    imgSrc,
-    isModalActive,
-    isSvg,
-    isZoomed,
-    loadedImgEl,
-    zoomMargin,
-  ])
+
+    // =========================================================================
+
+    return (
+      <div data-rmiz ref={refWrap}>
+        <div data-rmiz-content ref={refContent} style={styleContent}>
+          {children}
+        </div>
+        <div data-rmiz-ghost style={styleGhost}>
+          <button
+            aria-label={`${a11yNameButtonZoom}: ${imgAlt}`}
+            data-rmiz-btn-zoom
+            onClick={handleOpen}
+            type="button"
+          >
+            <IEnlarge /* @TODO: Allow for them to pass their own icons? */ />
+          </button>
+        </div>
+        <dialog /* eslint-disable-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
+          aria-labelledby={idModalImg}
+          aria-modal="true"
+          data-rmiz-modal
+          ref={refDialog}
+          onClick={handleClose}
+          onClose={handleClose}
+          onKeyDown={handleDialogKeyDown}
+          role="dialog"
+        >
+          <div data-rmiz-modal-overlay={dataOverlayState} />
+          <div data-rmiz-modal-content>
+            {isImg || isDiv
+              ? <img
+                alt={imgAlt}
+                sizes={imgSizes}
+                src={imgSrc}
+                srcSet={imgSrcSet}
+                {...isZoomImgLoaded && modalState === ModalState.LOADED ? zoomImg : {}}
+                data-rmiz-modal-img
+                height={this.styleModalImg.height}
+                id={idModalImg}
+                ref={refModalImg}
+                style={this.styleModalImg}
+                width={this.styleModalImg.width}
+              />
+              : undefined
+            }
+            {isSvg
+              ? <div
+              data-rmiz-modal-img
+              ref={refModalImg}
+              style={this.styleModalImg}
+              />
+              : undefined
+            }
+            <button
+              aria-label={a11yNameButtonUnzoom}
+              data-rmiz-btn-unzoom
+              onClick={handleClose}
+              type="button"
+            >
+              <ICompress />
+            </button>
+          </div>
+        </dialog>
+      </div>
+    )
+  }
 
   // ===========================================================================
 
-  const dataOverlayState =
-    modalState === ModalState.UNLOADED || modalState === ModalState.UNLOADING
-      ? 'hidden'
-      : 'visible'
+  componentDidMount() {
+    this.setAndTrackImg()
+    this.handleImgLoad()
+    this.UNSAFE_handleSvg()
+    this.imgEl?.addEventListener?.('load', this.handleImgLoad)
+    this.imgEl?.addEventListener?.('click', this.handleOpen)
+  }
+
+  componentWillUnmount() {
+    this.imgElObserver?.disconnect()
+    this.imgEl?.removeEventListener?.('load', this.handleImgLoad)
+    this.imgEl?.removeEventListener?.('click', this.handleOpen)
+    window.removeEventListener('resize', this.handleResize)
+    window.removeEventListener('scroll', this.handleScroll)
+  }
 
   // ===========================================================================
 
-  // Report zoom state change
-  const handleOpen = useCallback(() => { onZoomChange?.(true) }, [onZoomChange])
-  const handleClose = useCallback(() => { onZoomChange?.(false) }, [onZoomChange])
+  componentDidUpdate(prevProps: BasePropsWithDefaults) {
+    this.UNSAFE_handleSvg()
+    this.handleIfZoomChanged(prevProps.isZoomed)
+  }
 
+  // ===========================================================================
+  // Find and set the image we're working with
+
+  setAndTrackImg = () => {
+    this.imgEl = this.refContent.current?.querySelector?.(
+      'img, svg, [role="img"], [data-zoom]'
+    ) as SupportedImage | null
+
+    if (this.imgEl) {
+      this.imgElObserver = new ResizeObserver(entries => {
+        const entry = entries[0]
+
+        if (entry && entry.target) {
+          this.imgEl = entry.target as SupportedImage
+          this.setState({}) // Force a re-render
+        }
+      })
+
+      this.imgElObserver.observe(this.imgEl)
+    }
+  }
+
+  // ===========================================================================
+  // Show modal when zoomed; hide modal when unzoomed
+
+  handleIfZoomChanged = (prevIsZoomed: boolean) => {
+    const { isZoomed } = this.props
+
+    if (!prevIsZoomed && isZoomed) {
+      this.zoom()
+    } else if (prevIsZoomed && !isZoomed) {
+      this.unzoom()
+    }
+  }
+
+  // ===========================================================================
+  // Ensure we always have the latest img src value loaded
+
+  handleImgLoad = () => {
+    const { imgEl } = this
+
+    const img = new Image()
+    img.src = getImgSrc(imgEl) ?? ''
+
+    if (testImg(imgEl)) {
+      img.sizes = imgEl.sizes
+      img.srcset = imgEl.srcset
+    }
+
+    img.decode().then(() => {
+      this.setState({ loadedImgEl: img })
+    })
+  }
+
+  // ===========================================================================
+  // Report zoom state changes
+
+  handleOpen = () => {
+    this.props.onZoomChange?.(true)
+  }
+
+  handleClose = () => {
+    this.props.onZoomChange?.(false)
+  }
+
+  // ===========================================================================
   // Intercept default dialog.close() and use ours so we can animate
-  const handleDialogKeyDown = useCallback((e: KeyboardEvent<HTMLDialogElement>) => {
+
+  handleDialogKeyDown = (e: KeyboardEvent<HTMLDialogElement>) => {
     if (e.key === 'Escape' || e.keyCode === 27) {
       e.preventDefault()
       e.stopPropagation()
-      handleClose()
+      this.handleClose()
     }
-  }, [handleClose])
+  }
 
+  // ===========================================================================
   // Force re-renders on closing scroll
-  const handleScroll = useCallback(() => {
-    forceUpdate(n => n + 1)
-    handleClose()
-  }, [handleClose])
 
+  handleScroll = () => {
+    this.setState({ shouldRefresh: true })
+    this.handleClose()
+  }
+
+  // ===========================================================================
   // Force re-render on resize
-  const handleResize = useCallback(() => {
-    forceUpdate(n => n + 1)
-  }, [])
 
-  const loadZoomImg = useCallback(() => {
-    if (zoomImgSrc && (!isZoomImgLoaded || prevZoomImgSrc !== zoomImgSrc)) {
-      const img = new Image()
-      img.src = zoomImgSrc
-      img.sizes = zoomImgSizes || ''
-      img.srcset = zoomImgSrcSet || ''
+  handleResize = () => {
+    this.setState({ shouldRefresh: true })
+  }
 
-      img.decode().then(() => {
-        setIsZoomImgLoaded(true)
-      })
-    }
-  }, [isZoomImgLoaded, prevZoomImgSrc, zoomImgSizes, zoomImgSrc, zoomImgSrcSet])
-
+  // ===========================================================================
   // Perform zoom actions
-  const zoom = useCallback(() => {
+
+  zoom = () => {
+    const {
+      handleResize,
+      handleScroll,
+      loadZoomImg,
+      props: {
+        scrollableEl,
+      },
+      refDialog,
+      refModalImg,
+    } = this
+
     refDialog.current?.showModal?.()
-    setModalState(ModalState.LOADING)
+    this.setState({ modalState: ModalState.LOADING })
     loadZoomImg()
 
     refModalImg.current?.addEventListener?.('transitionend', () => {
       setTimeout(() => {
-        setModalState(ModalState.LOADED)
+        this.setState({ modalState: ModalState.LOADED })
         scrollableEl.addEventListener('scroll', handleScroll)
         window.addEventListener('resize', handleResize)
       }, 0)
     }, { once: true })
-  }, [handleScroll, handleResize, loadZoomImg, scrollableEl])
+  }
 
+  // ===========================================================================
   // Perform unzoom actions
-  const unzoom = useCallback(() => {
-    setModalState(ModalState.UNLOADING)
+
+  unzoom = () => {
+    const {
+      handleResize,
+      handleScroll,
+      refDialog,
+      refModalImg,
+      props: { scrollableEl },
+    } = this
+
+    this.setState({ modalState: ModalState.UNLOADING })
 
     refModalImg.current?.addEventListener?.('transitionend', () => {
       setTimeout(() => {
         window.removeEventListener('resize', handleResize)
         scrollableEl.removeEventListener('scroll', handleScroll)
-        setModalState(ModalState.UNLOADED)
-        forceUpdate(0)
+
+        this.setState({
+          shouldRefresh: false,
+          modalState: ModalState.UNLOADED,
+        })
+
         refDialog.current?.close?.()
       }, 0)
     }, { once: true })
-  }, [handleResize, handleScroll, scrollableEl])
+  }
 
   // ===========================================================================
+  // Load the zoomImg manually
 
-  // Ensure we always have the latest img src value loaded
-  useEffect(() => {
-    const handleImgLoad = () => {
+  loadZoomImg = () => {
+    const { props: { zoomImg } } = this
+    const zoomImgSrc = zoomImg?.src
+
+    if (zoomImgSrc) {
       const img = new Image()
-      img.src = getImgSrc(imgEl) ?? ''
-
-      if (testImg(imgEl)) {
-        img.sizes = imgEl.sizes
-        img.srcset = imgEl.srcset
-      }
+      img.src = zoomImgSrc
+      img.sizes = zoomImg?.sizes ?? ''
+      img.srcset = zoomImg?.srcSet ?? ''
 
       img.decode().then(() => {
-        setLoadedImgEl(img)
+        this.setState({ isZoomImgLoaded: true })
       })
     }
+  }
 
-    handleImgLoad()
-    imgEl?.addEventListener('load', handleImgLoad)
-
-    return () => {
-      imgEl?.removeEventListener('load', handleImgLoad)
-    }
-  }, [imgEl])
-
-  // Show modal when zoomed; hide modal when unzoomed
-  useEffect(() => {
-    if (!prevIsZoomed && isZoomed) {
-      zoom()
-    } else if (prevIsZoomed && !isZoomed) {
-      unzoom()
-    }
-  }, [isZoomed, prevIsZoomed, unzoom, zoom])
-
-  // Handle clicking the image
-  useEffect(() => {
-    imgEl?.addEventListener?.('click', handleOpen)
-
-    return () => {
-      imgEl?.removeEventListener?.('click', handleOpen)
-    }
-  }, [handleOpen, imgEl])
-
-  // Cleanup lingering handlers
-  useEffect(() => {
-    return () => {
-      window.removeEventListener('resize', handleResize)
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [handleResize, handleScroll])
-
+  // ===========================================================================
   // Hackily deal with SVGs because of all of their unknowns.
-  useEffect(() => {
-    if (isSvg && imgEl) {
+
+  UNSAFE_handleSvg = () => {
+    const { imgEl, refModalImg, styleModalImg } = this
+
+    if (testSvg(imgEl)) {
       const tmp = document.createElement('div')
       tmp.innerHTML = imgEl.outerHTML
 
       const svg = tmp.firstChild as SVGSVGElement
-      svg.style.width = `${styleModalImg.width}px`
-      svg.style.height = `${styleModalImg.height}px`
+      svg.style.width = `${styleModalImg.width ?? 0}px`
+      svg.style.height = `${styleModalImg.height ?? 0}px`
 
-      refModalImg.current?.firstChild?.remove()
-      refModalImg.current?.appendChild(svg)
+      refModalImg.current?.firstChild?.remove?.()
+      refModalImg.current?.appendChild?.(svg)
     }
-  }, [imgEl, isSvg, styleModalImg.height, styleModalImg.width])
-
-  // ===========================================================================
-
-  return (
-    <div data-rmiz ref={refWrap}>
-      <div data-rmiz-content ref={refContent} style={styleContent}>
-        {children}
-      </div>
-      <div data-rmiz-ghost style={styleGhost}>
-        <button
-          aria-label={`${a11yNameButtonZoom}: ${imgAlt}`}
-          data-rmiz-btn-zoom
-          onClick={handleOpen}
-          type="button"
-        >
-          <IEnlarge />
-        </button>
-      </div>
-      <dialog /* eslint-disable-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
-        aria-labelledby={idModalImg}
-        aria-modal="true"
-        data-rmiz-modal
-        ref={refDialog}
-        onClick={handleClose}
-        onClose={handleClose}
-        onKeyDown={handleDialogKeyDown}
-        role="dialog"
-      >
-        <div data-rmiz-modal-overlay={dataOverlayState} />
-        <div data-rmiz-modal-content>
-          {isImg || isDiv
-            ? <img
-              alt={imgAlt}
-              sizes={imgSizes}
-              src={imgSrc}
-              srcSet={imgSrcSet}
-              {...isZoomImgLoaded && modalState === ModalState.LOADED ? zoomImg : {}}
-              data-rmiz-modal-img
-              height={styleModalImg.height}
-              id={idModalImg}
-              ref={refModalImg}
-              style={styleModalImg}
-              width={styleModalImg.width}
-            />
-            : undefined
-          }
-          {isSvg
-            ? <div
-            data-rmiz-modal-img
-            ref={refModalImg}
-            style={styleModalImg}
-            />
-            : undefined
-          }
-          <button
-            aria-label={a11yNameButtonUnzoom}
-            data-rmiz-btn-unzoom
-            onClick={handleClose}
-            type="button"
-          >
-            <ICompress />
-          </button>
-        </div>
-      </dialog>
-    </div>
-  )
+  }
 }
