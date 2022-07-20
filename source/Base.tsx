@@ -258,7 +258,7 @@ export default class Base extends Component<BasePropsWithDefaults, BaseState> {
       this.imgElObserver = new ResizeObserver(entries => {
         const entry = entries[0]
 
-        if (entry && entry.target) {
+        if (entry?.target) {
           this.imgEl = entry.target as SupportedImage
           this.setState({}) // Force a re-render
         }
