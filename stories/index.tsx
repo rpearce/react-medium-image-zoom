@@ -189,6 +189,7 @@ export const ImageGallery = () => {
             <Zoom>
               <img
                 alt={img.alt}
+                loading="lazy"
                 src={img.src}
                 style={{ objectFit, objectPosition, width: '100%' }}
                 width="250"

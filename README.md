@@ -8,7 +8,8 @@ library for React.js.
 Supports:
 
 * `<img />`, including all [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit)
-  values, plus any [`object-position`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-position)
+  values, any [`object-position`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-position),
+  and [`loading="lazy"`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-loading)
 * `<div>` and `<span>` with any [`background-image`](https://developer.mozilla.org/en-US/docs/Web/CSS/background-image),
   [`background-size`](https://developer.mozilla.org/en-US/docs/Web/CSS/background-size),
   and [`background-position`](https://developer.mozilla.org/en-US/docs/Web/CSS/background-position)
