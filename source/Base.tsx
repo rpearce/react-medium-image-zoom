@@ -85,9 +85,9 @@ export default class Base extends Component<BasePropsWithDefaults, BaseState> {
 
   render() {
     const {
-      handleClose,
+      handleUnzoom,
       handleDialogKeyDown,
-      handleOpen,
+      handleZoom,
       idModalImg,
       imgEl,
       props: {
@@ -122,6 +122,10 @@ export default class Base extends Component<BasePropsWithDefaults, BaseState> {
     const imgSrcSet = isImg ? imgEl.srcset : undefined
 
     const hasZoomImg = !!zoomImg?.src
+
+    const labelBtnZoom = imgAlt
+      ? `${a11yNameButtonZoom}: ${imgAlt}`
+      : a11yNameButtonZoom
 
     const isModalActive = modalState === ModalState.LOADING ||
       modalState === ModalState.LOADED
@@ -163,9 +167,9 @@ export default class Base extends Component<BasePropsWithDefaults, BaseState> {
         </div>
         <div data-rmiz-ghost style={styleGhost}>
           <button
-            aria-label={`${a11yNameButtonZoom}: ${imgAlt}`}
+            aria-label={labelBtnZoom}
             data-rmiz-btn-zoom
-            onClick={handleOpen}
+            onClick={handleZoom}
             type="button"
           >
             <IEnlarge /* @TODO: Allow for them to pass their own icons? */ />
@@ -176,8 +180,8 @@ export default class Base extends Component<BasePropsWithDefaults, BaseState> {
           aria-modal="true"
           data-rmiz-modal
           ref={refDialog}
-          onClick={handleClose}
-          onClose={handleClose}
+          onClick={handleUnzoom}
+          onClose={handleUnzoom}
           onKeyDown={handleDialogKeyDown}
           role="dialog"
         >
@@ -210,7 +214,7 @@ export default class Base extends Component<BasePropsWithDefaults, BaseState> {
             <button
               aria-label={a11yNameButtonUnzoom}
               data-rmiz-btn-unzoom
-              onClick={handleClose}
+              onClick={handleUnzoom}
               type="button"
             >
               <ICompress />
@@ -228,13 +232,13 @@ export default class Base extends Component<BasePropsWithDefaults, BaseState> {
     this.handleImgLoad()
     this.UNSAFE_handleSvg()
     this.imgEl?.addEventListener?.('load', this.handleImgLoad)
-    this.imgEl?.addEventListener?.('click', this.handleOpen)
+    this.imgEl?.addEventListener?.('click', this.handleZoom)
   }
 
   componentWillUnmount() {
     this.imgElObserver?.disconnect()
     this.imgEl?.removeEventListener?.('load', this.handleImgLoad)
-    this.imgEl?.removeEventListener?.('click', this.handleOpen)
+    this.imgEl?.removeEventListener?.('click', this.handleZoom)
     window.removeEventListener('resize', this.handleResize)
     window.removeEventListener('scroll', this.handleScroll)
   }
@@ -303,11 +307,11 @@ export default class Base extends Component<BasePropsWithDefaults, BaseState> {
   // ===========================================================================
   // Report zoom state changes
 
-  handleOpen = () => {
+  handleZoom = () => {
     this.props.onZoomChange?.(true)
   }
 
-  handleClose = () => {
+  handleUnzoom = () => {
     this.props.onZoomChange?.(false)
   }
 
@@ -318,7 +322,7 @@ export default class Base extends Component<BasePropsWithDefaults, BaseState> {
     if (e.key === 'Escape' || e.keyCode === 27) {
       e.preventDefault()
       e.stopPropagation()
-      this.handleClose()
+      this.handleUnzoom()
     }
   }
 
@@ -327,7 +331,7 @@ export default class Base extends Component<BasePropsWithDefaults, BaseState> {
 
   handleScroll = () => {
     this.setState({ shouldRefresh: true })
-    this.handleClose()
+    this.handleUnzoom()
   }
 
   // ===========================================================================
