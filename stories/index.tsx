@@ -304,7 +304,6 @@ export const DivImageGallery = () => {
   )
 }
 
-
 export const Picture = props => (
   <div>
     <h1>{'Zoom an <img /> in a <picture> element with a <source />'}</h1>
