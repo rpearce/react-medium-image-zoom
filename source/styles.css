@@ -42,11 +42,16 @@
 [data-rmiz-btn-unzoom] {
   position: fixed;
   z-index: 1;
+  pointer-events: all;
 }
 [data-rmiz-content] img,
+[data-rmiz-content] svg,
 [data-rmiz-content] [role="img"],
 [data-rmiz-content] [data-zoom] {
   cursor: zoom-in;
+}
+[data-rmiz-modal] {
+  pointer-events: none;
 }
 [data-rmiz-modal]::backdrop {
   display: none;
@@ -61,12 +66,12 @@
   padding: 0;
   border: 0;
   background: transparent;
-  cursor: zoom-out;
 }
 [data-rmiz-modal-overlay] {
   position: fixed;
   inset: 0;
-  pointer-events: none;
+  cursor: zoom-out;
+  pointer-events: all;
   transition: background-color 0.3s;
 }
 [data-rmiz-modal-overlay="hidden"] {
@@ -80,7 +85,9 @@
 }
 [data-rmiz-modal-img] {
   position: absolute;
+  cursor: zoom-out;
   image-rendering: high-quality;
+  pointer-events: all;
   transform-origin: top left;
   transition: transform 0.3s;
   will-change: transform;
