@@ -31,6 +31,60 @@ if you're able to help!_
 npm i react-medium-image-zoom
 ```
 
+## API
+
+You can pass these options to either the `Uncontrolled` (default) or
+`Controlled` components.
+
+```tsx
+export interface UncontrolledProps {
+  // Accessible label text for when you want to unzoom
+  // Default: 'Minimize image'
+  a11yNameButtonUnzoom?: string
+
+  // Accessible label text for when you want to zoom
+  // Default: 'Expand image'
+  a11yNameButtonZoom?: string
+
+  // Your image
+  children: ReactNode
+
+  // Provide your own unzoom button icon
+  // Default: ICompress
+  IconUnzoom?: ElementType
+
+  // Provide your own zoom button icon
+  // Default: IEnlarge
+  IconZoom?: ElementType
+
+  // Scrollable parent element
+  // Default: window
+  scrollableEl?: Window | HTMLElement
+
+  // Higher quality image attributes to use on zoom
+  zoomImg?: ImgHTMLAttributes<HTMLImageElement>
+
+  // Offset in pixels the zoomed image should be from the `window`'s boundaries
+  zoomMargin?: number
+}
+```
+
+You can pass these options to only the `Controlled` component.
+
+```tsx
+export interface ControlledProps {
+  // ...same as UncontrolledProps
+
+  // Tell the component whether or not it should be zoomed
+  // Default: false
+  isZoomed: boolean
+
+  // Listen for hints from the component about when you
+  // should zoom (`true` value) or unzoom (`false` value)
+  onZoomChange?: (value: boolean) => void
+}
+```
+
 ## Basic Usage
 
 ### Uncontrolled component (default)
@@ -103,7 +157,7 @@ export const MyFigure = () => (
 )
 ```
 
-### Controlled component (`Controlled`)
+### Controlled component
 
 Import the `Controlled` component and the CSS, wrap your image with the
 component, and then dictate the `isZoomed` state to the component.
@@ -137,63 +191,6 @@ export default MyComponent
 The `onZoomChange` prop accepts a callback that will receive `true` or `false`
 based on events that occur (like click or scroll events) to assist you in
 determining when to zoom and unzoom the component.
-
-## API
-
-## Both uncontrolled & controlled components
-
-You can pass these options to either the default or controlled components.
-
-```tsx
-export interface UncontrolledProps {
-  // Accessible label text for when you want to unzoom
-  // Default: 'Minimize image'
-  a11yNameButtonUnzoom?: string
-
-  // Accessible label text for when you want to zoom
-  // Default: 'Expand image'
-  a11yNameButtonZoom?: string
-
-  // Your image
-  children: ReactNode
-
-  // Provide your own unzoom button icon
-  // Default: ICompress
-  IconUnzoom?: ElementType
-
-  // Provide your own zoom button icon
-  // Default: IEnlarge
-  IconZoom?: ElementType
-
-  // Scrollable parent element
-  // Default: window
-  scrollableEl?: Window | HTMLElement
-
-  // Higher quality image attributes to use on zoom
-  zoomImg?: ImgHTMLAttributes<HTMLImageElement>
-
-  // Offset in pixels the zoomed image should be from the `window`'s boundaries
-  zoomMargin?: number
-}
-```
-
-## Only the controlled component
-
-You can pass these options to only the controlled component.
-
-```tsx
-export interface ControlledProps {
-  // ...same as UncontrolledProps
-
-  // Tell the component whether or not it should be zoomed
-  // Default: false
-  isZoomed: boolean
-
-  // Listen for hints from the component about when you
-  // should zoom (`true` value) or unzoom (`false` value)
-  onZoomChange?: (value: boolean) => void
-}
-```
 
 ## Migrating From v4 to v5
 
