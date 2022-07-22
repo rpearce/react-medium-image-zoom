@@ -141,23 +141,59 @@ determining when to zoom and unzoom the component.
 ## API
 
 ## Both uncontrolled & controlled components
+
 You can pass these options to either the default or controlled components.
 
-| Prop | Default | Details |
-| ---  | ---     | ---     |
-| `a11yNameButtonUnzoom?: string` | `'Minimize image'` | Accessible label text for when you want to unzoom |
-| `a11yNameButtonZoom?: string` | `'Expand image'` | Accessible label text for when you want to zoom |
-| `scrollableEl?: Window \| HTMLElement` | `window` | Scrollable parent element |
-| `zoomImg?: ImgHTMLAttributes<HTMLImageElement>` | `undefined` | Higher quality image attributes to use on zoom |
-| `zoomMargin?: number` | `0` | Offset in pixels the zoomed image should be from the `window`'s boundaries |
+```tsx
+export interface UncontrolledProps {
+  // Accessible label text for when you want to unzoom
+  // Default: 'Minimize image'
+  a11yNameButtonUnzoom?: string
+
+  // Accessible label text for when you want to zoom
+  // Default: 'Expand image'
+  a11yNameButtonZoom?: string
+
+  // Your image
+  children: ReactNode
+
+  // Provide your own unzoom button icon
+  // Default: ICompress
+  IconUnzoom?: ElementType
+
+  // Provide your own zoom button icon
+  // Default: IEnlarge
+  IconZoom?: ElementType
+
+  // Scrollable parent element
+  // Default: window
+  scrollableEl?: Window | HTMLElement
+
+  // Higher quality image attributes to use on zoom
+  zoomImg?: ImgHTMLAttributes<HTMLImageElement>
+
+  // Offset in pixels the zoomed image should be from the `window`'s boundaries
+  zoomMargin?: number
+}
+```
 
 ## Only the controlled component
+
 You can pass these options to only the controlled component.
 
-| Prop | Default | Details |
-| ---  | ---     | ---     |
-| `isZoomed: boolean` | `false` | Tell the component whether or not it should be zoomed |
-| `onZoomChange?: (value: boolean) => void` | `undefined` | Listen for hints from the component about when you should zoom (`true` value) or unzoom (`false` value) |
+```tsx
+export interface ControlledProps {
+  // ...same as UncontrolledProps
+
+  // Tell the component whether or not it should be zoomed
+  // Default: false
+  isZoomed: boolean
+
+  // Listen for hints from the component about when you
+  // should zoom (`true` value) or unzoom (`false` value)
+  onZoomChange?: (value: boolean) => void
+}
+```
 
 ## Migrating From v4 to v5
 

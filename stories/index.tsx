@@ -109,6 +109,16 @@ export const Image = props => (
         width="150"
       />
     </Zoom>
+    <h2>An image with custom zoom & unzoom icons</h2>
+    <div className="change-icons">
+      <Zoom {...props} IconZoom={() => '+'} IconUnzoom={() => '—'}>
+        <img
+          alt={imgHookerValleyTrack.alt}
+          src={imgHookerValleyTrack.src}
+          width="400"
+        />
+      </Zoom>
+    </div>
   </div>
 )
 

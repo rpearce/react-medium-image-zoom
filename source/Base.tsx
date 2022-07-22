@@ -2,6 +2,7 @@ import React, {
   Component,
   createRef,
   CSSProperties,
+  ElementType,
   ImgHTMLAttributes,
   KeyboardEvent,
   ReactNode,
@@ -35,6 +36,8 @@ export interface BaseProps {
   a11yNameButtonUnzoom?: string
   a11yNameButtonZoom?: string
   children: ReactNode
+  IconUnzoom?: ElementType
+  IconZoom?: ElementType
   isZoomed: boolean
   onZoomChange?: (value: boolean) => void
   scrollableEl?: Window | HTMLElement
@@ -45,6 +48,8 @@ export interface BaseProps {
 export interface BaseDefaultProps {
   a11yNameButtonUnzoom: string
   a11yNameButtonZoom: string
+  IconUnzoom: ElementType
+  IconZoom: ElementType
   scrollableEl: Window | HTMLElement
   zoomMargin: number
 }
@@ -62,6 +67,8 @@ export default class Base extends Component<BasePropsWithDefaults, BaseState> {
   static defaultProps: BaseDefaultProps = {
     a11yNameButtonUnzoom: 'Minimize image',
     a11yNameButtonZoom: 'Expand image',
+    IconUnzoom: ICompress,
+    IconZoom: IEnlarge,
     scrollableEl: window,
     zoomMargin: 0,
   }
@@ -94,6 +101,8 @@ export default class Base extends Component<BasePropsWithDefaults, BaseState> {
         a11yNameButtonUnzoom,
         a11yNameButtonZoom,
         children,
+        IconUnzoom,
+        IconZoom,
         isZoomed,
         zoomImg,
         zoomMargin,
@@ -172,7 +181,7 @@ export default class Base extends Component<BasePropsWithDefaults, BaseState> {
             onClick={handleZoom}
             type="button"
           >
-            <IEnlarge /* @TODO: Allow for them to pass their own icons? */ />
+            <IconZoom />
           </button>
         </div>
         <dialog /* eslint-disable-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
@@ -217,7 +226,7 @@ export default class Base extends Component<BasePropsWithDefaults, BaseState> {
               onClick={handleUnzoom}
               type="button"
             >
-              <ICompress />
+              <IconUnzoom />
             </button>
           </div>
         </dialog>

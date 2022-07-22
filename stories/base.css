@@ -34,3 +34,13 @@ img {
   display: block;
   max-width: 100%;
 }
+.change-icons [data-rmiz-btn-zoom] {
+  bottom: 10px;
+  top: initial;
+}
+.change-icons [data-rmiz-btn-zoom],
+.change-icons [data-rmiz-btn-unzoom] {
+  background-color: #fff;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.8);
+  color: #000;
+}
