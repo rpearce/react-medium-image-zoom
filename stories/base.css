@@ -44,3 +44,11 @@ img {
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.8);
   color: #000;
 }
+.data-uri-img [data-rmiz-btn-zoom] {
+  height: 15px;
+  padding: 3px;
+  right: -15px;
+  top: -10px;
+  width: 15px;
+  line-height: 0;
+}

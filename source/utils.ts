@@ -446,7 +446,12 @@ export const getStyleModalImg: GetStyleModalImg = ({
   shouldRefresh,
   targetEl,
 }) => {
-  const hasScalableSrc = isSvg || hasZoomImg || !!(imgSrc && SRC_SVG_REGEX.test(imgSrc))
+  const hasScalableSrc =
+    isSvg ||
+    imgSrc?.slice?.(0, 18) === 'data:image/svg+xml' ||
+    hasZoomImg ||
+    !!(imgSrc && SRC_SVG_REGEX.test(imgSrc))
+
   const imgRect = targetEl.getBoundingClientRect()
   const targetElComputedStyle = window.getComputedStyle(targetEl)
 
