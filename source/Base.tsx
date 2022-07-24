@@ -152,8 +152,7 @@ export default class Base extends Component<BasePropsWithDefaults, BaseState> {
 
     const styleGhost = getStyleGhost(imgEl)
 
-    // @TODO: Better way to share this with UNSAFE_handleSvg?
-    //        What ways can we optimize?
+    // Share this with UNSAFE_handleSvg
     this.styleModalImg = imgEl && (loadedImgEl || isSvg)
       ? getStyleModalImg({
         hasZoomImg,
