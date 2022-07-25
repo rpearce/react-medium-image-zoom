@@ -45,6 +45,10 @@ export interface ControlledProps {
   zoomMargin?: number
 }
 
+export function Controlled (props: ControlledProps) {
+  return <ControlledBase {...props} />
+}
+
 interface ControlledDefaultProps {
   a11yNameButtonUnzoom: string
   a11yNameButtonZoom: string
@@ -62,7 +66,7 @@ interface ControlledState {
   modalState: ModalState
 }
 
-export default class Controlled extends Component<ControlledPropsWithDefaults, ControlledState> {
+class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledState> {
   static defaultProps: ControlledDefaultProps = {
     a11yNameButtonUnzoom: 'Minimize image',
     a11yNameButtonZoom: 'Expand image',
