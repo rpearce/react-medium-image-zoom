@@ -1,2 +1,2 @@
-export { default } from './Uncontrolled'
-export { default as Controlled } from './Controlled'
+export * from './Uncontrolled'
+export * from './Controlled'
