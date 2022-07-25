@@ -265,7 +265,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
 
   setAndTrackImg = () => {
     this.imgEl = this.refContent.current?.querySelector?.(
-      'img, svg, [role="img"], [data-zoom]'
+      ':is(img, svg, [role="img"], [data-zoom]):not([aria-hidden="true"])'
     ) as SupportedImage | null
 
     if (this.imgEl) {
