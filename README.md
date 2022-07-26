@@ -192,6 +192,15 @@ The `onZoomChange` prop accepts a callback that will receive `true` or `false`
 based on events that occur (like click or scroll events) to assist you in
 determining when to zoom and unzoom the component.
 
+## Styles
+
+You can import the default styles from `react-medium-image-zoom/dist/styles.css`
+and override the values from your code, or you can copy [the styles.css
+file](./source/styles.css) and alter it to your liking. The latter is the best
+option, given `rem`s should be used instead of `px` to account for different
+default browser font sizes, but it's hard to guess at what these values should
+be.
+
 ## Migrating From v4 to v5
 
 TODO
