@@ -4,6 +4,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.0.0] - 2022-07-31
+
+Closes #164, #166, #213, #227, #259, #265, #281, #282
+
+### Added
+
+* Added `IconUnzoom` and `IconZoom` in order to customize the zoom & unzoom buttons
+* Added `zoomImg` to provide attributes for an image that should be loaded on zoom
+* Added better zooming support for all of the following:
+  * `<img />`, including all [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit)
+  values, any [`object-position`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-position),
+  and [`loading="lazy"`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-loading)
+  * `<div>` and `<span>` with any [`background-image`](https://developer.mozilla.org/en-US/docs/Web/CSS/background-image),
+  [`background-size`](https://developer.mozilla.org/en-US/docs/Web/CSS/background-size),
+  and [`background-position`](https://developer.mozilla.org/en-US/docs/Web/CSS/background-position)
+  * `<picture>` with `<source />` and `<img />`
+  * `<figure>` with `<img />`
+
+### Changed
+
+* Renamed `closeText` to `a11yNameButtonUnzoom`
+* Renamed `openText` to `a11yNameButtonZoom`
+* Images must meet these `querySelector` criteria to be found:
+   ```js
+   ':is(img, svg, [role="img"], [data-zoom]):not([aria-hidden="true"])'
+   ```
+
+### Removed
+
+* Removed `focus-options-polyfill` dependency
+* Removed `tslib` dependency
+* Removed `overlayBgColorStart` (now specified via CSS: `[data-rmiz-modal-overlay="hidden"]`)
+* Removed `overlayBgColorEnd` (now specified via CSS: `[data-rmiz-modal-overlay="visible"]`)
+* Removed `portalEl`
+* Removed `transitionDuration` (now specified via CSS: `[data-rmiz-modal-overlay]` and `[data-rmiz-modal-img]`)
+* Removed `wrapElement`
+* Removed `wrapStyle`
+* Removed `zoomZIndex`
+
 ## [4.4.3] - 2022-05-23
 ### Fixed
 * Reverts setting `"type": "module"` in `package.json` (issue: #322)
