@@ -5,7 +5,7 @@
 The original [medium.com-style image zooming](https://medium.design/image-zoom-on-medium-24d146fc0c20)
 library for React.js.
 
-Supports:
+Features:
 
 * `<img />`, including all [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit)
   values, any [`object-position`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-position),
@@ -15,6 +15,7 @@ Supports:
   and [`background-position`](https://developer.mozilla.org/en-US/docs/Web/CSS/background-position)
 * `<picture>` with `<source />` and `<img />`
 * `<figure>` with `<img />`
+* Zero `dependencies`
 * Accessibility:
   * JAWS in Chrome, Edge, and Firefox (Windows)
   * NVDA in Chrome, Edge, and Firefox (Windows)
