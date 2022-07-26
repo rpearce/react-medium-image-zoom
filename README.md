@@ -19,7 +19,7 @@ Supports:
   * JAWS in Chrome, Edge, and Firefox (Windows)
   * NVDA in Chrome, Edge, and Firefox (Windows)
   * VoiceOver in Safari (macOS, iOS)
-  * Talkback in Chrome (Android)
+  * TalkBack in Chrome (Android)
 
 [View the storybook examples](https://rpearce.github.io/react-medium-image-zoom/)
 to see various usages. _NOTE: Help is wanted with making the examples more
