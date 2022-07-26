@@ -15,20 +15,37 @@ Supports:
   and [`background-position`](https://developer.mozilla.org/en-US/docs/Web/CSS/background-position)
 * `<picture>` with `<source />` and `<img />`
 * `<figure>` with `<img />`
-* Full accessibility:
+* Accessibility:
   * JAWS in Chrome, Edge, and Firefox (Windows)
   * NVDA in Chrome, Edge, and Firefox (Windows)
-  * Safari + VoiceOver (macOS, iOS)
+  * VoiceOver in Safari (macOS, iOS)
+  * Talkback in Chrome (Android)
 
 [View the storybook examples](https://rpearce.github.io/react-medium-image-zoom/)
 to see various usages. _NOTE: Help is wanted with making the examples more
 informative, so please [start a discussion](https://github.com/rpearce/react-medium-image-zoom/discussions)
 if you're able to help!_
 
-## Installation
+## Quickstart
 
 ```bash
-npm i react-medium-image-zoom
+npm install --save react-medium-image-zoom
+```
+
+```javascript
+import React from 'react'
+import Zoom from 'react-medium-image-zoom'
+import 'react-medium-image-zoom/dist/styles.css'
+
+export const MyImg = () => (
+  <Zoom>
+    <img
+      alt="That wanaka tree, alone in the water near mountains"
+      src="/path/to/thatwanakatree.jpg"
+      width="500"
+    />
+  </Zoom>
+)
 ```
 
 ## API
@@ -36,7 +53,7 @@ npm i react-medium-image-zoom
 You can pass these options to either the `Uncontrolled` (default) or
 `Controlled` components.
 
-```tsx
+```typescript
 export interface UncontrolledProps {
   // Accessible label text for when you want to unzoom
   // Default: 'Minimize image'
@@ -64,14 +81,14 @@ export interface UncontrolledProps {
   // Higher quality image attributes to use on zoom
   zoomImg?: ImgHTMLAttributes<HTMLImageElement>
 
-  // Offset in pixels the zoomed image should be from the `window`'s boundaries
+  // Offset in pixels the zoomed image should be from the window's boundaries
   zoomMargin?: number
 }
 ```
 
 You can pass these options to only the `Controlled` component.
 
-```tsx
+```typescript
 export interface ControlledProps {
   // ...same as UncontrolledProps
 
@@ -92,7 +109,7 @@ export interface ControlledProps {
 Import the component and the CSS, wrap your image with the component, and the
 component will handle it's own state.
 
-```js
+```javascript
 import React from 'react'
 import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
@@ -162,7 +179,7 @@ export const MyFigure = () => (
 Import the `Controlled` component and the CSS, wrap your image with the
 component, and then dictate the `isZoomed` state to the component.
 
-```js
+```javascript
 import React, { useCallback, useState } from 'react'
 import { Controlled as ControlledZoom } from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
