@@ -40,7 +40,7 @@ import 'react-medium-image-zoom/dist/styles.css'
 export const MyImg = () => (
   <Zoom>
     <img
-      alt="That wanaka tree, alone in the water near mountains"
+      alt="That Wanaka Tree, New Zealand by Laura Smetsers"
       src="/path/to/thatwanakatree.jpg"
       width="500"
     />
@@ -81,7 +81,8 @@ export interface UncontrolledProps {
   // Higher quality image attributes to use on zoom
   zoomImg?: ImgHTMLAttributes<HTMLImageElement>
 
-  // Offset in pixels the zoomed image should be from the window's boundaries
+  // Offset in pixels the zoomed image should
+  // be from the window's boundaries
   zoomMargin?: number
 }
 ```
@@ -118,7 +119,7 @@ import 'react-medium-image-zoom/dist/styles.css'
 export const MyImg = () => (
   <Zoom>
     <img
-      alt="That wanaka tree, alone in the water near mountains"
+      alt="That Wanaka Tree, New Zealand by Laura Smetsers"
       src="/path/to/thatwanakatree.jpg"
       width="500"
     />
@@ -129,7 +130,7 @@ export const MyImg = () => (
 export const MyDiv = () => (
   <Zoom>
     <div
-      aria-label="That wanaka tree, alone in the water near mountains"
+      aria-label="That Wanaka Tree, New Zealand by Laura Smetsers"
       role="img"
       style={{
         backgroundColor: '#fff',
@@ -164,12 +165,12 @@ export const MyFigure = () => (
   <figure>
     <Zoom>
       <img
-        alt="That wanaka tree, alone in the water near mountains"
+        alt="That Wanaka Tree, New Zealand by Laura Smetsers"
         src="/path/to/thatwanakatree.jpg"
         width="500"
       />
     </Zoom>
-    <figcaption>That Wanaka Tree</figcaption>
+    <figcaption>Photo by Laura Smetsers</figcaption>
   </figure>
 )
 ```
