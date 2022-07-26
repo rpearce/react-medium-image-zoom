@@ -24,6 +24,7 @@ Closes #164, #166, #213, #227, #259, #265, #281, #282
 
 ### Changed
 
+* Sets `"type": "module"` in `package.json` for ESModule usage
 * Renamed `closeText` to `a11yNameButtonUnzoom`
 * Renamed `openText` to `a11yNameButtonZoom`
 * Images must meet these `querySelector` criteria to be found:
