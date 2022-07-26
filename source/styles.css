@@ -7,19 +7,16 @@
 }
 [data-rmiz-btn-zoom],
 [data-rmiz-btn-unzoom] {
-  top: 10px;
-  right: 10px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   border-radius: 50%;
   border: none;
   box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
   color: #fff;
-  cursor: pointer;
   height: 40px;
+  inset: 10px 10px auto auto;
   margin: 0;
   outline-offset: 2px;
   padding: 9px;
-  pointer-events: none;
   touch-action: manipulation;
   width: 40px;
   -webkit-appearance: none;
@@ -38,9 +35,11 @@
 }
 [data-rmiz-btn-zoom] {
   position: absolute;
+  cursor: zoom-in;
 }
 [data-rmiz-btn-unzoom] {
   position: fixed;
+  cursor: zoom-out;
   z-index: 1;
   pointer-events: all;
 }
