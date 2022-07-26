@@ -2,8 +2,8 @@
 
 [![All Contributors](https://img.shields.io/badge/all_contributors-44-orange.svg?style=flat-square)](#contributors-) [![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg?style=flat-square)](https://www.npmjs.com/package/react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg?style=flat-square)](https://www.npmjs.com/package/react-medium-image-zoom) [![bundlephobia size](https://badgen.net/bundlephobia/minzip/react-medium-image-zoom)](bundlephobia.com/result?p=react-medium-image-zoom) [![Coverage Status](https://coveralls.io/repos/github/rpearce/react-medium-image-zoom/badge.svg?branch=master)](https://coveralls.io/github/rpearce/react-medium-image-zoom?branch=master)
 
-The original [medium.com-style image zooming](https://medium.design/image-zoom-on-medium-24d146fc0c20)
-library for React.js.
+The original [medium.com-inspired image zooming](https://medium.design/image-zoom-on-medium-24d146fc0c20)
+library for [React](https://reactjs.org).
 
 Features:
 
@@ -15,12 +15,12 @@ Features:
   and [`background-position`](https://developer.mozilla.org/en-US/docs/Web/CSS/background-position)
 * `<picture>` with `<source />` and `<img />`
 * `<figure>` with `<img />`
-* Zero `dependencies`
 * Accessibility:
   * JAWS in Chrome, Edge, and Firefox (Windows)
   * NVDA in Chrome, Edge, and Firefox (Windows)
   * VoiceOver in Safari (macOS, iOS)
   * TalkBack in Chrome (Android)
+* Zero `dependencies`
 
 [View the storybook examples](https://rpearce.github.io/react-medium-image-zoom/)
 to see various usages. _NOTE: Help is wanted with making the examples more
@@ -48,6 +48,10 @@ export const MyImg = () => (
   </Zoom>
 )
 ```
+
+This library's compilation target is `ES2022`, but it only uses features from
+`ES2020` and below. If you find you need to support older browsers, add
+`react-medium-image-zoom` to your build system.
 
 ## API
 
