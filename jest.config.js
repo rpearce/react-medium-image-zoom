@@ -7,7 +7,7 @@ export default {
     '\\.css$': 'identity-obj-proxy',
   },
   preset: 'ts-jest',
-  setupFilesAfterEnv: ['<rootDir>/testSetup.js'],
+  setupFilesAfterEnv: ['<rootDir>/testSetup.ts'],
   testEnvironment: 'jsdom',
   verbose: true,
 }
