@@ -69,7 +69,6 @@
 [data-rmiz-modal-overlay] {
   position: fixed;
   inset: 0;
-  cursor: zoom-out;
   pointer-events: all;
   transition: background-color 0.3s;
 }
