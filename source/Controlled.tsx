@@ -8,7 +8,7 @@ import React, {
   ReactNode,
 } from 'react'
 
-import { SupportedImage } from './types'
+import type { SupportedImage } from './types'
 import { IEnlarge, ICompress } from './icons'
 
 import {

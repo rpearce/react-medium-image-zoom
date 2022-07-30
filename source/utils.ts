@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react'
-import { SupportedImage } from './types'
+import type { SupportedImage } from './types'
 
 // =============================================================================
 
