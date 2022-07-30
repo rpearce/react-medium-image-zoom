@@ -19,7 +19,12 @@
     "removeComments": true,
     "sourceMap": false,
     "strict": true,
-    "target": "es2022"
+    "target": "es2022",
+    "types": [
+      "puppeteer",
+      "jest-environment-puppeteer",
+      "expect-puppeteer"
+    ]
   },
   "include": ["./source/index.ts"]
 }
