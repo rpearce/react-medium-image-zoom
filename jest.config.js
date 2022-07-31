@@ -1,15 +1,9 @@
 export default {
   collectCoverageFrom: ['<rootDir>/source/**/*.{ts,tsx}'],
   coveragePathIgnorePatterns: ['/node_modules/'],
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.json',
-    },
-  },
-  preset: 'jest-puppeteer',
+  preset: 'ts-jest',
   setupFilesAfterEnv: [
     '@testing-library/jest-dom/extend-expect',
-    'expect-puppeteer',
     '<rootDir>/jest.setup.ts',
   ],
   verbose: true,
