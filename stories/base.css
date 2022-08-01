@@ -17,6 +17,7 @@ body {
   margin: 2em;
   font-size: 1.6rem;
   font-family: monospace;
+  line-height: 1.5;
   color: #333;
 }
 body,
@@ -27,12 +28,24 @@ button {
 figure {
   margin: 0;
 }
+h1 {
+  line-height: initial;
+}
 h2 {
   margin-top: 4rem;
 }
 img {
   display: block;
   max-width: 100%;
+}
+.mw-600 {
+  max-width: 60rem;
+}
+.jk [data-rmiz-btn-zoom],
+.jk [data-rmiz-btn-unzoom],
+.jk [data-rmiz-content] img,
+.jk [data-rmiz-modal-img] {
+  cursor: default;
 }
 .change-icons [data-rmiz-btn-zoom] {
   bottom: 10px;

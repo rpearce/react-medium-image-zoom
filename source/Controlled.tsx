@@ -302,16 +302,23 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     const { imgEl } = this
 
     const img = new Image()
-    img.src = getImgSrc(imgEl) ?? ''
 
     if (testImg(imgEl)) {
       img.sizes = imgEl.sizes
       img.srcset = imgEl.srcset
     }
 
-    img.decode().then(() => {
-      this.setState({ loadedImgEl: img })
-    })
+    img.src = getImgSrc(imgEl) ?? ''
+
+    img.decode()
+      .then(() => {
+        this.setState({ loadedImgEl: img })
+      })
+      .catch(() => {
+        img.onload = () => {
+          this.setState({ loadedImgEl: img })
+        }
+      })
   }
 
   // ===========================================================================

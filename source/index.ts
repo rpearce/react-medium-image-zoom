@@ -1,2 +1,4 @@
-export { Uncontrolled as default, UncontrolledProps } from './Uncontrolled'
-export { Controlled, ControlledProps } from './Controlled'
+export { Uncontrolled as default } from './Uncontrolled'
+export { Controlled } from './Controlled'
+export type { UncontrolledProps } from './Uncontrolled'
+export type { ControlledProps } from './Controlled'

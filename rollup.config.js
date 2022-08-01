@@ -8,7 +8,7 @@ export default [
     output: { file: pkg.main, format: 'es' },
     external: isExternal,
     plugins: [ts({
-      tsconfig: './tsconfig.build.json',
+      tsconfig: './tsconfig.json',
       compilerOptions: { declarationDir: './types' },
     })],
   },

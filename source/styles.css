@@ -38,7 +38,7 @@
   cursor: zoom-in;
 }
 [data-rmiz-btn-unzoom] {
-  position: fixed;
+  position: absolute;
   cursor: zoom-out;
   z-index: 1;
   pointer-events: all;
@@ -67,7 +67,7 @@
   background: transparent;
 }
 [data-rmiz-modal-overlay] {
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: all;
   transition: background-color 0.3s;

@@ -10,6 +10,7 @@ module.exports = {
     'standard',
     'plugin:@typescript-eslint/recommended',
     'plugin:jsx-a11y/recommended',
+    'plugin:storybook/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -24,6 +25,7 @@ module.exports = {
     'react-hooks',
     '@typescript-eslint',
   ],
+  root: true,
   rules: {
     'comma-dangle': ['error', {
       arrays: 'always-multiline',
