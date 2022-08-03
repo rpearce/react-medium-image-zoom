@@ -299,6 +299,9 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
     <td align="center"><a href="https://www.linkedin.com/in/robinmgoudeketting/"><img src="https://avatars.githubusercontent.com/u/56813989?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Robin Goudeketting</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3AGoudekettingRM" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://github.com/btoro"><img src="https://avatars.githubusercontent.com/u/15056753?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Botros Toro</b></sub></a><br /><a href="#ideas-btoro" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://thedveloper.com/"><img src="https://avatars.githubusercontent.com/u/10765364?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Christian Guevara</b></sub></a><br /><a href="#question-christianguevara" title="Answering Questions">💬</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
