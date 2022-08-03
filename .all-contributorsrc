@@ -484,6 +484,15 @@
       "contributions": [
         "question"
       ]
+    },
+    {
+      "login": "GoudekettingRM",
+      "name": "Robin Goudeketting",
+      "avatar_url": "https://avatars.githubusercontent.com/u/56813989?v=4",
+      "profile": "https://www.linkedin.com/in/robinmgoudeketting/",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
