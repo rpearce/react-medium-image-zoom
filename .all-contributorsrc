@@ -511,6 +511,15 @@
       "contributions": [
         "question"
       ]
+    },
+    {
+      "login": "johanbook",
+      "name": "Johan Book",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13253042?v=4",
+      "profile": "https://github.com/johanbook",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",

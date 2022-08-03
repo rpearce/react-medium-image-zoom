@@ -301,6 +301,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
   </tr>
   <tr>
     <td align="center"><a href="https://thedveloper.com/"><img src="https://avatars.githubusercontent.com/u/10765364?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Christian Guevara</b></sub></a><br /><a href="#question-christianguevara" title="Answering Questions">💬</a></td>
+    <td align="center"><a href="https://github.com/johanbook"><img src="https://avatars.githubusercontent.com/u/13253042?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Johan Book</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Ajohanbook" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 
