@@ -1,13 +1,10 @@
-module.exports = {
-  clearMocks: true,
-  collectCoverage: true,
+export default {
   collectCoverageFrom: ['<rootDir>/source/**/*.{ts,tsx}'],
   coveragePathIgnorePatterns: ['/node_modules/'],
-  moduleNameMapper: {
-    '\\.css$': 'identity-obj-proxy',
-  },
   preset: 'ts-jest',
-  setupFilesAfterEnv: ['<rootDir>/testSetup.js'],
-  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: [
+    '@testing-library/jest-dom/extend-expect',
+    '<rootDir>/jest.setup.ts',
+  ],
   verbose: true,
 }

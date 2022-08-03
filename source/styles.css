@@ -1,52 +1,92 @@
-[data-rmiz-wrap="visible"],
-[data-rmiz-wrap="hidden"] {
+[data-rmiz] {
   position: relative;
-  display: inline-flex;
-  align-items: flex-start;
 }
-[data-rmiz-wrap="hidden"] {
-  visibility: hidden;
-}
-[data-rmiz-overlay] {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transition-property: background-color;
-}
-[data-rmiz-btn-open],
-[data-rmiz-btn-close] {
+[data-rmiz-ghost] {
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  /* reset styles */
-  margin: 0;
-  padding: 0;
-  border: none;
-  border-radius: 0;
-  font: inherit;
-  color: inherit;
-  background: none;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
+  pointer-events: none;
 }
-[data-rmiz-btn-open] {
+[data-rmiz-btn-zoom],
+[data-rmiz-btn-unzoom] {
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  border: none;
+  box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+  color: #fff;
+  height: 40px;
+  inset: 10px 10px auto auto;
+  margin: 0;
+  outline-offset: 2px;
+  padding: 9px;
+  touch-action: manipulation;
+  width: 40px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+[data-rmiz-btn-zoom]:not(:focus):not(:active) {
+  position: absolute;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  pointer-events: none;
+  white-space: nowrap;
+  width: 1px;
+}
+[data-rmiz-btn-zoom] {
+  position: absolute;
   cursor: zoom-in;
 }
-[data-rmiz-btn-close] {
-  cursor: zoom-out;
-}
-[data-rmiz-modal-content] {
+[data-rmiz-btn-unzoom] {
   position: absolute;
-  transition-property: transform;
-  transform-origin: center center;
+  cursor: zoom-out;
+  z-index: 1;
+  pointer-events: all;
+}
+[data-rmiz-content] img,
+[data-rmiz-content] svg,
+[data-rmiz-content] [role="img"],
+[data-rmiz-content] [data-zoom] {
+  cursor: zoom-in;
+}
+[data-rmiz-modal] {
+  pointer-events: none;
+}
+[data-rmiz-modal]::backdrop {
+  display: none;
+}
+[data-rmiz-modal][open] {
+  position: fixed;
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+[data-rmiz-modal-overlay] {
+  position: absolute;
+  inset: 0;
+  pointer-events: all;
+  transition: background-color 0.3s;
+}
+[data-rmiz-modal-overlay="hidden"] {
+  background-color: rgba(255, 255, 255, 0);
+}
+[data-rmiz-modal-overlay="visible"] {
+  background-color: rgba(255, 255, 255, 1);
+}
+[data-rmiz-modal][open] [data-rmiz-modal-content] {
+  position: relative;
+}
+[data-rmiz-modal-img] {
+  position: absolute;
+  cursor: zoom-out;
+  image-rendering: high-quality;
+  pointer-events: all;
+  transform-origin: top left;
+  transition: transform 0.3s;
+  will-change: transform;
 }

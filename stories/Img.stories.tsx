@@ -1,0 +1,172 @@
+import React from 'react'
+
+import { ComponentStory, ComponentMeta } from '@storybook/react'
+import { waitFor, within, userEvent } from '@storybook/testing-library'
+import { expect } from '@storybook/jest'
+
+import Zoom from '../source'
+import '../source/styles.css'
+import './base.css'
+
+import {
+  imgHookerValleyTrack,
+  imgKeaSmall,
+  imgKeaLarge,
+  imgNzMap,
+  imgTeAraiPoint,
+  imgThatWanakaTree,
+} from './images'
+
+export default {
+  title: '<img>',
+  component: Zoom,
+  parameters: {},
+} as ComponentMeta<typeof Zoom>
+
+export const Regular: ComponentStory<typeof Zoom> = (props) => (
+  <div>
+    <h1>Zooming a regular image</h1>
+    <div className="mw-600">
+      <Zoom {...props}>
+        <img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height="320"
+          loading="lazy"
+        />
+      </Zoom>
+    </div>
+  </div>
+)
+
+export const SmallPortrait: ComponentStory<typeof Zoom> = (props) => (
+  <div>
+    <h1>A portrait image with a small width specified</h1>
+    <div className="mw-600">
+      <p>Small size specifications scale well, too — even on mobile.</p>
+      <Zoom {...props}>
+        <img
+          alt={imgTeAraiPoint.alt}
+          src={imgTeAraiPoint.src}
+          height="112"
+          loading="lazy"
+        />
+      </Zoom>
+    </div>
+  </div>
+)
+
+export const SVGSource: ComponentStory<typeof Zoom> = (props) => (
+  <div>
+    <h1>An image with an SVG src</h1>
+    <div className="mw-600">
+      <Zoom {...props}>
+        <img
+          alt={imgNzMap.alt}
+          src={imgNzMap.src}
+          width="150"
+          loading="lazy"
+        />
+      </Zoom>
+    </div>
+  </div>
+)
+
+export const DataSVGSource: ComponentStory<typeof Zoom> = () => (
+  <div>
+    <h1>An image with a <code>data:image/svg+xml</code> <code>src</code></h1>
+    <div className="data-uri-img mw-600">
+      <Zoom>
+        <img
+          alt="Gatsby G Logo"
+          src="data:image/svg+xml,%3Csvg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2a10 10 0 110 20 10 10 0 010-20zm0 2c-3.73 0-6.86 2.55-7.75 6L14 19.75c3.45-.89 6-4.02 6-7.75h-5.25v1.5h3.45a6.37 6.37 0 01-3.89 4.44L6.06 9.69C7 7.31 9.3 5.63 12 5.63c2.13 0 4 1.04 5.18 2.65l1.23-1.06A7.959 7.959 0 0012 4zm-8 8a8 8 0 008 8c.04 0 .09 0-8-8z' fill='%23639'/%3E%3C/svg%3E"
+        />
+      </Zoom>
+    </div>
+  </div>
+)
+
+export const ProvideZoomImg: ComponentStory<typeof Zoom> = (props) => (
+  <div>
+    <h1>An image with a larger <code>zoomImg</code></h1>
+    <div className="mw-600">
+      <p>
+        When zoomed, the original image will scale to as large as the window will
+        allow, and then it will be replaced by an image that is downloaded in the
+        background.
+      </p>
+      <Zoom
+        {...props}
+        zoomImg={{
+          alt: imgKeaLarge.alt,
+          src: imgKeaLarge.src,
+        }}
+      >
+        <img
+          alt={imgKeaSmall.alt}
+          src={imgKeaSmall.src}
+          width="150"
+        />
+      </Zoom>
+    </div>
+  </div>
+)
+
+export const SmallSrcSize: ComponentStory<typeof Zoom> = (props) => (
+  <div>
+    <h1>An image with a small size</h1>
+    <div className="mw-600">
+      <p>
+        In order to prevent blurry images, An image won&apos;t scale up larger
+        than its natural dimensions.
+      </p>
+      <Zoom {...props}>
+        <img
+          alt={imgKeaSmall.alt}
+          src={imgKeaSmall.src}
+          width="150"
+        />
+      </Zoom>
+    </div>
+  </div>
+)
+
+export const CustomButtonIcons: ComponentStory<typeof Zoom> = (props) => (
+  <div>
+    <h1>An image with custom zoom & unzoom icons</h1>
+    <div className="mw-600">
+      <p>Press TAB to activate the zoom button</p>
+      <div className="change-icons">
+        <Zoom {...props} IconZoom={() => <>+</>} IconUnzoom={() => <>+</>}>
+          <img
+            alt={imgHookerValleyTrack.alt}
+            src={imgHookerValleyTrack.src}
+            width="400"
+          />
+        </Zoom>
+      </div>
+    </div>
+  </div>
+)
+
+// =============================================================================
+// INTERACTIONS
+
+export const WithRegularZoomed = Regular.bind({})
+WithRegularZoomed.play = async ({ canvasElement }) => {
+  const canvas = within(canvasElement)
+
+  await waitFor(async () => {
+    await expect(canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`)).toBeVisible()
+  })
+
+  // TAB to expand button and press ENTER
+  await userEvent.tab()
+  await userEvent.keyboard('{Enter}', { delay: 1000 })
+
+  await waitFor(async () => {
+    await expect(canvas.getByRole('dialog')).toHaveAttribute('open')
+    await expect(canvas.getByRole('dialog').querySelector(`img[alt="${imgThatWanakaTree.alt}"]`)).toBeVisible()
+    await expect(canvas.getByLabelText('Minimize image')).toHaveFocus()
+  })
+}

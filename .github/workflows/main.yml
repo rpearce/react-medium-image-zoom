@@ -19,8 +19,17 @@ jobs:
     - name: Install deps without updating package-lock.json
       run: npm i --no-save
 
+    - name: Install Playwright for Storybook
+      run: npx playwright install --with-deps
+
     - name: Run the CI build
       run: npm run ci
+
+    - name: Serve Storybook and run tests
+      run: |
+        npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
+          "npx http-server docs --port 6006 --silent" \
+          "npx wait-on tcp:6006 && npm run test-storybook"
 
     - name: Deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v3

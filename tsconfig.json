@@ -4,17 +4,21 @@
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false,
     "declaration": true,
+    "emitDeclarationOnly": true,
     "esModuleInterop": true,
-    "importHelpers": true,
+    "forceConsistentCasingInFileNames": true,
     "jsx": "react",
     "lib": ["esnext", "dom"],
     "module": "esnext",
-    "moduleResolution": "node",
     "noImplicitAny": true,
-    "outDir": "./dist/",
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "outDir": "./dist",
+    "removeComments": true,
     "sourceMap": false,
     "strict": true,
-    "target": "es5"
+    "target": "es2022"
   },
   "include": ["./source/index.ts"]
 }
