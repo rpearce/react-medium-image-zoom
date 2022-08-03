@@ -295,6 +295,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
     <td align="center"><a href="https://rikusen.dev/"><img src="https://avatars.githubusercontent.com/u/19174234?v=4?s=100" width="100px;" alt=""/><br /><sub><b>rikusen0335</b></sub></a><br /><a href="#ideas-rikusen0335" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="http://surjithctly.in/"><img src="https://avatars.githubusercontent.com/u/1884712?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Surjith S M</b></sub></a><br /><a href="#ideas-surjithctly" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/developergunny"><img src="https://avatars.githubusercontent.com/u/67149898?v=4?s=100" width="100px;" alt=""/><br /><sub><b>developergunny</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Adevelopergunny" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://uxdkhan.com/"><img src="https://avatars.githubusercontent.com/u/6104751?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Khan Mohsin</b></sub></a><br /><a href="#question-m90khan" title="Answering Questions">💬</a></td>
   </tr>
 </table>
 

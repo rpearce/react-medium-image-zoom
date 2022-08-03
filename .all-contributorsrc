@@ -475,6 +475,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "m90khan",
+      "name": "Khan Mohsin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6104751?v=4",
+      "profile": "https://uxdkhan.com/",
+      "contributions": [
+        "question"
+      ]
     }
   ],
   "repoType": "github",
