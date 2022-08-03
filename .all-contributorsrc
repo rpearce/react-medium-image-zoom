@@ -520,6 +520,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "PaoloDiBello",
+      "name": "Paolo Di Bello",
+      "avatar_url": "https://avatars.githubusercontent.com/u/36816681?v=4",
+      "profile": "http://dibellopaolo-portfolio-demo-1.rf.gd/",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "repoType": "github",
