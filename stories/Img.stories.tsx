@@ -72,7 +72,7 @@ export const SVGSource: ComponentStory<typeof Zoom> = (props) => (
   </div>
 )
 
-export const DataSVGSource: ComponentStory<typeof Zoom> = (props) => (
+export const DataSVGSource: ComponentStory<typeof Zoom> = () => (
   <div>
     <h1>An image with a <code>data:image/svg+xml</code> <code>src</code></h1>
     <div className="data-uri-img mw-600">
