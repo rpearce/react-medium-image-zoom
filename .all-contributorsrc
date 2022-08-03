@@ -493,6 +493,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "btoro",
+      "name": "Botros Toro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15056753?v=4",
+      "profile": "https://github.com/btoro",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "repoType": "github",
