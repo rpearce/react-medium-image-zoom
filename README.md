@@ -221,8 +221,12 @@ You can import the default styles from `react-medium-image-zoom/dist/styles.css`
 and override the values from your code, or you can copy [the styles.css
 file](./source/styles.css) and alter it to your liking. The latter is the best
 option, given `rem`s should be used instead of `px` to account for different
-default browser font sizes, but it's hard to guess at what these values should
-be.
+default browser font sizes, and it's hard for a library to guess at what these
+values should be.
+
+An example of customizing the transition duration, timing function, overlay
+background color, and unzoom button styles with `:focus-visible` can be found in
+this story: https://rpearce.github.io/react-medium-image-zoom/?path=/story/img--custom-modal-styles
 
 ## Migrating From v4 to v5
 

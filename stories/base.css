@@ -57,6 +57,25 @@ img {
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.8);
   color: #000;
 }
+.custom-zoom [data-rmiz-modal-overlay],
+.custom-zoom [data-rmiz-modal-img] {
+  transition-duration: 0.8s;
+  transition-timing-function: linear;
+}
+.custom-zoom [data-rmiz-modal-overlay="hidden"] {
+  background-color: rgb(56, 58, 89, 0);
+}
+.custom-zoom [data-rmiz-modal-overlay="visible"] {
+  background-color: rgb(56, 58, 89, 1);
+}
+.custom-zoom [data-rmiz-btn-unzoom] {
+  background-color: #bd93f9;
+  color: #000;
+}
+.custom-zoom [data-rmiz-btn-unzoom]:focus-visible {
+  outline-offset: 0.4rem;
+  outline: 0.2rem solid #bd93f9;
+}
 .data-uri-img [data-rmiz-btn-zoom] {
   height: 15px;
   padding: 3px;
