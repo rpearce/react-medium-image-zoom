@@ -132,24 +132,6 @@ export const SmallSrcSize: ComponentStory<typeof Zoom> = (props) => (
   </div>
 )
 
-export const CustomButtonIcons: ComponentStory<typeof Zoom> = (props) => (
-  <div>
-    <h1>An image with custom zoom &amp; unzoom icons</h1>
-    <div className="mw-600">
-      <p>Press TAB to activate the zoom button</p>
-      <div className="change-icons">
-        <Zoom {...props} IconZoom={() => <>+</>} IconUnzoom={() => <>+</>}>
-          <img
-            alt={imgHookerValleyTrack.alt}
-            src={imgHookerValleyTrack.src}
-            width="400"
-          />
-        </Zoom>
-      </div>
-    </div>
-  </div>
-)
-
 export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => (
   <div>
     <h1>Custom Modal Styles</h1>
@@ -190,6 +172,24 @@ export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => (
 `}
         </code>
       </pre>
+    </div>
+  </div>
+)
+
+export const CustomButtonIcons: ComponentStory<typeof Zoom> = (props) => (
+  <div>
+    <h1>An image with custom zoom &amp; unzoom icons</h1>
+    <div className="mw-600">
+      <p>Press TAB to activate the zoom button</p>
+      <div className="change-icons">
+        <Zoom {...props} IconZoom={() => <>+</>} IconUnzoom={() => <>-</>}>
+          <img
+            alt={imgHookerValleyTrack.alt}
+            src={imgHookerValleyTrack.src}
+            width="400"
+          />
+        </Zoom>
+      </div>
     </div>
   </div>
 )
