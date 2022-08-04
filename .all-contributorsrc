@@ -529,6 +529,15 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "remorses",
+      "name": "Tommaso De Rossi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31321188?v=4",
+      "profile": "https://github.com/remorses",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "repoType": "github",

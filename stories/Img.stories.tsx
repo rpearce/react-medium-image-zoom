@@ -9,9 +9,10 @@ import '../source/styles.css'
 import './base.css'
 
 import {
+  imgGlenorchyLagoon,
   imgHookerValleyTrack,
-  imgKeaSmall,
   imgKeaLarge,
+  imgKeaSmall,
   imgNzMap,
   imgTeAraiPoint,
   imgThatWanakaTree,
@@ -131,13 +132,57 @@ export const SmallSrcSize: ComponentStory<typeof Zoom> = (props) => (
   </div>
 )
 
+export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => (
+  <div>
+    <h1>Custom Modal Styles</h1>
+    <div className="mw-600">
+      <p>Use CSS to customize the zoom modal styles.</p>
+      <p>Here, we slow down the transition time and use a different overlay color.</p>
+      <div className="custom-zoom">
+        <Zoom {...props}>
+          <img
+            alt={imgGlenorchyLagoon.alt}
+            src={imgGlenorchyLagoon.src}
+            width="400"
+          />
+        </Zoom>
+      </div>
+      <p>The CSS to do this:</p>
+      <pre>
+        <code>{`
+.custom-zoom [data-rmiz-modal-overlay],
+.custom-zoom [data-rmiz-modal-img] {
+  transition-duration: 0.8s;
+  transition-timing-function: linear;
+}
+.custom-zoom [data-rmiz-modal-overlay="hidden"] {
+  background-color: rgb(56, 58, 89, 0);
+}
+.custom-zoom [data-rmiz-modal-overlay="visible"] {
+  background-color: rgb(56, 58, 89, 1);
+}
+.custom-zoom [data-rmiz-btn-unzoom] {
+  background-color: #bd93f9;
+  color: #000;
+}
+.custom-zoom [data-rmiz-btn-unzoom]:focus-visible {
+  outline-offset: 0.4rem;
+  outline: 0.2rem solid #bd93f9;
+}
+`}
+        </code>
+      </pre>
+    </div>
+  </div>
+)
+
 export const CustomButtonIcons: ComponentStory<typeof Zoom> = (props) => (
   <div>
-    <h1>An image with custom zoom & unzoom icons</h1>
+    <h1>An image with custom zoom &amp; unzoom icons</h1>
     <div className="mw-600">
       <p>Press TAB to activate the zoom button</p>
       <div className="change-icons">
-        <Zoom {...props} IconZoom={() => <>+</>} IconUnzoom={() => <>+</>}>
+        <Zoom {...props} IconZoom={() => <>+</>} IconUnzoom={() => <>-</>}>
           <img
             alt={imgHookerValleyTrack.alt}
             src={imgHookerValleyTrack.src}

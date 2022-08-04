@@ -1,6 +1,6 @@
 # react-medium-image-zoom
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-52-orange.svg)](#contributors-) [![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![bundlephobia size](https://badgen.net/bundlephobia/minzip/react-medium-image-zoom)](https://bundlephobia.com/result?p=react-medium-image-zoom)
+[![All Contributors](https://img.shields.io/badge/all_contributors-53-orange.svg)](#contributors-) [![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![bundlephobia size](https://badgen.net/bundlephobia/minzip/react-medium-image-zoom)](https://bundlephobia.com/result?p=react-medium-image-zoom)
 
 The original [medium.com-inspired image zooming](https://medium.design/image-zoom-on-medium-24d146fc0c20)
 library for [React](https://reactjs.org).
@@ -221,8 +221,12 @@ You can import the default styles from `react-medium-image-zoom/dist/styles.css`
 and override the values from your code, or you can copy [the styles.css
 file](./source/styles.css) and alter it to your liking. The latter is the best
 option, given `rem`s should be used instead of `px` to account for different
-default browser font sizes, but it's hard to guess at what these values should
-be.
+default browser font sizes, and it's hard for a library to guess at what these
+values should be.
+
+An example of customizing the transition duration, timing function, overlay
+background color, and unzoom button styles with `:focus-visible` can be found in
+this story: https://rpearce.github.io/react-medium-image-zoom/?path=/story/img--custom-modal-styles
 
 ## Migrating From v4 to v5
 
@@ -303,6 +307,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
     <td align="center"><a href="https://thedveloper.com/"><img src="https://avatars.githubusercontent.com/u/10765364?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Christian Guevara</b></sub></a><br /><a href="#question-christianguevara" title="Answering Questions">💬</a></td>
     <td align="center"><a href="https://github.com/johanbook"><img src="https://avatars.githubusercontent.com/u/13253042?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Johan Book</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Ajohanbook" title="Bug reports">🐛</a></td>
     <td align="center"><a href="http://dibellopaolo-portfolio-demo-1.rf.gd/"><img src="https://avatars.githubusercontent.com/u/36816681?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Paolo Di Bello</b></sub></a><br /><a href="#ideas-PaoloDiBello" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/remorses"><img src="https://avatars.githubusercontent.com/u/31321188?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Tommaso De Rossi</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/commits?author=remorses" title="Documentation">📖</a></td>
   </tr>
 </table>
 
