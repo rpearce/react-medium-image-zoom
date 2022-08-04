@@ -88,6 +88,7 @@ export interface UncontrolledProps {
 
   // Offset in pixels the zoomed image should
   // be from the window's boundaries
+  // Default: 0
   zoomMargin?: number
 }
 ```
@@ -230,7 +231,19 @@ this story: https://rpearce.github.io/react-medium-image-zoom/?path=/story/img--
 
 ## Migrating From v4 to v5
 
-TODO
+Here are the prop changes from `v4` to be aware of:
+
+* `closeText` was renamed to `a11yNameButtonUnzoom`
+* `openText` was renamed to `a11yNameButtonZoom`
+* `overlayBgColorStart` was removed and is now controlled via the CSS selector `[data-rmiz-modal-overlay="hidden"]`
+* `overlayBgColorEnd` was removed and is now controlled via the CSS selector `[data-rmiz-modal-overlay="visible"]`
+* `portalEl` was removed, for we are using the `<dialog>` element now
+* `transitionDuration` was removed and is now controlled via the CSS selectors `[data-rmiz-modal-overlay]` and `[data-rmiz-modal-img]`
+* `wrapElement` was removed
+* `wrapStyle` was removed
+* `zoomZindex` was removed, for we are using the `<dialog>` element now
+
+And you can now provide `zoomImg` props to specify a different image to load when zooming
 
 ## Contributors
 
