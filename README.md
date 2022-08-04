@@ -1,6 +1,6 @@
 # react-medium-image-zoom
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-53-orange.svg)](#contributors-) [![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![bundlephobia size](https://badgen.net/bundlephobia/minzip/react-medium-image-zoom)](https://bundlephobia.com/result?p=react-medium-image-zoom)
+[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![bundlephobia size](https://badgen.net/bundlephobia/minzip/react-medium-image-zoom)](https://bundlephobia.com/result?p=react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-54-orange.svg)](#contributors-)
 
 The original [medium.com-inspired image zooming](https://medium.design/image-zoom-on-medium-24d146fc0c20)
 library for [React](https://reactjs.org).
@@ -243,11 +243,11 @@ Here are the prop changes from `v4` to be aware of:
 * `wrapStyle` was removed
 * `zoomZindex` was removed, for we are using the `<dialog>` element now
 
-And you can now provide `zoomImg` props to specify a different image to load when zooming
+And you can now provide `zoomImg` props to specify a different image to load when zooming.
 
-## Contributors
+## Contributors ✨
 
-Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -321,6 +321,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
     <td align="center"><a href="https://github.com/johanbook"><img src="https://avatars.githubusercontent.com/u/13253042?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Johan Book</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Ajohanbook" title="Bug reports">🐛</a></td>
     <td align="center"><a href="http://dibellopaolo-portfolio-demo-1.rf.gd/"><img src="https://avatars.githubusercontent.com/u/36816681?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Paolo Di Bello</b></sub></a><br /><a href="#ideas-PaoloDiBello" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/remorses"><img src="https://avatars.githubusercontent.com/u/31321188?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Tommaso De Rossi</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/commits?author=remorses" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/romanown"><img src="https://avatars.githubusercontent.com/u/7169357?v=4?s=100" width="100px;" alt=""/><br /><sub><b>roman</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/commits?author=romanown" title="Documentation">📖</a></td>
   </tr>
 </table>
 
@@ -329,4 +330,4 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
