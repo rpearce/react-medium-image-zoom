@@ -1,11 +1,11 @@
 import React, {
-  Component,
-  createRef,
   CSSProperties,
+  Component,
   ElementType,
   ImgHTMLAttributes,
   KeyboardEvent,
   ReactNode,
+  createRef,
 } from 'react'
 
 import type { SupportedImage } from './types'
@@ -60,10 +60,11 @@ interface ControlledDefaultProps {
 type ControlledPropsWithDefaults = ControlledDefaultProps & ControlledProps
 
 interface ControlledState {
-  shouldRefresh: boolean
+  id: string,
   isZoomImgLoaded: boolean
   loadedImgEl: HTMLImageElement | undefined
   modalState: ModalState
+  shouldRefresh: boolean
 }
 
 class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledState> {
@@ -76,10 +77,11 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   }
 
   state: ControlledState = {
-    shouldRefresh: false,
+    id: '',
     isZoomImgLoaded: false,
     loadedImgEl: undefined,
     modalState: ModalState.UNLOADED,
+    shouldRefresh: false,
   }
 
   private refContent = createRef<HTMLDivElement>()
@@ -90,14 +92,12 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   private imgEl: SupportedImage | null = null
   private imgElObserver: ResizeObserver | undefined
   private styleModalImg: CSSProperties = {}
-  private idModalImg = `rmiz-modal-img-${Math.random().toString(16).slice(-4)}`
 
   render() {
     const {
-      handleUnzoom,
       handleDialogKeyDown,
+      handleUnzoom,
       handleZoom,
-      idModalImg,
       imgEl,
       props: {
         a11yNameButtonUnzoom,
@@ -114,12 +114,15 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
       refModalImg,
       refWrap,
       state: {
-        shouldRefresh,
+        id,
         isZoomImgLoaded,
         loadedImgEl,
         modalState,
+        shouldRefresh,
       },
     } = this
+
+    const idModalImg = `rmiz-modal-img-${id}`
 
     // =========================================================================
 
@@ -238,6 +241,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   // ===========================================================================
 
   componentDidMount() {
+    this.setId()
     this.setAndTrackImg()
     this.handleImgLoad()
     this.UNSAFE_handleSvg()
@@ -258,6 +262,13 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   componentDidUpdate(prevProps: ControlledPropsWithDefaults) {
     this.UNSAFE_handleSvg()
     this.handleIfZoomChanged(prevProps.isZoomed)
+  }
+
+  // ===========================================================================
+  // Because of SSR, set a unique ID after render
+
+  setId = () => {
+    this.setState({ id: Math.random().toString(16).slice(-4) })
   }
 
   // ===========================================================================
