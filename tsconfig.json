@@ -10,6 +10,7 @@
     "jsx": "react",
     "lib": ["esnext", "dom"],
     "module": "esnext",
+    "moduleResolution": "nodenext",
     "noImplicitAny": true,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
