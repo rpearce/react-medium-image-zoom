@@ -13,6 +13,9 @@ body {
 *:after {
   box-sizing: inherit;
 }
+*:focus:not(:focus-visible) {
+  outline: none;
+}
 body {
   margin: 2em;
   font-size: 1.6rem;
