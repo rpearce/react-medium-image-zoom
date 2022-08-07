@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { ReactElement, useLayoutEffect, useMemo, useState } from 'react'
 
 import { ComponentStory, ComponentMeta } from '@storybook/react'
 import { waitFor, within, userEvent } from '@storybook/testing-library'
 import { expect } from '@storybook/jest'
 
-import Zoom from '../source'
+import Zoom, { UncontrolledProps } from '../source'
 import '../source/styles.css'
 import './base.css'
 
@@ -176,6 +176,69 @@ export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => (
   </div>
 )
 
+export const ModalFigureCaption: ComponentStory<typeof Zoom> = (props) => (
+  <div>
+    <h1>Modal With Figure And Caption</h1>
+    <p>
+      If you want more control over the zoom modal&apos;s content, you can pass
+      a <code>ZoomContent</code> component
+    </p>
+    <div className="mw-600">
+      <Zoom {...props} ZoomContent={CustomZoomContent}>
+        <img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height="320"
+          loading="lazy"
+        />
+      </Zoom>
+    </div>
+  </div>
+)
+
+const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({ buttonUnzoom, img }) => {
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  const imgProps = (img as ReactElement<HTMLImageElement>)?.props
+  const imgWidth = imgProps?.width
+  const imgHeight = imgProps?.height
+
+  const classCaption = useMemo(() => {
+    const hasWidthHeight = imgWidth && imgHeight
+    const imgRatioLargerThanWindow = imgWidth / imgHeight > window.innerWidth / window.innerHeight
+
+    return cx({
+      'zoom-caption': true,
+      'zoom-caption--loaded': isLoaded,
+      'zoom-caption--bottom': hasWidthHeight && imgRatioLargerThanWindow,
+      'zoom-caption--left': hasWidthHeight && !imgRatioLargerThanWindow,
+    })
+  }, [imgWidth, imgHeight, isLoaded])
+
+  // @TODO: this needs to be set on load/unload
+  useLayoutEffect(() => {
+    setIsLoaded(true)
+  }, [])
+
+  return <>
+    {buttonUnzoom}
+
+    <figure>
+      {img}
+      <figcaption className={classCaption}>
+        That Wanaka Tree, also known as the Wanaka Willow, is a willow tree
+        located at the southern end of Lake Wānaka in the Otago region of New
+        Zealand.
+        <cite className="zoom-caption-cite">
+          Wikipedia, <a className="zoom-caption-link" href="https://en.wikipedia.org/wiki/That_Wanaka_Tree">
+            That Wanaka Tree
+          </a>
+        </cite>
+      </figcaption>
+    </figure>
+  </>
+}
+
 export const CustomButtonIcons: ComponentStory<typeof Zoom> = (props) => (
   <div>
     <h1>An image with custom zoom &amp; unzoom icons</h1>
@@ -214,4 +277,19 @@ WithRegularZoomed.play = async ({ canvasElement }) => {
     await expect(canvas.getByRole('dialog').querySelector(`img[alt="${imgThatWanakaTree.alt}"]`)).toBeVisible()
     await expect(canvas.getByLabelText('Minimize image')).toHaveFocus()
   })
+}
+
+// =============================================================================
+// HELPERS
+
+const cx = (mods) => {
+  const cns = []
+
+  for (const k in mods) {
+    if (mods[k]) {
+      cns.push(k)
+    }
+  }
+
+  return cns.join(' ')
 }

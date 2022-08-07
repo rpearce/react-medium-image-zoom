@@ -69,7 +69,6 @@
 [data-rmiz-modal-overlay] {
   position: absolute;
   inset: 0;
-  pointer-events: all;
   transition: background-color 0.3s;
 }
 [data-rmiz-modal-overlay="hidden"] {
@@ -78,14 +77,16 @@
 [data-rmiz-modal-overlay="visible"] {
   background-color: rgba(255, 255, 255, 1);
 }
-[data-rmiz-modal][open] [data-rmiz-modal-content] {
+[data-rmiz-modal-content] {
   position: relative;
+  pointer-events: all;
+  width: 100%;
+  height: 100%;
 }
 [data-rmiz-modal-img] {
   position: absolute;
   cursor: zoom-out;
   image-rendering: high-quality;
-  pointer-events: all;
   transform-origin: top left;
   transition: transform 0.3s;
   will-change: transform;
