@@ -26,10 +26,10 @@ import {
 // =============================================================================
 
 const enum ModalState {
-  LOADED,
-  LOADING,
-  UNLOADED,
-  UNLOADING,
+  LOADED = 'LOADED',
+  LOADING = 'LOADING',
+  UNLOADED = 'UNLOADED',
+  UNLOADING = 'UNLOADING',
 }
 
 // =============================================================================
@@ -46,6 +46,7 @@ export interface ControlledProps {
   ZoomContent?: (data: {
     img: ReactElement | null
     buttonUnzoom: ReactElement<HTMLButtonElement>
+    modalState: ModalState
     onUnzoom: () => void
   }) => ReactElement
   zoomImg?: ImgHTMLAttributes<HTMLImageElement>
@@ -218,6 +219,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     const modalContent = ZoomContent
       ? <ZoomContent
         buttonUnzoom={modalBtnUnzoom}
+        modalState={modalState}
         img={modalImg}
         onUnzoom={handleUnzoom}
       />

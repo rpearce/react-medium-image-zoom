@@ -196,7 +196,12 @@ export const ModalFigureCaption: ComponentStory<typeof Zoom> = (props) => (
   </div>
 )
 
-const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({ buttonUnzoom, img }) => {
+const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({
+  buttonUnzoom,
+  modalState,
+  img,
+  //onUnzooom, // Not used here, but could be
+}) => {
   const [isLoaded, setIsLoaded] = useState(false)
 
   const imgProps = (img as ReactElement<HTMLImageElement>)?.props
@@ -215,10 +220,13 @@ const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({ buttonUnzoom, img
     })
   }, [imgWidth, imgHeight, isLoaded])
 
-  // @TODO: this needs to be set on load/unload
   useLayoutEffect(() => {
-    setIsLoaded(true)
-  }, [])
+    if (modalState === 'LOADED') {
+      setIsLoaded(true)
+    } else if (modalState === 'UNLOADING') {
+      setIsLoaded(false)
+    }
+  }, [modalState])
 
   return <>
     {buttonUnzoom}

@@ -94,7 +94,7 @@ img {
   font-size: 1.4rem;
   padding: 1.7rem 2.5rem;
   opacity: 0.0001;
-  transition: opacity 1s;
+  transition: opacity 0.3s;
 }
 .zoom-caption--loaded {
   opacity: 1;
