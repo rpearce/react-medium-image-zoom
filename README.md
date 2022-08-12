@@ -50,8 +50,8 @@ export const MyImg = () => (
 ```
 
 This library's compilation target is `ES2022`, but it only uses features from
-`ES2020` and below. If you find you need to support older browsers, add
-`react-medium-image-zoom` to your build system.
+`ES2020` and below. If you find you need to support older environments, run this
+project through your build system.
 
 ## API
 
