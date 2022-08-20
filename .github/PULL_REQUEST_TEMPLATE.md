@@ -1,8 +1,9 @@
-This pull request closes (past link to GitHub issue here)
+## Description
 
-## Pre-Flight Checklist
+This pull request addresses (issue)
 
-I have made sure to:
+## Testing
 
-- [ ] add tests & add a Storybook example (when this makes sense)
-- [ ] manually test all the Storybook examples
+1. Do this
+2. Do that
+3. It should work
