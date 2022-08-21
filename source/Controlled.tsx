@@ -266,7 +266,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
 
   setId = () => {
     const gen4 = () => Math.random().toString(16).slice(-4)
-    this.setState({ id: gen4() + gen4() })
+    this.setState({ id: gen4() + gen4() + gen4() })
   }
 
   // ===========================================================================
