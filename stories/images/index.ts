@@ -1,3 +1,4 @@
+import earth from './earth-large.jpg'
 import glenorchyLagoon from './glenorchy-lagoon.jpg'
 import hobbiton from './andres-iga-7XKkJVw1d8c-unsplash-smaller.jpg'
 import hookerValleyTrack from './roell-de-ram-2DM7eOR5iyc-unsplash-smaller.jpg'
@@ -11,6 +12,11 @@ import teAraiPoint from './douglas-bagg-wRwa3Z6GtRI-unsplash-smaller.jpg'
 import tekapo from './tobias-keller-73F4pKoUkM0-unsplash-smaller.jpg'
 import thatWanakaTree from './laura-smetsers-H-TW2CoNtTk-unsplash-smaller.jpg'
 import nzMap from './nz-map.svg'
+
+export const imgEarth = {
+  alt: '2D map of the Earth',
+  src: earth,
+}
 
 export const imgGlenorchyLagoon = {
   alt: 'Glenorchy lagoon, New Zealand by Robert Pearce',
