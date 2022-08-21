@@ -12,7 +12,7 @@ export default {
 } as ComponentMeta<typeof Zoom>
 
 export const AnimatingSquare: ComponentStory<typeof Zoom> = (props) => (
-  <div>
+  <main aria-label="Story">
     <h1>An animating square SVG with its width & height set via style</h1>
     <div className="mw-600">
       <figure>
@@ -36,11 +36,11 @@ export const AnimatingSquare: ComponentStory<typeof Zoom> = (props) => (
         </figcaption>
       </figure>
     </div>
-  </div>
+  </main>
 )
 
 export const BirdOnBackground: ComponentStory<typeof Zoom> = () => (
-  <div>
+  <main aria-label="Story">
     <h1>A bird SVG on a non-SVG background</h1>
     <div className="mw-600">
       <div
@@ -65,5 +65,5 @@ export const BirdOnBackground: ComponentStory<typeof Zoom> = () => (
         </Zoom>
       </div>
     </div>
-  </div>
+  </main>
 )

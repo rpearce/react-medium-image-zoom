@@ -34,7 +34,7 @@ export const JAndKZoomUnzoom: ComponentStory<typeof Zoom> = (props) => {
   }, [handleKeyDown])
 
   return (
-    <div>
+    <main aria-label="Story">
       <h1>Custom zoom and unzoom controls</h1>
       <div className="jk mw-600">
         <p>Click into this window, then use &quot;j&quot; to zoom and &quot;k&quot; to unzoom</p>
@@ -50,6 +50,6 @@ export const JAndKZoomUnzoom: ComponentStory<typeof Zoom> = (props) => {
           />
         </Zoom>
       </div>
-    </div>
+    </main>
   )
 }

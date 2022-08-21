@@ -25,7 +25,7 @@ export default {
 } as ComponentMeta<typeof Zoom>
 
 export const Regular: ComponentStory<typeof Zoom> = (props) => (
-  <div>
+  <main aria-label="Story">
     <h1>Zooming a regular image</h1>
     <div className="mw-600">
       <Zoom {...props}>
@@ -37,11 +37,11 @@ export const Regular: ComponentStory<typeof Zoom> = (props) => (
         />
       </Zoom>
     </div>
-  </div>
+  </main>
 )
 
 export const SmallPortrait: ComponentStory<typeof Zoom> = (props) => (
-  <div>
+  <main aria-label="Story">
     <h1>A portrait image with a small width specified</h1>
     <div className="mw-600">
       <p>Small size specifications scale well, too — even on mobile.</p>
@@ -54,11 +54,11 @@ export const SmallPortrait: ComponentStory<typeof Zoom> = (props) => (
         />
       </Zoom>
     </div>
-  </div>
+  </main>
 )
 
 export const SVGSource: ComponentStory<typeof Zoom> = (props) => (
-  <div>
+  <main aria-label="Story">
     <h1>An image with an SVG src</h1>
     <div className="mw-600">
       <Zoom {...props}>
@@ -70,11 +70,11 @@ export const SVGSource: ComponentStory<typeof Zoom> = (props) => (
         />
       </Zoom>
     </div>
-  </div>
+  </main>
 )
 
 export const DataSVGSource: ComponentStory<typeof Zoom> = () => (
-  <div>
+  <main aria-label="Story">
     <h1>An image with a <code>data:image/svg+xml</code> <code>src</code></h1>
     <div className="data-uri-img mw-600">
       <Zoom>
@@ -84,11 +84,11 @@ export const DataSVGSource: ComponentStory<typeof Zoom> = () => (
         />
       </Zoom>
     </div>
-  </div>
+  </main>
 )
 
 export const ProvideZoomImg: ComponentStory<typeof Zoom> = (props) => (
-  <div>
+  <main aria-label="Story">
     <h1>An image with a larger <code>zoomImg</code></h1>
     <div className="mw-600">
       <p>
@@ -110,11 +110,11 @@ export const ProvideZoomImg: ComponentStory<typeof Zoom> = (props) => (
         />
       </Zoom>
     </div>
-  </div>
+  </main>
 )
 
 export const SmallSrcSize: ComponentStory<typeof Zoom> = (props) => (
-  <div>
+  <main aria-label="Story">
     <h1>An image with a small size</h1>
     <div className="mw-600">
       <p>
@@ -129,11 +129,11 @@ export const SmallSrcSize: ComponentStory<typeof Zoom> = (props) => (
         />
       </Zoom>
     </div>
-  </div>
+  </main>
 )
 
 export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => (
-  <div>
+  <main aria-label="Story">
     <h1>Custom Modal Styles</h1>
     <div className="mw-600">
       <p>Use CSS to customize the zoom modal styles.</p>
@@ -173,11 +173,11 @@ export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => (
         </code>
       </pre>
     </div>
-  </div>
+  </main>
 )
 
 export const CustomButtonIcons: ComponentStory<typeof Zoom> = (props) => (
-  <div>
+  <main aria-label="Story">
     <h1>An image with custom zoom &amp; unzoom icons</h1>
     <div className="mw-600">
       <p>Press TAB to activate the zoom button</p>
@@ -191,7 +191,7 @@ export const CustomButtonIcons: ComponentStory<typeof Zoom> = (props) => (
         </Zoom>
       </div>
     </div>
-  </div>
+  </main>
 )
 
 // =============================================================================
