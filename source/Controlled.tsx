@@ -146,7 +146,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     const isModalActive = modalState === ModalState.LOADING ||
       modalState === ModalState.LOADED
 
-    const dataContentState = hasImage ? '' : 'not-found'
+    const dataContentState = hasImage ? 'found' : 'not-found'
 
     const dataOverlayState =
       modalState === ModalState.UNLOADED || modalState === ModalState.UNLOADING
