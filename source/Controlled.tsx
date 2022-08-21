@@ -89,6 +89,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   private refModalImg = createRef<HTMLImageElement>()
   private refWrap = createRef<HTMLDivElement>()
 
+  private changeObserver: MutationObserver | undefined
   private imgEl: SupportedImage | null = null
   private imgElObserver: ResizeObserver | undefined
   private styleModalImg: CSSProperties = {}
@@ -245,7 +246,8 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   }
 
   componentWillUnmount() {
-    this.imgElObserver?.disconnect()
+    this.changeObserver?.disconnect?.()
+    this.imgElObserver?.disconnect?.()
     this.imgEl?.removeEventListener?.('load', this.handleImgLoad)
     this.imgEl?.removeEventListener?.('click', this.handleZoom)
     window.removeEventListener('resize', this.handleResize)
@@ -270,12 +272,17 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   // ===========================================================================
   // Find and set the image we're working with
 
-  setAndTrackImg = ({ retryCount = 0 } = {}) => {
-    this.imgEl = this.refContent.current?.querySelector?.(
+  setAndTrackImg = () => {
+    const contentEl = this.refContent.current
+
+    if (!contentEl) return
+
+    this.imgEl = contentEl.querySelector(
       ':is(img, svg, [role="img"], [data-zoom]):not([aria-hidden="true"])'
     ) as SupportedImage | null
 
     if (this.imgEl) {
+      this.changeObserver?.disconnect?.()
       this.imgEl?.addEventListener?.('load', this.handleImgLoad)
       this.imgEl?.addEventListener?.('click', this.handleZoom)
 
@@ -293,10 +300,9 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
       })
 
       this.imgElObserver.observe(this.imgEl)
-    } else if (retryCount < 3) {
-      setTimeout(() => {
-        this.setAndTrackImg({ retryCount: retryCount + 1 })
-      }, 1000 * 2 ** retryCount)
+    } else if (!this.changeObserver) {
+      this.changeObserver = new MutationObserver(this.setAndTrackImg)
+      this.changeObserver.observe(contentEl, { childList: true, subtree: true })
     }
   }
 
