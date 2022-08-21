@@ -43,10 +43,10 @@
   z-index: 1;
   pointer-events: all;
 }
-[data-rmiz-content] img,
-[data-rmiz-content] svg,
-[data-rmiz-content] [role="img"],
-[data-rmiz-content] [data-zoom] {
+[data-rmiz-content=""] img,
+[data-rmiz-content=""] svg,
+[data-rmiz-content=""] [role="img"],
+[data-rmiz-content=""] [data-zoom] {
   cursor: zoom-in;
 }
 [data-rmiz-modal] {
