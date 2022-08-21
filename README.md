@@ -20,6 +20,9 @@ Features:
   * NVDA in Chrome, Edge, and Firefox (Windows)
   * VoiceOver in Safari (macOS, iOS)
   * TalkBack in Chrome (Android)
+* Supports popular tools:
+  * [Gatsby](https://www.gatsbyjs.com) and [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/)
+  * [Next.js' next/image](https://nextjs.org/docs/api-reference/next/image)
 * Zero `dependencies`
 
 [View the storybook examples](https://rpearce.github.io/react-medium-image-zoom/)
