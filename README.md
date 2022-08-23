@@ -1,6 +1,6 @@
 # react-medium-image-zoom
 
-[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![bundlephobia size](https://badgen.net/bundlephobia/minzip/react-medium-image-zoom)](https://bundlephobia.com/result?p=react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-54-orange.svg)](#contributors-)
+[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![bundlephobia size](https://badgen.net/bundlephobia/minzip/react-medium-image-zoom)](https://bundlephobia.com/result?p=react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-55-orange.svg)](#contributors-)
 
 The original [medium.com-inspired image zooming](https://medium.design/image-zoom-on-medium-24d146fc0c20)
 library for [React](https://reactjs.org).
@@ -20,6 +20,9 @@ Features:
   * NVDA in Chrome, Edge, and Firefox (Windows)
   * VoiceOver in Safari (macOS, iOS)
   * TalkBack in Chrome (Android)
+* Supports popular tools:
+  * [Gatsby](https://www.gatsbyjs.com) and [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/)
+  * [Next.js](https://nextjs.org/docs/api-reference/next/image)
 * Zero `dependencies`
 
 [View the storybook examples](https://rpearce.github.io/react-medium-image-zoom/)
@@ -321,6 +324,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/johanbook"><img src="https://avatars.githubusercontent.com/u/13253042?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Johan Book</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Ajohanbook" title="Bug reports">🐛</a></td>
     <td align="center"><a href="http://dibellopaolo-portfolio-demo-1.rf.gd/"><img src="https://avatars.githubusercontent.com/u/36816681?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Paolo Di Bello</b></sub></a><br /><a href="#ideas-PaoloDiBello" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/remorses"><img src="https://avatars.githubusercontent.com/u/31321188?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Tommaso De Rossi</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/commits?author=remorses" title="Documentation">📖</a> <a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Aremorses" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://github.com/lezan"><img src="https://avatars.githubusercontent.com/u/1663016?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lezan</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Alezan" title="Bug reports">🐛</a> <a href="#ideas-lezan" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 

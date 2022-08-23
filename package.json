@@ -1,6 +1,6 @@
 {
   "name": "react-medium-image-zoom",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "license": "BSD-3-Clause",
   "description": "Accessible medium.com-style image zoom for React",
   "type": "module",

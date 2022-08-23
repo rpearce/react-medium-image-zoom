@@ -15,7 +15,7 @@ export default {
 } as ComponentMeta<typeof Zoom>
 
 export const Figure: ComponentStory<typeof Zoom> = (props) => (
-  <div>
+  <main aria-label="Story">
     <h1>{'Zoom an <img /> in a <figure> element'}</h1>
     <div className="mw-600">
       <figure>
@@ -33,5 +33,5 @@ export const Figure: ComponentStory<typeof Zoom> = (props) => (
         </figcaption>
       </figure>
     </div>
-  </div>
+  </main>
 )

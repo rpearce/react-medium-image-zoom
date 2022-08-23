@@ -57,7 +57,7 @@ export const ImageGallery = () => {
   }, [])
 
   return (
-    <div>
+    <main aria-label="Story">
       <h1>{'Image gallery using <img />, object-fit, & object-position'}</h1>
       <form style={{ marginBottom: '3rem' }} onSubmit={handleSubmit}>
         <div style={{ marginBottom: '1rem' }}>
@@ -113,7 +113,7 @@ export const ImageGallery = () => {
           </li>
         ))}
       </ul>
-    </div>
+    </main>
   )
 }
 
@@ -145,7 +145,7 @@ export const DivImageGallery = () => {
   }, [])
 
   return (
-    <div>
+    <main aria-label="Story">
       <h1>{'Image gallery using <div>s, background images, and padding'}</h1>
       <form style={{ marginBottom: '3rem' }} onSubmit={handleSubmit}>
         <div style={{ marginBottom: '1rem' }}>
@@ -214,6 +214,6 @@ export const DivImageGallery = () => {
           </li>
         ))}
       </ul>
-    </div>
+    </main>
   )
 }

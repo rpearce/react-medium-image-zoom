@@ -15,7 +15,7 @@ export default {
 } as ComponentMeta<typeof Zoom>
 
 export const Picture: ComponentStory<typeof Zoom> = (props) => (
-  <div>
+  <main aria-label="Story">
     <h1>{'Zoom an <img /> in a <picture> element with a <source />'}</h1>
     <div className="mw-600">
       <p>Hint: reduce the window&apos;s width to see a portrait picture, instead.</p>
@@ -30,5 +30,5 @@ export const Picture: ComponentStory<typeof Zoom> = (props) => (
         </picture>
       </Zoom>
     </div>
-  </div>
+  </main>
 )
