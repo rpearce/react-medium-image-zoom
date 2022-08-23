@@ -98,6 +98,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   private refModalImg = createRef<HTMLImageElement>()
   private refWrap = createRef<HTMLDivElement>()
 
+  private changeObserver: MutationObserver | undefined
   private imgEl: SupportedImage | null = null
   private imgElObserver: ResizeObserver | undefined
   private styleModalImg: CSSProperties = {}
@@ -148,6 +149,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     const imgSrcSet = isImg ? imgEl.srcset : undefined
 
     const hasZoomImg = !!zoomImg?.src
+    const hasImage = imgEl && (loadedImgEl || isSvg)
 
     const labelBtnZoom = imgAlt
       ? `${a11yNameButtonZoom}: ${imgAlt}`
@@ -155,6 +157,8 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
 
     const isModalActive = modalState === ModalState.LOADING ||
       modalState === ModalState.LOADED
+
+    const dataContentState = hasImage ? 'found' : 'not-found'
 
     const dataOverlayState =
       modalState === ModalState.UNLOADED || modalState === ModalState.UNLOADING
@@ -170,7 +174,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     const styleGhost = getStyleGhost(imgEl)
 
     // Share this with UNSAFE_handleSvg
-    this.styleModalImg = imgEl && (loadedImgEl || isSvg)
+    this.styleModalImg = hasImage
       ? getStyleModalImg({
         hasZoomImg,
         imgSrc,
@@ -185,67 +189,71 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
 
     // =========================================================================
 
-    const modalImg = isImg || isDiv
-      ? <img
-        alt={imgAlt}
-        sizes={imgSizes}
-        src={imgSrc}
-        srcSet={imgSrcSet}
-        {...isZoomImgLoaded && modalState === ModalState.LOADED ? zoomImg : {}}
-        data-rmiz-modal-img
-        height={this.styleModalImg.height}
-        id={idModalImg}
-        ref={refModalImg}
-        style={this.styleModalImg}
-        width={this.styleModalImg.width}
-      />
-      : isSvg
-        ? <div
-          data-rmiz-modal-img
+    let modalContent = null
+
+    if (hasImage) {
+      const modalImg = isImg || isDiv
+        ? <img
+          alt={imgAlt}
+          sizes={imgSizes}
+          src={imgSrc}
+          srcSet={imgSrcSet}
+          {...isZoomImgLoaded && modalState === ModalState.LOADED ? zoomImg : {}}
+          data-rmiz-modal-img=""
+          height={this.styleModalImg.height}
+          id={idModalImg}
           ref={refModalImg}
           style={this.styleModalImg}
-          />
-        : null
+          width={this.styleModalImg.width}
+        />
+        : isSvg
+          ? <div
+            data-rmiz-modal-img
+            ref={refModalImg}
+            style={this.styleModalImg}
+            />
+          : null
 
-    const modalBtnUnzoom = <button
-      aria-label={a11yNameButtonUnzoom}
-      data-rmiz-btn-unzoom
-      onClick={handleUnzoom}
-      type="button"
-    >
-      <IconUnzoom />
-    </button>
+      const modalBtnUnzoom = <button
+        aria-label={a11yNameButtonUnzoom}
+        data-rmiz-btn-unzoom=""
+        onClick={handleUnzoom}
+        type="button"
+      >
+        <IconUnzoom />
+      </button>
 
-    const modalContent = ZoomContent
-      ? <ZoomContent
-        buttonUnzoom={modalBtnUnzoom}
-        modalState={modalState}
-        img={modalImg}
-        onUnzoom={handleUnzoom}
-      />
-      : <>{modalImg}{modalBtnUnzoom}</>
+      modalContent = ZoomContent
+        ? <ZoomContent
+          buttonUnzoom={modalBtnUnzoom}
+          modalState={modalState}
+          img={modalImg}
+          onUnzoom={handleUnzoom}
+        />
+        : <>{modalImg}{modalBtnUnzoom}</>
+    }
 
     // =========================================================================
 
     return (
-      <div data-rmiz ref={refWrap}>
-        <div data-rmiz-content ref={refContent} style={styleContent}>
+      <div data-rmiz="" ref={refWrap}>
+        <div data-rmiz-content={dataContentState} ref={refContent} style={styleContent}>
           {children}
         </div>
-        <div data-rmiz-ghost style={styleGhost}>
+        {hasImage && <div data-rmiz-ghost="" style={styleGhost}>
           <button
             aria-label={labelBtnZoom}
-            data-rmiz-btn-zoom
+            data-rmiz-btn-zoom=""
             onClick={handleZoom}
             type="button"
           >
             <IconZoom />
           </button>
-        </div>
-        <dialog /* eslint-disable-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
+        </div>}
+        {hasImage && <dialog /* eslint-disable-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
           aria-labelledby={idModalImg}
           aria-modal="true"
-          data-rmiz-modal
+          data-rmiz-modal=""
           ref={refDialog}
           onClick={handleDialogClick}
           onClose={handleUnzoom}
@@ -253,8 +261,10 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
           role="dialog"
         >
           <div data-rmiz-modal-overlay={dataOverlayState} />
-          <div data-rmiz-modal-content ref={refModalContent}>{modalContent}</div>
-        </dialog>
+          <div data-rmiz-modal-content="" ref={refModalContent}>
+            {modalContent}
+          </div>
+        </dialog>}
       </div>
     )
   }
@@ -266,12 +276,11 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     this.setAndTrackImg()
     this.handleImgLoad()
     this.UNSAFE_handleSvg()
-    this.imgEl?.addEventListener?.('load', this.handleImgLoad)
-    this.imgEl?.addEventListener?.('click', this.handleZoom)
   }
 
   componentWillUnmount() {
-    this.imgElObserver?.disconnect()
+    this.changeObserver?.disconnect?.()
+    this.imgElObserver?.disconnect?.()
     this.imgEl?.removeEventListener?.('load', this.handleImgLoad)
     this.imgEl?.removeEventListener?.('click', this.handleZoom)
     window.removeEventListener('resize', this.handleResize)
@@ -289,18 +298,31 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   // Because of SSR, set a unique ID after render
 
   setId = () => {
-    this.setState({ id: Math.random().toString(16).slice(-4) })
+    const gen4 = () => Math.random().toString(16).slice(-4)
+    this.setState({ id: gen4() + gen4() + gen4() })
   }
 
   // ===========================================================================
   // Find and set the image we're working with
 
   setAndTrackImg = () => {
-    this.imgEl = this.refContent.current?.querySelector?.(
+    const contentEl = this.refContent.current
+
+    if (!contentEl) return
+
+    this.imgEl = contentEl.querySelector(
       ':is(img, svg, [role="img"], [data-zoom]):not([aria-hidden="true"])'
     ) as SupportedImage | null
 
     if (this.imgEl) {
+      this.changeObserver?.disconnect?.()
+      this.imgEl?.addEventListener?.('load', this.handleImgLoad)
+      this.imgEl?.addEventListener?.('click', this.handleZoom)
+
+      if (!this.state.loadedImgEl) {
+        this.handleImgLoad()
+      }
+
       this.imgElObserver = new ResizeObserver(entries => {
         const entry = entries[0]
 
@@ -311,6 +333,9 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
       })
 
       this.imgElObserver.observe(this.imgEl)
+    } else if (!this.changeObserver) {
+      this.changeObserver = new MutationObserver(this.setAndTrackImg)
+      this.changeObserver.observe(contentEl, { childList: true, subtree: true })
     }
   }
 
@@ -333,6 +358,10 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   handleImgLoad = () => {
     const { imgEl } = this
 
+    const imgSrc = getImgSrc(imgEl)
+
+    if (!imgSrc) return
+
     const img = new Image()
 
     if (testImg(imgEl)) {
@@ -340,17 +369,18 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
       img.srcset = imgEl.srcset
     }
 
-    img.src = getImgSrc(imgEl) ?? ''
+    // img.src must be set after sizes and srcset
+    // because of Firefox flickering on zoom
+    img.src = imgSrc
 
-    img.decode()
-      .then(() => {
-        this.setState({ loadedImgEl: img })
-      })
-      .catch(() => {
-        img.onload = () => {
-          this.setState({ loadedImgEl: img })
-        }
-      })
+    const setLoaded = () => {
+      this.setState({ loadedImgEl: img })
+    }
+
+    img
+      .decode()
+      .then(setLoaded)
+      .catch(() => { img.onload = setLoaded })
   }
 
   // ===========================================================================
@@ -465,13 +495,18 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
 
     if (zoomImgSrc) {
       const img = new Image()
-      img.src = zoomImgSrc
       img.sizes = zoomImg?.sizes ?? ''
       img.srcset = zoomImg?.srcSet ?? ''
+      img.src = zoomImgSrc
 
-      img.decode().then(() => {
+      const setLoaded = () => {
         this.setState({ isZoomImgLoaded: true })
-      })
+      }
+
+      img
+        .decode()
+        .then(setLoaded)
+        .catch(() => { img.onload = setLoaded })
     }
   }
 

@@ -1,42 +1,10 @@
-This issue is a: <!-- delete as appropriate -->
+## Issue Type
 
-- Bug report
-- Feature request
-- Question / support request
-- Other
-
-<!-- BUG REPORT? – REMOVE THIS LINE
-
-## Expected behavior
-I expected...
-
-## Actual behavior
-What actually happened was...
-
-## Steps to reproduce behavior
-1. First do this...
-1. Then this...
-1. Then this...
-
-## Link to repository/example of behavior
-Here's a link to to where I've recreated the issue...
-
-BUG REPORT? – REMOVE THIS LINE -->
-
-
-
-<!-- FEATURE REQUEST? – REMOVE THIS LINE
+- [ ] Bug report
+- [ ] Feature request
+- [ ] Question / support request
+- [ ] Other
 
 ## Description
-It would be nice if...
 
-FEATURE REQUEST? – REMOVE THIS LINE -->
-
-
-
-<!-- QUESTION/SUPPORT REQUEST? – REMOVE THIS LINE
-
-## Description
-For some reason I can't get it to work right...
-
-QUESTION/SUPPORT REQUEST? – REMOVE THIS LINE -->
+Place detailed information here

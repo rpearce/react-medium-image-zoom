@@ -1,4 +1,11 @@
-import React, { ReactElement, useLayoutEffect, useMemo, useState } from 'react'
+import React, {
+  ReactElement,
+  CSSProperties,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from 'react'
 
 import { ComponentStory, ComponentMeta } from '@storybook/react'
 import { waitFor, within, userEvent } from '@storybook/testing-library'
@@ -9,6 +16,7 @@ import '../source/styles.css'
 import './base.css'
 
 import {
+  imgEarth,
   imgGlenorchyLagoon,
   imgHookerValleyTrack,
   imgKeaLarge,
@@ -24,8 +32,10 @@ export default {
   parameters: {},
 } as ComponentMeta<typeof Zoom>
 
+// =============================================================================
+
 export const Regular: ComponentStory<typeof Zoom> = (props) => (
-  <div>
+  <main aria-label="Story">
     <h1>Zooming a regular image</h1>
     <div className="mw-600">
       <Zoom {...props}>
@@ -37,11 +47,13 @@ export const Regular: ComponentStory<typeof Zoom> = (props) => (
         />
       </Zoom>
     </div>
-  </div>
+  </main>
 )
 
+// =============================================================================
+
 export const SmallPortrait: ComponentStory<typeof Zoom> = (props) => (
-  <div>
+  <main aria-label="Story">
     <h1>A portrait image with a small width specified</h1>
     <div className="mw-600">
       <p>Small size specifications scale well, too — even on mobile.</p>
@@ -54,11 +66,13 @@ export const SmallPortrait: ComponentStory<typeof Zoom> = (props) => (
         />
       </Zoom>
     </div>
-  </div>
+  </main>
 )
 
+// =============================================================================
+
 export const SVGSource: ComponentStory<typeof Zoom> = (props) => (
-  <div>
+  <main aria-label="Story">
     <h1>An image with an SVG src</h1>
     <div className="mw-600">
       <Zoom {...props}>
@@ -70,11 +84,13 @@ export const SVGSource: ComponentStory<typeof Zoom> = (props) => (
         />
       </Zoom>
     </div>
-  </div>
+  </main>
 )
 
+// =============================================================================
+
 export const DataSVGSource: ComponentStory<typeof Zoom> = () => (
-  <div>
+  <main aria-label="Story">
     <h1>An image with a <code>data:image/svg+xml</code> <code>src</code></h1>
     <div className="data-uri-img mw-600">
       <Zoom>
@@ -84,11 +100,13 @@ export const DataSVGSource: ComponentStory<typeof Zoom> = () => (
         />
       </Zoom>
     </div>
-  </div>
+  </main>
 )
 
+// =============================================================================
+
 export const ProvideZoomImg: ComponentStory<typeof Zoom> = (props) => (
-  <div>
+  <main aria-label="Story">
     <h1>An image with a larger <code>zoomImg</code></h1>
     <div className="mw-600">
       <p>
@@ -110,11 +128,13 @@ export const ProvideZoomImg: ComponentStory<typeof Zoom> = (props) => (
         />
       </Zoom>
     </div>
-  </div>
+  </main>
 )
 
+// =============================================================================
+
 export const SmallSrcSize: ComponentStory<typeof Zoom> = (props) => (
-  <div>
+  <main aria-label="Story">
     <h1>An image with a small size</h1>
     <div className="mw-600">
       <p>
@@ -129,11 +149,13 @@ export const SmallSrcSize: ComponentStory<typeof Zoom> = (props) => (
         />
       </Zoom>
     </div>
-  </div>
+  </main>
 )
 
+// =============================================================================
+
 export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => (
-  <div>
+  <main aria-label="Story">
     <h1>Custom Modal Styles</h1>
     <div className="mw-600">
       <p>Use CSS to customize the zoom modal styles.</p>
@@ -173,11 +195,13 @@ export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => (
         </code>
       </pre>
     </div>
-  </div>
+  </main>
 )
 
+// =============================================================================
+
 export const ModalFigureCaption: ComponentStory<typeof Zoom> = (props) => (
-  <div>
+  <main aria-label="Story">
     <h1>Modal With Figure And Caption</h1>
     <p>
       If you want more control over the zoom modal&apos;s content, you can pass
@@ -193,7 +217,7 @@ export const ModalFigureCaption: ComponentStory<typeof Zoom> = (props) => (
         />
       </Zoom>
     </div>
-  </div>
+  </main>
 )
 
 const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({
@@ -247,8 +271,96 @@ const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({
   </>
 }
 
+// =============================================================================
+
+type DelayedImgProps = {
+  timer: number
+  alt: string
+  src: string
+  width: string
+  height: string
+}
+
+const DelayedImg = (props: DelayedImgProps) => {
+  const { alt, height, src, timer, width } = props
+
+  const stylePlaceholder: CSSProperties = timer === 0
+    ? { opacity: 0, visibility: 'hidden', position: 'absolute' }
+    : { opacity: 1 }
+
+  useEffect(() => {
+    const img = new Image()
+    img.src = src
+    img.decode()
+  }, [src])
+
+  return (
+    <div>
+      <img /* placeholder */
+        alt=""
+        aria-hidden="true"
+        decoding="async"
+        height={height}
+        src="data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAALABQDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAgQA/8QAFgEBAQEAAAAAAAAAAAAAAAAAAgED/9oADAMBAAIQAxAAAAFutLOHXan/xAAaEAACAwEBAAAAAAAAAAAAAAAAEwIDEQES/9oACAEBAAEFAmyxnT3YKhiqxcD/xAAYEQADAQEAAAAAAAAAAAAAAAAAAQISUf/aAAgBAwEBPwFKjNdP/8QAFxEBAAMAAAAAAAAAAAAAAAAAAAERIf/aAAgBAgEBPwHFw//EABcQAQEBAQAAAAAAAAAAAAAAAAAxATL/2gAIAQEABj8Cq6qOUf/EAB0QAQACAgIDAAAAAAAAAAAAAAEAETFBIVFhcYH/2gAIAQEAAT8hLTa9xQK5/MRwq9wB94FrKsV+z//aAAwDAQACAAMAAAAQg+//xAAYEQACAwAAAAAAAAAAAAAAAAAAARFB0f/aAAgBAwEBPxBCxzaP/8QAFhEBAQEAAAAAAAAAAAAAAAAAAQAx/9oACAECAQE/EEUAZf/EAB0QAAICAgMBAAAAAAAAAAAAAAERADEhQVGRocH/2gAIAQEAAT8QrTbZUQmHR1CiO0TexMDR5OfZSZbuE1IcAh9n/9k="
+        style={stylePlaceholder}
+        width={width}
+      />
+      {timer === 0 && <img
+        alt={alt}
+        decoding="async"
+        loading="lazy"
+        src={src}
+        width={width}
+      />}
+    </div>
+  )
+}
+
+export const DelayedImageRender: ComponentStory<typeof Zoom> = (props) => {
+  const [timer, setTimer] = useState(5000)
+
+  useEffect(() => {
+    const interval = setInterval(function () {
+      if (timer === 0) {
+        clearInterval(this)
+      } else {
+        setTimer(timer - 1000)
+      }
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [timer])
+
+  return (
+    <main aria-label="Story">
+      <h1>A sub-component which delays rendering</h1>
+      <div className="mw-600">
+        <p>
+          This examples simulates an issue caused by the gatsby-plugin-image
+          (and potentially others) where the actual image element isn&apos;t
+          found on the first render.
+        </p>
+        <div>
+          Image loads in: <span role="timer">{timer / 1000}</span>
+        </div>
+        <Zoom {...props}>
+          <DelayedImg
+            timer={timer}
+            alt={imgEarth.alt}
+            src={imgEarth.src}
+            height="200"
+            width="400"
+          />
+        </Zoom>
+      </div>
+    </main>
+  )
+}
+
+// =============================================================================
+
 export const CustomButtonIcons: ComponentStory<typeof Zoom> = (props) => (
-  <div>
+  <main aria-label="Story">
     <h1>An image with custom zoom &amp; unzoom icons</h1>
     <div className="mw-600">
       <p>Press TAB to activate the zoom button</p>
@@ -262,7 +374,7 @@ export const CustomButtonIcons: ComponentStory<typeof Zoom> = (props) => (
         </Zoom>
       </div>
     </div>
-  </div>
+  </main>
 )
 
 // =============================================================================
