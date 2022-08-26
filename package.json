@@ -78,7 +78,7 @@
     "test-storybook": "test-storybook"
   },
   "devDependencies": {
-    "@babel/core": "^7.18.10",
+    "@babel/core": "^7.18.13",
     "@mdx-js/react": "^2.1.3",
     "@rollup/plugin-typescript": "8.3.3",
     "@storybook/addon-a11y": "^6.5.10",
@@ -95,11 +95,11 @@
     "@storybook/test-runner": "^0.6.0-next.1",
     "@storybook/testing-library": "^0.0.13",
     "@types/axe-core": "^2.0.7",
-    "@types/node": "^18.7.8",
+    "@types/node": "^18.7.13",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
-    "@typescript-eslint/eslint-plugin": "^5.33.1",
-    "@typescript-eslint/parser": "^5.33.1",
+    "@typescript-eslint/eslint-plugin": "^5.35.1",
+    "@typescript-eslint/parser": "^5.35.1",
     "all-contributors-cli": "^6.20.0",
     "axe-core": "^4.4.3",
     "babel-loader": "^8.2.5",
@@ -108,9 +108,9 @@
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.6.1",
-    "eslint-plugin-n": "^15.2.4",
-    "eslint-plugin-promise": "^6.0.0",
-    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-n": "^15.2.5",
+    "eslint-plugin-promise": "^6.0.1",
+    "eslint-plugin-react": "^7.31.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-storybook": "^0.6.4",
     "jest": "^28.1.3",
@@ -119,7 +119,7 @@
     "react-dom": "^18.2.0",
     "rollup": "^2.78.1",
     "rollup-plugin-dts": "^4.2.2",
-    "typescript": "^4.7.4"
+    "typescript": "^4.8.2"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
