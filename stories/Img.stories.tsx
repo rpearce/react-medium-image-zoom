@@ -1,6 +1,5 @@
 import React, {
   CSSProperties,
-  ImgHTMLAttributes,
   useEffect,
   useState,
 } from 'react'
