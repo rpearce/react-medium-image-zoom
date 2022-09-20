@@ -549,6 +549,42 @@
         "bug",
         "ideas"
       ]
+    },
+    {
+      "login": "MrLibya",
+      "name": "Ibrahim H. Sluma",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22921411?v=4",
+      "profile": "https://www.facebook.com/perma.ban.731/",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "bengotow",
+      "name": "Ben Gotow",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1037212?v=4",
+      "profile": "http://www.foundry376.com/",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "Rubon72",
+      "name": "Rubon72",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16108629?v=4",
+      "profile": "https://github.com/Rubon72",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "wanderingme",
+      "name": "wanderingme",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15581?v=4",
+      "profile": "https://github.com/wanderingme",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
