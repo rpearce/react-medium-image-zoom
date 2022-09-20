@@ -329,6 +329,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center"><a href="https://www.facebook.com/perma.ban.731/"><img src="https://avatars.githubusercontent.com/u/22921411?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ibrahim H. Sluma</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3AMrLibya" title="Bug reports">🐛</a></td>
       <td align="center"><a href="http://www.foundry376.com/"><img src="https://avatars.githubusercontent.com/u/1037212?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ben Gotow</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Abengotow" title="Bug reports">🐛</a></td>
     </tr>
+    <tr>
+      <td align="center"><a href="https://github.com/Rubon72"><img src="https://avatars.githubusercontent.com/u/16108629?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Rubon72</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3ARubon72" title="Bug reports">🐛</a></td>
+    </tr>
   </tbody>
 </table>
 
