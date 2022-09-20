@@ -558,6 +558,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "bengotow",
+      "name": "Ben Gotow",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1037212?v=4",
+      "profile": "http://www.foundry376.com/",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
