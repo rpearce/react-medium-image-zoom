@@ -549,6 +549,15 @@
         "bug",
         "ideas"
       ]
+    },
+    {
+      "login": "MrLibya",
+      "name": "Ibrahim H. Sluma",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22921411?v=4",
+      "profile": "https://www.facebook.com/perma.ban.731/",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
