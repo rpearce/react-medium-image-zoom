@@ -289,6 +289,24 @@ export const CustomButtonIcons: ComponentStory<typeof Zoom> = (props) => (
 )
 
 // =============================================================================
+
+export const WrapElementSpan: ComponentStory<typeof Zoom> = (props) => (
+  <main aria-label="Story">
+    <h1>Using spans as wrapElements</h1>
+    <div className="mw-600">
+      <Zoom {...props} wrapElement="span">
+        <img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height="320"
+          loading="lazy"
+        />
+      </Zoom>
+    </div>
+  </main>
+)
+
+// =============================================================================
 // INTERACTIONS
 
 export const WithRegularZoomed = Regular.bind({})

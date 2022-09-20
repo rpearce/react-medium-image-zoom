@@ -41,6 +41,7 @@ export interface ControlledProps {
   isZoomed: boolean
   onZoomChange?: (value: boolean) => void
   scrollableEl?: Window | HTMLElement
+  wrapElement?: ElementType
   zoomImg?: ImgHTMLAttributes<HTMLImageElement>
   zoomMargin?: number
 }
@@ -54,6 +55,7 @@ interface ControlledDefaultProps {
   a11yNameButtonZoom: string
   IconUnzoom: ElementType
   IconZoom: ElementType
+  wrapElement: ElementType,
   zoomMargin: number
 }
 
@@ -73,6 +75,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     a11yNameButtonZoom: 'Expand image',
     IconUnzoom: ICompress,
     IconZoom: IEnlarge,
+    wrapElement: 'div',
     zoomMargin: 0,
   }
 
@@ -107,6 +110,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
         IconUnzoom,
         IconZoom,
         isZoomed,
+        wrapElement: WrapElement,
         zoomImg,
         zoomMargin,
       },
@@ -178,10 +182,10 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     // =========================================================================
 
     return (
-      <div data-rmiz="" ref={refWrap}>
-        <div data-rmiz-content={dataContentState} ref={refContent} style={styleContent}>
+      <WrapElement data-rmiz="" ref={refWrap}>
+        <WrapElement data-rmiz-content={dataContentState} ref={refContent} style={styleContent}>
           {children}
-        </div>
+        </WrapElement>
         {hasImage && <div data-rmiz-ghost="" style={styleGhost}>
           <button
             aria-label={labelBtnZoom}
@@ -232,7 +236,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
             </button>
           </div>
         </dialog>}
-      </div>
+      </WrapElement>
     )
   }
 
