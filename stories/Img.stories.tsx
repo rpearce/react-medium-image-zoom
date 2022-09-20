@@ -293,16 +293,18 @@ export const CustomButtonIcons: ComponentStory<typeof Zoom> = (props) => (
 export const WrapElementSpan: ComponentStory<typeof Zoom> = (props) => (
   <main aria-label="Story">
     <h1>Using spans as wrapElements</h1>
-    <div className="mw-600">
+    <p className="wrap-element-example">
+      This example uses spans instead of divs for the Zoom component.
       <Zoom {...props} wrapElement="span">
         <img
           alt={imgThatWanakaTree.alt}
+          decoding="async"
           src={imgThatWanakaTree.src}
           height="320"
           loading="lazy"
         />
       </Zoom>
-    </div>
+    </p>
   </main>
 )
 

@@ -8,6 +8,8 @@ import React, {
   createRef,
 } from 'react'
 
+import { createPortal } from 'react-dom'
+
 import type { SupportedImage } from './types'
 import { IEnlarge, ICompress } from './icons'
 
@@ -196,46 +198,49 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
             <IconZoom />
           </button>
         </div>}
-        {hasImage && <dialog /* eslint-disable-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
-          aria-labelledby={idModalImg}
-          aria-modal="true"
-          data-rmiz-modal=""
-          ref={refDialog}
-          onClick={handleUnzoom}
-          onClose={handleUnzoom /* eslint-disable-line react/no-unknown-property */}
-          onKeyDown={handleDialogKeyDown}
-          role="dialog"
-        >
-          <div data-rmiz-modal-overlay={dataOverlayState} />
-          <div data-rmiz-modal-content="">
-            {(isImg || isDiv) && <img
-              alt={imgAlt}
-              sizes={imgSizes}
-              src={imgSrc}
-              srcSet={imgSrcSet}
-              {...isZoomImgLoaded && modalState === ModalState.LOADED ? zoomImg : {}}
-              data-rmiz-modal-img=""
-              height={this.styleModalImg.height}
-              id={idModalImg}
-              ref={refModalImg}
-              style={this.styleModalImg}
-              width={this.styleModalImg.width}
-            />}
-            {isSvg && <div
-              data-rmiz-modal-img=""
-              ref={refModalImg}
-              style={this.styleModalImg}
-            />}
-            <button
-              aria-label={a11yNameButtonUnzoom}
-              data-rmiz-btn-unzoom=""
-              onClick={handleUnzoom}
-              type="button"
-            >
-              <IconUnzoom />
-            </button>
-          </div>
-        </dialog>}
+        {hasImage && document?.body != null && createPortal(
+          <dialog /* eslint-disable-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
+            aria-labelledby={idModalImg}
+            aria-modal="true"
+            data-rmiz-modal=""
+            ref={refDialog}
+            onClick={handleUnzoom}
+            onClose={handleUnzoom /* eslint-disable-line react/no-unknown-property */}
+            onKeyDown={handleDialogKeyDown}
+            role="dialog"
+          >
+            <div data-rmiz-modal-overlay={dataOverlayState} />
+            <div data-rmiz-modal-content="">
+              {(isImg || isDiv) && <img
+                alt={imgAlt}
+                sizes={imgSizes}
+                src={imgSrc}
+                srcSet={imgSrcSet}
+                {...isZoomImgLoaded && modalState === ModalState.LOADED ? zoomImg : {}}
+                data-rmiz-modal-img=""
+                height={this.styleModalImg.height}
+                id={idModalImg}
+                ref={refModalImg}
+                style={this.styleModalImg}
+                width={this.styleModalImg.width}
+              />}
+              {isSvg && <div
+                data-rmiz-modal-img=""
+                ref={refModalImg}
+                style={this.styleModalImg}
+              />}
+              <button
+                aria-label={a11yNameButtonUnzoom}
+                data-rmiz-btn-unzoom=""
+                onClick={handleUnzoom}
+                type="button"
+              >
+                <IconUnzoom />
+              </button>
+            </div>
+          </dialog>
+          , document.body
+        )}
       </WrapElement>
     )
   }
