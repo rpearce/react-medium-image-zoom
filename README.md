@@ -331,6 +331,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     </tr>
     <tr>
       <td align="center"><a href="https://github.com/Rubon72"><img src="https://avatars.githubusercontent.com/u/16108629?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Rubon72</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3ARubon72" title="Bug reports">🐛</a></td>
+      <td align="center"><a href="https://github.com/wanderingme"><img src="https://avatars.githubusercontent.com/u/15581?v=4?s=100" width="100px;" alt=""/><br /><sub><b>wanderingme</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Awanderingme" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
