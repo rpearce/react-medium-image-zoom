@@ -1,6 +1,9 @@
 import React, {
+  ReactElement,
   CSSProperties,
   useEffect,
+  useLayoutEffect,
+  useMemo,
   useState,
 } from 'react'
 
@@ -8,7 +11,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react'
 import { waitFor, within, userEvent } from '@storybook/testing-library'
 import { expect } from '@storybook/jest'
 
-import Zoom from '../source'
+import Zoom, { UncontrolledProps } from '../source'
 import '../source/styles.css'
 import './base.css'
 
@@ -29,6 +32,8 @@ export default {
   parameters: {},
 } as ComponentMeta<typeof Zoom>
 
+// =============================================================================
+
 export const Regular: ComponentStory<typeof Zoom> = (props) => (
   <main aria-label="Story">
     <h1>Zooming a regular image</h1>
@@ -44,6 +49,8 @@ export const Regular: ComponentStory<typeof Zoom> = (props) => (
     </div>
   </main>
 )
+
+// =============================================================================
 
 export const SmallPortrait: ComponentStory<typeof Zoom> = (props) => (
   <main aria-label="Story">
@@ -62,6 +69,8 @@ export const SmallPortrait: ComponentStory<typeof Zoom> = (props) => (
   </main>
 )
 
+// =============================================================================
+
 export const SVGSource: ComponentStory<typeof Zoom> = (props) => (
   <main aria-label="Story">
     <h1>An image with an SVG src</h1>
@@ -78,6 +87,8 @@ export const SVGSource: ComponentStory<typeof Zoom> = (props) => (
   </main>
 )
 
+// =============================================================================
+
 export const DataSVGSource: ComponentStory<typeof Zoom> = () => (
   <main aria-label="Story">
     <h1>An image with a <code>data:image/svg+xml</code> <code>src</code></h1>
@@ -91,6 +102,8 @@ export const DataSVGSource: ComponentStory<typeof Zoom> = () => (
     </div>
   </main>
 )
+
+// =============================================================================
 
 export const ProvideZoomImg: ComponentStory<typeof Zoom> = (props) => (
   <main aria-label="Story">
@@ -118,6 +131,8 @@ export const ProvideZoomImg: ComponentStory<typeof Zoom> = (props) => (
   </main>
 )
 
+// =============================================================================
+
 export const SmallSrcSize: ComponentStory<typeof Zoom> = (props) => (
   <main aria-label="Story">
     <h1>An image with a small size</h1>
@@ -136,6 +151,8 @@ export const SmallSrcSize: ComponentStory<typeof Zoom> = (props) => (
     </div>
   </main>
 )
+
+// =============================================================================
 
 export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => (
   <main aria-label="Story">
@@ -182,7 +199,79 @@ export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => (
 )
 
 // =============================================================================
-// Delayed image example
+
+export const ModalFigureCaption: ComponentStory<typeof Zoom> = (props) => (
+  <main aria-label="Story">
+    <h1>Modal With Figure And Caption</h1>
+    <p>
+      If you want more control over the zoom modal&apos;s content, you can pass
+      a <code>ZoomContent</code> component
+    </p>
+    <div className="mw-600">
+      <Zoom {...props} ZoomContent={CustomZoomContent}>
+        <img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height="320"
+          loading="lazy"
+        />
+      </Zoom>
+    </div>
+  </main>
+)
+
+const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({
+  buttonUnzoom,
+  modalState,
+  img,
+  //onUnzooom, // Not used here, but could be
+}) => {
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  const imgProps = (img as ReactElement<HTMLImageElement>)?.props
+  const imgWidth = imgProps?.width
+  const imgHeight = imgProps?.height
+
+  const classCaption = useMemo(() => {
+    const hasWidthHeight = imgWidth && imgHeight
+    const imgRatioLargerThanWindow = imgWidth / imgHeight > window.innerWidth / window.innerHeight
+
+    return cx({
+      'zoom-caption': true,
+      'zoom-caption--loaded': isLoaded,
+      'zoom-caption--bottom': hasWidthHeight && imgRatioLargerThanWindow,
+      'zoom-caption--left': hasWidthHeight && !imgRatioLargerThanWindow,
+    })
+  }, [imgWidth, imgHeight, isLoaded])
+
+  useLayoutEffect(() => {
+    if (modalState === 'LOADED') {
+      setIsLoaded(true)
+    } else if (modalState === 'UNLOADING') {
+      setIsLoaded(false)
+    }
+  }, [modalState])
+
+  return <>
+    {buttonUnzoom}
+
+    <figure>
+      {img}
+      <figcaption className={classCaption}>
+        That Wanaka Tree, also known as the Wanaka Willow, is a willow tree
+        located at the southern end of Lake Wānaka in the Otago region of New
+        Zealand.
+        <cite className="zoom-caption-cite">
+          Wikipedia, <a className="zoom-caption-link" href="https://en.wikipedia.org/wiki/That_Wanaka_Tree">
+            That Wanaka Tree
+          </a>
+        </cite>
+      </figcaption>
+    </figure>
+  </>
+}
+
+// =============================================================================
 
 type DelayedImgProps = {
   timer: number
@@ -329,4 +418,19 @@ WithRegularZoomed.play = async ({ canvasElement, ...rest }) => {
     await expect(document.querySelector('dialog').querySelector(`img[alt="${imgThatWanakaTree.alt}"]`)).toBeVisible()
     await expect(document.querySelector('dialog').querySelector('[aria-label="Minimize image"')).toHaveFocus()
   })
+}
+
+// =============================================================================
+// HELPERS
+
+const cx = (mods) => {
+  const cns = []
+
+  for (const k in mods) {
+    if (mods[k]) {
+      cns.push(k)
+    }
+  }
+
+  return cns.join(' ')
 }
