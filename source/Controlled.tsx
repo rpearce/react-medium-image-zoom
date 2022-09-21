@@ -256,7 +256,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
           data-rmiz-modal=""
           ref={refDialog}
           onClick={handleDialogClick}
-          onClose={handleUnzoom}
+          onClose={handleUnzoom /* eslint-disable-line react/no-unknown-property */}
           onKeyDown={handleDialogKeyDown}
           role="dialog"
         >
