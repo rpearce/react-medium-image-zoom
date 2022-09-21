@@ -4,6 +4,8 @@ import React, {
   ElementType,
   ImgHTMLAttributes,
   KeyboardEvent,
+  MouseEvent,
+  ReactElement,
   ReactNode,
   createRef,
 } from 'react'
@@ -24,10 +26,10 @@ import {
 // =============================================================================
 
 const enum ModalState {
-  LOADED,
-  LOADING,
-  UNLOADED,
-  UNLOADING,
+  LOADED = 'LOADED',
+  LOADING = 'LOADING',
+  UNLOADED = 'UNLOADED',
+  UNLOADING = 'UNLOADING',
 }
 
 // =============================================================================
@@ -41,6 +43,12 @@ export interface ControlledProps {
   isZoomed: boolean
   onZoomChange?: (value: boolean) => void
   scrollableEl?: Window | HTMLElement
+  ZoomContent?: (data: {
+    img: ReactElement | null
+    buttonUnzoom: ReactElement<HTMLButtonElement>
+    modalState: ModalState
+    onUnzoom: () => void
+  }) => ReactElement
   zoomImg?: ImgHTMLAttributes<HTMLImageElement>
   zoomMargin?: number
 }
@@ -86,6 +94,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
 
   private refContent = createRef<HTMLDivElement>()
   private refDialog = createRef<HTMLDialogElement>()
+  private refModalContent = createRef<HTMLDivElement>()
   private refModalImg = createRef<HTMLImageElement>()
   private refWrap = createRef<HTMLDivElement>()
 
@@ -96,6 +105,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
 
   render() {
     const {
+      handleDialogClick,
       handleDialogKeyDown,
       handleUnzoom,
       handleZoom,
@@ -107,11 +117,13 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
         IconUnzoom,
         IconZoom,
         isZoomed,
+        ZoomContent,
         zoomImg,
         zoomMargin,
       },
       refContent,
       refDialog,
+      refModalContent,
       refModalImg,
       refWrap,
       state: {
@@ -177,6 +189,52 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
 
     // =========================================================================
 
+    let modalContent = null
+
+    if (hasImage) {
+      const modalImg = isImg || isDiv
+        ? <img
+          alt={imgAlt}
+          sizes={imgSizes}
+          src={imgSrc}
+          srcSet={imgSrcSet}
+          {...isZoomImgLoaded && modalState === ModalState.LOADED ? zoomImg : {}}
+          data-rmiz-modal-img=""
+          height={this.styleModalImg.height}
+          id={idModalImg}
+          ref={refModalImg}
+          style={this.styleModalImg}
+          width={this.styleModalImg.width}
+        />
+        : isSvg
+          ? <div
+            data-rmiz-modal-img
+            ref={refModalImg}
+            style={this.styleModalImg}
+            />
+          : null
+
+      const modalBtnUnzoom = <button
+        aria-label={a11yNameButtonUnzoom}
+        data-rmiz-btn-unzoom=""
+        onClick={handleUnzoom}
+        type="button"
+      >
+        <IconUnzoom />
+      </button>
+
+      modalContent = ZoomContent
+        ? <ZoomContent
+          buttonUnzoom={modalBtnUnzoom}
+          modalState={modalState}
+          img={modalImg}
+          onUnzoom={handleUnzoom}
+        />
+        : <>{modalImg}{modalBtnUnzoom}</>
+    }
+
+    // =========================================================================
+
     return (
       <div data-rmiz="" ref={refWrap}>
         <div data-rmiz-content={dataContentState} ref={refContent} style={styleContent}>
@@ -197,39 +255,14 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
           aria-modal="true"
           data-rmiz-modal=""
           ref={refDialog}
-          onClick={handleUnzoom}
+          onClick={handleDialogClick}
           onClose={handleUnzoom /* eslint-disable-line react/no-unknown-property */}
           onKeyDown={handleDialogKeyDown}
           role="dialog"
         >
           <div data-rmiz-modal-overlay={dataOverlayState} />
-          <div data-rmiz-modal-content="">
-            {(isImg || isDiv) && <img
-              alt={imgAlt}
-              sizes={imgSizes}
-              src={imgSrc}
-              srcSet={imgSrcSet}
-              {...isZoomImgLoaded && modalState === ModalState.LOADED ? zoomImg : {}}
-              data-rmiz-modal-img=""
-              height={this.styleModalImg.height}
-              id={idModalImg}
-              ref={refModalImg}
-              style={this.styleModalImg}
-              width={this.styleModalImg.width}
-            />}
-            {isSvg && <div
-              data-rmiz-modal-img=""
-              ref={refModalImg}
-              style={this.styleModalImg}
-            />}
-            <button
-              aria-label={a11yNameButtonUnzoom}
-              data-rmiz-btn-unzoom=""
-              onClick={handleUnzoom}
-              type="button"
-            >
-              <IconUnzoom />
-            </button>
+          <div data-rmiz-modal-content="" ref={refModalContent}>
+            {modalContent}
           </div>
         </dialog>}
       </div>
@@ -359,6 +392,15 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
 
   handleUnzoom = () => {
     this.props.onZoomChange?.(false)
+  }
+
+  // ===========================================================================
+  // Have dialog.click() only close in certain situations
+
+  handleDialogClick = (e: MouseEvent<HTMLDialogElement>) => {
+    if (e.target === this.refModalContent.current || e.target === this.refModalImg.current) {
+      this.handleUnzoom()
+    }
   }
 
   // ===========================================================================
