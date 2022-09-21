@@ -312,7 +312,8 @@ export const WrapElementSpan: ComponentStory<typeof Zoom> = (props) => (
 // INTERACTIONS
 
 export const WithRegularZoomed = Regular.bind({})
-WithRegularZoomed.play = async ({ canvasElement }) => {
+WithRegularZoomed.play = async ({ canvasElement, ...rest }) => {
+  console.log(rest)
   const canvas = within(canvasElement)
 
   await waitFor(async () => {
@@ -324,8 +325,8 @@ WithRegularZoomed.play = async ({ canvasElement }) => {
   await userEvent.keyboard('{Enter}', { delay: 1000 })
 
   await waitFor(async () => {
-    await expect(canvas.getByRole('dialog')).toHaveAttribute('open')
-    await expect(canvas.getByRole('dialog').querySelector(`img[alt="${imgThatWanakaTree.alt}"]`)).toBeVisible()
-    await expect(canvas.getByLabelText('Minimize image')).toHaveFocus()
+    await expect(document.querySelector('dialog')).toHaveAttribute('open')
+    await expect(document.querySelector('dialog').querySelector(`img[alt="${imgThatWanakaTree.alt}"]`)).toBeVisible()
+    await expect(document.querySelector('dialog').querySelector('[aria-label="Minimize image"')).toHaveFocus()
   })
 }
