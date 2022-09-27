@@ -154,24 +154,36 @@ export const SmallSrcSize: ComponentStory<typeof Zoom> = (props) => (
 
 // =============================================================================
 
-export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => (
-  <main aria-label="Story">
-    <h1>Custom Modal Styles</h1>
-    <div className="mw-600">
-      <p>Use CSS to customize the zoom modal styles.</p>
-      <p>Here, we slow down the transition time and use a different overlay color.</p>
-      <div className="custom-zoom">
-        <Zoom {...props}>
-          <img
-            alt={imgGlenorchyLagoon.alt}
-            src={imgGlenorchyLagoon.src}
-            width="400"
-          />
-        </Zoom>
-      </div>
-      <p>The CSS to do this:</p>
-      <pre>
-        <code>{`
+export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => {
+  useEffect(() => {
+    document.body.classList.add('custom-zoom')
+
+    return () => {
+      document.body.classList.remove('custom-zoom')
+    }
+  }, [])
+
+  return (
+    <main aria-label="Story">
+      <h1>Custom Modal Styles</h1>
+      <div className="mw-600">
+        <p>Use CSS to customize the zoom modal styles.</p>
+        <p>Here, we slow down the transition time and use a different overlay color.</p>
+        <div>
+          <Zoom {...props}>
+            <img
+              alt={imgGlenorchyLagoon.alt}
+              src={imgGlenorchyLagoon.src}
+              width="400"
+            />
+          </Zoom>
+        </div>
+        <p>
+          The CSS class, <code>custom-zoom</code>, is on
+          the <code>body</code> element:
+        </p>
+        <pre>
+          <code>{`
 .custom-zoom [data-rmiz-modal-overlay],
 .custom-zoom [data-rmiz-modal-img] {
   transition-duration: 0.8s;
@@ -192,11 +204,12 @@ export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => (
   outline: 0.2rem solid #bd93f9;
 }
 `}
-        </code>
-      </pre>
-    </div>
-  </main>
-)
+          </code>
+        </pre>
+      </div>
+    </main>
+  )
+}
 
 // =============================================================================
 
@@ -379,12 +392,12 @@ export const CustomButtonIcons: ComponentStory<typeof Zoom> = (props) => (
 
 // =============================================================================
 
-export const WrapElementSpan: ComponentStory<typeof Zoom> = (props) => (
+export const InlineImage: ComponentStory<typeof Zoom> = (props) => (
   <main aria-label="Story">
-    <h1>Using spans as wrapElements</h1>
-    <p className="wrap-element-example">
-      This example uses spans instead of divs for the Zoom component.
-      <Zoom {...props} wrapElement="span">
+    <h1>Inline Image</h1>
+    <p className="inline">
+      This example is of an image that is inline with text.
+      <Zoom {...props}>
         <img
           alt={imgThatWanakaTree.alt}
           decoding="async"
@@ -401,8 +414,7 @@ export const WrapElementSpan: ComponentStory<typeof Zoom> = (props) => (
 // INTERACTIONS
 
 export const WithRegularZoomed = Regular.bind({})
-WithRegularZoomed.play = async ({ canvasElement, ...rest }) => {
-  console.log(rest)
+WithRegularZoomed.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement)
 
   await waitFor(async () => {

@@ -249,7 +249,7 @@ Here are the prop changes from `v4` to be aware of:
 * `overlayBgColorEnd` was removed and is now controlled via the CSS selector `[data-rmiz-modal-overlay="visible"]`
 * `portalEl` was removed, for we are using the `<dialog>` element now
 * `transitionDuration` was removed and is now controlled via the CSS selectors `[data-rmiz-modal-overlay]` and `[data-rmiz-modal-img]`
-* `wrapElement` was removed then added back in `v5.1.0`
+* `wrapElement` was removed
 * `wrapStyle` was removed
 * `zoomZindex` was removed, for we are using the `<dialog>` element now
 

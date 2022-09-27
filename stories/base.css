@@ -87,7 +87,7 @@ img {
   width: 15px;
   line-height: 0;
 }
-.wrap-element-example [data-rmiz] img {
+.inline [data-rmiz] img {
   display: inline-block;
   vertical-align: middle;
 }
