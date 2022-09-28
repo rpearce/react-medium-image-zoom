@@ -10,6 +10,8 @@ import React, {
   createRef,
 } from 'react'
 
+import { createPortal } from 'react-dom'
+
 import type { SupportedImage } from './types'
 import { IEnlarge, ICompress } from './icons'
 
@@ -22,6 +24,16 @@ import {
   testImg,
   testSvg,
 } from './utils'
+
+// =============================================================================
+
+let elDialogContainer: HTMLDivElement
+
+if (typeof document !== 'undefined') {
+  elDialogContainer = document.createElement('div')
+  elDialogContainer.setAttribute('data-rmiz-portal', '')
+  document.body.appendChild(elDialogContainer)
+}
 
 // =============================================================================
 
@@ -43,6 +55,7 @@ export interface ControlledProps {
   isZoomed: boolean
   onZoomChange?: (value: boolean) => void
   scrollableEl?: Window | HTMLElement
+  wrapElement?: ElementType
   ZoomContent?: (data: {
     img: ReactElement | null
     buttonUnzoom: ReactElement<HTMLButtonElement>
@@ -62,6 +75,7 @@ interface ControlledDefaultProps {
   a11yNameButtonZoom: string
   IconUnzoom: ElementType
   IconZoom: ElementType
+  wrapElement: ElementType
   zoomMargin: number
 }
 
@@ -81,6 +95,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     a11yNameButtonZoom: 'Expand image',
     IconUnzoom: ICompress,
     IconZoom: IEnlarge,
+    wrapElement: 'div',
     zoomMargin: 0,
   }
 
@@ -117,6 +132,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
         IconUnzoom,
         IconZoom,
         isZoomed,
+        wrapElement: WrapElement,
         ZoomContent,
         zoomImg,
         zoomMargin,
@@ -236,11 +252,11 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     // =========================================================================
 
     return (
-      <div data-rmiz="" ref={refWrap}>
-        <div data-rmiz-content={dataContentState} ref={refContent} style={styleContent}>
+      <WrapElement data-rmiz="" ref={refWrap}>
+        <WrapElement data-rmiz-content={dataContentState} ref={refContent} style={styleContent}>
           {children}
-        </div>
-        {hasImage && <div data-rmiz-ghost="" style={styleGhost}>
+        </WrapElement>
+        {hasImage && <WrapElement data-rmiz-ghost="" style={styleGhost}>
           <button
             aria-label={labelBtnZoom}
             data-rmiz-btn-zoom=""
@@ -249,23 +265,26 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
           >
             <IconZoom />
           </button>
-        </div>}
-        {hasImage && <dialog /* eslint-disable-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
-          aria-labelledby={idModalImg}
-          aria-modal="true"
-          data-rmiz-modal=""
-          ref={refDialog}
-          onClick={handleDialogClick}
-          onClose={handleUnzoom /* eslint-disable-line react/no-unknown-property */}
-          onKeyDown={handleDialogKeyDown}
-          role="dialog"
-        >
-          <div data-rmiz-modal-overlay={dataOverlayState} />
-          <div data-rmiz-modal-content="" ref={refModalContent}>
-            {modalContent}
-          </div>
-        </dialog>}
-      </div>
+        </WrapElement>}
+        {hasImage && document?.body != null && createPortal(
+          <dialog /* eslint-disable-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
+            aria-labelledby={idModalImg}
+            aria-modal="true"
+            data-rmiz-modal=""
+            ref={refDialog}
+            onClick={handleDialogClick}
+            onClose={handleUnzoom /* eslint-disable-line react/no-unknown-property */}
+            onKeyDown={handleDialogKeyDown}
+            role="dialog"
+          >
+            <div data-rmiz-modal-overlay={dataOverlayState} />
+            <div data-rmiz-modal-content="" ref={refModalContent}>
+              {modalContent}
+            </div>
+          </dialog>
+          , elDialogContainer
+        )}
+      </WrapElement>
     )
   }
 

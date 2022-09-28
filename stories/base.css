@@ -87,6 +87,10 @@ img {
   width: 15px;
   line-height: 0;
 }
+.inline [data-rmiz] img {
+  display: inline-block;
+  vertical-align: middle;
+}
 .zoom-caption {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.85);

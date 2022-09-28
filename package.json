@@ -1,6 +1,6 @@
 {
   "name": "react-medium-image-zoom",
-  "version": "5.1.0-beta.2",
+  "version": "5.1.0-beta.4",
   "license": "BSD-3-Clause",
   "description": "Accessible medium.com-style image zoom for React",
   "type": "module",
@@ -72,7 +72,7 @@
     "contributors:generate": "all-contributors generate",
     "lint": "eslint .",
     "prepublishOnly": "concurrently npm:lint npm:build",
-    "start": "start-storybook -p 6006",
+    "start": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "test-storybook": "test-storybook"
