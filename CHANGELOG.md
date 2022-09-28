@@ -10,10 +10,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 * Ability to customize the zoom modal content via `<ZoomContent>` (issue #332)
+* Re-added `wrapElement` prop to API because of #356
 
 ### Changed
 
-* Now rendering `<dialog>` in a portal because of #356
+* Now rendering `<dialog>` in a portal because of #356. This will affect the
+  probably non-existent portion of people using CSS like `.my-class
+  [data-rmiz] {}`.
 
 ## [5.0.3] - 2022-09-19
 
