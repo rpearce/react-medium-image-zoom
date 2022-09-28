@@ -397,7 +397,7 @@ export const InlineImage: ComponentStory<typeof Zoom> = (props) => (
     <h1>Inline Image</h1>
     <p className="inline">
       This example is of an image that is inline with text.
-      <Zoom {...props}>
+      <Zoom {...props} wrapElement="span">
         <img
           alt={imgThatWanakaTree.alt}
           decoding="async"
