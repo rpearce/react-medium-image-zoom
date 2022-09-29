@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 * Ability to customize the zoom modal content via `<ZoomContent>` (issue #332)
-* Re-added `wrapElement` prop to API because of #356
+* Re-added `wrapElement` prop to API (issue #356)
+* Added a11y support for `prefers-reduced-motion: reduce` (issue #359)
 
 ### Changed
 

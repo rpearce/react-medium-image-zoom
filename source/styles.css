@@ -93,3 +93,9 @@
   transition: transform 0.3s;
   will-change: transform;
 }
+@media (prefers-reduced-motion: reduce) {
+  [data-rmiz-modal-overlay],
+  [data-rmiz-modal-img] {
+    transition-duration: 0.01ms !important;
+  }
+}
