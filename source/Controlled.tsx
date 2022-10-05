@@ -46,6 +46,26 @@ const enum ModalState {
 
 // =============================================================================
 
+interface DocumentProps {
+  left: string
+  overflow: string
+  pageYOffset: number
+  position: string
+  top: string
+  width: string
+}
+
+const defaultDocumentProps: DocumentProps = {
+  left: '',
+  overflow: '',
+  pageYOffset: 0,
+  position: '',
+  top: '',
+  width: '',
+}
+
+// =============================================================================
+
 export interface ControlledProps {
   a11yNameButtonUnzoom?: string
   a11yNameButtonZoom?: string
@@ -54,7 +74,6 @@ export interface ControlledProps {
   IconZoom?: ElementType
   isZoomed: boolean
   onZoomChange?: (value: boolean) => void
-  scrollableEl?: Window | HTMLElement
   wrapElement?: ElementType
   ZoomContent?: (data: {
     img: ReactElement | null
@@ -116,7 +135,10 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   private changeObserver: MutationObserver | undefined
   private imgEl: SupportedImage | null = null
   private imgElObserver: ResizeObserver | undefined
+  private prevDocumentProps: DocumentProps = defaultDocumentProps
   private styleModalImg: CSSProperties = {}
+  private touchYStart?: number
+  private touchYEnd?: number
 
   render() {
     const {
@@ -302,8 +324,11 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     this.imgElObserver?.disconnect?.()
     this.imgEl?.removeEventListener?.('load', this.handleImgLoad)
     this.imgEl?.removeEventListener?.('click', this.handleZoom)
+    window.removeEventListener('wheel', this.handleWheel)
+    window.removeEventListener('touchstart', this.handleTouchStart)
+    window.removeEventListener('touchend', this.handleTouchMove)
+    window.removeEventListener('touchcancel', this.handleTouchCancel)
     window.removeEventListener('resize', this.handleResize)
-    window.removeEventListener('scroll', this.handleScroll)
   }
 
   // ===========================================================================
@@ -436,9 +461,37 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   // ===========================================================================
   // Force re-renders on closing scroll
 
-  handleScroll = () => {
+  handleWheel = () => {
     this.setState({ shouldRefresh: true })
     this.handleUnzoom()
+  }
+
+  handleTouchStart = (e: TouchEvent) => {
+    if (e.changedTouches.length === 1 && e.changedTouches[0]) {
+      this.touchYStart = e.changedTouches[0].screenY
+    }
+  }
+
+  handleTouchMove = (e: TouchEvent) => {
+    if (this.touchYStart != null && e.changedTouches[0]) {
+      this.touchYEnd = e.changedTouches[0].screenY
+
+      const max = Math.max(this.touchYStart, this.touchYEnd)
+      const min = Math.min(this.touchYStart, this.touchYEnd)
+      const delta = Math.abs(max - min)
+      const threshold = 10
+
+      if (delta > threshold) {
+        this.touchYStart = undefined
+        this.touchYEnd = undefined
+        this.handleUnzoom()
+      }
+    }
+  }
+
+  handleTouchCancel = () => {
+    this.touchYStart = undefined
+    this.touchYEnd = undefined
   }
 
   // ===========================================================================
@@ -452,26 +505,19 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   // Perform zoom actions
 
   zoom = () => {
-    const {
-      handleResize,
-      handleScroll,
-      loadZoomImg,
-      props: {
-        scrollableEl = window,
-      },
-      refDialog,
-      refModalImg,
-    } = this
-
-    refDialog.current?.showModal?.()
+    this.bodyScrollDisable()
+    this.refDialog.current?.showModal?.()
     this.setState({ modalState: ModalState.LOADING })
-    loadZoomImg()
+    this.loadZoomImg()
 
-    refModalImg.current?.addEventListener?.('transitionend', () => {
+    this.refModalImg.current?.addEventListener?.('transitionend', () => {
       setTimeout(() => {
         this.setState({ modalState: ModalState.LOADED })
-        scrollableEl.addEventListener('scroll', handleScroll)
-        window.addEventListener('resize', handleResize)
+        window.addEventListener('wheel', this.handleWheel, { passive: true })
+        window.addEventListener('touchstart', this.handleTouchStart, { passive: true })
+        window.addEventListener('touchend', this.handleTouchMove, { passive: true })
+        window.addEventListener('touchcancel', this.handleTouchCancel, { passive: true })
+        window.addEventListener('resize', this.handleResize, { passive: true })
       }, 0)
     }, { once: true })
   }
@@ -480,29 +526,64 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   // Perform unzoom actions
 
   unzoom = () => {
-    const {
-      handleResize,
-      handleScroll,
-      refDialog,
-      refModalImg,
-      props: { scrollableEl = window },
-    } = this
-
     this.setState({ modalState: ModalState.UNLOADING })
 
-    refModalImg.current?.addEventListener?.('transitionend', () => {
+    this.refModalImg.current?.addEventListener?.('transitionend', () => {
       setTimeout(() => {
-        window.removeEventListener('resize', handleResize)
-        scrollableEl.removeEventListener('scroll', handleScroll)
+        window.removeEventListener('wheel', this.handleWheel)
+        window.removeEventListener('touchstart', this.handleTouchStart)
+        window.removeEventListener('touchend', this.handleTouchMove)
+        window.removeEventListener('touchcancel', this.handleTouchCancel)
+        window.removeEventListener('resize', this.handleResize)
 
         this.setState({
           shouldRefresh: false,
           modalState: ModalState.UNLOADED,
         })
 
-        refDialog.current?.close?.()
+        this.refDialog.current?.close?.()
+        this.bodyScrollEnable()
       }, 0)
     }, { once: true })
+  }
+
+  // ===========================================================================
+  // Enable / disable body scrolling
+
+  bodyScrollDisable = () => {
+    const prevDocumentProps = document.body.style
+    const pageYOffset = window.pageYOffset
+
+    // Save the prior style values on the body,
+    // plus the page scroll amount, so we can
+    // return the document to the state it was in.
+    this.prevDocumentProps = {
+      position: prevDocumentProps.position,
+      top: prevDocumentProps.top,
+      left: prevDocumentProps.left,
+      overflow: prevDocumentProps.overflow,
+      width: prevDocumentProps.width,
+      pageYOffset,
+    }
+
+    Object.assign(document.body.style, {
+      overflow: 'hidden',
+      position: 'fixed',
+      top: `-${pageYOffset}px`,
+      width: '100%',
+    })
+  }
+
+  bodyScrollEnable = () => {
+    Object.assign(document.body.style, {
+      overflow: this.prevDocumentProps.overflow,
+      position: this.prevDocumentProps.position,
+      top: this.prevDocumentProps.top,
+      width: this.prevDocumentProps.width,
+    })
+
+    window.scrollTo(0, this.prevDocumentProps.pageYOffset)
+    this.prevDocumentProps = defaultDocumentProps
   }
 
   // ===========================================================================
