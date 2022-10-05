@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [5.1.0] - 2022-09-30
+## [5.1.0] - 2022-10-06
 
 ### Added
 
@@ -17,7 +17,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 * Now rendering `<dialog>` in a portal because of #356. This will affect the
   probably non-existent portion of people using CSS like `.my-class
-  [data-rmiz] {}`.
+  [data-rmiz] {}`
+
+### Fixed
+
+* Now using the `wheel` event instead of `scroll` to detect trying to leave the
+  modal (issue #350)
+* Fixed mobile scrolling experience (related to issue #350)
+
+### Removed
+
+* Removed the broken `scrollableEl` that has arguably not ever worked (issue #350)
 
 ## [5.0.3] - 2022-09-19
 

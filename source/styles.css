@@ -49,9 +49,6 @@
 [data-rmiz-content="found"] [data-zoom] {
   cursor: zoom-in;
 }
-[data-rmiz-modal] {
-  pointer-events: none;
-}
 [data-rmiz-modal]::backdrop {
   display: none;
 }
@@ -91,7 +88,6 @@
   image-rendering: high-quality;
   transform-origin: top left;
   transition: transform 0.3s;
-  will-change: transform;
 }
 @media (prefers-reduced-motion: reduce) {
   [data-rmiz-modal-overlay],

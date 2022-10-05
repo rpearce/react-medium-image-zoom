@@ -82,10 +82,6 @@ export interface UncontrolledProps {
   // Default: IEnlarge
   IconZoom?: ElementType
 
-  // Scrollable parent element
-  // Default: window
-  scrollableEl?: Window | HTMLElement
-
   // Provide your own custom modal content component
   ZoomContent?: (props: {
     img: ReactElement | null;
