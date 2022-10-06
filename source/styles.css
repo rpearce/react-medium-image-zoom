@@ -41,7 +41,6 @@
   position: absolute;
   cursor: zoom-out;
   z-index: 1;
-  pointer-events: all;
 }
 [data-rmiz-content="found"] img,
 [data-rmiz-content="found"] svg,
@@ -78,9 +77,6 @@
   position: relative;
   width: 100%;
   height: 100%;
-}
-[data-rmiz-modal-content] * {
-  pointer-events: all;
 }
 [data-rmiz-modal-img] {
   position: absolute;
