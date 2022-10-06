@@ -82,6 +82,12 @@ export interface UncontrolledProps {
   // Default: IEnlarge
   IconZoom?: ElementType
 
+  // Specify what type of element should be used for
+  // internal component usage. This is useful if the
+  // image is inside a <p> or <button>, for example.
+  // Default: 'div'
+  wrapElement?: 'div' | 'span'
+
   // Provide your own custom modal content component
   ZoomContent?: (props: {
     img: ReactElement | null;

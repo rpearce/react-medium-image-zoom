@@ -74,7 +74,7 @@ export interface ControlledProps {
   IconZoom?: ElementType
   isZoomed: boolean
   onZoomChange?: (value: boolean) => void
-  wrapElement?: ElementType
+  wrapElement?: 'div' | 'span'
   ZoomContent?: (data: {
     img: ReactElement | null
     buttonUnzoom: ReactElement<HTMLButtonElement>
@@ -94,7 +94,7 @@ interface ControlledDefaultProps {
   a11yNameButtonZoom: string
   IconUnzoom: ElementType
   IconZoom: ElementType
-  wrapElement: ElementType
+  wrapElement: 'div' | 'span'
   zoomMargin: number
 }
 
