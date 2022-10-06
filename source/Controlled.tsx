@@ -173,6 +173,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
       },
     } = this
 
+    const idModal = `rmiz-modal-${id}`
     const idModalImg = `rmiz-modal-img-${id}`
 
     // =========================================================================
@@ -274,7 +275,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     // =========================================================================
 
     return (
-      <WrapElement data-rmiz="" ref={refWrap}>
+      <WrapElement aria-owns={idModal} data-rmiz="" ref={refWrap}>
         <WrapElement data-rmiz-content={dataContentState} ref={refContent} style={styleContent}>
           {children}
         </WrapElement>
@@ -288,15 +289,16 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
             <IconZoom />
           </button>
         </WrapElement>}
-        {hasImage && document?.body != null && createPortal(
+        {hasImage && elDialogContainer != null && createPortal(
           <dialog /* eslint-disable-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
             aria-labelledby={idModalImg}
             aria-modal="true"
             data-rmiz-modal=""
-            ref={refDialog}
+            id={idModal}
             onClick={handleDialogClick}
             onClose={handleUnzoom /* eslint-disable-line react/no-unknown-property */}
             onKeyDown={handleDialogKeyDown}
+            ref={refDialog}
             role="dialog"
           >
             <div data-rmiz-modal-overlay={dataOverlayState} />
