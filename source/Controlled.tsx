@@ -46,21 +46,13 @@ const enum ModalState {
 
 // =============================================================================
 
-interface DocumentProps {
-  left: string
+interface BodyAttrs {
   overflow: string
-  pageYOffset: number
-  position: string
-  top: string
   width: string
 }
 
-const defaultDocumentProps: DocumentProps = {
-  left: '',
+const defaultBodyAttrs: BodyAttrs = {
   overflow: '',
-  pageYOffset: 0,
-  position: '',
-  top: '',
   width: '',
 }
 
@@ -135,7 +127,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   private changeObserver: MutationObserver | undefined
   private imgEl: SupportedImage | null = null
   private imgElObserver: ResizeObserver | undefined
-  private prevDocumentProps: DocumentProps = defaultDocumentProps
+  private prevBodyAttrs: BodyAttrs = defaultBodyAttrs
   private styleModalImg: CSSProperties = {}
   private touchYStart?: number
   private touchYEnd?: number
@@ -463,9 +455,12 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   // ===========================================================================
   // Force re-renders on closing scroll
 
-  handleWheel = () => {
-    this.setState({ shouldRefresh: true })
-    this.handleUnzoom()
+  handleWheel = (e: WheelEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    queueMicrotask(() => {
+      this.handleUnzoom()
+    })
   }
 
   handleTouchStart = (e: TouchEvent) => {
@@ -544,6 +539,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
         })
 
         this.refDialog.current?.close?.()
+
         this.bodyScrollEnable()
       }, 0)
     }, { once: true })
@@ -553,39 +549,22 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   // Enable / disable body scrolling
 
   bodyScrollDisable = () => {
-    const prevDocumentProps = document.body.style
-    const pageYOffset = window.pageYOffset
-
-    // Save the prior style values on the body,
-    // plus the page scroll amount, so we can
-    // return the document to the state it was in.
-    this.prevDocumentProps = {
-      position: prevDocumentProps.position,
-      top: prevDocumentProps.top,
-      left: prevDocumentProps.left,
-      overflow: prevDocumentProps.overflow,
-      width: prevDocumentProps.width,
-      pageYOffset,
+    this.prevBodyAttrs = {
+      overflow: document.body.style.overflow,
+      width: document.body.style.width,
     }
 
-    Object.assign(document.body.style, {
-      overflow: 'hidden',
-      position: 'fixed',
-      top: `-${pageYOffset}px`,
-      width: '100%',
-    })
+    // Get clientWidth before setting overflow: 'hidden'
+    const clientWidth = document.body.clientWidth
+
+    document.body.style.overflow = 'hidden'
+    document.body.style.width = `${clientWidth}px`
   }
 
   bodyScrollEnable = () => {
-    Object.assign(document.body.style, {
-      overflow: this.prevDocumentProps.overflow,
-      position: this.prevDocumentProps.position,
-      top: this.prevDocumentProps.top,
-      width: this.prevDocumentProps.width,
-    })
-
-    window.scrollTo(0, this.prevDocumentProps.pageYOffset)
-    this.prevDocumentProps = defaultDocumentProps
+    document.body.style.width = this.prevBodyAttrs.width
+    document.body.style.overflow = this.prevBodyAttrs.overflow
+    this.prevBodyAttrs = defaultBodyAttrs
   }
 
   // ===========================================================================
