@@ -456,7 +456,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   }
 
   // ===========================================================================
-  // Force re-renders on closing scroll
+  // Handle wheel and swipe events
 
   handleWheel = (e: WheelEvent) => {
     e.preventDefault()
@@ -510,13 +510,14 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     this.setState({ modalState: ModalState.LOADING })
     this.loadZoomImg()
 
+    window.addEventListener('wheel', this.handleWheel, { passive: true })
+    window.addEventListener('touchstart', this.handleTouchStart, { passive: true })
+    window.addEventListener('touchend', this.handleTouchMove, { passive: true })
+    window.addEventListener('touchcancel', this.handleTouchCancel, { passive: true })
+
     this.refModalImg.current?.addEventListener?.('transitionend', () => {
       setTimeout(() => {
         this.setState({ modalState: ModalState.LOADED })
-        window.addEventListener('wheel', this.handleWheel, { passive: true })
-        window.addEventListener('touchstart', this.handleTouchStart, { passive: true })
-        window.addEventListener('touchend', this.handleTouchMove, { passive: true })
-        window.addEventListener('touchcancel', this.handleTouchCancel, { passive: true })
         window.addEventListener('resize', this.handleResize, { passive: true })
       }, 0)
     }, { once: true })
@@ -528,12 +529,13 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   unzoom = () => {
     this.setState({ modalState: ModalState.UNLOADING })
 
+    window.removeEventListener('wheel', this.handleWheel)
+    window.removeEventListener('touchstart', this.handleTouchStart)
+    window.removeEventListener('touchend', this.handleTouchMove)
+    window.removeEventListener('touchcancel', this.handleTouchCancel)
+
     this.refModalImg.current?.addEventListener?.('transitionend', () => {
       setTimeout(() => {
-        window.removeEventListener('wheel', this.handleWheel)
-        window.removeEventListener('touchstart', this.handleTouchStart)
-        window.removeEventListener('touchend', this.handleTouchMove)
-        window.removeEventListener('touchcancel', this.handleTouchCancel)
         window.removeEventListener('resize', this.handleResize)
 
         this.setState({
