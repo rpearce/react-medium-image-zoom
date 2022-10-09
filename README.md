@@ -74,6 +74,9 @@ export interface UncontrolledProps {
   // Your image (required)
   children: ReactNode
 
+  // Custom CSS className to add to the zoomed <dialog>
+  classDialog?: string
+
   // Provide your own unzoom button icon
   // Default: ICompress
   IconUnzoom?: ElementType

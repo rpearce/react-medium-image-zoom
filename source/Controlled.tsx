@@ -62,6 +62,7 @@ export interface ControlledProps {
   a11yNameButtonUnzoom?: string
   a11yNameButtonZoom?: string
   children: ReactNode
+  classDialog?: string
   IconUnzoom?: ElementType
   IconZoom?: ElementType
   isZoomed: boolean
@@ -143,6 +144,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
         a11yNameButtonUnzoom,
         a11yNameButtonZoom,
         children,
+        classDialog,
         IconUnzoom,
         IconZoom,
         isZoomed,
@@ -285,6 +287,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
           <dialog /* eslint-disable-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
             aria-labelledby={idModalImg}
             aria-modal="true"
+            className={classDialog}
             data-rmiz-modal=""
             id={idModal}
             onClick={handleDialogClick}

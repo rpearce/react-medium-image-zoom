@@ -155,14 +155,6 @@ export const SmallSrcSize: ComponentStory<typeof Zoom> = (props) => (
 // =============================================================================
 
 export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => {
-  useEffect(() => {
-    document.body.classList.add('custom-zoom')
-
-    return () => {
-      document.body.classList.remove('custom-zoom')
-    }
-  }, [])
-
   return (
     <main aria-label="Story">
       <h1>Custom Modal Styles</h1>
@@ -170,7 +162,7 @@ export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => {
         <p>Use CSS to customize the zoom modal styles.</p>
         <p>Here, we slow down the transition time and use a different overlay color.</p>
         <div>
-          <Zoom {...props}>
+          <Zoom {...props} classDialog="custom-zoom">
             <img
               alt={imgGlenorchyLagoon.alt}
               src={imgGlenorchyLagoon.src}
@@ -179,8 +171,8 @@ export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => {
           </Zoom>
         </div>
         <p>
-          The CSS class, <code>custom-zoom</code>, is on
-          the <code>body</code> element:
+          The CSS class, <code>custom-zoom</code>, is sent to the component via
+          the <code>classDialog</code> string prop. Here are the styles used:
         </p>
         <pre>
           <code>{`
