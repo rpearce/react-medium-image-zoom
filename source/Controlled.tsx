@@ -459,7 +459,6 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   // Handle wheel and swipe events
 
   handleWheel = (e: WheelEvent) => {
-    e.preventDefault()
     e.stopPropagation()
     queueMicrotask(() => {
       this.handleUnzoom()
