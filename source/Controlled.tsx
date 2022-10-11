@@ -236,11 +236,11 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
           srcSet={imgSrcSet}
           {...isZoomImgLoaded && modalState === ModalState.LOADED ? zoomImg : {}}
           data-rmiz-modal-img=""
-          height={this.styleModalImg.height}
+          height={this.styleModalImg.height || undefined}
           id={idModalImg}
           ref={refModalImg}
           style={this.styleModalImg}
-          width={this.styleModalImg.width}
+          width={this.styleModalImg.width || undefined}
         />
         : isSvg
           ? <div
