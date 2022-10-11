@@ -23,6 +23,7 @@ import {
   imgKeaSmall,
   imgNzMap,
   imgTeAraiPoint,
+  imgTekapo,
   imgThatWanakaTree,
 } from './images'
 
@@ -322,19 +323,7 @@ const DelayedImg = (props: DelayedImgProps) => {
 }
 
 export const DelayedImageRender: ComponentStory<typeof Zoom> = (props) => {
-  const [timer, setTimer] = useState(5000)
-
-  useEffect(() => {
-    const interval = setInterval(function () {
-      if (timer === 0) {
-        clearInterval(this)
-      } else {
-        setTimer(timer - 1000)
-      }
-    }, 1000)
-
-    return () => clearInterval(interval)
-  }, [timer])
+  const { timer } = useTimer(5000)
 
   return (
     <main aria-label="Story">
@@ -355,6 +344,38 @@ export const DelayedImageRender: ComponentStory<typeof Zoom> = (props) => {
             src={imgEarth.src}
             height="200"
             width="400"
+          />
+        </Zoom>
+      </div>
+    </main>
+  )
+}
+
+// =============================================================================
+
+export const DelayedDisplayNone: ComponentStory<typeof Zoom> = (props) => {
+  const { timer } = useTimer(5000)
+  const classImg = timer === 0 ? undefined : 'display-none'
+
+  return (
+    <main aria-label="Story">
+      <h1>A delayed <code>display: none;</code> image</h1>
+      <div className="mw-600">
+        <p>
+          This examples simulates an image being hidden with CSS and then shown
+          after the countdown.
+        </p>
+        <div>
+          Image loads in: <span role="timer">{timer / 1000}</span>
+        </div>
+        <Zoom {...props}>
+          <img
+            alt={imgTekapo.alt}
+            src={imgTekapo.src}
+            className={classImg}
+            decoding="async"
+            height="320"
+            loading="lazy"
           />
         </Zoom>
       </div>
@@ -392,8 +413,8 @@ export const InlineImage: ComponentStory<typeof Zoom> = (props) => (
       <Zoom {...props} wrapElement="span">
         <img
           alt={imgThatWanakaTree.alt}
-          decoding="async"
           src={imgThatWanakaTree.src}
+          decoding="async"
           height="320"
           loading="lazy"
         />
@@ -437,4 +458,22 @@ const cx = (mods) => {
   }
 
   return cns.join(' ')
+}
+
+const useTimer = (duration: number) => {
+  const [timer, setTimer] = useState(duration)
+
+  useEffect(() => {
+    const interval = setInterval(function () {
+      if (timer === 0) {
+        clearInterval(this)
+      } else {
+        setTimer(timer - 1000)
+      }
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [timer])
+
+  return { timer }
 }

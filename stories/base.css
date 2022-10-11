@@ -41,6 +41,9 @@ img {
   display: block;
   max-width: 100%;
 }
+.display-none {
+  display: none;
+}
 .mw-600 {
   max-width: 60rem;
 }

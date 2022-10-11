@@ -182,7 +182,10 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     const imgSrcSet = isImg ? imgEl.srcset : undefined
 
     const hasZoomImg = !!zoomImg?.src
-    const hasImage = imgEl && (loadedImgEl || isSvg)
+
+    const hasImage = imgEl &&
+      (loadedImgEl || isSvg) &&
+      window.getComputedStyle(imgEl).display !== 'none'
 
     const labelBtnZoom = imgAlt
       ? `${a11yNameButtonZoom}: ${imgAlt}`
