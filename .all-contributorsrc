@@ -629,6 +629,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "mmxdr",
+      "name": "mx",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3596230?v=4",
+      "profile": "https://radio.syg.ma/",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
