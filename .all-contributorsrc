@@ -585,6 +585,19 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "tom2strobl",
+      "name": "Thomas Strobl",
+      "avatar_url": "https://avatars.githubusercontent.com/u/557074?v=4",
+      "profile": "http://thomas-strobl.com/",
+      "contributions": [
+        "bug",
+        "ideas",
+        "example",
+        "question",
+        "review"
+      ]
     }
   ],
   "repoType": "github",
