@@ -4,7 +4,7 @@
   "files": [
     "README.md"
   ],
-  "imageSize": 100,
+  "imageSize": 40,
   "commit": true,
   "contributors": [
     {
@@ -582,6 +582,59 @@
       "name": "wanderingme",
       "avatar_url": "https://avatars.githubusercontent.com/u/15581?v=4",
       "profile": "https://github.com/wanderingme",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "tom2strobl",
+      "name": "Thomas Strobl",
+      "avatar_url": "https://avatars.githubusercontent.com/u/557074?v=4",
+      "profile": "http://thomas-strobl.com/",
+      "contributions": [
+        "bug",
+        "ideas",
+        "example",
+        "question",
+        "review"
+      ]
+    },
+    {
+      "login": "Songkeys",
+      "name": "Songkeys",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22665058?v=4",
+      "profile": "https://github.com/Songkeys",
+      "contributions": [
+        "bug",
+        "ideas",
+        "example",
+        "question",
+        "review"
+      ]
+    },
+    {
+      "login": "AntoineS92",
+      "name": "AntoineS92",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58309786?v=4",
+      "profile": "https://github.com/AntoineS92",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "trebua",
+      "name": "Sindre Aubert",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31652936?v=4",
+      "profile": "https://github.com/trebua",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "mmxdr",
+      "name": "mx",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3596230?v=4",
+      "profile": "https://radio.syg.ma/",
       "contributions": [
         "bug"
       ]

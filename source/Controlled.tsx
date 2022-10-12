@@ -4,9 +4,13 @@ import React, {
   ElementType,
   ImgHTMLAttributes,
   KeyboardEvent,
+  MouseEvent,
+  ReactElement,
   ReactNode,
   createRef,
 } from 'react'
+
+import { createPortal } from 'react-dom'
 
 import type { SupportedImage } from './types'
 import { IEnlarge, ICompress } from './icons'
@@ -23,11 +27,33 @@ import {
 
 // =============================================================================
 
+let elDialogContainer: HTMLDivElement
+
+if (typeof document !== 'undefined') {
+  elDialogContainer = document.createElement('div')
+  elDialogContainer.setAttribute('data-rmiz-portal', '')
+  document.body.appendChild(elDialogContainer)
+}
+
+// =============================================================================
+
 const enum ModalState {
-  LOADED,
-  LOADING,
-  UNLOADED,
-  UNLOADING,
+  LOADED = 'LOADED',
+  LOADING = 'LOADING',
+  UNLOADED = 'UNLOADED',
+  UNLOADING = 'UNLOADING',
+}
+
+// =============================================================================
+
+interface BodyAttrs {
+  overflow: string
+  width: string
+}
+
+const defaultBodyAttrs: BodyAttrs = {
+  overflow: '',
+  width: '',
 }
 
 // =============================================================================
@@ -36,11 +62,18 @@ export interface ControlledProps {
   a11yNameButtonUnzoom?: string
   a11yNameButtonZoom?: string
   children: ReactNode
+  classDialog?: string
   IconUnzoom?: ElementType
   IconZoom?: ElementType
   isZoomed: boolean
   onZoomChange?: (value: boolean) => void
-  scrollableEl?: Window | HTMLElement
+  wrapElement?: 'div' | 'span'
+  ZoomContent?: (data: {
+    img: ReactElement | null
+    buttonUnzoom: ReactElement<HTMLButtonElement>
+    modalState: ModalState
+    onUnzoom: () => void
+  }) => ReactElement
   zoomImg?: ImgHTMLAttributes<HTMLImageElement>
   zoomMargin?: number
 }
@@ -54,6 +87,7 @@ interface ControlledDefaultProps {
   a11yNameButtonZoom: string
   IconUnzoom: ElementType
   IconZoom: ElementType
+  wrapElement: 'div' | 'span'
   zoomMargin: number
 }
 
@@ -73,6 +107,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     a11yNameButtonZoom: 'Expand image',
     IconUnzoom: ICompress,
     IconZoom: IEnlarge,
+    wrapElement: 'div',
     zoomMargin: 0,
   }
 
@@ -86,16 +121,21 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
 
   private refContent = createRef<HTMLDivElement>()
   private refDialog = createRef<HTMLDialogElement>()
+  private refModalContent = createRef<HTMLDivElement>()
   private refModalImg = createRef<HTMLImageElement>()
   private refWrap = createRef<HTMLDivElement>()
 
   private changeObserver: MutationObserver | undefined
   private imgEl: SupportedImage | null = null
   private imgElObserver: ResizeObserver | undefined
+  private prevBodyAttrs: BodyAttrs = defaultBodyAttrs
   private styleModalImg: CSSProperties = {}
+  private touchYStart?: number
+  private touchYEnd?: number
 
   render() {
     const {
+      handleDialogClick,
       handleDialogKeyDown,
       handleUnzoom,
       handleZoom,
@@ -104,14 +144,18 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
         a11yNameButtonUnzoom,
         a11yNameButtonZoom,
         children,
+        classDialog,
         IconUnzoom,
         IconZoom,
         isZoomed,
+        wrapElement: WrapElement,
+        ZoomContent,
         zoomImg,
         zoomMargin,
       },
       refContent,
       refDialog,
+      refModalContent,
       refModalImg,
       refWrap,
       state: {
@@ -123,6 +167,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
       },
     } = this
 
+    const idModal = `rmiz-modal-${id}`
     const idModalImg = `rmiz-modal-img-${id}`
 
     // =========================================================================
@@ -137,7 +182,10 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     const imgSrcSet = isImg ? imgEl.srcset : undefined
 
     const hasZoomImg = !!zoomImg?.src
-    const hasImage = imgEl && (loadedImgEl || isSvg)
+
+    const hasImage = imgEl &&
+      (loadedImgEl || isSvg) &&
+      window.getComputedStyle(imgEl).display !== 'none'
 
     const labelBtnZoom = imgAlt
       ? `${a11yNameButtonZoom}: ${imgAlt}`
@@ -177,12 +225,58 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
 
     // =========================================================================
 
+    let modalContent = null
+
+    if (hasImage) {
+      const modalImg = isImg || isDiv
+        ? <img
+          alt={imgAlt}
+          sizes={imgSizes}
+          src={imgSrc}
+          srcSet={imgSrcSet}
+          {...isZoomImgLoaded && modalState === ModalState.LOADED ? zoomImg : {}}
+          data-rmiz-modal-img=""
+          height={this.styleModalImg.height || undefined}
+          id={idModalImg}
+          ref={refModalImg}
+          style={this.styleModalImg}
+          width={this.styleModalImg.width || undefined}
+        />
+        : isSvg
+          ? <div
+            data-rmiz-modal-img
+            ref={refModalImg}
+            style={this.styleModalImg}
+            />
+          : null
+
+      const modalBtnUnzoom = <button
+        aria-label={a11yNameButtonUnzoom}
+        data-rmiz-btn-unzoom=""
+        onClick={handleUnzoom}
+        type="button"
+      >
+        <IconUnzoom />
+      </button>
+
+      modalContent = ZoomContent
+        ? <ZoomContent
+          buttonUnzoom={modalBtnUnzoom}
+          modalState={modalState}
+          img={modalImg}
+          onUnzoom={handleUnzoom}
+        />
+        : <>{modalImg}{modalBtnUnzoom}</>
+    }
+
+    // =========================================================================
+
     return (
-      <div data-rmiz="" ref={refWrap}>
-        <div data-rmiz-content={dataContentState} ref={refContent} style={styleContent}>
+      <WrapElement aria-owns={idModal} data-rmiz="" ref={refWrap}>
+        <WrapElement data-rmiz-content={dataContentState} ref={refContent} style={styleContent}>
           {children}
-        </div>
-        {hasImage && <div data-rmiz-ghost="" style={styleGhost}>
+        </WrapElement>
+        {hasImage && <WrapElement data-rmiz-ghost="" style={styleGhost}>
           <button
             aria-label={labelBtnZoom}
             data-rmiz-btn-zoom=""
@@ -191,48 +285,28 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
           >
             <IconZoom />
           </button>
-        </div>}
-        {hasImage && <dialog /* eslint-disable-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
-          aria-labelledby={idModalImg}
-          aria-modal="true"
-          data-rmiz-modal=""
-          ref={refDialog}
-          onClick={handleUnzoom}
-          onClose={handleUnzoom /* eslint-disable-line react/no-unknown-property */}
-          onKeyDown={handleDialogKeyDown}
-          role="dialog"
-        >
-          <div data-rmiz-modal-overlay={dataOverlayState} />
-          <div data-rmiz-modal-content="">
-            {(isImg || isDiv) && <img
-              alt={imgAlt}
-              sizes={imgSizes}
-              src={imgSrc}
-              srcSet={imgSrcSet}
-              {...isZoomImgLoaded && modalState === ModalState.LOADED ? zoomImg : {}}
-              data-rmiz-modal-img=""
-              height={this.styleModalImg.height}
-              id={idModalImg}
-              ref={refModalImg}
-              style={this.styleModalImg}
-              width={this.styleModalImg.width}
-            />}
-            {isSvg && <div
-              data-rmiz-modal-img=""
-              ref={refModalImg}
-              style={this.styleModalImg}
-            />}
-            <button
-              aria-label={a11yNameButtonUnzoom}
-              data-rmiz-btn-unzoom=""
-              onClick={handleUnzoom}
-              type="button"
-            >
-              <IconUnzoom />
-            </button>
-          </div>
-        </dialog>}
-      </div>
+        </WrapElement>}
+        {hasImage && elDialogContainer != null && createPortal(
+          <dialog /* eslint-disable-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
+            aria-labelledby={idModalImg}
+            aria-modal="true"
+            className={classDialog}
+            data-rmiz-modal=""
+            id={idModal}
+            onClick={handleDialogClick}
+            onClose={handleUnzoom /* eslint-disable-line react/no-unknown-property */}
+            onKeyDown={handleDialogKeyDown}
+            ref={refDialog}
+            role="dialog"
+          >
+            <div data-rmiz-modal-overlay={dataOverlayState} />
+            <div data-rmiz-modal-content="" ref={refModalContent}>
+              {modalContent}
+            </div>
+          </dialog>
+          , elDialogContainer
+        )}
+      </WrapElement>
     )
   }
 
@@ -250,8 +324,11 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     this.imgElObserver?.disconnect?.()
     this.imgEl?.removeEventListener?.('load', this.handleImgLoad)
     this.imgEl?.removeEventListener?.('click', this.handleZoom)
+    window.removeEventListener('wheel', this.handleWheel)
+    window.removeEventListener('touchstart', this.handleTouchStart)
+    window.removeEventListener('touchend', this.handleTouchMove)
+    window.removeEventListener('touchcancel', this.handleTouchCancel)
     window.removeEventListener('resize', this.handleResize)
-    window.removeEventListener('scroll', this.handleScroll)
   }
 
   // ===========================================================================
@@ -362,6 +439,15 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   }
 
   // ===========================================================================
+  // Have dialog.click() only close in certain situations
+
+  handleDialogClick = (e: MouseEvent<HTMLDialogElement>) => {
+    if (e.target === this.refModalContent.current || e.target === this.refModalImg.current) {
+      this.handleUnzoom()
+    }
+  }
+
+  // ===========================================================================
   // Intercept default dialog.close() and use ours so we can animate
 
   handleDialogKeyDown = (e: KeyboardEvent<HTMLDialogElement>) => {
@@ -373,11 +459,41 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   }
 
   // ===========================================================================
-  // Force re-renders on closing scroll
+  // Handle wheel and swipe events
 
-  handleScroll = () => {
-    this.setState({ shouldRefresh: true })
-    this.handleUnzoom()
+  handleWheel = (e: WheelEvent) => {
+    e.stopPropagation()
+    queueMicrotask(() => {
+      this.handleUnzoom()
+    })
+  }
+
+  handleTouchStart = (e: TouchEvent) => {
+    if (e.changedTouches.length === 1 && e.changedTouches[0]) {
+      this.touchYStart = e.changedTouches[0].screenY
+    }
+  }
+
+  handleTouchMove = (e: TouchEvent) => {
+    if (this.touchYStart != null && e.changedTouches[0]) {
+      this.touchYEnd = e.changedTouches[0].screenY
+
+      const max = Math.max(this.touchYStart, this.touchYEnd)
+      const min = Math.min(this.touchYStart, this.touchYEnd)
+      const delta = Math.abs(max - min)
+      const threshold = 10
+
+      if (delta > threshold) {
+        this.touchYStart = undefined
+        this.touchYEnd = undefined
+        this.handleUnzoom()
+      }
+    }
+  }
+
+  handleTouchCancel = () => {
+    this.touchYStart = undefined
+    this.touchYEnd = undefined
   }
 
   // ===========================================================================
@@ -391,26 +507,20 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   // Perform zoom actions
 
   zoom = () => {
-    const {
-      handleResize,
-      handleScroll,
-      loadZoomImg,
-      props: {
-        scrollableEl = window,
-      },
-      refDialog,
-      refModalImg,
-    } = this
-
-    refDialog.current?.showModal?.()
+    this.bodyScrollDisable()
+    this.refDialog.current?.showModal?.()
     this.setState({ modalState: ModalState.LOADING })
-    loadZoomImg()
+    this.loadZoomImg()
 
-    refModalImg.current?.addEventListener?.('transitionend', () => {
+    window.addEventListener('wheel', this.handleWheel, { passive: true })
+    window.addEventListener('touchstart', this.handleTouchStart, { passive: true })
+    window.addEventListener('touchend', this.handleTouchMove, { passive: true })
+    window.addEventListener('touchcancel', this.handleTouchCancel, { passive: true })
+
+    this.refModalImg.current?.addEventListener?.('transitionend', () => {
       setTimeout(() => {
         this.setState({ modalState: ModalState.LOADED })
-        scrollableEl.addEventListener('scroll', handleScroll)
-        window.addEventListener('resize', handleResize)
+        window.addEventListener('resize', this.handleResize, { passive: true })
       }, 0)
     }, { once: true })
   }
@@ -419,29 +529,49 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   // Perform unzoom actions
 
   unzoom = () => {
-    const {
-      handleResize,
-      handleScroll,
-      refDialog,
-      refModalImg,
-      props: { scrollableEl = window },
-    } = this
-
     this.setState({ modalState: ModalState.UNLOADING })
 
-    refModalImg.current?.addEventListener?.('transitionend', () => {
+    window.removeEventListener('wheel', this.handleWheel)
+    window.removeEventListener('touchstart', this.handleTouchStart)
+    window.removeEventListener('touchend', this.handleTouchMove)
+    window.removeEventListener('touchcancel', this.handleTouchCancel)
+
+    this.refModalImg.current?.addEventListener?.('transitionend', () => {
       setTimeout(() => {
-        window.removeEventListener('resize', handleResize)
-        scrollableEl.removeEventListener('scroll', handleScroll)
+        window.removeEventListener('resize', this.handleResize)
 
         this.setState({
           shouldRefresh: false,
           modalState: ModalState.UNLOADED,
         })
 
-        refDialog.current?.close?.()
+        this.refDialog.current?.close?.()
+
+        this.bodyScrollEnable()
       }, 0)
     }, { once: true })
+  }
+
+  // ===========================================================================
+  // Enable / disable body scrolling
+
+  bodyScrollDisable = () => {
+    this.prevBodyAttrs = {
+      overflow: document.body.style.overflow,
+      width: document.body.style.width,
+    }
+
+    // Get clientWidth before setting overflow: 'hidden'
+    const clientWidth = document.body.clientWidth
+
+    document.body.style.overflow = 'hidden'
+    document.body.style.width = `${clientWidth}px`
+  }
+
+  bodyScrollEnable = () => {
+    document.body.style.width = this.prevBodyAttrs.width
+    document.body.style.overflow = this.prevBodyAttrs.overflow
+    this.prevBodyAttrs = defaultBodyAttrs
   }
 
   // ===========================================================================

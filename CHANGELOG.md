@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.1.0] - 2022-10-11
+
+### Added
+
+* Ability to customize the zoom modal content via `<ZoomContent>` (issue #332)
+* Re-added `wrapElement` prop to API; only supports `'div' | 'span'` (issue #356)
+* Added a11y support for `prefers-reduced-motion: reduce` (issue #359)
+* Added `classDialog` string prop to account for the loss of granular styling
+  control over different modals resulting from moving the `<dialog>` rendering
+  to a portal
+
+### Changed
+
+* Now rendering `<dialog>` in a portal because of #356
+  * For the folx using `.my-class [data-rmiz-modal] {}` to change the `<dialog>`
+    styles, please use the `classDialog` prop to pass `my-class` to the
+    `<dialog>`. I wish I didn't have to do this, but this is something that
+    needs fixing, and I can't justify a new major version just because of this
+    new style requirement. The `classDialog` addition (mentioned above) should
+    solve this nicely.
+
+### Fixed
+
+* Now using the `wheel` event instead of `scroll` to detect trying to leave the
+  modal (issue #350)
+* Fixed mobile scrolling experience (related to issue #350)
+
+### Removed
+
+* Removed the broken `scrollableEl` that has arguably not ever worked (issue #350)
+
 ## [5.0.3] - 2022-09-19
 
 ### Fixed

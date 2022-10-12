@@ -41,6 +41,9 @@ img {
   display: block;
   max-width: 100%;
 }
+.display-none {
+  display: none;
+}
 .mw-600 {
   max-width: 60rem;
 }
@@ -86,4 +89,36 @@ img {
   top: -10px;
   width: 15px;
   line-height: 0;
+}
+.inline [data-rmiz] img {
+  display: inline-block;
+  vertical-align: middle;
+}
+.zoom-caption {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  font-size: 1.4rem;
+  padding: 1.7rem 2.5rem;
+  opacity: 0.0001;
+  transition: opacity 0.3s;
+}
+.zoom-caption--loaded {
+  opacity: 1;
+}
+.zoom-caption--bottom {
+  inset: auto 0 0 0;
+}
+.zoom-caption--left {
+  max-width: 40rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.zoom-caption-cite {
+  display: block;
+  margin-top: 1.5rem;
+}
+.zoom-caption-link {
+   color: #fff;
+   text-underline-offset: 0.5rem;
 }

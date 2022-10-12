@@ -1,6 +1,9 @@
 import React, {
+  ReactElement,
   CSSProperties,
   useEffect,
+  useLayoutEffect,
+  useMemo,
   useState,
 } from 'react'
 
@@ -8,7 +11,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react'
 import { waitFor, within, userEvent } from '@storybook/testing-library'
 import { expect } from '@storybook/jest'
 
-import Zoom from '../source'
+import Zoom, { UncontrolledProps } from '../source'
 import '../source/styles.css'
 import './base.css'
 
@@ -20,6 +23,7 @@ import {
   imgKeaSmall,
   imgNzMap,
   imgTeAraiPoint,
+  imgTekapo,
   imgThatWanakaTree,
 } from './images'
 
@@ -28,6 +32,8 @@ export default {
   component: Zoom,
   parameters: {},
 } as ComponentMeta<typeof Zoom>
+
+// =============================================================================
 
 export const Regular: ComponentStory<typeof Zoom> = (props) => (
   <main aria-label="Story">
@@ -44,6 +50,8 @@ export const Regular: ComponentStory<typeof Zoom> = (props) => (
     </div>
   </main>
 )
+
+// =============================================================================
 
 export const SmallPortrait: ComponentStory<typeof Zoom> = (props) => (
   <main aria-label="Story">
@@ -62,6 +70,8 @@ export const SmallPortrait: ComponentStory<typeof Zoom> = (props) => (
   </main>
 )
 
+// =============================================================================
+
 export const SVGSource: ComponentStory<typeof Zoom> = (props) => (
   <main aria-label="Story">
     <h1>An image with an SVG src</h1>
@@ -78,6 +88,8 @@ export const SVGSource: ComponentStory<typeof Zoom> = (props) => (
   </main>
 )
 
+// =============================================================================
+
 export const DataSVGSource: ComponentStory<typeof Zoom> = () => (
   <main aria-label="Story">
     <h1>An image with a <code>data:image/svg+xml</code> <code>src</code></h1>
@@ -91,6 +103,8 @@ export const DataSVGSource: ComponentStory<typeof Zoom> = () => (
     </div>
   </main>
 )
+
+// =============================================================================
 
 export const ProvideZoomImg: ComponentStory<typeof Zoom> = (props) => (
   <main aria-label="Story">
@@ -118,6 +132,8 @@ export const ProvideZoomImg: ComponentStory<typeof Zoom> = (props) => (
   </main>
 )
 
+// =============================================================================
+
 export const SmallSrcSize: ComponentStory<typeof Zoom> = (props) => (
   <main aria-label="Story">
     <h1>An image with a small size</h1>
@@ -137,24 +153,30 @@ export const SmallSrcSize: ComponentStory<typeof Zoom> = (props) => (
   </main>
 )
 
-export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => (
-  <main aria-label="Story">
-    <h1>Custom Modal Styles</h1>
-    <div className="mw-600">
-      <p>Use CSS to customize the zoom modal styles.</p>
-      <p>Here, we slow down the transition time and use a different overlay color.</p>
-      <div className="custom-zoom">
-        <Zoom {...props}>
-          <img
-            alt={imgGlenorchyLagoon.alt}
-            src={imgGlenorchyLagoon.src}
-            width="400"
-          />
-        </Zoom>
-      </div>
-      <p>The CSS to do this:</p>
-      <pre>
-        <code>{`
+// =============================================================================
+
+export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => {
+  return (
+    <main aria-label="Story">
+      <h1>Custom Modal Styles</h1>
+      <div className="mw-600">
+        <p>Use CSS to customize the zoom modal styles.</p>
+        <p>Here, we slow down the transition time and use a different overlay color.</p>
+        <div>
+          <Zoom {...props} classDialog="custom-zoom">
+            <img
+              alt={imgGlenorchyLagoon.alt}
+              src={imgGlenorchyLagoon.src}
+              width="400"
+            />
+          </Zoom>
+        </div>
+        <p>
+          The CSS class, <code>custom-zoom</code>, is sent to the component via
+          the <code>classDialog</code> string prop. Here are the styles used:
+        </p>
+        <pre>
+          <code>{`
 .custom-zoom [data-rmiz-modal-overlay],
 .custom-zoom [data-rmiz-modal-img] {
   transition-duration: 0.8s;
@@ -175,14 +197,87 @@ export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => (
   outline: 0.2rem solid #bd93f9;
 }
 `}
-        </code>
-      </pre>
+          </code>
+        </pre>
+      </div>
+    </main>
+  )
+}
+
+// =============================================================================
+
+export const ModalFigureCaption: ComponentStory<typeof Zoom> = (props) => (
+  <main aria-label="Story">
+    <h1>Modal With Figure And Caption</h1>
+    <p>
+      If you want more control over the zoom modal&apos;s content, you can pass
+      a <code>ZoomContent</code> component
+    </p>
+    <div className="mw-600">
+      <Zoom {...props} ZoomContent={CustomZoomContent}>
+        <img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height="320"
+          loading="lazy"
+        />
+      </Zoom>
     </div>
   </main>
 )
 
+const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({
+  buttonUnzoom,
+  modalState,
+  img,
+  //onUnzooom, // Not used here, but could be
+}) => {
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  const imgProps = (img as ReactElement<HTMLImageElement>)?.props
+  const imgWidth = imgProps?.width
+  const imgHeight = imgProps?.height
+
+  const classCaption = useMemo(() => {
+    const hasWidthHeight = imgWidth && imgHeight
+    const imgRatioLargerThanWindow = imgWidth / imgHeight > window.innerWidth / window.innerHeight
+
+    return cx({
+      'zoom-caption': true,
+      'zoom-caption--loaded': isLoaded,
+      'zoom-caption--bottom': hasWidthHeight && imgRatioLargerThanWindow,
+      'zoom-caption--left': hasWidthHeight && !imgRatioLargerThanWindow,
+    })
+  }, [imgWidth, imgHeight, isLoaded])
+
+  useLayoutEffect(() => {
+    if (modalState === 'LOADED') {
+      setIsLoaded(true)
+    } else if (modalState === 'UNLOADING') {
+      setIsLoaded(false)
+    }
+  }, [modalState])
+
+  return <>
+    {buttonUnzoom}
+
+    <figure>
+      {img}
+      <figcaption className={classCaption}>
+        That Wanaka Tree, also known as the Wanaka Willow, is a willow tree
+        located at the southern end of Lake Wānaka in the Otago region of New
+        Zealand.
+        <cite className="zoom-caption-cite">
+          Wikipedia, <a className="zoom-caption-link" href="https://en.wikipedia.org/wiki/That_Wanaka_Tree">
+            That Wanaka Tree
+          </a>
+        </cite>
+      </figcaption>
+    </figure>
+  </>
+}
+
 // =============================================================================
-// Delayed image example
 
 type DelayedImgProps = {
   timer: number
@@ -228,19 +323,7 @@ const DelayedImg = (props: DelayedImgProps) => {
 }
 
 export const DelayedImageRender: ComponentStory<typeof Zoom> = (props) => {
-  const [timer, setTimer] = useState(5000)
-
-  useEffect(() => {
-    const interval = setInterval(function () {
-      if (timer === 0) {
-        clearInterval(this)
-      } else {
-        setTimer(timer - 1000)
-      }
-    }, 1000)
-
-    return () => clearInterval(interval)
-  }, [timer])
+  const { timer } = useTimer(5000)
 
   return (
     <main aria-label="Story">
@@ -270,6 +353,38 @@ export const DelayedImageRender: ComponentStory<typeof Zoom> = (props) => {
 
 // =============================================================================
 
+export const DelayedDisplayNone: ComponentStory<typeof Zoom> = (props) => {
+  const { timer } = useTimer(5000)
+  const classImg = timer === 0 ? undefined : 'display-none'
+
+  return (
+    <main aria-label="Story">
+      <h1>A delayed <code>display: none;</code> image</h1>
+      <div className="mw-600">
+        <p>
+          This examples simulates an image being hidden with CSS and then shown
+          after the countdown.
+        </p>
+        <div>
+          Image loads in: <span role="timer">{timer / 1000}</span>
+        </div>
+        <Zoom {...props}>
+          <img
+            alt={imgTekapo.alt}
+            src={imgTekapo.src}
+            className={classImg}
+            decoding="async"
+            height="320"
+            loading="lazy"
+          />
+        </Zoom>
+      </div>
+    </main>
+  )
+}
+
+// =============================================================================
+
 export const CustomButtonIcons: ComponentStory<typeof Zoom> = (props) => (
   <main aria-label="Story">
     <h1>An image with custom zoom &amp; unzoom icons</h1>
@@ -289,6 +404,26 @@ export const CustomButtonIcons: ComponentStory<typeof Zoom> = (props) => (
 )
 
 // =============================================================================
+
+export const InlineImage: ComponentStory<typeof Zoom> = (props) => (
+  <main aria-label="Story">
+    <h1>Inline Image</h1>
+    <p className="inline">
+      This example is of an image that is inline with text.
+      <Zoom {...props} wrapElement="span">
+        <img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          decoding="async"
+          height="320"
+          loading="lazy"
+        />
+      </Zoom>
+    </p>
+  </main>
+)
+
+// =============================================================================
 // INTERACTIONS
 
 export const WithRegularZoomed = Regular.bind({})
@@ -304,8 +439,41 @@ WithRegularZoomed.play = async ({ canvasElement }) => {
   await userEvent.keyboard('{Enter}', { delay: 1000 })
 
   await waitFor(async () => {
-    await expect(canvas.getByRole('dialog')).toHaveAttribute('open')
-    await expect(canvas.getByRole('dialog').querySelector(`img[alt="${imgThatWanakaTree.alt}"]`)).toBeVisible()
-    await expect(canvas.getByLabelText('Minimize image')).toHaveFocus()
+    await expect(document.querySelector('dialog')).toHaveAttribute('open')
+    await expect(document.querySelector('dialog').querySelector(`img[alt="${imgThatWanakaTree.alt}"]`)).toBeVisible()
+    await expect(document.querySelector('dialog').querySelector('[aria-label="Minimize image"')).toHaveFocus()
   })
+}
+
+// =============================================================================
+// HELPERS
+
+const cx = (mods) => {
+  const cns = []
+
+  for (const k in mods) {
+    if (mods[k]) {
+      cns.push(k)
+    }
+  }
+
+  return cns.join(' ')
+}
+
+const useTimer = (duration: number) => {
+  const [timer, setTimer] = useState(duration)
+
+  useEffect(() => {
+    const interval = setInterval(function () {
+      if (timer === 0) {
+        clearInterval(this)
+      } else {
+        setTimer(timer - 1000)
+      }
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [timer])
+
+  return { timer }
 }
