@@ -611,6 +611,15 @@
         "question",
         "review"
       ]
+    },
+    {
+      "login": "AntoineS92",
+      "name": "AntoineS92",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58309786?v=4",
+      "profile": "https://github.com/AntoineS92",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
