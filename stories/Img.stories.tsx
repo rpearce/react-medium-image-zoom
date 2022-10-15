@@ -445,13 +445,16 @@ export const InlineImage: ComponentStory<typeof Zoom> = (props) => (
 // =============================================================================
 // INTERACTIONS
 
-export const WithRegularZoomed = Regular.bind({})
-WithRegularZoomed.play = async ({ canvasElement }) => {
+export const AutomatedTest = Regular.bind({}, { title: '(Automated Test)' })
+AutomatedTest.storyName = '(Automated Test)'
+AutomatedTest.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement)
 
   await waitFor(async () => {
     await expect(canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`)).toBeVisible()
   })
+
+  await delay(1000)
 
   // TAB to expand button and press ENTER
   await userEvent.tab()
@@ -461,6 +464,15 @@ WithRegularZoomed.play = async ({ canvasElement }) => {
     await expect(document.querySelector('dialog')).toHaveAttribute('open')
     await expect(document.querySelector('dialog').querySelector(`img[alt="${imgThatWanakaTree.alt}"]`)).toBeVisible()
     await expect(document.querySelector('dialog').querySelector('[aria-label="Minimize image"')).toHaveFocus()
+  })
+
+  await delay(1000)
+
+  await userEvent.keyboard('{Escape}', { delay: 1000 })
+
+  await waitFor(async () => {
+    await expect(document.querySelector('dialog')).not.toHaveAttribute('open')
+    await expect(canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`)).toHaveFocus()
   })
 }
 
@@ -478,6 +490,9 @@ const cx = (mods) => {
 
   return cns.join(' ')
 }
+
+const delay = (duration) =>
+  new Promise(resolve => setTimeout(resolve, duration))
 
 const useTimer = (duration: number) => {
   const [timer, setTimer] = useState(duration)
