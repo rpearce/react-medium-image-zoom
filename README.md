@@ -15,6 +15,8 @@ Features:
   and [`background-position`](https://developer.mozilla.org/en-US/docs/Web/CSS/background-position)
 * `<picture>` with `<source />` and `<img />`
 * `<figure>` with `<img />`
+* `<svg>`
+* [Custom zoom modal content](#custom-zoom-modal-content) (👇)
 * Accessibility:
   * JAWS in Chrome, Edge, and Firefox (Windows)
   * NVDA in Chrome, Edge, and Firefox (Windows)
@@ -243,6 +245,69 @@ values should be.
 An example of customizing the transition duration, timing function, overlay
 background color, and unzoom button styles with `:focus-visible` can be found in
 this story: https://rpearce.github.io/react-medium-image-zoom/?path=/story/img--custom-modal-styles
+
+### Custom zoom modal content
+
+If you want to customize the zoomed modal experience with a caption, form, or
+other set of components, you can do so by providing a custom component to the
+`ZoomContent` prop.
+
+[View the live example of custom zoom modal content.](https://rpearce.github.io/react-medium-image-zoom/?path=/story/img--modal-figure-caption)
+
+Below is some example code that demonstrates how to use this feature.
+
+```javascript
+export const MyImg = () => (
+  <Zoom ZoomContent={CustomZoomContent}>
+    <img
+      alt="That Wanaka Tree, New Zealand by Laura Smetsers"
+      src="/path/to/thatwanakatree.jpg"
+      width="500"
+    />
+  </Zoom>
+)
+
+const CustomZoomContent = ({
+  buttonUnzoom, // default unzoom button
+  modalState,   // current state of the zoom modal: UNLOADED, LOADING, LOADED, UNLOADING
+  img,          // your image, prepped for zooming
+  //onUnzoom,   // unused here, but a callback to manually unzoom the image and
+                //   close the modal if you want to use your own buttons or
+                //   listeners in your custom experience
+}) => {
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  useLayoutEffect(() => {
+    if (modalState === 'LOADED') {
+      setIsLoaded(true)
+    } else if (modalState === 'UNLOADING') {
+      setIsLoaded(false)
+    }
+  }, [modalState])
+
+  const classCaption = isLoaded
+    ? 'zoom-caption zoom-caption--loaded'
+    : 'zoom-caption'
+
+  return <>
+    {buttonUnzoom}
+
+    <figure>
+      {img}
+      <figcaption className={classCaption}>
+        That Wanaka Tree, also known as the Wanaka Willow, is a willow tree
+        located at the southern end of Lake Wānaka in the Otago region of New
+        Zealand.
+        <cite className="zoom-caption-cite">
+          Wikipedia, <a className="zoom-caption-link" href="https://en.wikipedia.org/wiki/That_Wanaka_Tree">
+            That Wanaka Tree
+          </a>
+        </cite>
+      </figcaption>
+    </figure>
+  <>
+}
+```
 
 ## Migrating From v4 to v5
 
