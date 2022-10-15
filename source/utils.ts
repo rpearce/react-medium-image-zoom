@@ -26,8 +26,8 @@ export interface GetScaleToWindow {
 
 export const getScaleToWindow: GetScaleToWindow = ({ height, offset, width }) => {
   return Math.min(
-    window.innerWidth / (width + offset), // scale X-axis
-    window.innerHeight / (height + offset) // scale Y-axis
+    (window.innerWidth - offset * 2) / width, // scale X-axis
+    (window.innerHeight - offset * 2) / height // scale Y-axis
   )
 }
 

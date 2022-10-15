@@ -53,6 +53,25 @@ export const Regular: ComponentStory<typeof Zoom> = (props) => (
 
 // =============================================================================
 
+export const ZoomMargin: ComponentStory<typeof Zoom> = (props) => (
+  <main aria-label="Story">
+    <h1>Setting a zoomMargin of 45(px)</h1>
+    <div className="mw-600">
+      <p>This example should always be offset from the window by at least 45px</p>
+      <Zoom {...props} zoomMargin={45}>
+        <img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height="320"
+          loading="lazy"
+        />
+      </Zoom>
+    </div>
+  </main>
+)
+
+// =============================================================================
+
 export const SmallPortrait: ComponentStory<typeof Zoom> = (props) => (
   <main aria-label="Story">
     <h1>A portrait image with a small width specified</h1>
