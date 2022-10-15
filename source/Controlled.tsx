@@ -244,9 +244,9 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
         />
         : isSvg
           ? <div
-            data-rmiz-modal-img
-            ref={refModalImg}
-            style={this.styleModalImg}
+              data-rmiz-modal-img
+              ref={refModalImg}
+              style={this.styleModalImg}
             />
           : null
 
@@ -611,6 +611,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
       const svg = tmp.firstChild as SVGSVGElement
       svg.style.width = `${styleModalImg.width ?? 0}px`
       svg.style.height = `${styleModalImg.height ?? 0}px`
+      svg.addEventListener('click', this.handleUnzoom)
 
       refModalImg.current?.firstChild?.remove?.()
       refModalImg.current?.appendChild?.(svg)
