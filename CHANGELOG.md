@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.1.1] - 2022-10-14
+
+### Fixed
+
+* `zoomMargin` portion of "Neither zoomMargin nor scrollableEl seem to be working
+  correctly" (issue #350)
+* Clicking on zoomed SVGs doesn't unzoom (issue #369)
+
 ## [5.1.0] - 2022-10-11
 
 ### Added
