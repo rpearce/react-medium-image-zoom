@@ -324,6 +324,8 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     this.imgElObserver?.disconnect?.()
     this.imgEl?.removeEventListener?.('load', this.handleImgLoad)
     this.imgEl?.removeEventListener?.('click', this.handleZoom)
+    this.refModalImg.current?.removeEventListener?.('transitionend', this.handleZoomEnd)
+    this.refModalImg.current?.removeEventListener?.('transitionend', this.handleUnzoomEnd)
     window.removeEventListener('wheel', this.handleWheel)
     window.removeEventListener('touchstart', this.handleTouchStart)
     window.removeEventListener('touchend', this.handleTouchMove)
@@ -517,12 +519,19 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     window.addEventListener('touchend', this.handleTouchMove, { passive: true })
     window.addEventListener('touchcancel', this.handleTouchCancel, { passive: true })
 
-    this.refModalImg.current?.addEventListener?.('transitionend', () => {
-      setTimeout(() => {
-        this.setState({ modalState: ModalState.LOADED })
-        window.addEventListener('resize', this.handleResize, { passive: true })
-      }, 0)
-    }, { once: true })
+    this.refModalImg.current?.addEventListener?.('transitionend', this.handleZoomEnd, { once: true })
+  }
+
+  handleZoomEnd = () => {
+    this.refDialog.current?.addEventListener?.('close', (e) => {
+      e.stopPropagation()
+      e.preventDefault()
+    }, true)
+
+    setTimeout(() => {
+      this.setState({ modalState: ModalState.LOADED })
+      window.addEventListener('resize', this.handleResize, { passive: true })
+    }, 0)
   }
 
   // ===========================================================================
@@ -536,20 +545,22 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     window.removeEventListener('touchend', this.handleTouchMove)
     window.removeEventListener('touchcancel', this.handleTouchCancel)
 
-    this.refModalImg.current?.addEventListener?.('transitionend', () => {
-      setTimeout(() => {
-        window.removeEventListener('resize', this.handleResize)
+    this.refModalImg.current?.addEventListener?.('transitionend', this.handleUnzoomEnd, { once: true })
+  }
 
-        this.setState({
-          shouldRefresh: false,
-          modalState: ModalState.UNLOADED,
-        })
+  handleUnzoomEnd = () => {
+    setTimeout(() => {
+      window.removeEventListener('resize', this.handleResize)
 
-        this.refDialog.current?.close?.()
+      this.setState({
+        shouldRefresh: false,
+        modalState: ModalState.UNLOADED,
+      })
 
-        this.bodyScrollEnable()
-      }, 0)
-    }, { once: true })
+      this.refDialog.current?.close?.()
+
+      this.bodyScrollEnable()
+    }, 0)
   }
 
   // ===========================================================================
