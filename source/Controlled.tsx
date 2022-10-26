@@ -7,6 +7,7 @@ import React, {
   MouseEvent,
   ReactElement,
   ReactNode,
+  SyntheticEvent,
   createRef,
 } from 'react'
 
@@ -135,6 +136,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
 
   render() {
     const {
+      handleDialogCancel,
       handleDialogClick,
       handleDialogKeyDown,
       handleUnzoom,
@@ -295,6 +297,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
             id={idModal}
             onClick={handleDialogClick}
             onClose={handleUnzoom /* eslint-disable-line react/no-unknown-property */}
+            onCancel={handleDialogCancel}
             onKeyDown={handleDialogKeyDown}
             ref={refDialog}
             role="dialog"
@@ -438,6 +441,13 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
 
   handleUnzoom = () => {
     this.props.onZoomChange?.(false)
+  }
+
+  // ===========================================================================
+  // Prevent the browser from removing the dialog on Escape
+
+  handleDialogCancel = (e: SyntheticEvent) => {
+    e.preventDefault()
   }
 
   // ===========================================================================
