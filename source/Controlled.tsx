@@ -533,11 +533,6 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   }
 
   handleZoomEnd = () => {
-    this.refDialog.current?.addEventListener?.('close', (e) => {
-      e.stopPropagation()
-      e.preventDefault()
-    }, true)
-
     setTimeout(() => {
       this.setState({ modalState: ModalState.LOADED })
       window.addEventListener('resize', this.handleResize, { passive: true })
