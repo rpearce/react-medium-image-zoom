@@ -638,6 +638,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "SanderHeling",
+      "name": "Sander Heling",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1461215?v=4",
+      "profile": "https://github.com/SanderHeling",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",

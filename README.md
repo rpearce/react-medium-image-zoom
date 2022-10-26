@@ -414,6 +414,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/trebua"><img src="https://avatars.githubusercontent.com/u/31652936?v=4?s=40" width="40px;" alt="Sindre Aubert"/><br /><sub><b>Sindre Aubert</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Atrebua" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://radio.syg.ma/"><img src="https://avatars.githubusercontent.com/u/3596230?v=4?s=40" width="40px;" alt="mx"/><br /><sub><b>mx</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Ammxdr" title="Bug reports">🐛</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/SanderHeling"><img src="https://avatars.githubusercontent.com/u/1461215?v=4?s=40" width="40px;" alt="Sander Heling"/><br /><sub><b>Sander Heling</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3ASanderHeling" title="Bug reports">🐛</a></td>
+    </tr>
   </tbody>
 </table>
 
