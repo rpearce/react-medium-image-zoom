@@ -1,4 +1,4 @@
-/*! axe v4.4.3
+/*! axe v4.5.0
  * Copyright (c) 2022 Deque Systems, Inc.
  *
  * Your use of this Source Code Form is subject to the terms of the Mozilla Public
