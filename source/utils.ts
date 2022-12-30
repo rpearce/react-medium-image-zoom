@@ -12,6 +12,7 @@ const testElType: TestElType = (type, el) =>
 
 export const testDiv = (el: unknown): el is HTMLDivElement | HTMLSpanElement => testElType('DIV', el) || testElType('SPAN', el)
 export const testImg = (el: unknown): el is HTMLImageElement => testElType('IMG', el)
+export const testImgLoaded = (el: HTMLImageElement) => el.complete && el.naturalHeight !== 0
 export const testSvg = (el: unknown): el is SVGElement => testElType('SVG', el)
 
 // =============================================================================

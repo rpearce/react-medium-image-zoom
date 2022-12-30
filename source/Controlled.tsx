@@ -23,6 +23,7 @@ import {
   getStyleModalImg,
   testDiv,
   testImg,
+  testImgLoaded,
   testSvg,
 } from './utils'
 
@@ -430,11 +431,11 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
       .decode()
       .then(setLoaded)
       .catch(() => {
-        if (img.complete) {
-          setLoaded();
-          return;
+        if (testImgLoaded(img)) {
+          setLoaded()
+          return
         }
-        img.onload = setLoaded;
+        img.onload = setLoaded
       })
   }
 
