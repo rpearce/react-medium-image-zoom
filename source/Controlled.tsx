@@ -429,7 +429,13 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     img
       .decode()
       .then(setLoaded)
-      .catch(() => { img.onload = setLoaded })
+      .catch(() => {
+        if (img.complete) {
+          setLoaded();
+          return;
+        }
+        img.onload = setLoaded;
+      })
   }
 
   // ===========================================================================
