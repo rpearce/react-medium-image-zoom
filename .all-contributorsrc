@@ -647,6 +647,16 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "zjhch123",
+      "name": "Yida Zhang",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12215513?v=4",
+      "profile": "https://github.com/zjhch123",
+      "contributions": [
+        "bug",
+        "code"
+      ]
     }
   ],
   "repoType": "github",
