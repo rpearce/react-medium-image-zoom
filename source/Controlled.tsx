@@ -38,6 +38,13 @@ if (typeof document !== 'undefined') {
 }
 
 // =============================================================================
+// The selector query we use to find and track the image
+
+const IMAGE_QUERY = ['img', 'svg', '[data-zoom]']
+  .map(x => `${x}:not([aria-hidden="true"])`)
+  .join(',')
+
+// =============================================================================
 
 const enum ModalState {
   LOADED = 'LOADED',
@@ -360,9 +367,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
 
     if (!contentEl) return
 
-    this.imgEl = contentEl.querySelector(
-      ':is(img, svg, [role="img"], [data-zoom]):not([aria-hidden="true"])'
-    ) as SupportedImage | null
+    this.imgEl = contentEl.querySelector(IMAGE_QUERY) as SupportedImage | null
 
     if (this.imgEl) {
       this.changeObserver?.disconnect?.()
