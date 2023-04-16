@@ -541,15 +541,25 @@ export const getStyleGhost: GetStyleGhost = (imgEl) => {
   }
 
   if (testSvg(imgEl)) {
-    const parentEl = imgEl.parentNode as HTMLElement
-    const parentRect = parentEl?.getBoundingClientRect?.()
+    const parentEl = imgEl.parentElement
     const rect = imgEl.getBoundingClientRect()
 
-    return {
-      height: rect.height,
-      left: parentRect.left - rect.left,
-      width: rect.width,
-      top: parentRect.top - rect.top,
+    if (parentEl) {
+      const parentRect = parentEl.getBoundingClientRect()
+
+      return {
+        height: rect.height,
+        left: parentRect.left - rect.left,
+        top: parentRect.top - rect.top,
+        width: rect.width,
+      }
+    } else {
+      return {
+        height: rect.height,
+        left: rect.left,
+        width: rect.width,
+        top: rect.top,
+      }
     }
   } else {
     return {
