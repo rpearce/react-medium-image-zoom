@@ -85,6 +85,10 @@ export const getScale: GetScale = ({
   targetHeight,
   targetWidth,
 }) => {
+  if (!containerHeight || !containerWidth) {
+    return 1
+  }
+
   return !hasScalableSrc && targetHeight && targetWidth
     ? getScaleToWindowMax({
       containerHeight,
