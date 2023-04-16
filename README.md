@@ -417,6 +417,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/SanderHeling"><img src="https://avatars.githubusercontent.com/u/1461215?v=4?s=40" width="40px;" alt="Sander Heling"/><br /><sub><b>Sander Heling</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3ASanderHeling" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/zjhch123"><img src="https://avatars.githubusercontent.com/u/12215513?v=4?s=40" width="40px;" alt="Yida Zhang"/><br /><sub><b>Yida Zhang</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Azjhch123" title="Bug reports">🐛</a> <a href="https://github.com/rpearce/react-medium-image-zoom/commits?author=zjhch123" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/nirhaas"><img src="https://avatars.githubusercontent.com/u/35661734?v=4?s=40" width="40px;" alt="Nir"/><br /><sub><b>Nir</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Anirhaas" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>

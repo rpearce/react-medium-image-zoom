@@ -657,6 +657,15 @@
         "bug",
         "code"
       ]
+    },
+    {
+      "login": "nirhaas",
+      "name": "Nir",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35661734?v=4",
+      "profile": "https://github.com/nirhaas",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
