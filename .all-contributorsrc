@@ -675,6 +675,16 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "pacocoursey",
+      "name": "Paco",
+      "avatar_url": "https://avatars.githubusercontent.com/u/34928425?v=4",
+      "profile": "https://github.com/pacocoursey",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
     }
   ],
   "repoType": "github",
