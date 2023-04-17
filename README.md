@@ -5,6 +5,9 @@
 The original [medium.com-inspired image zooming](https://medium.design/image-zoom-on-medium-24d146fc0c20)
 library for [React](https://reactjs.org).
 
+[View the storybook examples](https://rpearce.github.io/react-medium-image-zoom/)
+to see various usages.
+
 Features:
 
 * `<img />`, including all [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit)
@@ -27,10 +30,12 @@ Features:
   * [Next.js](https://nextjs.org/docs/api-reference/next/image)
 * Zero `dependencies`
 
-[View the storybook examples](https://rpearce.github.io/react-medium-image-zoom/)
-to see various usages. _NOTE: Help is wanted with making the examples more
-informative, so please [start a discussion](https://github.com/rpearce/react-medium-image-zoom/discussions)
-if you're able to help!_
+Requirements to know about:
+
+* `<dialog>` element ([caniuse dialog](https://caniuse.com/dialog))
+* `ResizeObserver` ([caniuse ResizeObserver](https://caniuse.com/mdn-api_resizeobserver))
+* Package build target is `ES2021`. If you need to support older environments,
+  run this package through your build system.
 
 ## Quickstart
 
@@ -53,9 +58,6 @@ export const MyImg = () => (
   </Zoom>
 )
 ```
-
-This library's compilation target is `ES2021`. If you find you need to support
-older environments, run this project through your build system.
 
 ## API
 
