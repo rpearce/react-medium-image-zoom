@@ -1,9 +1,12 @@
 # react-medium-image-zoom
 
-[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![bundlephobia size](https://badgen.net/bundlephobia/minzip/react-medium-image-zoom)](https://bundlephobia.com/result?p=react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-65-orange.svg)](#contributors-)
+[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![bundlephobia size](https://badgen.net/bundlephobia/minzip/react-medium-image-zoom)](https://bundlephobia.com/result?p=react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-70-orange.svg)](#contributors-)
 
 The original [medium.com-inspired image zooming](https://medium.design/image-zoom-on-medium-24d146fc0c20)
 library for [React](https://reactjs.org).
+
+[View the storybook examples](https://rpearce.github.io/react-medium-image-zoom/)
+to see various usages.
 
 Features:
 
@@ -27,10 +30,12 @@ Features:
   * [Next.js](https://nextjs.org/docs/api-reference/next/image)
 * Zero `dependencies`
 
-[View the storybook examples](https://rpearce.github.io/react-medium-image-zoom/)
-to see various usages. _NOTE: Help is wanted with making the examples more
-informative, so please [start a discussion](https://github.com/rpearce/react-medium-image-zoom/discussions)
-if you're able to help!_
+Requirements to know about:
+
+* `<dialog>` element ([caniuse dialog](https://caniuse.com/dialog))
+* `ResizeObserver` ([caniuse ResizeObserver](https://caniuse.com/mdn-api_resizeobserver))
+* Package build target is `ES2021`. If you need to support older environments,
+  run this package through your build system.
 
 ## Quickstart
 
@@ -53,9 +58,6 @@ export const MyImg = () => (
   </Zoom>
 )
 ```
-
-This library's compilation target is `ES2021`. If you find you need to support
-older environments, run this project through your build system.
 
 ## API
 
@@ -417,6 +419,11 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/SanderHeling"><img src="https://avatars.githubusercontent.com/u/1461215?v=4?s=40" width="40px;" alt="Sander Heling"/><br /><sub><b>Sander Heling</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3ASanderHeling" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/zjhch123"><img src="https://avatars.githubusercontent.com/u/12215513?v=4?s=40" width="40px;" alt="Yida Zhang"/><br /><sub><b>Yida Zhang</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Azjhch123" title="Bug reports">🐛</a> <a href="https://github.com/rpearce/react-medium-image-zoom/commits?author=zjhch123" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/nirhaas"><img src="https://avatars.githubusercontent.com/u/35661734?v=4?s=40" width="40px;" alt="Nir"/><br /><sub><b>Nir</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Anirhaas" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/hhatakeyama"><img src="https://avatars.githubusercontent.com/u/5581539?v=4?s=40" width="40px;" alt="hhatakeyama"/><br /><sub><b>hhatakeyama</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Ahhatakeyama" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/pacocoursey"><img src="https://avatars.githubusercontent.com/u/34928425?v=4?s=40" width="40px;" alt="Paco"/><br /><sub><b>Paco</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Apacocoursey" title="Bug reports">🐛</a> <a href="#ideas-pacocoursey" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/LichLord91"><img src="https://avatars.githubusercontent.com/u/8435580?v=4?s=40" width="40px;" alt="LichLord91"/><br /><sub><b>LichLord91</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3ALichLord91" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/just-small-potato"><img src="https://avatars.githubusercontent.com/u/68165945?v=4?s=40" width="40px;" alt="just-small-potato"/><br /><sub><b>just-small-potato</b></sub></a><br /><a href="#ideas-just-small-potato" title="Ideas, Planning, & Feedback">🤔</a></td>
     </tr>
   </tbody>
 </table>

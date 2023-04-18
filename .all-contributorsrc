@@ -657,6 +657,52 @@
         "bug",
         "code"
       ]
+    },
+    {
+      "login": "nirhaas",
+      "name": "Nir",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35661734?v=4",
+      "profile": "https://github.com/nirhaas",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "hhatakeyama",
+      "name": "hhatakeyama",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5581539?v=4",
+      "profile": "https://github.com/hhatakeyama",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "pacocoursey",
+      "name": "Paco",
+      "avatar_url": "https://avatars.githubusercontent.com/u/34928425?v=4",
+      "profile": "https://github.com/pacocoursey",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
+    },
+    {
+      "login": "LichLord91",
+      "name": "LichLord91",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8435580?v=4",
+      "profile": "https://github.com/LichLord91",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "just-small-potato",
+      "name": "just-small-potato",
+      "avatar_url": "https://avatars.githubusercontent.com/u/68165945?v=4",
+      "profile": "https://github.com/just-small-potato",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "repoType": "github",
