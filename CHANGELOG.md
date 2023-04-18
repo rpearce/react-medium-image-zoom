@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [5.1.4] - 2023-04-17
 
-### Fixes
+### Fixed
 
 * Older browser versions querySelector error (#391)
 * Cannot read properties of undefined (reading 'left') with Zoom Component and
