@@ -38,8 +38,10 @@ if (typeof document !== 'undefined') {
 }
 
 // =============================================================================
-// The selector query we use to find and track the image
 
+/**
+ * The selector query we use to find and track the image
+ */
 const IMAGE_QUERY = ['img', 'svg', '[data-zoom]']
   .map(x => `${x}:not([aria-hidden="true"])`)
   .join(',')
@@ -60,6 +62,11 @@ interface BodyAttrs {
   width: string
 }
 
+/**
+ * Helps keep track of some key `<body>` attributes
+ * so we can remove and re-add them when disabling and
+ * re-enabling body scrolling
+ */
 const defaultBodyAttrs: BodyAttrs = {
   overflow: '',
   width: '',
@@ -352,16 +359,20 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   }
 
   // ===========================================================================
-  // Because of SSR, set a unique ID after render
 
+  /**
+   * Because of SSR, set a unique ID after render
+   */
   setId = () => {
     const gen4 = () => Math.random().toString(16).slice(-4)
     this.setState({ id: gen4() + gen4() + gen4() })
   }
 
   // ===========================================================================
-  // Find and set the image we're working with
 
+  /**
+   * Find and set the image we're working with
+   */
   setAndTrackImg = () => {
     const contentEl = this.refContent.current
 
@@ -395,8 +406,10 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   }
 
   // ===========================================================================
-  // Show modal when zoomed; hide modal when unzoomed
 
+  /**
+   * Show modal when zoomed; hide modal when unzoomed
+   */
   handleIfZoomChanged = (prevIsZoomed: boolean) => {
     const { isZoomed } = this.props
 
@@ -408,8 +421,10 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   }
 
   // ===========================================================================
-  // Ensure we always have the latest img src value loaded
 
+  /**
+   * Ensure we always have the latest img src value loaded
+   */
   handleImgLoad = () => {
     const { imgEl } = this
 
@@ -445,26 +460,35 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   }
 
   // ===========================================================================
-  // Report zoom state changes
 
+  /**
+   * Report that zooming should occur
+   */
   handleZoom = () => {
     this.props.onZoomChange?.(true)
   }
 
+  /**
+   * Report that unzooming should occur
+   */
   handleUnzoom = () => {
     this.props.onZoomChange?.(false)
   }
 
   // ===========================================================================
-  // Prevent the browser from removing the dialog on Escape
 
+  /**
+   * Prevent the browser from removing the dialog on Escape
+   */
   handleDialogCancel = (e: SyntheticEvent) => {
     e.preventDefault()
   }
 
   // ===========================================================================
-  // Have dialog.click() only close in certain situations
 
+  /**
+   *  Have dialog.click() only close in certain situations
+   */
   handleDialogClick = (e: MouseEvent<HTMLDialogElement>) => {
     if (e.target === this.refModalContent.current || e.target === this.refModalImg.current) {
       this.handleUnzoom()
@@ -472,8 +496,10 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   }
 
   // ===========================================================================
-  // Intercept default dialog.close() and use ours so we can animate
 
+  /**
+   * Intercept default dialog.close() and use ours so we can animate
+   */
   handleDialogKeyDown = (e: KeyboardEvent<HTMLDialogElement>) => {
     if (e.key === 'Escape' || e.keyCode === 27) {
       e.preventDefault()
@@ -483,8 +509,10 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   }
 
   // ===========================================================================
-  // Handle wheel and swipe events
 
+  /**
+   * Unzoom on wheel event
+   */
   handleWheel = (e: WheelEvent) => {
     e.stopPropagation()
     queueMicrotask(() => {
@@ -492,12 +520,19 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     })
   }
 
+  /**
+   * Start tracking the Y-axis
+   */
   handleTouchStart = (e: TouchEvent) => {
     if (e.changedTouches.length === 1 && e.changedTouches[0]) {
       this.touchYStart = e.changedTouches[0].screenY
     }
   }
 
+  /**
+   * Track how far we've moved on the Y-axis
+   * and unzoom if we detect a "swipe"
+   */
   handleTouchMove = (e: TouchEvent) => {
     if (this.touchYStart != null && e.changedTouches[0]) {
       this.touchYEnd = e.changedTouches[0].screenY
@@ -515,21 +550,28 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     }
   }
 
+  /**
+   * Reset the Y-axis start and end tracking points
+   */
   handleTouchCancel = () => {
     this.touchYStart = undefined
     this.touchYEnd = undefined
   }
 
   // ===========================================================================
-  // Force re-render on resize
 
+  /**
+   * Force re-render on resize
+   */
   handleResize = () => {
     this.setState({ shouldRefresh: true })
   }
 
   // ===========================================================================
-  // Perform zoom actions
 
+  /**
+   * Perform zooming actions
+   */
   zoom = () => {
     this.bodyScrollDisable()
     this.refDialog.current?.showModal?.()
@@ -544,6 +586,10 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     this.refModalImg.current?.addEventListener?.('transitionend', this.handleZoomEnd, { once: true })
   }
 
+  /**
+   * Report that the zoom modal is loaded and listen
+   * for window resizing
+   */
   handleZoomEnd = () => {
     setTimeout(() => {
       this.setState({ modalState: ModalState.LOADED })
@@ -552,8 +598,10 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   }
 
   // ===========================================================================
-  // Perform unzoom actions
 
+  /**
+   * Perform unzooming actions
+   */
   unzoom = () => {
     this.setState({ modalState: ModalState.UNLOADING })
 
@@ -565,6 +613,10 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     this.refModalImg.current?.addEventListener?.('transitionend', this.handleUnzoomEnd, { once: true })
   }
 
+  /**
+   * Clean up the remaining things from zooming
+   * and report that we're done unzooming
+   */
   handleUnzoomEnd = () => {
     setTimeout(() => {
       window.removeEventListener('resize', this.handleResize)
@@ -581,8 +633,10 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   }
 
   // ===========================================================================
-  // Enable / disable body scrolling
 
+  /**
+   * Disable body scrolling
+   */
   bodyScrollDisable = () => {
     this.prevBodyAttrs = {
       overflow: document.body.style.overflow,
@@ -596,6 +650,9 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     document.body.style.width = `${clientWidth}px`
   }
 
+  /**
+   * Enable body scrolling
+   */
   bodyScrollEnable = () => {
     document.body.style.width = this.prevBodyAttrs.width
     document.body.style.overflow = this.prevBodyAttrs.overflow
@@ -603,8 +660,10 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   }
 
   // ===========================================================================
-  // Load the zoomImg manually
 
+  /**
+   * Load the zoomImg manually
+   */
   loadZoomImg = () => {
     const { props: { zoomImg } } = this
     const zoomImgSrc = zoomImg?.src
@@ -633,8 +692,10 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   }
 
   // ===========================================================================
-  // Hackily deal with SVGs because of all of their unknowns.
 
+  /**
+   * Hackily deal with SVGs because of all of their unknowns
+   */
   UNSAFE_handleSvg = () => {
     const { imgEl, refModalImg, styleModalImg } = this
 
