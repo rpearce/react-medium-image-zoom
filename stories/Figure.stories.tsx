@@ -1,6 +1,5 @@
 import React from 'react'
-
-import { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { Meta } from '@storybook/react'
 
 import Zoom from '../source'
 import '../source/styles.css'
@@ -8,13 +7,14 @@ import './base.css'
 
 import { imgHobbiton } from './images'
 
-export default {
+const meta: Meta<typeof Zoom> = {
   title: '<figure>',
   component: Zoom,
-  parameters: {},
-} as ComponentMeta<typeof Zoom>
+}
 
-export const Figure: ComponentStory<typeof Zoom> = (props) => (
+export default meta
+
+export const Figure = (props) => (
   <main aria-label="Story">
     <h1>{'Zoom an <img /> in a <figure> element'}</h1>
     <div className="mw-600">

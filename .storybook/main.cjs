@@ -1,20 +1,14 @@
 module.exports = {
-  addons: [
-    '@storybook/addon-viewport',
-    '@storybook/addon-docs',
-    '@storybook/addon-interactions',
-    '@storybook/addon-a11y',
-  ],
-  stories: [
-    '../stories/**/*.stories.mdx',
-    '../stories/**/*.stories.@(js|jsx|ts|tsx)',
-  ],
+  addons: ['@storybook/addon-viewport', '@storybook/addon-docs', '@storybook/addon-interactions', '@storybook/addon-a11y'],
+  stories: ['../stories/**/*.stories.mdx', '../stories/**/*.stories.@(js|jsx|ts|tsx)'],
   features: {
     interactionsDebugger: true,
-    previewMdx2: true,
     storyStoreV7: true,
   },
-  framework: '@storybook/react',
+  framework: {
+    name: '@storybook/react-webpack5',
+    options: {},
+  },
   typescript: {
     reactDocgen: 'react-docgen-typescript',
     reactDocgenTypescriptOptions: {
@@ -40,5 +34,11 @@ module.exports = {
         target: 'es2022',
       },
     },
+  },
+  core: {
+    disableTelemetry: true,
+  },
+  docs: {
+    autodocs: 'tag',
   },
 }

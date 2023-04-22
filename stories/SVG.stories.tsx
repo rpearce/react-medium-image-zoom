@@ -1,17 +1,18 @@
 import React from 'react'
-import { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { Meta } from '@storybook/react'
 
 import Zoom from '../source'
 import '../source/styles.css'
 import './base.css'
 
-export default {
+const meta: Meta<typeof Zoom> = {
   title: '<svg>',
   component: Zoom,
-  parameters: {},
-} as ComponentMeta<typeof Zoom>
+}
 
-export const AnimatingSquare: ComponentStory<typeof Zoom> = (props) => (
+export default meta
+
+export const AnimatingSquare = (props) => (
   <main aria-label="Story">
     <h1>An animating square SVG with its width & height set via style</h1>
     <div className="mw-600">
@@ -39,7 +40,7 @@ export const AnimatingSquare: ComponentStory<typeof Zoom> = (props) => (
   </main>
 )
 
-export const BirdOnBackground: ComponentStory<typeof Zoom> = () => (
+export const BirdOnBackground = () => (
   <main aria-label="Story">
     <h1>A bird SVG on a non-SVG background</h1>
     <div className="mw-600">

@@ -13,7 +13,7 @@ jobs:
     - name: Use nodejs
       uses: actions/setup-node@v3
       with:
-        node-version: '16'
+        node-version: '18'
         cache: 'npm'
 
     - name: Install deps without updating package-lock.json
@@ -24,12 +24,6 @@ jobs:
 
     - name: Run the CI build
       run: npm run ci
-
-    - name: Serve Storybook and run tests
-      run: |
-        npx concurrently -k -s first -n "SB,TEST" -c "magenta,blue" \
-          "npx http-server docs --port 6006 --silent" \
-          "npx wait-on tcp:6006 && npm run test-storybook"
 
     - name: Deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v3

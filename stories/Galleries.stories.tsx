@@ -4,8 +4,7 @@ import React, {
   useMemo,
   useState,
 } from 'react'
-
-import { ComponentMeta } from '@storybook/react'
+import type { Meta } from '@storybook/react'
 
 import Zoom from '../source'
 import '../source/styles.css'
@@ -23,11 +22,12 @@ import {
   imgThatWanakaTree,
 } from './images'
 
-export default {
+const meta: Meta<typeof Zoom> = {
   title: 'Galleries',
   component: Zoom,
-  parameters: {},
-} as ComponentMeta<typeof Zoom>
+}
+
+export default meta
 
 type ObjectFit = 'contain' | 'cover' | 'fill' | 'none' | 'scale-down'
 

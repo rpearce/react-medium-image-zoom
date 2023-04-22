@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-
-import { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { Meta } from '@storybook/react'
 
 import { Controlled as Zoom } from '../source'
 import '../source/styles.css'
@@ -8,13 +7,14 @@ import './base.css'
 
 import { imgThatWanakaTree } from './images'
 
-export default {
+const meta: Meta<typeof Zoom> = {
   title: 'Custom Controls',
   component: Zoom,
-  parameters: {},
-} as ComponentMeta<typeof Zoom>
+}
 
-export const JAndKZoomUnzoom: ComponentStory<typeof Zoom> = (props) => {
+export default meta
+
+export const JAndKZoomUnzoom = (props) => {
   const [isZoomed, setIsZoomed] = useState(false)
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
