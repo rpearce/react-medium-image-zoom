@@ -6,8 +6,8 @@ import React, {
   useMemo,
   useState,
 } from 'react'
+import type { Meta } from '@storybook/react'
 
-import { ComponentStory, ComponentMeta } from '@storybook/react'
 import { waitFor, within, userEvent } from '@storybook/testing-library'
 import { expect } from '@storybook/jest'
 
@@ -27,15 +27,16 @@ import {
   imgThatWanakaTree,
 } from './images'
 
-export default {
+const meta: Meta<typeof Zoom> = {
   title: '<img>',
   component: Zoom,
-  parameters: {},
-} as ComponentMeta<typeof Zoom>
+}
+
+export default meta
 
 // =============================================================================
 
-export const Regular: ComponentStory<typeof Zoom> = (props) => (
+export const Regular = (props) => (
   <main aria-label="Story">
     <h1>Zooming a regular image</h1>
     <div className="mw-600">
@@ -53,7 +54,7 @@ export const Regular: ComponentStory<typeof Zoom> = (props) => (
 
 // =============================================================================
 
-export const ZoomMargin: ComponentStory<typeof Zoom> = (props) => (
+export const ZoomMargin = (props) => (
   <main aria-label="Story">
     <h1>Setting a zoomMargin of 45(px)</h1>
     <div className="mw-600">
@@ -72,7 +73,7 @@ export const ZoomMargin: ComponentStory<typeof Zoom> = (props) => (
 
 // =============================================================================
 
-export const SmallPortrait: ComponentStory<typeof Zoom> = (props) => (
+export const SmallPortrait = (props) => (
   <main aria-label="Story">
     <h1>A portrait image with a small width specified</h1>
     <div className="mw-600">
@@ -91,7 +92,7 @@ export const SmallPortrait: ComponentStory<typeof Zoom> = (props) => (
 
 // =============================================================================
 
-export const SVGSource: ComponentStory<typeof Zoom> = (props) => (
+export const SVGSource = (props) => (
   <main aria-label="Story">
     <h1>An image with an SVG src</h1>
     <div className="mw-600">
@@ -109,7 +110,7 @@ export const SVGSource: ComponentStory<typeof Zoom> = (props) => (
 
 // =============================================================================
 
-export const DataSVGSource: ComponentStory<typeof Zoom> = () => (
+export const DataSVGSource = () => (
   <main aria-label="Story">
     <h1>An image with a <code>data:image/svg+xml</code> <code>src</code></h1>
     <div className="data-uri-img mw-600">
@@ -125,7 +126,7 @@ export const DataSVGSource: ComponentStory<typeof Zoom> = () => (
 
 // =============================================================================
 
-export const ProvideZoomImg: ComponentStory<typeof Zoom> = (props) => (
+export const ProvideZoomImg = (props) => (
   <main aria-label="Story">
     <h1>An image with a larger <code>zoomImg</code></h1>
     <div className="mw-600">
@@ -153,7 +154,7 @@ export const ProvideZoomImg: ComponentStory<typeof Zoom> = (props) => (
 
 // =============================================================================
 
-export const SmallSrcSize: ComponentStory<typeof Zoom> = (props) => (
+export const SmallSrcSize = (props) => (
   <main aria-label="Story">
     <h1>An image with a small size</h1>
     <div className="mw-600">
@@ -174,7 +175,7 @@ export const SmallSrcSize: ComponentStory<typeof Zoom> = (props) => (
 
 // =============================================================================
 
-export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => {
+export const CustomModalStyles = (props) => {
   return (
     <main aria-label="Story">
       <h1>Custom Modal Styles</h1>
@@ -225,7 +226,7 @@ export const CustomModalStyles: ComponentStory<typeof Zoom> = (props) => {
 
 // =============================================================================
 
-export const ModalFigureCaption: ComponentStory<typeof Zoom> = (props) => (
+export const ModalFigureCaption = (props) => (
   <main aria-label="Story">
     <h1>Modal With Figure And Caption</h1>
     <p>
@@ -258,7 +259,7 @@ const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({
   const imgHeight = imgProps?.height
 
   const classCaption = useMemo(() => {
-    const hasWidthHeight = imgWidth && imgHeight
+    const hasWidthHeight = imgWidth != null && imgHeight != null
     const imgRatioLargerThanWindow = imgWidth / imgHeight > window.innerWidth / window.innerHeight
 
     return cx({
@@ -341,7 +342,7 @@ const DelayedImg = (props: DelayedImgProps) => {
   )
 }
 
-export const DelayedImageRender: ComponentStory<typeof Zoom> = (props) => {
+export const DelayedImageRender = (props) => {
   const { timer } = useTimer(5000)
 
   return (
@@ -372,7 +373,7 @@ export const DelayedImageRender: ComponentStory<typeof Zoom> = (props) => {
 
 // =============================================================================
 
-export const DelayedDisplayNone: ComponentStory<typeof Zoom> = (props) => {
+export const DelayedDisplayNone = (props) => {
   const { timer } = useTimer(5000)
   const classImg = timer === 0 ? undefined : 'display-none'
 
@@ -404,7 +405,7 @@ export const DelayedDisplayNone: ComponentStory<typeof Zoom> = (props) => {
 
 // =============================================================================
 
-export const CustomButtonIcons: ComponentStory<typeof Zoom> = (props) => (
+export const CustomButtonIcons = (props) => (
   <main aria-label="Story">
     <h1>An image with custom zoom &amp; unzoom icons</h1>
     <div className="mw-600">
@@ -424,7 +425,7 @@ export const CustomButtonIcons: ComponentStory<typeof Zoom> = (props) => (
 
 // =============================================================================
 
-export const InlineImage: ComponentStory<typeof Zoom> = (props) => (
+export const InlineImage = (props) => (
   <main aria-label="Story">
     <h1>Inline Image</h1>
     <p className="inline">
@@ -461,9 +462,15 @@ AutomatedTest.play = async ({ canvasElement }) => {
   await userEvent.keyboard('{Enter}', { delay: 1000 })
 
   await waitFor(async () => {
-    await expect(document.querySelector('dialog')).toHaveAttribute('open')
-    await expect(document.querySelector('dialog').querySelector(`img[alt="${imgThatWanakaTree.alt}"]`)).toBeVisible()
-    await expect(document.querySelector('dialog').querySelector('[aria-label="Minimize image"')).toHaveFocus()
+    const dialog = document.querySelector('dialog')
+
+    if (dialog == null) {
+      throw new Error('rmiz automated test failure: cannot find <dialog>')
+    }
+
+    await expect(dialog).toHaveAttribute('open')
+    await expect(dialog.querySelector(`img[alt="${imgThatWanakaTree.alt}"]`)).toBeVisible()
+    await expect(dialog.querySelector('[aria-label="Minimize image"')).toHaveFocus()
   })
 
   await delay(1000)
@@ -479,8 +486,8 @@ AutomatedTest.play = async ({ canvasElement }) => {
 // =============================================================================
 // HELPERS
 
-const cx = (mods) => {
-  const cns = []
+const cx = (mods: Record<string, boolean>): string => {
+  const cns: string[] = []
 
   for (const k in mods) {
     if (mods[k]) {
@@ -491,7 +498,7 @@ const cx = (mods) => {
   return cns.join(' ')
 }
 
-const delay = (duration) =>
+const delay = (duration: number): Promise<void> =>
   new Promise(resolve => setTimeout(resolve, duration))
 
 const useTimer = (duration: number) => {
