@@ -42,7 +42,7 @@ if (typeof document !== 'undefined') {
 /**
  * The selector query we use to find and track the image
  */
-const IMAGE_QUERY = ['img', 'svg', '[data-zoom]']
+const IMAGE_QUERY = ['img', 'svg', '[role="img"]', '[data-zoom]']
   .map(x => `${x}:not([aria-hidden="true"])`)
   .join(',')
 
