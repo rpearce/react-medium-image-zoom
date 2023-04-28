@@ -460,6 +460,9 @@ export const getStyleModalImg: GetStyleModalImg = ({
   const imgRect = targetEl.getBoundingClientRect()
   const targetElComputedStyle = window.getComputedStyle(targetEl)
 
+  const isDivImg = loadedImgEl != null && testDiv(targetEl)
+  const isImgObjectFit = loadedImgEl != null && !isDivImg
+
   const styleImgRegular = getImgRegularStyle({
     containerHeight: imgRect.height,
     containerLeft: imgRect.left,
@@ -471,7 +474,7 @@ export const getStyleModalImg: GetStyleModalImg = ({
     targetWidth: loadedImgEl?.naturalWidth ?? imgRect.width,
   })
 
-  const styleImgObjectFit = loadedImgEl && targetElComputedStyle.objectFit
+  const styleImgObjectFit = isImgObjectFit
     ? getImgObjectFitStyle({
       containerHeight: imgRect.height,
       containerLeft: imgRect.left,
@@ -486,7 +489,7 @@ export const getStyleModalImg: GetStyleModalImg = ({
     })
     : undefined
 
-  const styleDivImg = loadedImgEl && testDiv(targetEl)
+  const styleDivImg = isDivImg
     ? getDivImgStyle({
       backgroundPosition: targetElComputedStyle.backgroundPosition,
       backgroundSize: targetElComputedStyle.backgroundSize,
