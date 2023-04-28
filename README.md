@@ -66,25 +66,25 @@ You can pass these options to either the `Uncontrolled` (default) or
 
 ```typescript
 export interface UncontrolledProps {
-  // Accessible label text for when you want to unzoom
+  // Accessible label text for when you want to unzoom.
   // Default: 'Minimize image'
   a11yNameButtonUnzoom?: string
 
-  // Accessible label text for when you want to zoom
+  // Accessible label text for when you want to zoom.
   // Default: 'Expand image'
   a11yNameButtonZoom?: string
 
-  // Your image (required)
+  // Your image (required).
   children: ReactNode
 
-  // Custom CSS className to add to the zoomed <dialog>
+  // Custom CSS className to add to the zoomed <dialog>.
   classDialog?: string
 
-  // Provide your own unzoom button icon
+  // Provide your own unzoom button icon.
   // Default: ICompress
   IconUnzoom?: ElementType
 
-  // Provide your own zoom button icon
+  // Provide your own zoom button icon.
   // Default: IEnlarge
   IconZoom?: ElementType
 
@@ -94,18 +94,18 @@ export interface UncontrolledProps {
   // Default: 'div'
   wrapElement?: 'div' | 'span'
 
-  // Provide your own custom modal content component
+  // Provide your own custom modal content component.
   ZoomContent?: (props: {
     img: ReactElement | null;
     buttonUnzoom: ReactElement<HTMLButtonElement>;
     onUnzoom: () => void;
   }) => ReactElement;
 
-  // Higher quality image attributes to use on zoom
+  // Higher quality image attributes to use on zoom.
   zoomImg?: ImgHTMLAttributes<HTMLImageElement>
 
   // Offset in pixels the zoomed image should
-  // be from the window's boundaries
+  // be from the window's boundaries.
   // Default: 0
   zoomMargin?: number
 }
