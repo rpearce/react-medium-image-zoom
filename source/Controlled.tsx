@@ -92,6 +92,7 @@ export interface ControlledProps {
   }) => ReactElement
   zoomImg?: ImgHTMLAttributes<HTMLImageElement>
   zoomMargin?: number
+  zoomUseBorderRadius?: boolean
 }
 
 export function Controlled (props: ControlledProps) {
@@ -105,6 +106,7 @@ interface ControlledDefaultProps {
   IconZoom: ElementType
   wrapElement: 'div' | 'span'
   zoomMargin: number
+  zoomUseBorderRadius: boolean
 }
 
 type ControlledPropsWithDefaults = ControlledDefaultProps & ControlledProps
@@ -125,6 +127,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     IconZoom: IEnlarge,
     wrapElement: 'div',
     zoomMargin: 0,
+    zoomUseBorderRadius: false,
   }
 
   state: ControlledState = {
@@ -169,6 +172,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
         ZoomContent,
         zoomImg,
         zoomMargin,
+        zoomUseBorderRadius,
       },
       refContent,
       refDialog,
@@ -237,6 +241,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
         offset: zoomMargin,
         shouldRefresh,
         targetEl: imgEl,
+        zoomUseBorderRadius,
       })
       : {}
 

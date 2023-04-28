@@ -444,6 +444,25 @@ export const InlineImage = (props) => (
 )
 
 // =============================================================================
+
+export const UseBorderRadius = (props) => (
+  <main aria-label="Story">
+    <h1>Zooming a regular image</h1>
+    <div className="mw-600">
+      <Zoom {...props} zoomUseBorderRadius={true}>
+        <img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height="320"
+          loading="lazy"
+          style={{ borderRadius: '4rem' }}
+        />
+      </Zoom>
+    </div>
+  </main>
+)
+
+// =============================================================================
 // INTERACTIONS
 
 export const AutomatedTest = Regular.bind({}, { title: '(Automated Test)' })

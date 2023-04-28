@@ -144,8 +144,21 @@ export const getImgAlt: GetImgAlt = (imgEl) => {
 
 // =============================================================================
 
+interface ScaleBorderRadius {
+  (borderRadius: string, scale: number): string
+}
+
+const scaleBorderRadius: ScaleBorderRadius = (borderRadius, scale) => {
+  return borderRadius.endsWith('px')
+    ? parseFloat(borderRadius) * scale + 'px'
+    : borderRadius
+}
+
+// =============================================================================
+
 export interface GetImgRegularStyle {
   (data: {
+    borderRadius: string,
     containerHeight: number,
     containerLeft: number,
     containerTop: number,
@@ -158,6 +171,7 @@ export interface GetImgRegularStyle {
 }
 
 export const getImgRegularStyle: GetImgRegularStyle = ({
+  borderRadius,
   containerHeight,
   containerLeft,
   containerTop,
@@ -182,6 +196,7 @@ export const getImgRegularStyle: GetImgRegularStyle = ({
     width: containerWidth * scale,
     height: containerHeight * scale,
     transform: `translate(0,0) scale(${1 / scale})`,
+    borderRadius: scaleBorderRadius(borderRadius, scale),
   }
 }
 
@@ -206,6 +221,7 @@ export const parsePosition: ParsePosition = ({ position, relativeNum }) => {
 
 export interface GetImgObjectFitStyle {
   (data: {
+    borderRadius: string,
     containerHeight: number,
     containerLeft: number,
     containerTop: number,
@@ -220,6 +236,7 @@ export interface GetImgObjectFitStyle {
 }
 
 export const getImgObjectFitStyle: GetImgObjectFitStyle = ({
+  borderRadius,
   containerHeight,
   containerLeft,
   containerTop,
@@ -266,6 +283,7 @@ export const getImgObjectFitStyle: GetImgObjectFitStyle = ({
       width: targetWidth * ratio * scale,
       height: targetHeight * ratio * scale,
       transform: `translate(0,0) scale(${1 / scale})`,
+      borderRadius: scaleBorderRadius(borderRadius, scale),
     }
   } else if (objectFit === 'none') {
     const [posLeft = '50%', posTop = '50%'] = objectPosition.split(' ')
@@ -287,6 +305,7 @@ export const getImgObjectFitStyle: GetImgObjectFitStyle = ({
       width: targetWidth * scale,
       height: targetHeight * scale,
       transform: `translate(0,0) scale(${1 / scale})`,
+      borderRadius: scaleBorderRadius(borderRadius, scale),
     }
   } else if (objectFit === 'fill') {
     const widthRatio = containerWidth / targetWidth
@@ -306,6 +325,7 @@ export const getImgObjectFitStyle: GetImgObjectFitStyle = ({
       width: containerWidth * scale,
       height: containerHeight * scale,
       transform: `translate(0,0) scale(${1 / scale})`,
+      borderRadius: scaleBorderRadius(borderRadius, scale),
     }
   } else {
     return {}
@@ -318,6 +338,7 @@ export interface GetDivImgStyle {
   (data: {
     backgroundPosition: string,
     backgroundSize: string,
+    borderRadius: string,
     containerHeight: number,
     containerLeft: number,
     containerTop: number,
@@ -332,6 +353,7 @@ export interface GetDivImgStyle {
 export const getDivImgStyle: GetDivImgStyle = ({
   backgroundPosition,
   backgroundSize,
+  borderRadius,
   containerHeight,
   containerLeft,
   containerTop,
@@ -368,6 +390,7 @@ export const getDivImgStyle: GetDivImgStyle = ({
       width: targetWidth * ratio * scale,
       height: targetHeight * ratio * scale,
       transform: `translate(0,0) scale(${1 / scale})`,
+      borderRadius: scaleBorderRadius(borderRadius, scale),
     }
   } else if (backgroundSize === 'auto') {
     const [posLeft = '50%', posTop = '50%'] = backgroundPosition.split(' ')
@@ -389,6 +412,7 @@ export const getDivImgStyle: GetDivImgStyle = ({
       width: targetWidth * scale,
       height: targetHeight * scale,
       transform: `translate(0,0) scale(${1 / scale})`,
+      borderRadius: scaleBorderRadius(borderRadius, scale),
     }
   } else {
     const [sizeW = '50%', sizeH = '50%'] = backgroundSize.split(' ')
@@ -420,6 +444,7 @@ export const getDivImgStyle: GetDivImgStyle = ({
       width: targetWidth * ratio * scale,
       height: targetHeight * ratio * scale,
       transform: `translate(0,0) scale(${1 / scale})`,
+      borderRadius: scaleBorderRadius(borderRadius, scale),
     }
   }
 }
@@ -438,6 +463,7 @@ export interface GetStyleModalImg {
     offset: number,
     shouldRefresh: boolean,
     targetEl: SupportedImage,
+    zoomUseBorderRadius: boolean,
   }): CSSProperties
 }
 
@@ -450,6 +476,7 @@ export const getStyleModalImg: GetStyleModalImg = ({
   offset,
   shouldRefresh,
   targetEl,
+  zoomUseBorderRadius,
 }) => {
   const hasScalableSrc =
     isSvg ||
@@ -459,11 +486,13 @@ export const getStyleModalImg: GetStyleModalImg = ({
 
   const imgRect = targetEl.getBoundingClientRect()
   const targetElComputedStyle = window.getComputedStyle(targetEl)
+  const borderRadius = zoomUseBorderRadius ? targetElComputedStyle.borderRadius : '0'
 
   const isDivImg = loadedImgEl != null && testDiv(targetEl)
   const isImgObjectFit = loadedImgEl != null && !isDivImg
 
   const styleImgRegular = getImgRegularStyle({
+    borderRadius,
     containerHeight: imgRect.height,
     containerLeft: imgRect.left,
     containerTop: imgRect.top,
@@ -476,6 +505,7 @@ export const getStyleModalImg: GetStyleModalImg = ({
 
   const styleImgObjectFit = isImgObjectFit
     ? getImgObjectFitStyle({
+      borderRadius,
       containerHeight: imgRect.height,
       containerLeft: imgRect.left,
       containerTop: imgRect.top,
@@ -493,6 +523,7 @@ export const getStyleModalImg: GetStyleModalImg = ({
     ? getDivImgStyle({
       backgroundPosition: targetElComputedStyle.backgroundPosition,
       backgroundSize: targetElComputedStyle.backgroundSize,
+      borderRadius,
       containerHeight: imgRect.height,
       containerLeft: imgRect.left,
       containerTop: imgRect.top,
@@ -573,5 +604,3 @@ export const getStyleGhost: GetStyleGhost = (imgEl) => {
     }
   }
 }
-
-// =============================================================================

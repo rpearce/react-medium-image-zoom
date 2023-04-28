@@ -108,6 +108,11 @@ export interface UncontrolledProps {
   // be from the window's boundaries.
   // Default: 0
   zoomMargin?: number
+
+  // Indicate that the zoomed image should derive a
+  // border-radius value from the original image.
+  // Default: false
+  zoomUseBorderRadius?: boolean
 }
 ```
 
