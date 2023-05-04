@@ -19,9 +19,6 @@ jobs:
     - name: Install deps without updating package-lock.json
       run: npm i --no-save
 
-    - name: Install Playwright for Storybook
-      run: npx playwright install --with-deps
-
     - name: Run the CI build
       run: npm run ci
 
