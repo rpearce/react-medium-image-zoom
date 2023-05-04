@@ -2,7 +2,7 @@ import ts from '@rollup/plugin-typescript'
 import dts from 'rollup-plugin-dts'
 import pkg from './package.json' assert { type: 'json' }
 
-export default [
+export default (async () => ([
   {
     input: './source/index.ts',
     output: { file: pkg.main, format: 'es' },
@@ -17,7 +17,7 @@ export default [
     output: { file: pkg.types, format: 'es' },
     plugins: [dts(), rmOnWrite('./dist/types')],
   },
-]
+]))()
 
 function isExternal (id) {
   return !id.startsWith('.') && !id.startsWith('/')
@@ -25,8 +25,13 @@ function isExternal (id) {
 
 function rmOnWrite (dir) {
   return {
-    async writeBundle() {
-      (await import('node:fs/promises')).rm(dir, { force: true, recursive: true })
+    name: 'rollup-plugin-rm-on-write',
+    writeBundle: {
+      sequential: true,
+      order: 'post',
+      async handler() {
+        return (await import('node:fs/promises')).rm(dir, { force: true, recursive: true })
+      },
     },
   }
 }
