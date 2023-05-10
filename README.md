@@ -1,6 +1,6 @@
 # react-medium-image-zoom
 
-[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![bundlephobia size](https://badgen.net/bundlephobia/minzip/react-medium-image-zoom)](https://bundlephobia.com/result?p=react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-70-orange.svg)](#contributors-)
+[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![bundlephobia size](https://badgen.net/bundlephobia/minzip/react-medium-image-zoom)](https://bundlephobia.com/result?p=react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-71-orange.svg)](#contributors-)
 
 The original [medium.com-inspired image zooming](https://medium.design/image-zoom-on-medium-24d146fc0c20)
 library for [React](https://reactjs.org).
@@ -424,6 +424,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/pacocoursey"><img src="https://avatars.githubusercontent.com/u/34928425?v=4?s=40" width="40px;" alt="Paco"/><br /><sub><b>Paco</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Apacocoursey" title="Bug reports">🐛</a> <a href="#ideas-pacocoursey" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/LichLord91"><img src="https://avatars.githubusercontent.com/u/8435580?v=4?s=40" width="40px;" alt="LichLord91"/><br /><sub><b>LichLord91</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3ALichLord91" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/just-small-potato"><img src="https://avatars.githubusercontent.com/u/68165945?v=4?s=40" width="40px;" alt="just-small-potato"/><br /><sub><b>just-small-potato</b></sub></a><br /><a href="#ideas-just-small-potato" title="Ideas, Planning, & Feedback">🤔</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/walmsles"><img src="https://avatars.githubusercontent.com/u/2704782?v=4?s=40" width="40px;" alt="walmsles"/><br /><sub><b>walmsles</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Awalmsles" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
