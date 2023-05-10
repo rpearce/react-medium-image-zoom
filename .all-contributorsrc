@@ -703,6 +703,15 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "walmsles",
+      "name": "walmsles",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2704782?v=4",
+      "profile": "https://github.com/walmsles",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
