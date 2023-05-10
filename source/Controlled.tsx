@@ -338,6 +338,9 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   }
 
   componentWillUnmount() {
+    if (this.state.modalState !== ModalState.UNLOADED) {
+      this.bodyScrollEnable()
+    }
     this.changeObserver?.disconnect?.()
     this.imgElObserver?.disconnect?.()
     this.imgEl?.removeEventListener?.('load', this.handleImgLoad)
