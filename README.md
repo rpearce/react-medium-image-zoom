@@ -326,6 +326,25 @@ Here are the prop changes from `v4` to be aware of:
 
 And you can now provide `zoomImg` props to specify a different image to load when zooming.
 
+## A note about testing
+
+If you're using a testing library that uses `jsdom` (like Jest), to test a
+component that uses this library, you may encounter this error:
+
+> TypeError: img.decode is not a function
+
+This is because your version of `jsdom` hasn't implemented the [Image `decode()`
+method](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/decode)
+yet. Open your Jest setup file, add this, and it should be fixed!
+
+```js
+Object.defineProperty(global.Image.prototype, 'decode', {
+  get() {
+    return () => Promise.resolve()
+  },
+})
+```
+
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
