@@ -712,6 +712,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "amkkr",
+      "name": "tenshin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55781271?v=4",
+      "profile": "https://github.com/amkkr",
+      "contributions": [
+        "question"
+      ]
     }
   ],
   "repoType": "github",
