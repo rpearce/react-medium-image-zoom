@@ -3,7 +3,6 @@ import React, {
   Component,
   ElementType,
   ImgHTMLAttributes,
-  KeyboardEvent,
   MouseEvent,
   ReactElement,
   ReactNode,
@@ -153,7 +152,6 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     const {
       handleDialogCancel,
       handleDialogClick,
-      handleDialogKeyDown,
       handleUnzoom,
       handleZoom,
       imgEl,
@@ -304,7 +302,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
           </button>
         </WrapElement>}
         {hasImage && elDialogContainer != null && createPortal(
-          <dialog /* eslint-disable-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
+          <dialog /* eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
             aria-labelledby={idModalImg}
             aria-modal="true"
             className={classDialog}
@@ -313,7 +311,6 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
             onClick={handleDialogClick}
             onClose={handleUnzoom /* eslint-disable-line react/no-unknown-property */}
             onCancel={handleDialogCancel}
-            onKeyDown={handleDialogKeyDown}
             ref={refDialog}
             role="dialog"
           >
@@ -352,6 +349,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     window.removeEventListener('touchend', this.handleTouchMove)
     window.removeEventListener('touchcancel', this.handleTouchCancel)
     window.removeEventListener('resize', this.handleResize)
+    document.removeEventListener('keydown', this.handleKeyDown, true)
   }
 
   // ===========================================================================
@@ -503,7 +501,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   /**
    * Intercept default dialog.close() and use ours so we can animate
    */
-  handleDialogKeyDown = (e: KeyboardEvent<HTMLDialogElement>) => {
+  handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Escape' || e.keyCode === 27) {
       e.preventDefault()
       e.stopPropagation()
@@ -585,6 +583,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     window.addEventListener('touchstart', this.handleTouchStart, { passive: true })
     window.addEventListener('touchend', this.handleTouchMove, { passive: true })
     window.addEventListener('touchcancel', this.handleTouchCancel, { passive: true })
+    document.addEventListener('keydown', this.handleKeyDown, true)
 
     this.refModalImg.current?.addEventListener?.('transitionend', this.handleZoomEnd, { once: true })
   }
@@ -612,6 +611,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     window.removeEventListener('touchstart', this.handleTouchStart)
     window.removeEventListener('touchend', this.handleTouchMove)
     window.removeEventListener('touchcancel', this.handleTouchCancel)
+    document.removeEventListener('keydown', this.handleKeyDown, true)
 
     this.refModalImg.current?.addEventListener?.('transitionend', this.handleUnzoomEnd, { once: true })
   }
