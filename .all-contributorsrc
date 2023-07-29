@@ -721,6 +721,15 @@
       "contributions": [
         "question"
       ]
+    },
+    {
+      "login": "steven-tey",
+      "name": "Steven Tey",
+      "avatar_url": "https://avatars.githubusercontent.com/u/28986134?v=4",
+      "profile": "https://github.com/steven-tey",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
