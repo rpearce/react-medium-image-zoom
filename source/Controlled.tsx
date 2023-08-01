@@ -515,6 +515,9 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
    * Unzoom on wheel event
    */
   handleWheel = (e: WheelEvent) => {
+    // don't handle the event when the user is zooming with ctrl + wheel (or with pinch to zoom)
+    if (e.ctrlKey) return
+
     e.stopPropagation()
     queueMicrotask(() => {
       this.handleUnzoom()
