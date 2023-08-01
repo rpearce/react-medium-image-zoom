@@ -346,7 +346,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     this.refModalImg.current?.removeEventListener?.('transitionend', this.handleUnzoomEnd)
     window.removeEventListener('wheel', this.handleWheel)
     window.removeEventListener('touchstart', this.handleTouchStart)
-    window.removeEventListener('touchend', this.handleTouchMove)
+    window.removeEventListener('touchmove', this.handleTouchMove)
     window.removeEventListener('touchcancel', this.handleTouchCancel)
     window.removeEventListener('resize', this.handleResize)
     document.removeEventListener('keydown', this.handleKeyDown, true)
@@ -584,7 +584,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
 
     window.addEventListener('wheel', this.handleWheel, { passive: true })
     window.addEventListener('touchstart', this.handleTouchStart, { passive: true })
-    window.addEventListener('touchend', this.handleTouchMove, { passive: true })
+    window.addEventListener('touchmove', this.handleTouchMove, { passive: true })
     window.addEventListener('touchcancel', this.handleTouchCancel, { passive: true })
     document.addEventListener('keydown', this.handleKeyDown, true)
 
@@ -612,7 +612,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
 
     window.removeEventListener('wheel', this.handleWheel)
     window.removeEventListener('touchstart', this.handleTouchStart)
-    window.removeEventListener('touchend', this.handleTouchMove)
+    window.removeEventListener('touchmove', this.handleTouchMove)
     window.removeEventListener('touchcancel', this.handleTouchCancel)
     document.removeEventListener('keydown', this.handleKeyDown, true)
 
