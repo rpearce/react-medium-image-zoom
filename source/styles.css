@@ -55,9 +55,9 @@
 [data-rmiz-modal][open] {
   position: fixed;
   width: 100vw;
-  width: 100svw;
+  width: 100dvw;
   height: 100vh;
-  height: 100svh;
+  height: 100dvh;
   max-width: none;
   max-height: none;
   margin: 0;
