@@ -730,6 +730,17 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "eych",
+      "name": "Sergey",
+      "avatar_url": "https://avatars.githubusercontent.com/u/112840?v=4",
+      "profile": "http://15gifts.com/",
+      "contributions": [
+        "bug",
+        "code",
+        "doc"
+      ]
     }
   ],
   "repoType": "github",
