@@ -306,7 +306,7 @@ const CustomZoomContent = ({
         </cite>
       </figcaption>
     </figure>
-  <>
+  </>
 }
 ```
 
