@@ -1,6 +1,24 @@
-name: Node.js CI
+name: CI
 
-on: [push, pull_request]
+on:
+  push:
+    paths-ignore:
+      - '*.md'
+      - '*.nix'
+      - '.all-contributorsrc'
+      - '.vscode/**'
+      - 'Dockerfile'
+      - 'LICENSE'
+      - 'compose.yml'
+  pull_request:
+    paths-ignore:
+      - '*.md'
+      - '*.nix'
+      - '.all-contributorsrc'
+      - '.vscode/**'
+      - 'Dockerfile'
+      - 'LICENSE'
+      - 'compose.yml'
 
 jobs:
   build:
@@ -8,12 +26,12 @@ jobs:
 
     steps:
     - name: Checkout repo under GH workspace
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Use nodejs
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
         cache: 'npm'
 
     - name: Install deps without updating package-lock.json

@@ -8,8 +8,8 @@
     flake-parts.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit self; } {
+  outputs = inputs@{ self, flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" "aarch64-darwin" ];
       perSystem = { config, self', inputs', pkgs, system, ... }: {
         devShells.default = import ./shell.nix { inherit pkgs; };
