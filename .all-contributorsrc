@@ -741,6 +741,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "diegoatwa",
+      "name": "Diego Azevedo",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26748277?v=4",
+      "profile": "https://diegoazevedo.com.br/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "repoType": "github",
