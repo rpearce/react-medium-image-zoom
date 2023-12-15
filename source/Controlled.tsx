@@ -709,6 +709,17 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
       const tmp = document.createElement('div')
       tmp.innerHTML = imgEl.outerHTML
 
+      // Solves the mask ID issue in https://github.com/rpearce/react-medium-image-zoom/issues/438
+      tmp.querySelectorAll('mask[id]').forEach(maskEl => {
+        const newId = maskEl.id + '-zoom'
+
+        tmp.querySelectorAll(`[mask="url(#${maskEl.id})"]`).forEach(maskedEl => {
+          maskedEl.setAttribute('mask', `url(#${newId})`)
+        })
+
+        maskEl.id = newId
+      })
+
       const svg = tmp.firstChild as SVGSVGElement
       svg.style.width = `${styleModalImg.width || 0}px`
       svg.style.height = `${styleModalImg.height || 0}px`
