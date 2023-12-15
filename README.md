@@ -1,6 +1,6 @@
 # react-medium-image-zoom
 
-[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![bundlephobia size](https://badgen.net/bundlephobia/minzip/react-medium-image-zoom)](https://bundlephobia.com/result?p=react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-74-orange.svg)](#contributors-)
+[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![bundlephobia size](https://badgen.net/bundlephobia/minzip/react-medium-image-zoom)](https://bundlephobia.com/result?p=react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-75-orange.svg)](#contributors-)
 
 The original [medium.com-inspired image zooming](https://medium.design/image-zoom-on-medium-24d146fc0c20)
 library for [React](https://reactjs.org).
@@ -431,6 +431,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/steven-tey"><img src="https://avatars.githubusercontent.com/u/28986134?v=4?s=40" width="40px;" alt="Steven Tey"/><br /><sub><b>Steven Tey</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Asteven-tey" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://15gifts.com/"><img src="https://avatars.githubusercontent.com/u/112840?v=4?s=40" width="40px;" alt="Sergey"/><br /><sub><b>Sergey</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Aeych" title="Bug reports">🐛</a> <a href="https://github.com/rpearce/react-medium-image-zoom/commits?author=eych" title="Code">💻</a> <a href="https://github.com/rpearce/react-medium-image-zoom/commits?author=eych" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://diegoazevedo.com.br/"><img src="https://avatars.githubusercontent.com/u/26748277?v=4?s=40" width="40px;" alt="Diego Azevedo"/><br /><sub><b>Diego Azevedo</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/commits?author=diegoatwa" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/FaizanAhmad1122"><img src="https://avatars.githubusercontent.com/u/56729996?v=4?s=40" width="40px;" alt="Faizan Ahmad"/><br /><sub><b>Faizan Ahmad</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3AFaizanAhmad1122" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
