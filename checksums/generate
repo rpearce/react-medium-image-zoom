@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o errtrace
+set -o nounset
+set -eou pipefail
+
+function main {
+  find . \
+    -type f \
+    ! -path "./.git/*" \
+    ! -path "./.github/*" \
+    ! -path "./.storybook/*" \
+    ! -path "./.vscode/*" \
+    ! -path "./dist/*" \
+    ! -path "./docs/*" \
+    ! -path "./node_modules/*" \
+    ! -path "./scripts/*" \
+    \( -name "*.cjs" -o \
+       -name "*.css" -o \
+       -name "*.jpg" -o \
+       -name "*.js" -o \
+       -name "*.json" -o \
+       -name "*.mdx" -o \
+       -name "*.ts" -o \
+       -name "*.tsx" \
+    \) \
+    -exec md5sum '{}' \; \
+    > ./checksums/sums.md5
+}
+
+main
+
+#md5sum ./src/**/*.md | awk '{print $1}' | sort | md5sum | awk '{print $1}'

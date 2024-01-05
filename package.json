@@ -67,12 +67,12 @@
     "dist/"
   ],
   "scripts": {
-    "build": "rm -rf ./dist && rollup -c rollup.config.js && cp ./source/styles.css ./dist/styles.css",
-    "build:docs": "rm -rf ./docs && mkdir ./docs && storybook build --quiet -o docs",
+    "build": "./checksums/check-source || (rm -rf ./dist && rollup -c rollup.config.js && cp ./source/styles.css ./dist/styles.css)",
+    "build:docs": "./checksums/check-docs || (rm -rf ./docs && mkdir ./docs && storybook build --quiet -o docs)",
     "ci": "concurrently npm:lint npm:build npm:build:docs",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
-    "lint": "eslint .",
+    "lint": "./checksums/check-lintable || eslint .",
     "prepublishOnly": "concurrently npm:lint npm:build",
     "start": "NODE_OPTIONS=--openssl-legacy-provider storybook dev -p 6006",
     "storybook": "storybook dev -p 6006",

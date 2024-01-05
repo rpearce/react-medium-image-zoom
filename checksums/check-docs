@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o errtrace
+set -o nounset
+set -eou pipefail
+
+function main {
+  grep "./stories" ./checksums/sums.md5 \
+    | md5sum --check &> /dev/null
+}
+
+main
