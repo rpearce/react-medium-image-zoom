@@ -356,9 +356,11 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
    * Create a container for the dialog
    */
   appendDialogContainer = () => {
-    const elDialogContainer = document.createElement('div')
-    elDialogContainer.setAttribute('data-rmiz-portal', '')
-    document.body.appendChild(elDialogContainer)
+    if (!document.querySelector('[data-rmiz-portal]')) {
+      const elDialogContainer = document.createElement('div')
+      elDialogContainer.setAttribute('data-rmiz-portal', '')
+      document.body.appendChild(elDialogContainer)
+    }
   }
 
   // ===========================================================================
