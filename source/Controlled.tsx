@@ -28,16 +28,6 @@ import {
 
 // =============================================================================
 
-let elDialogContainer: HTMLDivElement
-
-if (typeof document !== 'undefined') {
-  elDialogContainer = document.createElement('div')
-  elDialogContainer.setAttribute('data-rmiz-portal', '')
-  document.body.appendChild(elDialogContainer)
-}
-
-// =============================================================================
-
 /**
  * The selector query we use to find and track the image
  */
@@ -301,7 +291,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
             <IconZoom />
           </button>
         </WrapElement>}
-        {hasImage && elDialogContainer != null && createPortal(
+        {hasImage && createPortal(
           <dialog /* eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
             aria-labelledby={idModalImg}
             aria-modal="true"
@@ -319,7 +309,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
               {modalContent}
             </div>
           </dialog>
-          , elDialogContainer
+          , document.querySelector('[data-rmiz-portal]') as HTMLDivElement
         )}
       </WrapElement>
     )
@@ -328,6 +318,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   // ===========================================================================
 
   componentDidMount() {
+    this.appendDialogContainer()
     this.setId()
     this.setAndTrackImg()
     this.handleImgLoad()
@@ -357,6 +348,17 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   componentDidUpdate(prevProps: ControlledPropsWithDefaults) {
     this.UNSAFE_handleSvg()
     this.handleIfZoomChanged(prevProps.isZoomed)
+  }
+
+  // ===========================================================================
+
+  /**
+   * Create a container for the dialog
+   */
+  appendDialogContainer = () => {
+    const elDialogContainer = document.createElement('div')
+    elDialogContainer.setAttribute('data-rmiz-portal', '')
+    document.body.appendChild(elDialogContainer)
   }
 
   // ===========================================================================
