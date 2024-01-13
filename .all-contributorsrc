@@ -759,6 +759,43 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "kizeesmack",
+      "name": "Kunal L.",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1277576?v=4",
+      "profile": "https://github.com/kizeesmack",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "thiskevinwang",
+      "name": "Kevin Wang",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26389321?v=4",
+      "profile": "https://github.com/thiskevinwang",
+      "contributions": [
+        "ideas"
+      ]
+    },
+    {
+      "login": "u3u",
+      "name": "u3u",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20062482?v=4",
+      "profile": "https://qwq.cat/",
+      "contributions": [
+        "ideas",
+        "review"
+      ]
+    },
+    {
+      "login": "tszhong0411",
+      "name": "Hong",
+      "avatar_url": "https://avatars.githubusercontent.com/u/75498339?v=4",
+      "profile": "https://honghong.me/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoType": "github",
