@@ -1,3 +1,3 @@
 try{
-var a=__STORYBOOKADDONS__,{addons:O,types:d,mockChannel:m}=__STORYBOOKADDONS__;O.setConfig({panelPosition:"right"});
+(()=>{var a=__STORYBOOK_ADDONS__,{addons:n,types:d,mockChannel:m}=__STORYBOOK_ADDONS__;n.setConfig({panelPosition:"right"});})();
 }catch(e){ console.error("[Storybook] One of your manager-entries failed: " + import.meta.url, e); }
