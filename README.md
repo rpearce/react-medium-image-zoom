@@ -437,6 +437,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/thiskevinwang"><img src="https://avatars.githubusercontent.com/u/26389321?v=4?s=40" width="40px;" alt="Kevin Wang"/><br /><sub><b>Kevin Wang</b></sub></a><br /><a href="#ideas-thiskevinwang" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://qwq.cat/"><img src="https://avatars.githubusercontent.com/u/20062482?v=4?s=40" width="40px;" alt="u3u"/><br /><sub><b>u3u</b></sub></a><br /><a href="#ideas-u3u" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/rpearce/react-medium-image-zoom/pulls?q=is%3Apr+reviewed-by%3Au3u" title="Reviewed Pull Requests">👀</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://honghong.me/"><img src="https://avatars.githubusercontent.com/u/75498339?v=4?s=40" width="40px;" alt="Hong"/><br /><sub><b>Hong</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/commits?author=tszhong0411" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

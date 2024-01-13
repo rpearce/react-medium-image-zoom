@@ -787,6 +787,15 @@
         "ideas",
         "review"
       ]
+    },
+    {
+      "login": "tszhong0411",
+      "name": "Hong",
+      "avatar_url": "https://avatars.githubusercontent.com/u/75498339?v=4",
+      "profile": "https://honghong.me/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoType": "github",
