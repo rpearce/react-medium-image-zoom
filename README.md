@@ -434,6 +434,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/FaizanAhmad1122"><img src="https://avatars.githubusercontent.com/u/56729996?v=4?s=40" width="40px;" alt="Faizan Ahmad"/><br /><sub><b>Faizan Ahmad</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3AFaizanAhmad1122" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/kizeesmack"><img src="https://avatars.githubusercontent.com/u/1277576?v=4?s=40" width="40px;" alt="Kunal L."/><br /><sub><b>Kunal L.</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Akizeesmack" title="Bug reports">🐛</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/thiskevinwang"><img src="https://avatars.githubusercontent.com/u/26389321?v=4?s=40" width="40px;" alt="Kevin Wang"/><br /><sub><b>Kevin Wang</b></sub></a><br /><a href="#ideas-thiskevinwang" title="Ideas, Planning, & Feedback">🤔</a></td>
+    </tr>
   </tbody>
 </table>
 
