@@ -28,16 +28,6 @@ import {
 
 // =============================================================================
 
-let elDialogContainer: HTMLDivElement
-
-if (typeof document !== 'undefined') {
-  elDialogContainer = document.createElement('div')
-  elDialogContainer.setAttribute('data-rmiz-portal', '')
-  document.body.appendChild(elDialogContainer)
-}
-
-// =============================================================================
-
 /**
  * The selector query we use to find and track the image
  */
@@ -301,7 +291,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
             <IconZoom />
           </button>
         </WrapElement>}
-        {hasImage && elDialogContainer != null && createPortal(
+        {hasImage && createPortal(
           <dialog /* eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
             aria-labelledby={idModalImg}
             aria-modal="true"
@@ -319,7 +309,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
               {modalContent}
             </div>
           </dialog>
-          , elDialogContainer
+          , this.getDialogContainer()
         )}
       </WrapElement>
     )
@@ -357,6 +347,23 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   componentDidUpdate(prevProps: ControlledPropsWithDefaults) {
     this.UNSAFE_handleSvg()
     this.handleIfZoomChanged(prevProps.isZoomed)
+  }
+
+  // ===========================================================================
+
+  /**
+   * Find or create a container for the dialog
+   */
+  getDialogContainer = (): HTMLDivElement => {
+    let el = document.querySelector('[data-rmiz-portal]')
+
+    if (el == null) {
+      el = document.createElement('div')
+      el.setAttribute('data-rmiz-portal', '')
+      document.body.appendChild(el)
+    }
+
+    return el as HTMLDivElement
   }
 
   // ===========================================================================
