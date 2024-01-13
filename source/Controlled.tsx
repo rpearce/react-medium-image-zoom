@@ -352,7 +352,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   // ===========================================================================
 
   /**
-   * Create a container for the dialog
+   * Find or create a container for the dialog
    */
   getDialogContainer = (): HTMLDivElement => {
     let el = document.querySelector('[data-rmiz-portal]')
