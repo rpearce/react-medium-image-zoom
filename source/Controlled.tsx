@@ -309,7 +309,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
               {modalContent}
             </div>
           </dialog>
-          , document.querySelector('[data-rmiz-portal]') as HTMLDivElement
+          , this.getDialogContainer()
         )}
       </WrapElement>
     )
@@ -318,7 +318,6 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   // ===========================================================================
 
   componentDidMount() {
-    this.appendDialogContainer()
     this.setId()
     this.setAndTrackImg()
     this.handleImgLoad()
@@ -355,12 +354,16 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   /**
    * Create a container for the dialog
    */
-  appendDialogContainer = () => {
-    if (!document.querySelector('[data-rmiz-portal]')) {
-      const elDialogContainer = document.createElement('div')
-      elDialogContainer.setAttribute('data-rmiz-portal', '')
-      document.body.appendChild(elDialogContainer)
+  getDialogContainer = (): HTMLDivElement => {
+    let el = document.querySelector('[data-rmiz-portal]')
+
+    if (el == null) {
+      el = document.createElement('div')
+      el.setAttribute('data-rmiz-portal', '')
+      document.body.appendChild(el)
     }
+
+    return el as HTMLDivElement
   }
 
   // ===========================================================================
