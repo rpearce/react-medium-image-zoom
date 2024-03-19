@@ -72,6 +72,8 @@ export interface ControlledProps {
   IconZoom?: ElementType
   isZoomed: boolean
   onZoomChange?: (value: boolean) => void
+  unZoomOnContentDragged?: boolean
+  unZoomOnContentDraggedThreshold?: number
   wrapElement?: 'div' | 'span'
   ZoomContent?: (data: {
     img: ReactElement | null
@@ -92,6 +94,8 @@ interface ControlledDefaultProps {
   a11yNameButtonZoom: string
   IconUnzoom: ElementType
   IconZoom: ElementType
+  unZoomOnContentDragged: boolean
+  unZoomOnContentDraggedThreshold: number
   wrapElement: 'div' | 'span'
   zoomMargin: number
 }
@@ -112,6 +116,8 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     a11yNameButtonZoom: 'Expand image',
     IconUnzoom: ICompress,
     IconZoom: IEnlarge,
+    unZoomOnContentDragged: true,
+    unZoomOnContentDraggedThreshold: 10,
     wrapElement: 'div',
     zoomMargin: 0,
   }
@@ -137,6 +143,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   private styleModalImg: CSSProperties = {}
   private touchYStart?: number
   private touchYEnd?: number
+ 
 
   render() {
     const {
@@ -153,6 +160,8 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
         IconUnzoom,
         IconZoom,
         isZoomed,
+        unZoomOnContentDragged,
+        unZoomOnContentDraggedThreshold,
         wrapElement: WrapElement,
         ZoomContent,
         zoomImg,
@@ -545,15 +554,19 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
    * and unzoom if we detect a "swipe"
    */
   handleTouchMove = (e: TouchEvent) => {
+    if(!this.props.unZoomOnContentDragged){
+      return
+    }
+
     if (this.touchYStart != null && e.changedTouches[0]) {
       this.touchYEnd = e.changedTouches[0].screenY
 
       const max = Math.max(this.touchYStart, this.touchYEnd)
       const min = Math.min(this.touchYStart, this.touchYEnd)
       const delta = Math.abs(max - min)
-      const threshold = 10
+      const {unZoomOnContentDraggedThreshold} = this.props
 
-      if (delta > threshold) {
+      if (delta > unZoomOnContentDraggedThreshold) {
         this.touchYStart = undefined
         this.touchYEnd = undefined
         this.handleUnzoom()
