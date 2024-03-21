@@ -561,7 +561,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
       const max = Math.max(this.touchYStart, this.touchYEnd)
       const min = Math.min(this.touchYStart, this.touchYEnd)
       const delta = Math.abs(max - min)
-      const {unZoomOnContentDraggedThreshold} = this.props
+      const { unZoomOnContentDraggedThreshold } = this.props
 
       if (delta > unZoomOnContentDraggedThreshold) {
         this.touchYStart = undefined
