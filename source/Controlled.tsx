@@ -143,7 +143,6 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   private styleModalImg: CSSProperties = {}
   private touchYStart?: number
   private touchYEnd?: number
- 
 
   render() {
     const {
@@ -160,8 +159,6 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
         IconUnzoom,
         IconZoom,
         isZoomed,
-        unZoomOnContentDragged,
-        unZoomOnContentDraggedThreshold,
         wrapElement: WrapElement,
         ZoomContent,
         zoomImg,
@@ -554,7 +551,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
    * and unzoom if we detect a "swipe"
    */
   handleTouchMove = (e: TouchEvent) => {
-    if(!this.props.unZoomOnContentDragged){
+    if (!this.props.unZoomOnContentDragged) {
       return
     }
 
