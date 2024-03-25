@@ -133,6 +133,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   private changeObserver: MutationObserver | undefined
   private imgEl: SupportedImage | null = null
   private imgElObserver: ResizeObserver | undefined
+  private isScaling = false
   private prevBodyAttrs: BodyAttrs = defaultBodyAttrs
   private styleModalImg: CSSProperties = {}
   private touchYStart?: number
@@ -337,6 +338,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     window.removeEventListener('wheel', this.handleWheel)
     window.removeEventListener('touchstart', this.handleTouchStart)
     window.removeEventListener('touchmove', this.handleTouchMove)
+    window.removeEventListener('touchend', this.handleTouchEnd)
     window.removeEventListener('touchcancel', this.handleTouchCancel)
     window.removeEventListener('resize', this.handleResize)
     document.removeEventListener('keydown', this.handleKeyDown, true)
@@ -532,20 +534,29 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   }
 
   /**
-   * Start tracking the Y-axis
+   * Start tracking the Y-axis but abort if non-scroll
+   * gesture is detected (like pinch-to-zoom)
    */
   handleTouchStart = (e: TouchEvent) => {
+    if (e.touches.length > 1) {
+      this.isScaling = true
+      return
+    }
+
     if (e.changedTouches.length === 1 && e.changedTouches[0]) {
       this.touchYStart = e.changedTouches[0].screenY
     }
   }
 
   /**
-   * Track how far we've moved on the Y-axis
-   * and unzoom if we detect a "swipe"
+   * If the window isn't browser zoomed,
+   * track how far we've moved on the Y-axis
+   * and unzoom if we detect a swipe
    */
   handleTouchMove = (e: TouchEvent) => {
-    if (this.touchYStart != null && e.changedTouches[0]) {
+    const browserScale = window.visualViewport?.scale ?? 1
+
+    if (!this.isScaling && browserScale <= 1 && this.touchYStart != null && e.changedTouches[0]) {
       this.touchYEnd = e.changedTouches[0].screenY
 
       const max = Math.max(this.touchYStart, this.touchYEnd)
@@ -562,9 +573,19 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   }
 
   /**
-   * Reset the Y-axis start and end tracking points
+   * Reset the scaling check and the Y-axis start and end tracking points
+   */
+  handleTouchEnd = () => {
+    this.isScaling = false
+    this.touchYStart = undefined
+    this.touchYEnd = undefined
+  }
+
+  /**
+   * Reset the scaling check and the Y-axis start and end tracking points
    */
   handleTouchCancel = () => {
+    this.isScaling = false
     this.touchYStart = undefined
     this.touchYEnd = undefined
   }
@@ -592,6 +613,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     window.addEventListener('wheel', this.handleWheel, { passive: true })
     window.addEventListener('touchstart', this.handleTouchStart, { passive: true })
     window.addEventListener('touchmove', this.handleTouchMove, { passive: true })
+    window.addEventListener('touchend', this.handleTouchEnd, { passive: true })
     window.addEventListener('touchcancel', this.handleTouchCancel, { passive: true })
     document.addEventListener('keydown', this.handleKeyDown, true)
 
@@ -620,6 +642,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     window.removeEventListener('wheel', this.handleWheel)
     window.removeEventListener('touchstart', this.handleTouchStart)
     window.removeEventListener('touchmove', this.handleTouchMove)
+    window.removeEventListener('touchend', this.handleTouchEnd)
     window.removeEventListener('touchcancel', this.handleTouchCancel)
     document.removeEventListener('keydown', this.handleKeyDown, true)
 
