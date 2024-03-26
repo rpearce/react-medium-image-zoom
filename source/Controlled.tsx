@@ -72,6 +72,8 @@ export interface ControlledProps {
   IconZoom?: ElementType
   isZoomed: boolean
   onZoomChange?: (value: boolean) => void
+  canSwipeToUnzoom?: boolean
+  swipeToUnzoomThreshold?: number
   wrapElement?: 'div' | 'span'
   ZoomContent?: (data: {
     img: ReactElement | null
@@ -92,6 +94,8 @@ interface ControlledDefaultProps {
   a11yNameButtonZoom: string
   IconUnzoom: ElementType
   IconZoom: ElementType
+  canSwipeToUnzoom: boolean
+  swipeToUnzoomThreshold: number
   wrapElement: 'div' | 'span'
   zoomMargin: number
 }
@@ -112,6 +116,8 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     a11yNameButtonZoom: 'Expand image',
     IconUnzoom: ICompress,
     IconZoom: IEnlarge,
+    canSwipeToUnzoom: true,
+    swipeToUnzoomThreshold: 10,
     wrapElement: 'div',
     zoomMargin: 0,
   }
@@ -554,17 +560,24 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
    * and unzoom if we detect a swipe
    */
   handleTouchMove = (e: TouchEvent) => {
+    if (!this.props.canSwipeToUnzoom) {
+      return
+    }
+
     const browserScale = window.visualViewport?.scale ?? 1
 
     if (!this.isScaling && browserScale <= 1 && this.touchYStart != null && e.changedTouches[0]) {
+
+    if (this.touchYStart != null && e.changedTouches[0]) {
+
       this.touchYEnd = e.changedTouches[0].screenY
 
       const max = Math.max(this.touchYStart, this.touchYEnd)
       const min = Math.min(this.touchYStart, this.touchYEnd)
       const delta = Math.abs(max - min)
-      const threshold = 10
+      const { swipeToUnzoomThreshold } = this.props
 
-      if (delta > threshold) {
+      if (delta > swipeToUnzoomThreshold) {
         this.touchYStart = undefined
         this.touchYEnd = undefined
         this.handleUnzoom()
