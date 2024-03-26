@@ -567,24 +567,22 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     const browserScale = window.visualViewport?.scale ?? 1
 
     if (!this.isScaling && browserScale <= 1 && this.touchYStart != null && e.changedTouches[0]) {
+      if (this.touchYStart != null && e.changedTouches[0]) {
+        this.touchYEnd = e.changedTouches[0].screenY
 
-    if (this.touchYStart != null && e.changedTouches[0]) {
+        const max = Math.max(this.touchYStart, this.touchYEnd)
+        const min = Math.min(this.touchYStart, this.touchYEnd)
+        const delta = Math.abs(max - min)
+        const { swipeToUnzoomThreshold } = this.props
 
-      this.touchYEnd = e.changedTouches[0].screenY
-
-      const max = Math.max(this.touchYStart, this.touchYEnd)
-      const min = Math.min(this.touchYStart, this.touchYEnd)
-      const delta = Math.abs(max - min)
-      const { swipeToUnzoomThreshold } = this.props
-
-      if (delta > swipeToUnzoomThreshold) {
-        this.touchYStart = undefined
-        this.touchYEnd = undefined
-        this.handleUnzoom()
+        if (delta > swipeToUnzoomThreshold) {
+          this.touchYStart = undefined
+          this.touchYEnd = undefined
+          this.handleUnzoom()
+        }
       }
     }
   }
-
   /**
    * Reset the scaling check and the Y-axis start and end tracking points
    */
