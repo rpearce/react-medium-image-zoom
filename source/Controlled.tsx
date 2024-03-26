@@ -583,6 +583,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
       }
     }
   }
+
   /**
    * Reset the scaling check and the Y-axis start and end tracking points
    */
