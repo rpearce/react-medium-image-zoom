@@ -90,7 +90,7 @@
     "@storybook/addon-docs": "^7.6.8",
     "@storybook/addon-interactions": "^7.6.8",
     "@storybook/addon-links": "^7.6.8",
-    "@storybook/addon-viewport": "^7.6.8",
+    "@storybook/addon-viewport": "^8.0.4",
     "@storybook/jest": "^0.2.3",
     "@storybook/react": "^7.6.8",
     "@storybook/react-webpack5": "^7.6.8",
