@@ -93,7 +93,7 @@
     "@storybook/addon-viewport": "^7.6.8",
     "@storybook/jest": "^0.2.3",
     "@storybook/react": "^7.6.8",
-    "@storybook/react-webpack5": "^7.6.8",
+    "@storybook/react-webpack5": "^8.0.4",
     "@storybook/test-runner": "^0.17.0",
     "@storybook/testing-library": "^0.2.2",
     "@types/node": "^20.11.0",
