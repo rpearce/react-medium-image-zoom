@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react'
+import React from 'react'
 import type { SupportedImage } from './types'
 
 // =============================================================================
@@ -154,7 +154,7 @@ export interface GetImgRegularStyle {
     offset: number,
     targetHeight: number,
     targetWidth: number,
-  }): CSSProperties
+  }): React.CSSProperties
 }
 
 export const getImgRegularStyle: GetImgRegularStyle = ({
@@ -216,7 +216,7 @@ export interface GetImgObjectFitStyle {
     offset: number,
     targetHeight: number,
     targetWidth: number,
-  }): CSSProperties
+  }): React.CSSProperties
 }
 
 export const getImgObjectFitStyle: GetImgObjectFitStyle = ({
@@ -326,7 +326,7 @@ export interface GetDivImgStyle {
     offset: number,
     targetHeight: number,
     targetWidth: number,
-  }): CSSProperties
+  }): React.CSSProperties
 }
 
 export const getDivImgStyle: GetDivImgStyle = ({
@@ -438,7 +438,7 @@ export interface GetStyleModalImg {
     offset: number,
     shouldRefresh: boolean,
     targetEl: SupportedImage,
-  }): CSSProperties
+  }): React.CSSProperties
 }
 
 export const getStyleModalImg: GetStyleModalImg = ({
@@ -535,7 +535,7 @@ export const getStyleModalImg: GetStyleModalImg = ({
 // =============================================================================
 
 export interface GetStyleGhost {
-  (imgEl: SupportedImage | null): CSSProperties
+  (imgEl: SupportedImage | null): React.CSSProperties
 }
 
 export const getStyleGhost: GetStyleGhost = (imgEl) => {

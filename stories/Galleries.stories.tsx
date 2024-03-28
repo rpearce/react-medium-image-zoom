@@ -1,4 +1,4 @@
-import React, { FormEvent, useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import type { Meta } from '@storybook/react'
 
 import Zoom from '../source'
@@ -42,7 +42,7 @@ export const ImageGallery = () => {
   const [objectFit, setObjectFit] = useState('cover' as ObjectFit)
   const [objectPosition, setObjectPosition] = useState('50% 50%')
 
-  const handleSubmit = useCallback((e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const data = new FormData(e.currentTarget)
@@ -132,7 +132,7 @@ export const DivImageGallery = () => {
   const [bgPosition, setBgPosition] = useState('50%')
   const [aspectRatio, setAspectRatio] = useState('56%')
 
-  const handleSubmit = useCallback((e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const data = new FormData(e.currentTarget)
