@@ -20,11 +20,7 @@ export const Figure = (props) => (
     <div className="mw-600">
       <figure>
         <Zoom {...props}>
-          <img
-            alt={imgHobbiton.alt}
-            src={imgHobbiton.src}
-            width="500"
-          />
+          <img alt={imgHobbiton.alt} src={imgHobbiton.src} width="500" />
         </Zoom>
         <figcaption>
           <a href="https://www.newzealand.com/in/plan/business/hobbiton-movie-set-tours/">

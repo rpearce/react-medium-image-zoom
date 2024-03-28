@@ -8,8 +8,7 @@ import React, {
 } from 'react'
 import type { Meta } from '@storybook/react'
 
-import { waitFor, within, userEvent } from '@storybook/testing-library'
-import { expect } from '@storybook/jest'
+import { waitFor, within, userEvent, expect } from '@storybook/test'
 
 import Zoom, { UncontrolledProps } from '../source'
 import '../source/styles.css'
@@ -58,7 +57,9 @@ export const ZoomMargin = (props) => (
   <main aria-label="Story">
     <h1>Setting a zoomMargin of 45(px)</h1>
     <div className="mw-600">
-      <p>This example should always be offset from the window by at least 45px</p>
+      <p>
+        This example should always be offset from the window by at least 45px
+      </p>
       <Zoom {...props} zoomMargin={45}>
         <img
           alt={imgThatWanakaTree.alt}
@@ -97,12 +98,7 @@ export const SVGSource = (props) => (
     <h1>An image with an SVG src</h1>
     <div className="mw-600">
       <Zoom {...props}>
-        <img
-          alt={imgNzMap.alt}
-          src={imgNzMap.src}
-          width="150"
-          loading="lazy"
-        />
+        <img alt={imgNzMap.alt} src={imgNzMap.src} width="150" loading="lazy" />
       </Zoom>
     </div>
   </main>
@@ -112,7 +108,9 @@ export const SVGSource = (props) => (
 
 export const DataSVGSource = () => (
   <main aria-label="Story">
-    <h1>An image with a <code>data:image/svg+xml</code> <code>src</code></h1>
+    <h1>
+      An image with a <code>data:image/svg+xml</code> <code>src</code>
+    </h1>
     <div className="data-uri-img mw-600">
       <Zoom>
         <img
@@ -128,12 +126,14 @@ export const DataSVGSource = () => (
 
 export const ProvideZoomImg = (props) => (
   <main aria-label="Story">
-    <h1>An image with a larger <code>zoomImg</code></h1>
+    <h1>
+      An image with a larger <code>zoomImg</code>
+    </h1>
     <div className="mw-600">
       <p>
-        When zoomed, the original image will scale to as large as the window will
-        allow, and then it will be replaced by an image that is downloaded in the
-        background.
+        When zoomed, the original image will scale to as large as the window
+        will allow, and then it will be replaced by an image that is downloaded
+        in the background.
       </p>
       <Zoom
         {...props}
@@ -142,11 +142,7 @@ export const ProvideZoomImg = (props) => (
           src: imgKeaLarge.src,
         }}
       >
-        <img
-          alt={imgKeaSmall.alt}
-          src={imgKeaSmall.src}
-          width="150"
-        />
+        <img alt={imgKeaSmall.alt} src={imgKeaSmall.src} width="150" />
       </Zoom>
     </div>
   </main>
@@ -163,11 +159,7 @@ export const SmallSrcSize = (props) => (
         than its natural dimensions.
       </p>
       <Zoom {...props}>
-        <img
-          alt={imgKeaSmall.alt}
-          src={imgKeaSmall.src}
-          width="150"
-        />
+        <img alt={imgKeaSmall.alt} src={imgKeaSmall.src} width="150" />
       </Zoom>
     </div>
   </main>
@@ -181,7 +173,10 @@ export const CustomModalStyles = (props) => {
       <h1>Custom Modal Styles</h1>
       <div className="mw-600">
         <p>Use CSS to customize the zoom modal styles.</p>
-        <p>Here, we slow down the transition time and use a different overlay color.</p>
+        <p>
+          Here, we slow down the transition time and use a different overlay
+          color.
+        </p>
         <div>
           <Zoom {...props} classDialog="custom-zoom">
             <img
@@ -196,7 +191,8 @@ export const CustomModalStyles = (props) => {
           the <code>classDialog</code> string prop. Here are the styles used:
         </p>
         <pre>
-          <code>{`
+          <code>
+            {`
 .custom-zoom [data-rmiz-modal-overlay],
 .custom-zoom [data-rmiz-modal-img] {
   transition-duration: 0.8s;
@@ -260,7 +256,8 @@ const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({
 
   const classCaption = useMemo(() => {
     const hasWidthHeight = imgWidth != null && imgHeight != null
-    const imgRatioLargerThanWindow = imgWidth / imgHeight > window.innerWidth / window.innerHeight
+    const imgRatioLargerThanWindow =
+      imgWidth / imgHeight > window.innerWidth / window.innerHeight
 
     return cx({
       'zoom-caption': true,
@@ -278,41 +275,48 @@ const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({
     }
   }, [modalState])
 
-  return <>
-    {buttonUnzoom}
+  return (
+    <>
+      {buttonUnzoom}
 
-    <figure>
-      {img}
-      <figcaption className={classCaption}>
-        That Wanaka Tree, also known as the Wanaka Willow, is a willow tree
-        located at the southern end of Lake Wānaka in the Otago region of New
-        Zealand.
-        <cite className="zoom-caption-cite">
-          Wikipedia, <a className="zoom-caption-link" href="https://en.wikipedia.org/wiki/That_Wanaka_Tree">
-            That Wanaka Tree
-          </a>
-        </cite>
-      </figcaption>
-    </figure>
-  </>
+      <figure>
+        {img}
+        <figcaption className={classCaption}>
+          That Wanaka Tree, also known as the Wanaka Willow, is a willow tree
+          located at the southern end of Lake Wānaka in the Otago region of New
+          Zealand.
+          <cite className="zoom-caption-cite">
+            Wikipedia,{' '}
+            <a
+              className="zoom-caption-link"
+              href="https://en.wikipedia.org/wiki/That_Wanaka_Tree"
+            >
+              That Wanaka Tree
+            </a>
+          </cite>
+        </figcaption>
+      </figure>
+    </>
+  )
 }
 
 // =============================================================================
 
 type DelayedImgProps = {
-  timer: number
-  alt: string
-  src: string
-  width: string
-  height: string
-}
+  timer: number;
+  alt: string;
+  src: string;
+  width: string;
+  height: string;
+};
 
 const DelayedImg = (props: DelayedImgProps) => {
   const { alt, height, src, timer, width } = props
 
-  const stylePlaceholder: CSSProperties = timer === 0
-    ? { opacity: 0, visibility: 'hidden', position: 'absolute' }
-    : { opacity: 1 }
+  const stylePlaceholder: CSSProperties =
+    timer === 0
+      ? { opacity: 0, visibility: 'hidden', position: 'absolute' }
+      : { opacity: 1 }
 
   useEffect(() => {
     const img = new Image()
@@ -331,13 +335,15 @@ const DelayedImg = (props: DelayedImgProps) => {
         style={stylePlaceholder}
         width={width}
       />
-      {timer === 0 && <img
-        alt={alt}
-        decoding="async"
-        loading="lazy"
-        src={src}
-        width={width}
-      />}
+      {timer === 0 && (
+        <img
+          alt={alt}
+          decoding="async"
+          loading="lazy"
+          src={src}
+          width={width}
+        />
+      )}
     </div>
   )
 }
@@ -379,7 +385,9 @@ export const DelayedDisplayNone = (props) => {
 
   return (
     <main aria-label="Story">
-      <h1>A delayed <code>display: none;</code> image</h1>
+      <h1>
+        A delayed <code>display: none;</code> image
+      </h1>
       <div className="mw-600">
         <p>
           This examples simulates an image being hidden with CSS and then shown
@@ -452,7 +460,9 @@ AutomatedTest.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement)
 
   await waitFor(async () => {
-    await expect(canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`)).toBeVisible()
+    await expect(
+      canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`),
+    ).toBeVisible()
   })
 
   await delay(1000)
@@ -469,8 +479,12 @@ AutomatedTest.play = async ({ canvasElement }) => {
     }
 
     await expect(dialog).toHaveAttribute('open')
-    await expect(dialog.querySelector(`img[alt="${imgThatWanakaTree.alt}"]`)).toBeVisible()
-    await expect(dialog.querySelector('[aria-label="Minimize image"')).toHaveFocus()
+    await expect(
+      dialog.querySelector(`img[alt="${imgThatWanakaTree.alt}"]`),
+    ).toBeVisible()
+    await expect(
+      dialog.querySelector('[aria-label="Minimize image"'),
+    ).toHaveFocus()
   })
 
   await delay(1000)
@@ -479,7 +493,9 @@ AutomatedTest.play = async ({ canvasElement }) => {
 
   await waitFor(async () => {
     await expect(document.querySelector('dialog')).not.toHaveAttribute('open')
-    await expect(canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`)).toHaveFocus()
+    await expect(
+      canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`),
+    ).toHaveFocus()
   })
 }
 
@@ -499,7 +515,7 @@ const cx = (mods: Record<string, boolean>): string => {
 }
 
 const delay = (duration: number): Promise<void> =>
-  new Promise(resolve => setTimeout(resolve, duration))
+  new Promise((resolve) => setTimeout(resolve, duration))
 
 const useTimer = (duration: number) => {
   const [timer, setTimer] = useState(duration)

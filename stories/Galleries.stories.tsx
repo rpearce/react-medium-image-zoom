@@ -1,9 +1,4 @@
-import React, {
-  FormEvent,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react'
+import React, { FormEvent, useCallback, useMemo, useState } from 'react'
 import type { Meta } from '@storybook/react'
 
 import Zoom from '../source'
@@ -29,7 +24,7 @@ const meta: Meta<typeof Zoom> = {
 
 export default meta
 
-type ObjectFit = 'contain' | 'cover' | 'fill' | 'none' | 'scale-down'
+type ObjectFit = 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
 
 export const ImageGallery = () => {
   const images = [
@@ -118,17 +113,20 @@ export const ImageGallery = () => {
 }
 
 export const DivImageGallery = () => {
-  const images = useMemo(() => [
-    imgGlenorchyLagoon,
-    imgThatWanakaTree,
-    imgNzBeach,
-    imgHobbiton,
-    imgHookerValleyTrack,
-    imgQueenstown,
-    imgTekapo,
-    imgPortWaikato,
-    imgKea,
-  ], [])
+  const images = useMemo(
+    () => [
+      imgGlenorchyLagoon,
+      imgThatWanakaTree,
+      imgNzBeach,
+      imgHobbiton,
+      imgHookerValleyTrack,
+      imgQueenstown,
+      imgTekapo,
+      imgPortWaikato,
+      imgKea,
+    ],
+    [],
+  )
 
   const [bgSize, setBgSize] = useState('cover')
   const [bgPosition, setBgPosition] = useState('50%')
@@ -151,11 +149,7 @@ export const DivImageGallery = () => {
         <div style={{ marginBottom: '1rem' }}>
           <label>
             <code>background-size:</code>
-            <input
-              defaultValue={bgSize}
-              name="backgroundSize"
-              type="text"
-            />
+            <input defaultValue={bgSize} name="backgroundSize" type="text" />
           </label>
         </div>
         <div style={{ marginBottom: '1rem' }}>
