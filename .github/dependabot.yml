@@ -13,10 +13,6 @@ updates:
     schedule:
       interval: "daily"
     groups:
-      babel:
-        patterns:
-          - "@babel/*"
-          - "babel-loader"
       eslint:
         patterns:
           - "@typescript-eslint/eslint-plugin"
