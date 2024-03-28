@@ -12,6 +12,7 @@ updates:
     open-pull-requests-limit: 5
     schedule:
       interval: "daily"
+    versioning-strategy: "increase"
     groups:
       eslint:
         patterns:
