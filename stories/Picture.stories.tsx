@@ -18,15 +18,13 @@ export const Picture = (props) => (
   <main aria-label="Story">
     <h1>{'Zoom an <img /> in a <picture> element with a <source />'}</h1>
     <div className="mw-600">
-      <p>Hint: reduce the window&apos;s width to see a portrait picture, instead.</p>
+      <p>
+        Hint: reduce the window&apos;s width to see a portrait picture, instead.
+      </p>
       <Zoom {...props}>
         <picture>
           <source media="(max-width: 800px)" srcSet={imgTeAraiPoint.src} />
-          <img
-            alt={imgNzBeach.alt}
-            src={imgNzBeach.src}
-            width="500"
-          />
+          <img alt={imgNzBeach.alt} src={imgNzBeach.src} width="500" />
         </picture>
       </Zoom>
     </div>

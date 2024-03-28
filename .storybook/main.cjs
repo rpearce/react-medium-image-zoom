@@ -1,9 +1,15 @@
 module.exports = {
-  addons: ['@storybook/addon-viewport', '@storybook/addon-docs', '@storybook/addon-interactions', '@storybook/addon-a11y'],
-  stories: ['../stories/**/*.stories.mdx', '../stories/**/*.stories.@(js|jsx|ts|tsx)'],
+  addons: [
+    '@storybook/addon-viewport',
+    '@storybook/addon-docs',
+    '@storybook/addon-interactions',
+    '@storybook/addon-a11y',
+    '@storybook/addon-mdx-gfm',
+    '@storybook/addon-webpack5-compiler-swc',
+  ],
+  stories: ['../stories/**/*.mdx', '../stories/**/*.stories.@(js|jsx|ts|tsx)'],
   features: {
     interactionsDebugger: true,
-    storyStoreV7: true,
   },
   framework: {
     name: '@storybook/react-webpack5',
@@ -31,7 +37,7 @@ module.exports = {
         removeComments: true,
         sourceMap: false,
         strict: true,
-        target: 'es2022',
+        target: 'es2021',
       },
     },
   },

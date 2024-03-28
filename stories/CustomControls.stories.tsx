@@ -37,7 +37,10 @@ export const JAndKZoomUnzoom = (props) => {
     <main aria-label="Story">
       <h1>Custom zoom and unzoom controls</h1>
       <div className="jk mw-600">
-        <p>Click into this window, then use &quot;j&quot; to zoom and &quot;k&quot; to unzoom</p>
+        <p>
+          Click into this window, then use &quot;j&quot; to zoom and
+          &quot;k&quot; to unzoom
+        </p>
         <Zoom
           {...props}
           isZoomed={isZoomed}
