@@ -1,16 +1,5 @@
-import React, {
-  CSSProperties,
-  Component,
-  ElementType,
-  ImgHTMLAttributes,
-  MouseEvent,
-  ReactElement,
-  ReactNode,
-  SyntheticEvent,
-  createRef,
-} from 'react'
-
-import { createPortal } from 'react-dom'
+import React from 'react'
+import ReactDOM from 'react-dom'
 
 import type { SupportedImage } from './types'
 import { IEnlarge, ICompress } from './icons'
@@ -66,20 +55,20 @@ const defaultBodyAttrs: BodyAttrs = {
 export interface ControlledProps {
   a11yNameButtonUnzoom?: string
   a11yNameButtonZoom?: string
-  children: ReactNode
+  children: React.ReactNode
   classDialog?: string
-  IconUnzoom?: ElementType
-  IconZoom?: ElementType
+  IconUnzoom?: React.ElementType
+  IconZoom?: React.ElementType
   isZoomed: boolean
   onZoomChange?: (value: boolean) => void
   wrapElement?: 'div' | 'span'
   ZoomContent?: (data: {
-    img: ReactElement | null
-    buttonUnzoom: ReactElement<HTMLButtonElement>
+    img: React.ReactElement | null
+    buttonUnzoom: React.ReactElement<HTMLButtonElement>
     modalState: ModalState
     onUnzoom: () => void
-  }) => ReactElement
-  zoomImg?: ImgHTMLAttributes<HTMLImageElement>
+  }) => React.ReactElement
+  zoomImg?: React.ImgHTMLAttributes<HTMLImageElement>
   zoomMargin?: number
 }
 
@@ -90,8 +79,8 @@ export function Controlled (props: ControlledProps) {
 interface ControlledDefaultProps {
   a11yNameButtonUnzoom: string
   a11yNameButtonZoom: string
-  IconUnzoom: ElementType
-  IconZoom: ElementType
+  IconUnzoom: React.ElementType
+  IconZoom: React.ElementType
   wrapElement: 'div' | 'span'
   zoomMargin: number
 }
@@ -106,7 +95,7 @@ interface ControlledState {
   shouldRefresh: boolean
 }
 
-class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledState> {
+class ControlledBase extends React.Component<ControlledPropsWithDefaults, ControlledState> {
   static defaultProps: ControlledDefaultProps = {
     a11yNameButtonUnzoom: 'Minimize image',
     a11yNameButtonZoom: 'Expand image',
@@ -124,18 +113,18 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
     shouldRefresh: false,
   }
 
-  private refContent = createRef<HTMLDivElement>()
-  private refDialog = createRef<HTMLDialogElement>()
-  private refModalContent = createRef<HTMLDivElement>()
-  private refModalImg = createRef<HTMLImageElement>()
-  private refWrap = createRef<HTMLDivElement>()
+  private refContent = React.createRef<HTMLDivElement>()
+  private refDialog = React.createRef<HTMLDialogElement>()
+  private refModalContent = React.createRef<HTMLDivElement>()
+  private refModalImg = React.createRef<HTMLImageElement>()
+  private refWrap = React.createRef<HTMLDivElement>()
 
   private changeObserver: MutationObserver | undefined
   private imgEl: SupportedImage | null = null
   private imgElObserver: ResizeObserver | undefined
   private isScaling = false
   private prevBodyAttrs: BodyAttrs = defaultBodyAttrs
-  private styleModalImg: CSSProperties = {}
+  private styleModalImg: React.CSSProperties = {}
   private touchYStart?: number
   private touchYEnd?: number
 
@@ -209,7 +198,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
 
     // =========================================================================
 
-    const styleContent: CSSProperties = {
+    const styleContent: React.CSSProperties = {
       visibility: modalState === ModalState.UNLOADED ? 'visible' : 'hidden',
     }
 
@@ -292,7 +281,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
             <IconZoom />
           </button>
         </WrapElement>}
-        {hasImage && createPortal(
+        {hasImage && ReactDOM.createPortal(
           <dialog /* eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
             aria-labelledby={idModalImg}
             aria-modal="true"
@@ -490,7 +479,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   /**
    * Prevent the browser from removing the dialog on Escape
    */
-  handleDialogCancel = (e: SyntheticEvent) => {
+  handleDialogCancel = (e: React.SyntheticEvent) => {
     e.preventDefault()
   }
 
@@ -499,7 +488,7 @@ class ControlledBase extends Component<ControlledPropsWithDefaults, ControlledSt
   /**
    *  Have dialog.click() only close in certain situations
    */
-  handleDialogClick = (e: MouseEvent<HTMLDialogElement>) => {
+  handleDialogClick = (e: React.MouseEvent<HTMLDialogElement>) => {
     if (e.target === this.refModalContent.current || e.target === this.refModalImg.current) {
       this.handleUnzoom()
     }
