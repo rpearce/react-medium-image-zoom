@@ -81,16 +81,16 @@
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.6",
-    "@storybook/addon-a11y": "^8.0.5",
-    "@storybook/addon-actions": "^8.0.5",
-    "@storybook/addon-docs": "^8.0.5",
-    "@storybook/addon-interactions": "^8.0.5",
-    "@storybook/addon-links": "^8.0.5",
-    "@storybook/addon-mdx-gfm": "^8.0.5",
-    "@storybook/addon-viewport": "^8.0.5",
+    "@storybook/addon-a11y": "^8.0.6",
+    "@storybook/addon-actions": "^8.0.6",
+    "@storybook/addon-docs": "^8.0.6",
+    "@storybook/addon-interactions": "^8.0.6",
+    "@storybook/addon-links": "^8.0.6",
+    "@storybook/addon-mdx-gfm": "^8.0.6",
+    "@storybook/addon-viewport": "^8.0.6",
     "@storybook/addon-webpack5-compiler-swc": "^1.0.2",
-    "@storybook/react": "^8.0.5",
-    "@storybook/react-webpack5": "^8.0.5",
+    "@storybook/react": "^8.0.6",
+    "@storybook/react-webpack5": "^8.0.6",
     "@storybook/test-runner": "^0.17.0",
     "@types/node": "^20.12.4",
     "@types/react": "^18.2.74",
@@ -113,7 +113,7 @@
     "react-dom": "^18.2.0",
     "rollup": "^4.14.0",
     "rollup-plugin-dts": "^6.1.0",
-    "storybook": "^8.0.5",
+    "storybook": "^8.0.6",
     "typescript": "^5.4.4"
   },
   "peerDependencies": {
@@ -121,6 +121,6 @@
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
   },
   "dependencies": {
-    "@storybook/test": "^8.0.5"
+    "@storybook/test": "^8.0.6"
   }
 }
