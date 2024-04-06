@@ -74,6 +74,10 @@ export interface UncontrolledProps {
   // Default: 'Expand image'
   a11yNameButtonZoom?: string
 
+  // Allow swipe gesture to unzoom.
+  // Default: true
+  canSwipeToUnzoom?: boolean
+
   // Your image (required).
   children: ReactNode
 
@@ -87,6 +91,10 @@ export interface UncontrolledProps {
   // Provide your own zoom button icon.
   // Default: IEnlarge
   IconZoom?: ElementType
+
+  // Swipe gesture threshold after which to unzoom.
+  // Default: 10
+  swipeToUnzoomThreshold?: number
 
   // Specify what type of element should be used for
   // internal component usage. This is useful if the

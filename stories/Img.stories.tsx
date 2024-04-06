@@ -452,6 +452,58 @@ export const InlineImage = (props) => (
 )
 
 // =============================================================================
+
+export const SwipeToUnzoomDisabled = (props) => (
+  <main aria-label="Story">
+    <h1>Swipe to Unzoom Disabled</h1>
+    <p>
+      This example demonstrates preventing swipe gestures from
+      unzooming when an image is zoomed. This is best tested on
+      a touchscreen device!
+    </p>
+    <div>
+      <Zoom {...props} canSwipeToUnzoom={false}>
+        <img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          decoding="async"
+          height="320"
+          loading="lazy"
+        />
+      </Zoom>
+    </div>
+  </main>
+)
+
+export const SwipeToUnzoomThreshold = (props) => (
+  <main aria-label="Story">
+    <h1>Swipe to Unzoom Threshold</h1>
+    <p>
+      This example demonstrates increasing the threshold
+      required for a swipe gesture on a touchscreen device to
+      unzoom when an image is zoomed. This is best tested on
+      a touchscreen device!
+    </p>
+    <p>
+      The default is <code>10</code> (px), but this example
+      is set to <code>200</code> (px); that&apos;s how far
+      you&apos;ll have to move your finger across the screen.
+    </p>
+    <div>
+      <Zoom {...props} swipeToUnzoomThreshold={200}>
+        <img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          decoding="async"
+          height="320"
+          loading="lazy"
+        />
+      </Zoom>
+    </div>
+  </main>
+)
+
+// =============================================================================
 // INTERACTIONS
 
 export const AutomatedTest = Regular.bind({}, { title: '(Automated Test)' })
