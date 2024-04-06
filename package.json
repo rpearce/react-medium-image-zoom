@@ -1,6 +1,6 @@
 {
   "name": "react-medium-image-zoom",
-  "version": "5.1.11",
+  "version": "5.2.0",
   "license": "BSD-3-Clause",
   "description": "Accessible medium.com-style image zoom for React",
   "type": "module",
@@ -33,7 +33,8 @@
     "Youngrok Kim <rok0810@gmail.com> (https://rokoroku.github.io)",
     "Josh-Cena <sidachen2003@gmail.com> (https://joshcena.com)",
     "Yida Zhang <zjhch123@qq.com>",
-    "eych"
+    "eych",
+    "tshmieldev"
   ],
   "funding": [
     {
