@@ -14,17 +14,21 @@ updates:
       interval: "daily"
     versioning-strategy: "increase"
     groups:
-      eslint:
+      lint:
         patterns:
           - "@typescript-eslint/eslint-plugin"
           - "@typescript-eslint/parser"
           - "eslint*"
-      rollup:
+      build:
         patterns:
           - "@rollup/plugin-typescript"
           - "rollup"
           - "rollup-plugin-dts"
-      storybook:
+          - "typescript"
+      docs:
         patterns:
           - "@storybook/*"
           - "storybook"
+    ignore:
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
