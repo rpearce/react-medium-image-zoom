@@ -1,6 +1,6 @@
 import ts from '@rollup/plugin-typescript'
 import dts from 'rollup-plugin-dts'
-import pkg from './package.json' assert { type: 'json' }
+import pkg from './package.json' with { type: 'json' }
 
 export default (async () => ([
   {
