@@ -806,6 +806,24 @@
         "code",
         "ideas"
       ]
+    },
+    {
+      "login": "brew-matija",
+      "name": "Matija",
+      "avatar_url": "https://avatars.githubusercontent.com/u/101182777?v=4",
+      "profile": "https://github.com/brew-matija",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "jiayihu",
+      "name": "Jiayi Hu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10067273?v=4",
+      "profile": "http://blog.jiayihu.net/",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
