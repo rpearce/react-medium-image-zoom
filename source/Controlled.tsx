@@ -184,9 +184,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
 
     const hasZoomImg = !!zoomImg?.src
 
-    const hasImage = imgEl &&
-      (loadedImgEl || isSvg) &&
-      window.getComputedStyle(imgEl).display !== 'none'
+    const hasImage = this.hasImage()
 
     const labelBtnZoom = imgAlt
       ? `${a11yNameButtonZoom}: ${imgAlt}`
@@ -220,7 +218,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
         loadedImgEl,
         offset: zoomMargin,
         shouldRefresh,
-        targetEl: imgEl,
+        targetEl: imgEl as SupportedImage,
       })
       : {}
 
@@ -470,7 +468,9 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
    * Report that zooming should occur
    */
   handleZoom = () => {
-    this.props.onZoomChange?.(true)
+    if (this.hasImage()) {
+      this.props.onZoomChange?.(true)
+    }
   }
 
   /**
@@ -599,6 +599,15 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
   }
 
   // ===========================================================================
+
+  /**
+   * Check if we have a loaded image to work with
+   */
+  hasImage = () => {
+    return this.imgEl &&
+      (this.state.loadedImgEl || testSvg(this.imgEl)) &&
+      window.getComputedStyle(this.imgEl).display !== 'none'
+  }
 
   /**
    * Perform zooming actions
