@@ -1,6 +1,6 @@
 # react-medium-image-zoom
 
-[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![react-medium-image-zoom bundlejs badge](https://deno.bundlejs.com/?q=react-medium-image-zoom&badge=&config={%22esbuild%22:{%22external%22:[%22react%22,%22react-dom%22]}})](https://bundlejs.com/?q=react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-82-orange.svg)](#contributors-)
+[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![react-medium-image-zoom bundlejs badge](https://deno.bundlejs.com/?q=react-medium-image-zoom&badge=&config={%22esbuild%22:{%22external%22:[%22react%22,%22react-dom%22]}})](https://bundlejs.com/?q=react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-83-orange.svg)](#contributors-)
 
 The original [medium.com-inspired image zooming](https://medium.design/image-zoom-on-medium-24d146fc0c20)
 library for [React](https://reactjs.org).
@@ -448,6 +448,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://honghong.me/"><img src="https://avatars.githubusercontent.com/u/75498339?v=4?s=40" width="40px;" alt="Hong"/><br /><sub><b>Hong</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/commits?author=tszhong0411" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/tshmieldev"><img src="https://avatars.githubusercontent.com/u/58606210?v=4?s=40" width="40px;" alt="Wojciech Rok"/><br /><sub><b>Wojciech Rok</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/commits?author=tshmieldev" title="Code">💻</a> <a href="#ideas-tshmieldev" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/brew-matija"><img src="https://avatars.githubusercontent.com/u/101182777?v=4?s=40" width="40px;" alt="Matija"/><br /><sub><b>Matija</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Abrew-matija" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://blog.jiayihu.net/"><img src="https://avatars.githubusercontent.com/u/10067273?v=4?s=40" width="40px;" alt="Jiayi Hu"/><br /><sub><b>Jiayi Hu</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Ajiayihu" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>

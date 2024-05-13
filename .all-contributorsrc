@@ -815,6 +815,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "jiayihu",
+      "name": "Jiayi Hu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10067273?v=4",
+      "profile": "http://blog.jiayihu.net/",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
