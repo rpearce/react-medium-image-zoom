@@ -747,15 +747,26 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
       const tmp = document.createElement('div')
       tmp.innerHTML = imgEl.outerHTML
 
-      // Solves the mask ID issue in https://github.com/rpearce/react-medium-image-zoom/issues/438
-      tmp.querySelectorAll('mask[id]').forEach(maskEl => {
-        const newId = maskEl.id + '-zoom'
+      // Solves the ID issues in https://github.com/rpearce/react-medium-image-zoom/issues/438
+      tmp.querySelectorAll('[id]').forEach(el => {
+        const newId = el.id + '-zoom'
 
-        tmp.querySelectorAll(`[mask="url(#${maskEl.id})"]`).forEach(maskedEl => {
-          maskedEl.setAttribute('mask', `url(#${newId})`)
+        const urlAttrs = [
+          'clip-path',
+          'fill',
+          'mask',
+          'marker-start',
+          'marker-mid',
+          'marker-end',
+        ]
+
+        urlAttrs.forEach(attr => {
+          tmp.querySelectorAll(`[${attr}="url(#${el.id})"]`).forEach(usedEl => {
+            usedEl.setAttribute(attr, `url(#${newId})`)
+          })
         })
 
-        maskEl.id = newId
+        el.id = newId
       })
 
       const svg = tmp.firstChild as SVGSVGElement
