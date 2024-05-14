@@ -824,6 +824,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "zeitderforschung",
+      "name": "Zeit der Forschung",
+      "avatar_url": "https://avatars.githubusercontent.com/u/54367033?v=4",
+      "profile": "https://github.com/zeitderforschung",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
