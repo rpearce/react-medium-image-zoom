@@ -451,6 +451,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="http://blog.jiayihu.net/"><img src="https://avatars.githubusercontent.com/u/10067273?v=4?s=40" width="40px;" alt="Jiayi Hu"/><br /><sub><b>Jiayi Hu</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Ajiayihu" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/zeitderforschung"><img src="https://avatars.githubusercontent.com/u/54367033?v=4?s=40" width="40px;" alt="Zeit der Forschung"/><br /><sub><b>Zeit der Forschung</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Azeitderforschung" title="Bug reports">🐛</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/andreibarabas"><img src="https://avatars.githubusercontent.com/u/2101405?v=4?s=40" width="40px;" alt="Andrei Barabas"/><br /><sub><b>Andrei Barabas</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Aandreibarabas" title="Bug reports">🐛</a> <a href="#ideas-andreibarabas" title="Ideas, Planning, & Feedback">🤔</a></td>
+    </tr>
   </tbody>
 </table>
 

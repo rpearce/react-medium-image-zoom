@@ -833,6 +833,16 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "andreibarabas",
+      "name": "Andrei Barabas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2101405?v=4",
+      "profile": "https://www.linkedin.com/in/andreibarabas",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
     }
   ],
   "repoType": "github",
