@@ -74,7 +74,7 @@
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
     "lint": "eslint .",
-    "prepublishOnly": "concurrently npm:lint npm:build",
+    "prepack": "concurrently npm:lint npm:build",
     "start": "NODE_OPTIONS=--openssl-legacy-provider storybook dev -p 6006",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
