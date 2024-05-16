@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.2.4] - 2024-05-16
+
+### Fixed
+
+* SVG arrows with text disappeared on Zoom (#438, continued again)
+  * Note: This is a vexing issue due to all the possible things that can go
+    wrong with cloning an SVG element that has HTML IDs inside of it. Hopefully,
+    this is the last fix for this issue.
+
 ## [5.2.3] - 2024-05-14
 
 ### Fixed
