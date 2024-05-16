@@ -575,3 +575,64 @@ export const getStyleGhost: GetStyleGhost = (imgEl) => {
 }
 
 // =============================================================================
+
+/**
+ * Deal with cloned SVG ID duplicate issues from https://github.com/rpearce/react-medium-image-zoom/issues/438
+ */
+export const adjustSvgIDs = (svgEl: SVGElement): void => {
+  const newIdSuffix = '-zoom'
+
+  // SVG attributes that can use `url(#foo)`
+  const attrs = [
+    'clip-path',
+    'fill',
+    'mask',
+    'marker-start',
+    'marker-mid',
+    'marker-end',
+  ]
+
+  // Map between old IDs and new IDs
+  const idMap = new Map()
+
+  // Update SVG element's ID, if present
+  if (svgEl.hasAttribute('id')) {
+    const oldId = svgEl.id
+    const newId = oldId + newIdSuffix
+    idMap.set(oldId, newId)
+    svgEl.id = newId
+  }
+
+  // Update all old IDs to new IDs and store values mapping for later
+  svgEl.querySelectorAll('[id]').forEach(el => {
+    const oldId = el.id
+    const newId = oldId + newIdSuffix
+    idMap.set(oldId, newId)
+    el.id = newId
+  })
+
+  idMap.forEach((newId, oldId) => {
+    const urlOldID = `url(#${oldId})`
+    const urlNewID = `url(#${newId})`
+    const attrsQuery = attrs.map(attr => `[${attr}="${urlOldID}"]`).join(', ')
+
+    // Look for all SVG attributes that can use `url(#foo)` in a single query,
+    // find the attribute(s) affected, and update them
+    svgEl.querySelectorAll(attrsQuery).forEach(usedEl => {
+      attrs.forEach(attr => {
+        if (usedEl.getAttribute(attr) === urlOldID) {
+          usedEl.setAttribute(attr, urlNewID)
+        }
+      })
+    })
+  })
+
+  // Update any SVG `<style>` elements to update old IDs to new IDs
+  svgEl.querySelectorAll('style').forEach(styleEl => {
+    idMap.forEach((newId, oldId) => {
+      if (styleEl.textContent) {
+        styleEl.textContent = styleEl.textContent.replaceAll(`#${oldId}`, `#${newId}`)
+      }
+    })
+  })
+}

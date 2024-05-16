@@ -5,6 +5,7 @@ import type { SupportedImage } from './types'
 import { IEnlarge, ICompress } from './icons'
 
 import {
+  adjustSvgIDs,
   getImgAlt,
   getImgSrc,
   getStyleGhost,
@@ -744,38 +745,17 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     const { imgEl, refModalImg, styleModalImg } = this
 
     if (testSvg(imgEl)) {
-      const tmp = document.createElement('div')
-      tmp.innerHTML = imgEl.outerHTML
+      const svgEl = imgEl.cloneNode(true) as typeof imgEl
 
-      // Solves the ID issues in https://github.com/rpearce/react-medium-image-zoom/issues/438
-      tmp.querySelectorAll('[id]').forEach(el => {
-        const newId = el.id + '-zoom'
+      // Deal with cloned SVG ID duplicate issues from https://github.com/rpearce/react-medium-image-zoom/issues/438
+      adjustSvgIDs(svgEl)
 
-        const urlAttrs = [
-          'clip-path',
-          'fill',
-          'mask',
-          'marker-start',
-          'marker-mid',
-          'marker-end',
-        ]
-
-        urlAttrs.forEach(attr => {
-          tmp.querySelectorAll(`[${attr}="url(#${el.id})"]`).forEach(usedEl => {
-            usedEl.setAttribute(attr, `url(#${newId})`)
-          })
-        })
-
-        el.id = newId
-      })
-
-      const svg = tmp.firstChild as SVGSVGElement
-      svg.style.width = `${styleModalImg.width || 0}px`
-      svg.style.height = `${styleModalImg.height || 0}px`
-      svg.addEventListener('click', this.handleUnzoom)
+      svgEl.style.width = `${styleModalImg.width || 0}px`
+      svgEl.style.height = `${styleModalImg.height || 0}px`
+      svgEl.addEventListener('click', this.handleUnzoom)
 
       refModalImg.current?.firstChild?.remove?.()
-      refModalImg.current?.appendChild?.(svg)
+      refModalImg.current?.appendChild?.(svgEl)
     }
   }
 }
