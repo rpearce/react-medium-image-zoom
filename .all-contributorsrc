@@ -843,6 +843,15 @@
         "bug",
         "ideas"
       ]
+    },
+    {
+      "login": "Binibeno",
+      "name": "Németh Benedek",
+      "avatar_url": "https://avatars.githubusercontent.com/u/53515381?v=4",
+      "profile": "https://binibeno.hu/",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
