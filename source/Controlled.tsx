@@ -619,7 +619,6 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     this.setState({ modalState: ModalState.LOADING })
     this.loadZoomImg()
 
-    window.addEventListener('wheel', this.handleWheel, { passive: true })
     window.addEventListener('touchstart', this.handleTouchStart, { passive: true })
     window.addEventListener('touchmove', this.handleTouchMove, { passive: true })
     window.addEventListener('touchend', this.handleTouchEnd, { passive: true })
@@ -637,6 +636,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     setTimeout(() => {
       this.setState({ modalState: ModalState.LOADED })
       window.addEventListener('resize', this.handleResize, { passive: true })
+      window.addEventListener('wheel', this.handleWheel, { passive: true })
     }, 0)
   }
 
