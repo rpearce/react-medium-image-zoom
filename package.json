@@ -116,7 +116,7 @@
     "rollup": "^4.18.0",
     "rollup-plugin-dts": "^6.1.1",
     "storybook": "^8.1.11",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.3"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
