@@ -669,11 +669,10 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
       this.setState({
         shouldRefresh: false,
         modalState: ModalState.UNLOADED,
+      }, () => {
+        this.refDialog.current?.close?.()
+        this.bodyScrollEnable()
       })
-
-      this.refDialog.current?.close?.()
-
-      this.bodyScrollEnable()
     }, 0)
   }
 
