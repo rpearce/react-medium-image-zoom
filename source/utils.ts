@@ -470,8 +470,8 @@ export const getStyleModalImg: GetStyleModalImg = ({
     containerWidth: imgRect.width,
     hasScalableSrc,
     offset,
-    targetHeight: loadedImgEl?.naturalHeight ?? imgRect.height,
-    targetWidth: loadedImgEl?.naturalWidth ?? imgRect.width,
+    targetHeight: loadedImgEl?.naturalHeight || imgRect.height,
+    targetWidth: loadedImgEl?.naturalWidth || imgRect.width,
   })
 
   const styleImgObjectFit = isImgObjectFit
@@ -484,8 +484,8 @@ export const getStyleModalImg: GetStyleModalImg = ({
       objectFit: targetElComputedStyle.objectFit,
       objectPosition: targetElComputedStyle.objectPosition,
       offset,
-      targetHeight: loadedImgEl.naturalHeight,
-      targetWidth: loadedImgEl.naturalWidth,
+      targetHeight: loadedImgEl?.naturalHeight || imgRect.height,
+      targetWidth: loadedImgEl?.naturalWidth || imgRect.width,
     })
     : undefined
 
@@ -499,8 +499,8 @@ export const getStyleModalImg: GetStyleModalImg = ({
       containerWidth: imgRect.width,
       hasScalableSrc,
       offset,
-      targetHeight: loadedImgEl.naturalHeight,
-      targetWidth: loadedImgEl.naturalWidth,
+      targetHeight: loadedImgEl?.naturalHeight || imgRect.height,
+      targetWidth: loadedImgEl?.naturalWidth || imgRect.width,
     })
     : undefined
 

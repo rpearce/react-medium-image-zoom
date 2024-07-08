@@ -44,6 +44,7 @@ export const Regular = (props) => (
           alt={imgThatWanakaTree.alt}
           src={imgThatWanakaTree.src}
           height="320"
+          decoding="async"
           loading="lazy"
         />
       </Zoom>
@@ -65,6 +66,7 @@ export const ZoomMargin = (props) => (
           alt={imgThatWanakaTree.alt}
           src={imgThatWanakaTree.src}
           height="320"
+          decoding="async"
           loading="lazy"
         />
       </Zoom>
@@ -84,6 +86,7 @@ export const SmallPortrait = (props) => (
           alt={imgTeAraiPoint.alt}
           src={imgTeAraiPoint.src}
           height="112"
+          decoding="async"
           loading="lazy"
         />
       </Zoom>
@@ -98,7 +101,13 @@ export const SVGSource = (props) => (
     <h1>An image with an SVG src</h1>
     <div className="mw-600">
       <Zoom {...props}>
-        <img alt={imgNzMap.alt} src={imgNzMap.src} width="150" loading="lazy" />
+        <img
+          alt={imgNzMap.alt}
+          src={imgNzMap.src}
+          width="150"
+          decoding="async"
+          loading="lazy"
+        />
       </Zoom>
     </div>
   </main>
@@ -235,6 +244,7 @@ export const ModalFigureCaption = (props) => (
           alt={imgThatWanakaTree.alt}
           src={imgThatWanakaTree.src}
           height="320"
+          decoding="async"
           loading="lazy"
         />
       </Zoom>
@@ -401,8 +411,8 @@ export const DelayedDisplayNone = (props) => {
             alt={imgTekapo.alt}
             src={imgTekapo.src}
             className={classImg}
-            decoding="async"
             height="320"
+            decoding="async"
             loading="lazy"
           />
         </Zoom>
@@ -442,8 +452,8 @@ export const InlineImage = (props) => (
         <img
           alt={imgThatWanakaTree.alt}
           src={imgThatWanakaTree.src}
-          decoding="async"
           height="320"
+          decoding="async"
           loading="lazy"
         />
       </Zoom>
@@ -466,8 +476,8 @@ export const SwipeToUnzoomDisabled = (props) => (
         <img
           alt={imgThatWanakaTree.alt}
           src={imgThatWanakaTree.src}
-          decoding="async"
           height="320"
+          decoding="async"
           loading="lazy"
         />
       </Zoom>
@@ -494,8 +504,8 @@ export const SwipeToUnzoomThreshold = (props) => (
         <img
           alt={imgThatWanakaTree.alt}
           src={imgThatWanakaTree.src}
-          decoding="async"
           height="320"
+          decoding="async"
           loading="lazy"
         />
       </Zoom>
