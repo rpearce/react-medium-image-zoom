@@ -4,7 +4,6 @@ module.exports = {
     '@storybook/addon-docs',
     '@storybook/addon-interactions',
     '@storybook/addon-a11y',
-    '@storybook/addon-mdx-gfm',
     '@storybook/addon-webpack5-compiler-swc',
   ],
   stories: ['../stories/**/*.mdx', '../stories/**/*.stories.@(js|jsx|ts|tsx)'],
