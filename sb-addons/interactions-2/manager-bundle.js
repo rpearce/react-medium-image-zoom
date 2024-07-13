@@ -73,15 +73,20 @@ This is deprecated and won't work in Storybook 8 anymore.
         Cannot access the Story Store until the index is ready.
 
         It is not recommended to use methods directly on the Story Store anyway, in Storybook 9 we will
-        remove access to the store entirely`})}};xe(ka,"StoryStoreAccessedBeforeInitializationError");var Na=ka,Ma=class extends Re{constructor(e){let r=/function\s*\*|regeneratorRuntime|asyncToGenerator|_ref|param|_0|__async/.test(e.playFunction);super({category:"PREVIEW_API",code:12,message:Ce`
+        remove access to the store entirely`})}};xe(ka,"StoryStoreAccessedBeforeInitializationError");var Na=ka,Ma=class extends Re{constructor(e){super({category:"PREVIEW_API",code:12,message:Ce`
       
-      To use mount in the play function, you must use object destructuring, e.g. play: ({ mount }) => {}.
-
-      ${r?Ce`
-          It seems that your builder is configured to transpile destructuring.
-          To use the mount prop of the story context, you must configure your builder to transpile to no earlier than ES2017.          
-          `:""}
-      More info: https://storybook.js.org/docs/writing-tests/interaction-testing#run-code-before-each-test
+      To use mount in the play function, you must satisfy the following two requirements: 
+      
+      1. You *must* destructure the mount property from the \`context\` (the argument passed to your play function). 
+         This makes sure that Storybook does not start rendering the story before the play function begins.
+      
+      2. Your Storybook framework or builder must be configured to transpile to ES2017 or newer. 
+         This is because destructuring statements and async/await usages are otherwise transpiled away, 
+         which prevents Storybook from recognizing your usage of \`mount\`.
+      
+      Note that Angular is not supported. As async/await is transpiled to support the zone.js polyfill. 
+      
+      More info: https://storybook.js.org/docs/writing-tests/interaction-testing#run-code-before-the-component-gets-rendered
       
       Received the following play function:
       ${e.playFunction}`}),this.data=e}};xe(Ma,"MountMustBeDestructuredError");var Dr=Ma,zu=class extends Re{constructor(){super({category:"PREVIEW_API",code:13,message:Ce`

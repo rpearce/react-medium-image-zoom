@@ -52447,7 +52447,7 @@ hr();
 var Oo = ee(xte(), 1), Dte = ee(Ai(), 1);
 
 // src/manager-api/version.ts
-var Cte = "8.2.1";
+var Cte = "8.2.2";
 
 // src/manager-api/modules/versions.ts
 var { VERSIONCHECK: nHe } = xe, Rte = (0, Dte.default)(1)(() => {
