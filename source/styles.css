@@ -1,6 +1,3 @@
-[data-rmiz] {
-  position: relative;
-}
 [data-rmiz-ghost] {
   position: absolute;
   pointer-events: none;
