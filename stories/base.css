@@ -59,9 +59,16 @@ img {
 }
 .change-icons [data-rmiz-btn-zoom],
 .change-icons [data-rmiz-btn-unzoom] {
+  align-items: center;
   background-color: #fff;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.8);
   color: #000;
+  display: flex;
+  font-family: monospace;
+  font-size: 2rem;
+  height: 3rem;
+  justify-content: center;
+  width: 3rem;
 }
 .custom-zoom [data-rmiz-modal-overlay],
 .custom-zoom [data-rmiz-modal-img] {

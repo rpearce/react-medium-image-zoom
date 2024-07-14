@@ -1,11 +1,4 @@
-import React, {
-  ReactElement,
-  CSSProperties,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useState,
-} from 'react'
+import React from 'react'
 import type { Meta } from '@storybook/react'
 
 import { waitFor, within, userEvent, expect } from '@storybook/test'
@@ -35,22 +28,40 @@ export default meta
 
 // =============================================================================
 
-export const Regular = (props) => (
-  <main aria-label="Story">
-    <h1>Zooming a regular image</h1>
-    <div className="mw-600">
-      <Zoom {...props}>
-        <img
-          alt={imgThatWanakaTree.alt}
-          src={imgThatWanakaTree.src}
-          height="320"
-          decoding="async"
-          loading="lazy"
-        />
-      </Zoom>
-    </div>
-  </main>
-)
+// Modern Fisher-Yates shuffle algo
+function shuffle<T extends Array<unknown>>(xs: T): T {
+  const xsClone = structuredClone(xs)
+
+  for (let i = xsClone.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    const tmp = xsClone[i]
+    xsClone[i] = xsClone[j]
+    xsClone[j] = tmp
+  }
+
+  return xsClone
+}
+
+// =============================================================================
+
+export const Regular = (props) => {
+  return (
+    <main aria-label="Story">
+      <h1>Zooming a regular image</h1>
+      <div className="mw-600" style={{ display: 'flex', flexDirection: 'column' }}>
+        <Zoom {...props} wrapElement="span">
+          <img
+            alt={imgThatWanakaTree.alt}
+            src={imgThatWanakaTree.src}
+            height="320"
+            decoding="async"
+            loading="lazy"
+          />
+        </Zoom>
+      </div>
+    </main>
+  )
+}
 
 // =============================================================================
 
@@ -258,13 +269,13 @@ const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({
   img,
   //onUnzooom, // Not used here, but could be
 }) => {
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [isLoaded, setIsLoaded] = React.useState(false)
 
-  const imgProps = (img as ReactElement<HTMLImageElement>)?.props
+  const imgProps = (img as React.ReactElement<HTMLImageElement>)?.props
   const imgWidth = imgProps?.width
   const imgHeight = imgProps?.height
 
-  const classCaption = useMemo(() => {
+  const classCaption = React.useMemo(() => {
     const hasWidthHeight = imgWidth != null && imgHeight != null
     const imgRatioLargerThanWindow =
       imgWidth / imgHeight > window.innerWidth / window.innerHeight
@@ -277,7 +288,7 @@ const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({
     })
   }, [imgWidth, imgHeight, isLoaded])
 
-  useLayoutEffect(() => {
+  React.useLayoutEffect(() => {
     if (modalState === 'LOADED') {
       setIsLoaded(true)
     } else if (modalState === 'UNLOADING') {
@@ -323,12 +334,12 @@ type DelayedImgProps = {
 const DelayedImg = (props: DelayedImgProps) => {
   const { alt, height, src, timer, width } = props
 
-  const stylePlaceholder: CSSProperties =
+  const stylePlaceholder: React.CSSProperties =
     timer === 0
       ? { opacity: 0, visibility: 'hidden', position: 'absolute' }
       : { opacity: 1 }
 
-  useEffect(() => {
+  React.useEffect(() => {
     const img = new Image()
     img.src = src
     img.decode()
@@ -423,23 +434,33 @@ export const DelayedDisplayNone = (props) => {
 
 // =============================================================================
 
-export const CustomButtonIcons = (props) => (
-  <main aria-label="Story">
-    <h1>An image with custom zoom &amp; unzoom icons</h1>
-    <div className="mw-600">
-      <p>Press TAB to activate the zoom button</p>
-      <div className="change-icons">
-        <Zoom {...props} IconZoom={() => <>+</>} IconUnzoom={() => <>-</>}>
-          <img
-            alt={imgHookerValleyTrack.alt}
-            src={imgHookerValleyTrack.src}
-            width="400"
-          />
-        </Zoom>
+export const CustomButtonIcons = (props) => {
+  React.useEffect(() => {
+    document.body.classList.add('change-icons')
+
+    return () => {
+      document.body.classList.remove('change-icons')
+    }
+  }, [])
+
+  return (
+    <main aria-label="Story">
+      <h1>An image with custom zoom &amp; unzoom icons</h1>
+      <div className="mw-600">
+        <p>Press TAB to activate the zoom button</p>
+        <div>
+          <Zoom {...props} IconZoom={() => <>+</>} IconUnzoom={() => <>-</>}>
+            <img
+              alt={imgHookerValleyTrack.alt}
+              src={imgHookerValleyTrack.src}
+              width="400"
+            />
+          </Zoom>
+        </div>
       </div>
-    </div>
-  </main>
-)
+    </main>
+  )
+}
 
 // =============================================================================
 
@@ -460,6 +481,55 @@ export const InlineImage = (props) => (
     </p>
   </main>
 )
+
+// =============================================================================
+
+export const CycleImages = (props) => {
+  const [img, setImg] = React.useState(imgThatWanakaTree)
+
+  React.useEffect(() => {
+    async function runCycle() {
+      while (true) {
+        await delay(3000)
+
+        setImg(shuffle([
+          imgThatWanakaTree,
+          imgEarth,
+          imgNzMap,
+          imgTekapo,
+          imgKeaLarge,
+          imgTeAraiPoint,
+          imgGlenorchyLagoon,
+          imgHookerValleyTrack,
+        ])[0])
+      }
+    }
+
+    runCycle()
+  }, [])
+
+  return (
+    <main aria-label="Story">
+      <h1>Cycle through images</h1>
+      <p>
+        This helps to test the ghost element that positions the button. Press
+        Tab to focus the button, then sit and watch it reposition with each new
+        image!
+      </p>
+      <p>
+        <Zoom {...props} wrapElement="span">
+          <img
+            alt={img.alt}
+            src={img.src}
+            height="320"
+            decoding="async"
+            loading="lazy"
+          />
+        </Zoom>
+      </p>
+    </main>
+  )
+}
 
 // =============================================================================
 
@@ -580,9 +650,9 @@ const delay = (duration: number): Promise<void> =>
   new Promise((resolve) => setTimeout(resolve, duration))
 
 const useTimer = (duration: number) => {
-  const [timer, setTimer] = useState(duration)
+  const [timer, setTimer] = React.useState(duration)
 
-  useEffect(() => {
+  React.useEffect(() => {
     const interval = setInterval(function () {
       if (timer === 0) {
         clearInterval(this)
