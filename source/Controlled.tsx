@@ -98,6 +98,7 @@ interface ControlledState {
   loadedImgEl: HTMLImageElement | undefined
   modalState: ModalState
   shouldRefresh: boolean
+  styleGhost: React.CSSProperties
 }
 
 class ControlledBase extends React.Component<ControlledPropsWithDefaults, ControlledState> {
@@ -118,6 +119,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     loadedImgEl: undefined,
     modalState: ModalState.UNLOADED,
     shouldRefresh: false,
+    styleGhost: {},
   }
 
   private refContent = React.createRef<HTMLDivElement>()
@@ -126,9 +128,10 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
   private refModalImg = React.createRef<HTMLImageElement>()
   private refWrap = React.createRef<HTMLDivElement>()
 
-  private changeObserver: MutationObserver | undefined
+  private contentChangeObserver: MutationObserver | undefined
+  private contentNotFoundChangeObserver: MutationObserver | undefined
   private imgEl: SupportedImage | null = null
-  private imgElObserver: ResizeObserver | undefined
+  private imgElResizeObserver: ResizeObserver | undefined
   private isScaling = false
   private prevBodyAttrs: BodyAttrs = defaultBodyAttrs
   private styleModalImg: React.CSSProperties = {}
@@ -166,6 +169,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
         loadedImgEl,
         modalState,
         shouldRefresh,
+        styleGhost,
       },
     } = this
 
@@ -206,8 +210,6 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     const styleContent: React.CSSProperties = {
       visibility: modalState === ModalState.UNLOADED ? 'visible' : 'hidden',
     }
-
-    const styleGhost = getStyleGhost(imgEl)
 
     // Share this with UNSAFE_handleSvg
     this.styleModalImg = hasImage
@@ -323,8 +325,9 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     if (this.state.modalState !== ModalState.UNLOADED) {
       this.bodyScrollEnable()
     }
-    this.changeObserver?.disconnect?.()
-    this.imgElObserver?.disconnect?.()
+    this.contentChangeObserver?.disconnect?.()
+    this.contentNotFoundChangeObserver?.disconnect?.()
+    this.imgElResizeObserver?.disconnect?.()
     this.imgEl?.removeEventListener?.('load', this.handleImgLoad)
     this.imgEl?.removeEventListener?.('click', this.handleZoom)
     this.refModalImg.current?.removeEventListener?.('transitionend', this.handleZoomEnd)
@@ -385,27 +388,40 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     this.imgEl = contentEl.querySelector(IMAGE_QUERY) as SupportedImage | null
 
     if (this.imgEl) {
-      this.changeObserver?.disconnect?.()
-      this.imgEl?.addEventListener?.('load', this.handleImgLoad)
-      this.imgEl?.addEventListener?.('click', this.handleZoom)
+      this.contentNotFoundChangeObserver?.disconnect?.()
+      this.imgEl.addEventListener('load', this.handleImgLoad)
+      this.imgEl.addEventListener('click', this.handleZoom)
 
       if (!this.state.loadedImgEl) {
         this.handleImgLoad()
       }
 
-      this.imgElObserver = new ResizeObserver(entries => {
+      this.imgElResizeObserver = new ResizeObserver(entries => {
         const entry = entries[0]
 
         if (entry?.target) {
           this.imgEl = entry.target as SupportedImage
-          this.setState({}) // Force a re-render
+
+          // Update ghost and force a re-render.
+          // NOTE: Always force a re-render here, even if we remove
+          //       all state changes. Pass `{}` in that case.
+          this.setState({ styleGhost: getStyleGhost(this.imgEl) })
         }
       })
 
-      this.imgElObserver.observe(this.imgEl)
-    } else if (!this.changeObserver) {
-      this.changeObserver = new MutationObserver(this.setAndTrackImg)
-      this.changeObserver.observe(contentEl, { childList: true, subtree: true })
+      this.imgElResizeObserver.observe(this.imgEl)
+
+      // Watch for any reasonable DOM changes and update ghost if so
+      if (!this.contentChangeObserver) {
+        this.contentChangeObserver = new MutationObserver(() => {
+          this.setState({ styleGhost: getStyleGhost(this.imgEl) })
+        })
+
+        this.contentChangeObserver.observe(contentEl, { attributes: true, childList: true, subtree: true })
+      }
+    } else if (!this.contentNotFoundChangeObserver) {
+      this.contentNotFoundChangeObserver = new MutationObserver(this.setAndTrackImg)
+      this.contentNotFoundChangeObserver.observe(contentEl, { childList: true, subtree: true })
     }
   }
 
@@ -430,17 +446,15 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
    * Ensure we always have the latest img src value loaded
    */
   handleImgLoad = () => {
-    const { imgEl } = this
-
-    const imgSrc = getImgSrc(imgEl)
+    const imgSrc = getImgSrc(this.imgEl)
 
     if (!imgSrc) return
 
     const img = new Image()
 
-    if (testImg(imgEl)) {
-      img.sizes = imgEl.sizes
-      img.srcset = imgEl.srcset
+    if (testImg(this.imgEl)) {
+      img.sizes = this.imgEl.sizes
+      img.srcset = this.imgEl.srcset
     }
 
     // img.src must be set after sizes and srcset
@@ -448,7 +462,10 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     img.src = imgSrc
 
     const setLoaded = () => {
-      this.setState({ loadedImgEl: img })
+      this.setState({
+        loadedImgEl: img,
+        styleGhost: getStyleGhost(this.imgEl),
+      })
     }
 
     img
