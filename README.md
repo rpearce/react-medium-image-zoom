@@ -1,6 +1,6 @@
 # react-medium-image-zoom
 
-[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![react-medium-image-zoom bundlejs badge](https://deno.bundlejs.com/?q=react-medium-image-zoom&badge=&config={%22esbuild%22:{%22external%22:[%22react%22,%22react-dom%22]}})](https://bundlejs.com/?q=react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-86-orange.svg)](#contributors-)
+[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![react-medium-image-zoom bundlejs badge](https://deno.bundlejs.com/?q=react-medium-image-zoom&badge=&config={%22esbuild%22:{%22external%22:[%22react%22,%22react-dom%22]}})](https://bundlejs.com/?q=react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-87-orange.svg)](#contributors-)
 
 The original [medium.com-inspired image zooming](https://medium.design/image-zoom-on-medium-24d146fc0c20)
 library for [React](https://reactjs.org).
@@ -454,6 +454,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/andreibarabas"><img src="https://avatars.githubusercontent.com/u/2101405?v=4?s=40" width="40px;" alt="Andrei Barabas"/><br /><sub><b>Andrei Barabas</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Aandreibarabas" title="Bug reports">🐛</a> <a href="#ideas-andreibarabas" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://binibeno.hu/"><img src="https://avatars.githubusercontent.com/u/53515381?v=4?s=40" width="40px;" alt="Németh Benedek"/><br /><sub><b>Németh Benedek</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3ABinibeno" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/imalfect"><img src="https://avatars.githubusercontent.com/u/77974917?v=4?s=40" width="40px;" alt="iMalFect"/><br /><sub><b>iMalFect</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Aimalfect" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>

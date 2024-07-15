@@ -852,6 +852,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "imalfect",
+      "name": "iMalFect",
+      "avatar_url": "https://avatars.githubusercontent.com/u/77974917?v=4",
+      "profile": "https://github.com/imalfect",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
