@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [5.2.8] - 2024-07-15
+
+### Fixed
+
+* Safari: Zoomable images make the body extend beyond the content (#627)
+
 ## [5.2.7] - 2024-07-08
 
 ### Fixed
