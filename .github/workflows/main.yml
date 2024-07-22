@@ -31,11 +31,11 @@ jobs:
     - name: Use nodejs
       uses: actions/setup-node@v4
       with:
-        node-version: '22'
+        node-version: 'latest'
         cache: 'npm'
 
     - name: Install deps without updating package-lock.json
-      run: npm i --no-save
+      run: npm ci
 
     - name: Run the CI build
       run: npm run ci
