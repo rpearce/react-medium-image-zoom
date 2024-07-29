@@ -88,7 +88,7 @@
     "@storybook/addon-interactions": "^8.2.6",
     "@storybook/addon-links": "^8.2.6",
     "@storybook/addon-viewport": "^8.2.6",
-    "@storybook/addon-webpack5-compiler-swc": "^1.0.4",
+    "@storybook/addon-webpack5-compiler-swc": "^1.0.5",
     "@storybook/react": "^8.2.6",
     "@storybook/react-webpack5": "^8.2.6",
     "@storybook/test": "^8.2.1",
