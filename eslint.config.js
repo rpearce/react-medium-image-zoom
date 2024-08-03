@@ -51,7 +51,7 @@ export default [
       }],
       'react-hooks/exhaustive-deps': 'error',
       'react-hooks/rules-of-hooks': 'error',
-      'react/prop-types': 0,
+      'react/prop-types': 'off',
       'space-before-function-paren': 'off',
       'spaced-comment': 'off',
       '@typescript-eslint/prefer-function-type': 'off',
