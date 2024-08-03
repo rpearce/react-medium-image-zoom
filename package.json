@@ -83,10 +83,8 @@
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.6",
     "@storybook/addon-a11y": "^8.2.7",
-    "@storybook/addon-actions": "^8.2.7",
     "@storybook/addon-docs": "^8.2.7",
     "@storybook/addon-interactions": "^8.2.7",
-    "@storybook/addon-links": "^8.2.7",
     "@storybook/addon-viewport": "^8.2.7",
     "@storybook/addon-webpack5-compiler-swc": "^1.0.5",
     "@storybook/react": "^8.2.7",
