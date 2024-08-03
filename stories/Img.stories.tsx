@@ -29,7 +29,7 @@ export default meta
 // =============================================================================
 
 // Modern Fisher-Yates shuffle algo
-function shuffle<T extends Array<unknown>>(xs: T): T {
+function shuffle<T extends unknown[]>(xs: T): T {
   const xsClone = structuredClone(xs)
 
   for (let i = xsClone.length - 1; i > 0; i--) {
@@ -323,12 +323,12 @@ const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({
 
 // =============================================================================
 
-type DelayedImgProps = {
-  timer: number;
-  alt: string;
-  src: string;
-  width: string;
-  height: string;
+interface DelayedImgProps {
+  timer: number
+  alt: string
+  src: string
+  width: string
+  height: string
 };
 
 const DelayedImg = (props: DelayedImgProps) => {
