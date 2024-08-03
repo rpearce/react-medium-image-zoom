@@ -296,7 +296,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
             data-rmiz-modal=""
             id={idModal}
             onClick={handleDialogClick}
-            onClose={handleUnzoom /* eslint-disable-line react/no-unknown-property */}
+            onClose={handleUnzoom}
             onCancel={handleDialogCancel}
             ref={refDialog}
             role="dialog"

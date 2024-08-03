@@ -29,6 +29,3 @@ updates:
         patterns:
           - "@storybook/*"
           - "storybook"
-    ignore:
-      - dependency-name: "eslint"
-        update-types: ["version-update:semver-major"]
