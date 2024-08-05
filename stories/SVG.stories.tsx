@@ -93,7 +93,7 @@ export const Excalidraw = () => (
             width="626.29296875"
             height="489.6796875"
             fill="#ffff"
-          ></rect>
+          />
           <g
             strokeLinecap="round"
             transform="translate(20 20.55078125) rotate(0 56.818359375 46.0390625)"
@@ -103,7 +103,7 @@ export const Excalidraw = () => (
               stroke="#000000"
               strokeWidth="1"
               fill="none"
-            ></path>
+            />
           </g>
           <g
             strokeLinecap="round"
@@ -114,7 +114,7 @@ export const Excalidraw = () => (
               stroke="#000000"
               strokeWidth="1"
               fill="none"
-            ></path>
+            />
           </g>
           <g mask="url(#mask-ooJ4ibF08UocumcqOa1EM)" strokeLinecap="round">
             <g transform="translate(145.59428097835973 59.070939438578705) rotate(0 115.39682997613369 -0.4915348908477881)">
@@ -123,7 +123,7 @@ export const Excalidraw = () => (
                 stroke="#000000"
                 strokeWidth="1"
                 fill="none"
-              ></path>
+              />
             </g>
             <g transform="translate(145.59428097835973 59.070939438578705) rotate(0 115.39682997613369 -0.4915348908477881)">
               <path
@@ -131,7 +131,7 @@ export const Excalidraw = () => (
                 stroke="#000000"
                 strokeWidth="1"
                 fill="none"
-              ></path>
+              />
             </g>
             <g transform="translate(145.59428097835973 59.070939438578705) rotate(0 115.39682997613369 -0.4915348908477881)">
               <path
@@ -139,7 +139,7 @@ export const Excalidraw = () => (
                 stroke="#000000"
                 strokeWidth="1"
                 fill="none"
-              ></path>
+              />
             </g>
           </g>
           <mask id="mask-ooJ4ibF08UocumcqOa1EM">
@@ -149,7 +149,7 @@ export const Excalidraw = () => (
               fill="#fff"
               width="476.3879409306271"
               height="160.05400922027428"
-            ></rect>
+            />
             <rect
               x="236.2111350633802"
               y="46.07940454773092"
@@ -157,7 +157,7 @@ export const Excalidraw = () => (
               width="49.55995178222656"
               height="25"
               opacity="1"
-            ></rect>
+            />
           </mask>
           <g transform="translate(236.2111350633802 46.07940454773092) rotate(0 24.512669051224293 12.696544553246326)">
             <text
@@ -181,7 +181,7 @@ export const Excalidraw = () => (
                 stroke="#000000"
                 strokeWidth="1"
                 fill="none"
-              ></path>
+              />
             </g>
             <g transform="translate(101.609375 126.671875) rotate(0 37.703125 82.224609375)">
               <path
@@ -189,7 +189,7 @@ export const Excalidraw = () => (
                 stroke="#000000"
                 strokeWidth="1"
                 fill="none"
-              ></path>
+              />
             </g>
             <g transform="translate(101.609375 126.671875) rotate(0 37.703125 82.224609375)">
               <path
@@ -197,7 +197,7 @@ export const Excalidraw = () => (
                 stroke="#000000"
                 strokeWidth="1"
                 fill="none"
-              ></path>
+              />
             </g>
           </g>
           <mask id="mask-SzkdVd0dyrggj1A8lYRnx">
@@ -207,7 +207,7 @@ export const Excalidraw = () => (
               fill="#fff"
               width="277.015625"
               height="391.12109375"
-            ></rect>
+            />
             <rect
               x="82.74254608154297"
               y="196.396484375"
@@ -215,7 +215,7 @@ export const Excalidraw = () => (
               width="113.13990783691406"
               height="25"
               opacity="1"
-            ></rect>
+            />
           </mask>
           <g transform="translate(82.74254608154297 196.396484375) rotate(0 56.50484466232359 13.071097182855027)">
             <text
@@ -241,7 +241,7 @@ export const Excalidraw = () => (
               stroke="#000000"
               strokeWidth="1"
               fill="none"
-            ></path>
+            />
           </g>
           <g mask="url(#mask-GrRrUWX5cd0_tTvab9KPU)" strokeLinecap="round">
             <g transform="translate(488.734375 135.21875) rotate(0 14.822265625 92.8828125)">
@@ -250,7 +250,7 @@ export const Excalidraw = () => (
                 stroke="#000000"
                 strokeWidth="1"
                 fill="none"
-              ></path>
+              />
             </g>
             <g transform="translate(488.734375 135.21875) rotate(0 14.822265625 92.8828125)">
               <path
@@ -258,7 +258,7 @@ export const Excalidraw = () => (
                 stroke="#000000"
                 strokeWidth="1"
                 fill="none"
-              ></path>
+              />
             </g>
             <g transform="translate(488.734375 135.21875) rotate(0 14.822265625 92.8828125)">
               <path
@@ -266,7 +266,7 @@ export const Excalidraw = () => (
                 stroke="#000000"
                 strokeWidth="1"
                 fill="none"
-              ></path>
+              />
             </g>
           </g>
           <mask id="mask-GrRrUWX5cd0_tTvab9KPU">
@@ -276,7 +276,7 @@ export const Excalidraw = () => (
               fill="#fff"
               width="618.37890625"
               height="420.984375"
-            ></rect>
+            />
             <rect
               x="406.3067092895508"
               y="215.6015625"
@@ -284,7 +284,7 @@ export const Excalidraw = () => (
               width="194.49986267089844"
               height="25"
               opacity="1"
-            ></rect>
+            />
           </mask>
           <g transform="translate(406.3067092895508 215.6015625) rotate(0 97.04689681343734 12.220587964728452)">
             <text
@@ -310,7 +310,7 @@ export const Excalidraw = () => (
               stroke="#000000"
               strokeWidth="1"
               fill="none"
-            ></path>
+            />
           </g>
           <g strokeLinecap="round">
             <g transform="translate(337.21484375 348.984375) rotate(0 52.912109375 13.373046875)">
@@ -319,7 +319,7 @@ export const Excalidraw = () => (
                 stroke="#000000"
                 strokeWidth="1"
                 fill="none"
-              ></path>
+              />
             </g>
             <g transform="translate(337.21484375 348.984375) rotate(0 52.912109375 13.373046875)">
               <path
@@ -327,7 +327,7 @@ export const Excalidraw = () => (
                 stroke="#000000"
                 strokeWidth="1"
                 fill="none"
-              ></path>
+              />
             </g>
             <g transform="translate(337.21484375 348.984375) rotate(0 52.912109375 13.373046875)">
               <path
@@ -335,10 +335,10 @@ export const Excalidraw = () => (
                 stroke="#000000"
                 strokeWidth="1"
                 fill="none"
-              ></path>
+              />
             </g>
           </g>
-          <mask></mask>
+          <mask />
         </svg>
       </Zoom>
     </div>

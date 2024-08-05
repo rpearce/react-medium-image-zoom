@@ -24,7 +24,7 @@ const meta: Meta<typeof Zoom> = {
 
 export default meta
 
-type ObjectFit = 'contain' | 'cover' | 'fill' | 'none' | 'scale-down';
+type ObjectFit = 'contain' | 'cover' | 'fill' | 'none' | 'scale-down'
 
 export const ImageGallery = () => {
   const images = [
@@ -125,7 +125,7 @@ export const DivImageGallery = () => {
       imgPortWaikato,
       imgKea,
     ],
-    [],
+    []
   )
 
   const [bgSize, setBgSize] = useState('cover')

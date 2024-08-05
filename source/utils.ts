@@ -508,7 +508,7 @@ export const getStyleModalImg: GetStyleModalImg = ({
     {},
     styleImgRegular,
     styleImgObjectFit,
-    styleDivImg,
+    styleDivImg
   )
 
   if (isZoomed) {

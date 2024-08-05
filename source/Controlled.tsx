@@ -31,7 +31,7 @@ const enum ModalState {
   LOADED = 'LOADED',
   LOADING = 'LOADING',
   UNLOADED = 'UNLOADED',
-  UNLOADING = 'UNLOADING',
+  UNLOADING = 'UNLOADING'
 }
 
 // =============================================================================
@@ -232,18 +232,18 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     if (hasImage) {
       const modalImg = isImg || isDiv
         ? <img
-          alt={imgAlt}
-          sizes={imgSizes}
-          src={imgSrc}
-          srcSet={imgSrcSet}
-          {...isZoomImgLoaded && modalState === ModalState.LOADED ? zoomImg : {}}
-          data-rmiz-modal-img=""
-          height={this.styleModalImg.height || undefined}
-          id={idModalImg}
-          ref={refModalImg}
-          style={this.styleModalImg}
-          width={this.styleModalImg.width || undefined}
-        />
+            alt={imgAlt}
+            sizes={imgSizes}
+            src={imgSrc}
+            srcSet={imgSrcSet}
+            {...isZoomImgLoaded && modalState === ModalState.LOADED ? zoomImg : {}}
+            data-rmiz-modal-img=""
+            height={this.styleModalImg.height || undefined}
+            id={idModalImg}
+            ref={refModalImg}
+            style={this.styleModalImg}
+            width={this.styleModalImg.width || undefined}
+          />
         : isSvg
           ? <div
               data-rmiz-modal-img
@@ -263,11 +263,11 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
 
       modalContent = ZoomContent
         ? <ZoomContent
-          buttonUnzoom={modalBtnUnzoom}
-          modalState={modalState}
-          img={modalImg}
-          onUnzoom={handleUnzoom}
-        />
+            buttonUnzoom={modalBtnUnzoom}
+            modalState={modalState}
+            img={modalImg}
+            onUnzoom={handleUnzoom}
+          />
         : <>{modalImg}{modalBtnUnzoom}</>
     }
 
