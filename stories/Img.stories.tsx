@@ -593,7 +593,7 @@ AutomatedTest.play = async ({ canvasElement }) => {
 
   await waitFor(async () => {
     await expect(
-      canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`),
+      canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`)
     ).toBeVisible()
   })
 
@@ -612,10 +612,10 @@ AutomatedTest.play = async ({ canvasElement }) => {
 
     await expect(dialog).toHaveAttribute('open')
     await expect(
-      dialog.querySelector(`img[alt="${imgThatWanakaTree.alt}"]`),
+      dialog.querySelector(`img[alt="${imgThatWanakaTree.alt}"]`)
     ).toBeVisible()
     await expect(
-      dialog.querySelector('[aria-label="Minimize image"'),
+      dialog.querySelector('[aria-label="Minimize image"')
     ).toHaveFocus()
   })
 
@@ -626,7 +626,7 @@ AutomatedTest.play = async ({ canvasElement }) => {
   await waitFor(async () => {
     await expect(document.querySelector('dialog')).not.toHaveAttribute('open')
     await expect(
-      canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`),
+      canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`)
     ).toHaveFocus()
   })
 }

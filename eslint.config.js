@@ -1,16 +1,12 @@
 // @ts-check
 
 import eslint from '@eslint/js'
-import eslintConfigStandard from 'eslint-config-standard'
 import eslintPluginJSXA11y from 'eslint-plugin-jsx-a11y'
-import eslintPluginPromise from 'eslint-plugin-promise'
 import eslintPluginReact from 'eslint-plugin-react'
 import eslintPluginReactHooks from 'eslint-plugin-react-hooks'
+import neostandard from 'neostandard'
 import tseslint from 'typescript-eslint'
 import { fixupPluginRules } from '@eslint/compat'
-import { FlatCompat } from '@eslint/eslintrc'
-
-const compat = new FlatCompat()
 
 export default [
   {
@@ -25,8 +21,7 @@ export default [
     ],
   },
   eslint.configs.recommended,
-  ...compat.config(eslintConfigStandard),
-  eslintPluginPromise.configs['flat/recommended'],
+  ...neostandard(),
   eslintPluginReact.configs.flat.recommended,
   eslintPluginJSXA11y.flatConfigs.strict,
   ...tseslint.configs.strict,
@@ -42,6 +37,12 @@ export default [
     },
     rules: {
       ...eslintPluginReactHooks.configs.recommended.rules,
+      '@stylistic/jsx-closing-bracket-location': 'off',
+      '@stylistic/jsx-closing-tag-location': 'off',
+      '@stylistic/jsx-quotes': 'off',
+      '@stylistic/jsx-wrap-multilines': 'off',
+      '@stylistic/space-before-function-paren': 'off',
+      '@stylistic/spaced-comment': 'off',
       'comma-dangle': ['error', {
         arrays: 'always-multiline',
         exports: 'always-multiline',
@@ -52,8 +53,6 @@ export default [
       'react-hooks/exhaustive-deps': 'error',
       'react-hooks/rules-of-hooks': 'error',
       'react/prop-types': 'off',
-      'space-before-function-paren': 'off',
-      'spaced-comment': 'off',
       '@typescript-eslint/prefer-function-type': 'off',
     },
   },
