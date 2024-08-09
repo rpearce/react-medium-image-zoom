@@ -70,17 +70,18 @@
   "scripts": {
     "build": "rm -rf ./dist && rollup -c rollup.config.js && cp ./source/styles.css ./dist/styles.css",
     "build:docs": "rm -rf ./docs && mkdir ./docs && storybook build --quiet -o docs",
+    "changeset": "changeset",
     "ci": "concurrently npm:lint npm:build npm:build:docs",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
     "lint": "eslint .",
     "prepack": "concurrently npm:lint npm:build",
+    "release": "changeset publish",
     "start": "NODE_OPTIONS=--openssl-legacy-provider storybook dev -p 6006",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "test-storybook": "test-storybook"
+    "storybook": "storybook dev -p 6006"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.7",
     "@eslint/compat": "^1.1.1",
     "@eslint/js": "^9.8.0",
     "@rollup/plugin-typescript": "^11.1.6",
