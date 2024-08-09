@@ -35,7 +35,7 @@ jobs:
         cache: 'npm'
 
     - name: Install deps without updating package-lock.json
-      run: npm ci
+      run: npm ci --ignore-scripts
 
     - name: Run the CI build
       run: npm run ci
