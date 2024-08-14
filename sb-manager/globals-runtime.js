@@ -52486,7 +52486,7 @@ hr();
 var Oo = te(Cte(), 1), Ate = te(Ai(), 1);
 
 // src/manager-api/version.ts
-var Dte = "8.2.8";
+var Dte = "8.2.9";
 
 // src/manager-api/modules/versions.ts
 var { VERSIONCHECK: aHe } = xe, Rte = (0, Ate.default)(1)(() => {
