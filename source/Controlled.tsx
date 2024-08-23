@@ -138,6 +138,8 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
   private touchYStart?: number
   private touchYEnd?: number
 
+  private timeoutTransitionEnd?: ReturnType<typeof setTimeout>
+
   render() {
     const {
       handleDialogCancel,
@@ -330,8 +332,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     this.imgElResizeObserver?.disconnect?.()
     this.imgEl?.removeEventListener?.('load', this.handleImgLoad)
     this.imgEl?.removeEventListener?.('click', this.handleZoom)
-    this.refModalImg.current?.removeEventListener?.('transitionend', this.handleZoomEnd)
-    this.refModalImg.current?.removeEventListener?.('transitionend', this.handleUnzoomEnd)
+    this.refModalImg.current?.removeEventListener?.('transitionend', this.handleImgTransitionEnd)
     window.removeEventListener('wheel', this.handleWheel)
     window.removeEventListener('touchstart', this.handleTouchStart)
     window.removeEventListener('touchmove', this.handleTouchMove)
@@ -343,9 +344,39 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
 
   // ===========================================================================
 
-  componentDidUpdate(prevProps: ControlledPropsWithDefaults) {
+  componentDidUpdate(prevProps: ControlledPropsWithDefaults, prevState: ControlledState) {
+    this.handleModalStateChange(prevState.modalState)
     this.UNSAFE_handleSvg()
     this.handleIfZoomChanged(prevProps.isZoomed)
+  }
+
+  handleModalStateChange = (prevModalState: ControlledState['modalState']) => {
+    const { modalState } = this.state
+
+    if (prevModalState !== ModalState.LOADING && modalState === ModalState.LOADING) {
+      this.loadZoomImg()
+      window.addEventListener('resize', this.handleResize, { passive: true })
+      window.addEventListener('touchstart', this.handleTouchStart, { passive: true })
+      window.addEventListener('touchmove', this.handleTouchMove, { passive: true })
+      window.addEventListener('touchend', this.handleTouchEnd, { passive: true })
+      window.addEventListener('touchcancel', this.handleTouchCancel, { passive: true })
+      document.addEventListener('keydown', this.handleKeyDown, true)
+    } else if (prevModalState !== ModalState.LOADED && modalState === ModalState.LOADED) {
+      window.addEventListener('wheel', this.handleWheel, { passive: true })
+    } else if (prevModalState !== ModalState.UNLOADING && modalState === ModalState.UNLOADING) {
+      this.ensureImgTransitionEnd()
+      window.removeEventListener('wheel', this.handleWheel)
+      window.removeEventListener('touchstart', this.handleTouchStart)
+      window.removeEventListener('touchmove', this.handleTouchMove)
+      window.removeEventListener('touchend', this.handleTouchEnd)
+      window.removeEventListener('touchcancel', this.handleTouchCancel)
+      document.removeEventListener('keydown', this.handleKeyDown, true)
+    } else if (prevModalState !== ModalState.UNLOADED && modalState === ModalState.UNLOADED) {
+      this.bodyScrollEnable()
+      window.removeEventListener('resize', this.handleResize)
+      this.refModalImg.current?.removeEventListener?.('transitionend', this.handleImgTransitionEnd)
+      this.refDialog.current?.close?.()
+    }
   }
 
   // ===========================================================================
@@ -627,70 +658,56 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
       window.getComputedStyle(this.imgEl).display !== 'none'
   }
 
+  // ===========================================================================
+
   /**
    * Perform zooming actions
    */
   zoom = () => {
     this.bodyScrollDisable()
     this.refDialog.current?.showModal?.()
+    this.refModalImg.current?.addEventListener?.('transitionend', this.handleImgTransitionEnd) // must be added after showModal
     this.setState({ modalState: ModalState.LOADING })
-    this.loadZoomImg()
-
-    window.addEventListener('touchstart', this.handleTouchStart, { passive: true })
-    window.addEventListener('touchmove', this.handleTouchMove, { passive: true })
-    window.addEventListener('touchend', this.handleTouchEnd, { passive: true })
-    window.addEventListener('touchcancel', this.handleTouchCancel, { passive: true })
-    document.addEventListener('keydown', this.handleKeyDown, true)
-
-    this.refModalImg.current?.addEventListener?.('transitionend', this.handleZoomEnd, { once: true })
   }
-
-  /**
-   * Report that the zoom modal is loaded and listen
-   * for window resizing
-   */
-  handleZoomEnd = () => {
-    setTimeout(() => {
-      this.setState({ modalState: ModalState.LOADED })
-      window.addEventListener('resize', this.handleResize, { passive: true })
-      window.addEventListener('wheel', this.handleWheel, { passive: true })
-    }, 0)
-  }
-
-  // ===========================================================================
 
   /**
    * Perform unzooming actions
    */
   unzoom = () => {
     this.setState({ modalState: ModalState.UNLOADING })
+  }
 
-    window.removeEventListener('wheel', this.handleWheel)
-    window.removeEventListener('touchstart', this.handleTouchStart)
-    window.removeEventListener('touchmove', this.handleTouchMove)
-    window.removeEventListener('touchend', this.handleTouchEnd)
-    window.removeEventListener('touchcancel', this.handleTouchCancel)
-    document.removeEventListener('keydown', this.handleKeyDown, true)
+  // ===========================================================================
 
-    this.refModalImg.current?.addEventListener?.('transitionend', this.handleUnzoomEnd, { once: true })
+  /**
+   * Handle img zoom/unzoom transitionend events and update states:
+   *   - LOADING -> LOADED
+   *   - UNLOADING -> UNLOADED
+   */
+  handleImgTransitionEnd = () => {
+    clearTimeout(this.timeoutTransitionEnd)
+
+    if (this.state.modalState === ModalState.LOADING) {
+      this.setState({ modalState: ModalState.LOADED })
+    } else if (this.state.modalState === ModalState.UNLOADING) {
+      this.setState({ shouldRefresh: false, modalState: ModalState.UNLOADED })
+    }
   }
 
   /**
-   * Clean up the remaining things from zooming
-   * and report that we're done unzooming
+   * Ensure handleImgTransitionEnd gets called. Safari can have significant
+   * delays before firing the event.
    */
-  handleUnzoomEnd = () => {
-    setTimeout(() => {
-      window.removeEventListener('resize', this.handleResize)
+  ensureImgTransitionEnd = () => {
+    if (this.refModalImg.current) {
+      const td = window.getComputedStyle(this.refModalImg.current).transitionDuration
+      const tdFloat = parseFloat(td)
 
-      this.setState({
-        shouldRefresh: false,
-        modalState: ModalState.UNLOADED,
-      }, () => {
-        this.refDialog.current?.close?.()
-        this.bodyScrollEnable()
-      })
-    }, 0)
+      if (tdFloat) {
+        const tdMs = tdFloat * (td.endsWith('ms') ? 1 : 1000) + 50
+        this.timeoutTransitionEnd = setTimeout(this.handleImgTransitionEnd, tdMs)
+      }
+    }
   }
 
   // ===========================================================================
