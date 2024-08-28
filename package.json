@@ -12,7 +12,7 @@
   "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git@github.com:rpearce/react-medium-image-zoom.git"
+    "url": "git+ssh://git@github.com/rpearce/react-medium-image-zoom.git"
   },
   "homepage": "https://github.com/rpearce/react-medium-image-zoom",
   "bugs": "https://github.com/rpearce/react-medium-image-zoom/issues",
