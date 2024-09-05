@@ -95,7 +95,7 @@
     "@storybook/test": "^8.2.1",
     "@storybook/test-runner": "^0.19.1",
     "@types/eslint__js": "^8.42.3",
-    "@types/node": "^22.5.3",
+    "@types/node": "^22.5.4",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "all-contributors-cli": "^6.26.1",
