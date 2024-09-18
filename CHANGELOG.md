@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.2.10
+
+### Patch Changes
+
+- 44473b3: include 'use client' directive in esm output
+
 ## 5.2.9
 
 ### Patch Changes
