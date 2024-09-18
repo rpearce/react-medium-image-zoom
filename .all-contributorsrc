@@ -861,6 +861,17 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "karlhorky",
+      "name": "Karl Horky",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1935696?v=4",
+      "profile": "https://upleveled.io/",
+      "contributions": [
+        "bug",
+        "ideas",
+        "review"
+      ]
     }
   ],
   "repoType": "github",
