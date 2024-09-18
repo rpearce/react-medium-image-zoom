@@ -37,6 +37,10 @@ Requirements to know about:
 * Package build target is `ES2021`. If you need to support older environments,
   run this package through your build system.
 
+## Media
+
+* [2024-08-2024 — _React Round Up_ — "Building a Seamless Image Zoom Feature"](https://topenddevs.com/podcasts/react-round-up/episodes/building-a-seamless-image-zoom-feature-rru-265)
+
 ## Quickstart
 
 ```bash
