@@ -5,7 +5,7 @@ import pkg from './package.json' with { type: 'json' }
 export default (async () => ([
   {
     input: './source/index.ts',
-    output: { file: pkg.main, format: 'es', banner: `'use client';` },
+    output: { file: pkg.main, format: 'es', banner: "'use client';" },
     external: isExternal,
     plugins: [ts({
       tsconfig: './tsconfig.json',
