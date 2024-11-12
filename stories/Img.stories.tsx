@@ -44,7 +44,7 @@ function shuffle<T extends unknown[]>(xs: T): T {
 
 // =============================================================================
 
-export const Regular = (props) => {
+export const Regular = (props: typeof Zoom) => {
   return (
     <main aria-label="Story">
       <h1>Zooming a regular image</h1>
@@ -65,7 +65,7 @@ export const Regular = (props) => {
 
 // =============================================================================
 
-export const ZoomMargin = (props) => (
+export const ZoomMargin = (props: typeof Zoom) => (
   <main aria-label="Story">
     <h1>Setting a zoomMargin of 45(px)</h1>
     <div className="mw-600">
@@ -87,7 +87,7 @@ export const ZoomMargin = (props) => (
 
 // =============================================================================
 
-export const SmallPortrait = (props) => (
+export const SmallPortrait = (props: typeof Zoom) => (
   <main aria-label="Story">
     <h1>A portrait image with a small width specified</h1>
     <div className="mw-600">
@@ -107,7 +107,7 @@ export const SmallPortrait = (props) => (
 
 // =============================================================================
 
-export const SVGSource = (props) => (
+export const SVGSource = (props: typeof Zoom) => (
   <main aria-label="Story">
     <h1>An image with an SVG src</h1>
     <div className="mw-600">
@@ -144,7 +144,7 @@ export const DataSVGSource = () => (
 
 // =============================================================================
 
-export const ProvideZoomImg = (props) => (
+export const ProvideZoomImg = (props: typeof Zoom) => (
   <main aria-label="Story">
     <h1>
       An image with a larger <code>zoomImg</code>
@@ -170,7 +170,7 @@ export const ProvideZoomImg = (props) => (
 
 // =============================================================================
 
-export const SmallSrcSize = (props) => (
+export const SmallSrcSize = (props: typeof Zoom) => (
   <main aria-label="Story">
     <h1>An image with a small size</h1>
     <div className="mw-600">
@@ -187,7 +187,7 @@ export const SmallSrcSize = (props) => (
 
 // =============================================================================
 
-export const CustomModalStyles = (props) => {
+export const CustomModalStyles = (props: typeof Zoom) => {
   return (
     <main aria-label="Story">
       <h1>Custom Modal Styles</h1>
@@ -242,7 +242,60 @@ export const CustomModalStyles = (props) => {
 
 // =============================================================================
 
-export const ModalFigureCaption = (props) => (
+export const ZoomImageFromInsideDialog = (props: typeof Zoom) => {
+  const refBtn = React.useRef<HTMLButtonElement>(null)
+  const refModal = React.useRef<HTMLDialogElement>(null)
+
+  const handleBtnClick = React.useCallback(() => {
+    refModal.current?.showModal()
+  }, [])
+
+  React.useEffect(() => {
+    const handleDocumentClick = (e: MouseEvent) => {
+      if (
+        !refBtn.current?.contains(e.target as Element) &&
+        !refModal.current?.contains(e.target as Element)
+      ) {
+        refModal.current?.close()
+      }
+    }
+
+    document.addEventListener('click', handleDocumentClick)
+
+    return () => {
+      document.removeEventListener('click', handleDocumentClick)
+    }
+  }, [])
+
+  return (
+    <main aria-label="Story">
+      <h1>Zoom Image From Inside Dialog</h1>
+      <div className="mw-600">
+        <button onClick={handleBtnClick} ref={refBtn} type="button">
+          Open Modal
+        </button>
+        <dialog aria-modal="true" ref={refModal}>
+          <form method="dialog">
+            <button type="submit">Close</button>
+          </form>
+          <h1>Zooming should work!</h1>
+          <div>
+            <Zoom {...props}>
+              <img
+                alt={imgGlenorchyLagoon.alt}
+                src={imgGlenorchyLagoon.src}
+                width="400"
+              />
+            </Zoom>
+          </div>
+        </dialog>
+      </div>
+    </main>
+  )
+}
+// =============================================================================
+
+export const ModalFigureCaption = (props: typeof Zoom) => (
   <main aria-label="Story">
     <h1>Modal With Figure And Caption</h1>
     <p>
@@ -369,7 +422,7 @@ const DelayedImg = (props: DelayedImgProps) => {
   )
 }
 
-export const DelayedImageRender = (props) => {
+export const DelayedImageRender = (props: typeof Zoom) => {
   const { timer } = useTimer(5000)
 
   return (
@@ -400,7 +453,7 @@ export const DelayedImageRender = (props) => {
 
 // =============================================================================
 
-export const DelayedDisplayNone = (props) => {
+export const DelayedDisplayNone = (props: typeof Zoom) => {
   const { timer } = useTimer(5000)
   const classImg = timer === 0 ? undefined : 'display-none'
 
@@ -434,7 +487,7 @@ export const DelayedDisplayNone = (props) => {
 
 // =============================================================================
 
-export const CustomButtonIcons = (props) => {
+export const CustomButtonIcons = (props: typeof Zoom) => {
   React.useEffect(() => {
     document.body.classList.add('change-icons')
 
@@ -464,7 +517,7 @@ export const CustomButtonIcons = (props) => {
 
 // =============================================================================
 
-export const InlineImage = (props) => (
+export const InlineImage = (props: typeof Zoom) => (
   <main aria-label="Story">
     <h1>Inline Image</h1>
     <p className="inline">
@@ -484,7 +537,7 @@ export const InlineImage = (props) => (
 
 // =============================================================================
 
-export const CycleImages = (props) => {
+export const CycleImages = (props: typeof Zoom) => {
   const [img, setImg] = React.useState(imgThatWanakaTree)
 
   React.useEffect(() => {
@@ -533,7 +586,7 @@ export const CycleImages = (props) => {
 
 // =============================================================================
 
-export const SwipeToUnzoomDisabled = (props) => (
+export const SwipeToUnzoomDisabled = (props: typeof Zoom) => (
   <main aria-label="Story">
     <h1>Swipe to Unzoom Disabled</h1>
     <p>
@@ -555,7 +608,7 @@ export const SwipeToUnzoomDisabled = (props) => (
   </main>
 )
 
-export const SwipeToUnzoomThreshold = (props) => (
+export const SwipeToUnzoomThreshold = (props: typeof Zoom) => (
   <main aria-label="Story">
     <h1>Swipe to Unzoom Threshold</h1>
     <p>

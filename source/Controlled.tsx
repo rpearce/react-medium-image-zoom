@@ -142,6 +142,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
 
   render() {
     const {
+      handleBtnUnzoomClick,
       handleDialogCancel,
       handleDialogClick,
       handleUnzoom,
@@ -257,7 +258,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
       const modalBtnUnzoom = <button
         aria-label={a11yNameButtonUnzoom}
         data-rmiz-btn-unzoom=""
-        onClick={handleUnzoom}
+        onClick={handleBtnUnzoomClick}
         type="button"
       >
         <IconUnzoom />
@@ -532,6 +533,17 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
   // ===========================================================================
 
   /**
+   * Capture click event when clicking unzoom button
+   */
+  handleBtnUnzoomClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    this.handleUnzoom()
+  }
+
+  // ===========================================================================
+
+  /**
    * Prevent the browser from removing the dialog on Escape
    */
   handleDialogCancel = (e: React.SyntheticEvent) => {
@@ -545,6 +557,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
    */
   handleDialogClick = (e: React.MouseEvent<HTMLDialogElement>) => {
     if (e.target === this.refModalContent.current || e.target === this.refModalImg.current) {
+      e.stopPropagation()
       this.handleUnzoom()
     }
   }
