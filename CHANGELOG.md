@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.2.11
+
+### Patch Changes
+
+- b647071: fixes zooming inside a dialog with click outside behavior
+
 ## 5.2.10
 
 ### Patch Changes
