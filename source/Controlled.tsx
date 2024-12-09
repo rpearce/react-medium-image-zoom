@@ -61,13 +61,14 @@ export interface ControlledProps {
   classDialog?: string
   IconUnzoom?: React.ElementType
   IconZoom?: React.ElementType
+  hideUnzoomIcon?: boolean
   isZoomed: boolean
   onZoomChange?: (value: boolean) => void
   swipeToUnzoomThreshold?: number
   wrapElement?: 'div' | 'span'
   ZoomContent?: (data: {
     img: React.ReactElement | null
-    buttonUnzoom: React.ReactElement<HTMLButtonElement>
+    buttonUnzoom: React.ReactElement<HTMLButtonElement> | null
     modalState: ModalState
     onUnzoom: () => void
   }) => React.ReactElement
@@ -85,6 +86,7 @@ interface ControlledDefaultProps {
   canSwipeToUnzoom: boolean
   IconUnzoom: React.ElementType
   IconZoom: React.ElementType
+  hideUnzoomIcon: boolean
   swipeToUnzoomThreshold: number
   wrapElement: 'div' | 'span'
   zoomMargin: number
@@ -108,6 +110,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     canSwipeToUnzoom: true,
     IconUnzoom: ICompress,
     IconZoom: IEnlarge,
+    hideUnzoomIcon: false,
     swipeToUnzoomThreshold: 10,
     wrapElement: 'div',
     zoomMargin: 0,
@@ -255,14 +258,18 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
             />
           : null
 
-      const modalBtnUnzoom = <button
-        aria-label={a11yNameButtonUnzoom}
-        data-rmiz-btn-unzoom=""
-        onClick={handleBtnUnzoomClick}
-        type="button"
-      >
-        <IconUnzoom />
-      </button>
+      const modalBtnUnzoom = this.props.hideUnzoomIcon
+        ? null
+        : (
+          <button
+            aria-label={a11yNameButtonUnzoom}
+            data-rmiz-btn-unzoom=""
+            onClick={handleBtnUnzoomClick}
+            type="button"
+        >
+            <IconUnzoom />
+          </button>
+          )
 
       modalContent = ZoomContent
         ? <ZoomContent
