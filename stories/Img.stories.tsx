@@ -637,6 +637,27 @@ export const SwipeToUnzoomThreshold = (props: typeof Zoom) => (
 )
 
 // =============================================================================
+
+export const HideUnzoomButton = (props: typeof Zoom) => {
+  return (
+    <main aria-label="Story">
+      <h1>Zooming a regular image</h1>
+      <div className="mw-600" style={{ display: 'flex', flexDirection: 'column' }}>
+        <Zoom {...props} hideUnzoomIcon wrapElement="span">
+          <img
+            alt={imgThatWanakaTree.alt}
+            src={imgThatWanakaTree.src}
+            height="320"
+            decoding="async"
+            loading="lazy"
+          />
+        </Zoom>
+      </div>
+    </main>
+  )
+}
+
+// =============================================================================
 // INTERACTIONS
 
 export const AutomatedTest = Regular.bind({}, { title: '(Automated Test)' })
