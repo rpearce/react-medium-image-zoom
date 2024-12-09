@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.2.12
+
+### Patch Changes
+
+- 63388a8: support react@19 and credit edlerd
+
 ## 5.2.11
 
 ### Patch Changes
