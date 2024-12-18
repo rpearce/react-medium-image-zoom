@@ -82,7 +82,7 @@
     "storybook": "storybook dev -p 6006"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.10",
+    "@changesets/cli": "^2.27.11",
     "@eslint/compat": "^1.2.4",
     "@eslint/js": "^9.17.0",
     "@rollup/plugin-typescript": "^12.1.2",
@@ -97,7 +97,7 @@
     "@storybook/test-runner": "^0.20.1",
     "@types/eslint__js": "^8.42.3",
     "@types/node": "^22.10.2",
-    "@types/react": "^19.0.1",
+    "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
     "all-contributors-cli": "^6.26.1",
     "concurrently": "^9.1.0",
