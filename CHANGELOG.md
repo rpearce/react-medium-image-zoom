@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.2.13
+
+### Patch Changes
+
+- 330cd40: fix zooming inside a parent dialog that has a close handler
+
 ## 5.2.12
 
 ### Patch Changes
