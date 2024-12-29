@@ -145,6 +145,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
       handleBtnUnzoomClick,
       handleDialogCancel,
       handleDialogClick,
+      handleDialogClose,
       handleUnzoom,
       handleZoom,
       imgEl,
@@ -299,7 +300,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
             data-rmiz-modal=""
             id={idModal}
             onClick={handleDialogClick}
-            onClose={handleUnzoom}
+            onClose={handleDialogClose}
             onCancel={handleDialogCancel}
             ref={refDialog}
             role="dialog"
@@ -560,6 +561,16 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
       e.stopPropagation()
       this.handleUnzoom()
     }
+  }
+
+  // ===========================================================================
+
+  /**
+   *  Prevent dialog's close event from closing a parent modal
+   */
+  handleDialogClose = (e: React.SyntheticEvent<HTMLDialogElement>) => {
+    e.stopPropagation()
+    this.handleUnzoom()
   }
 
   // ===========================================================================
