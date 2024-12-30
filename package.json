@@ -90,7 +90,7 @@
     "@storybook/addon-docs": "^8.4.7",
     "@storybook/addon-interactions": "^8.4.7",
     "@storybook/addon-viewport": "^8.4.7",
-    "@storybook/addon-webpack5-compiler-swc": "^1.0.5",
+    "@storybook/addon-webpack5-compiler-swc": "^2.0.0",
     "@storybook/react": "^8.4.7",
     "@storybook/react-webpack5": "^8.4.7",
     "@storybook/test": "^8.2.1",
@@ -113,7 +113,7 @@
     "rollup-plugin-dts": "^6.1.1",
     "storybook": "^8.4.7",
     "typescript": "^5.7.2",
-    "typescript-eslint": "^8.18.2"
+    "typescript-eslint": "^8.19.0"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
