@@ -237,7 +237,7 @@ const MyComponent = () => {
       />
     </ControlledZoom>
   )
-)
+}
 
 export default MyComponent
 ```
