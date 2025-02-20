@@ -190,6 +190,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     const imgSrc = getImgSrc(imgEl)
     const imgSizes = isImg ? imgEl.sizes : undefined
     const imgSrcSet = isImg ? imgEl.srcset : undefined
+    const imgCrossOrigin = isImg ? imgEl.crossOrigin : undefined
 
     const hasZoomImg = !!zoomImg?.src
 
@@ -237,6 +238,8 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
       const modalImg = isImg || isDiv
         ? <img
             alt={imgAlt}
+            // @ts-expect-error crossOrigin type is odd
+            crossOrigin={imgCrossOrigin}
             sizes={imgSizes}
             src={imgSrc}
             srcSet={imgSrcSet}
@@ -488,6 +491,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     if (testImg(this.imgEl)) {
       img.sizes = this.imgEl.sizes
       img.srcset = this.imgEl.srcset
+      img.crossOrigin = this.imgEl.crossOrigin
     }
 
     // img.src must be set after sizes and srcset
@@ -774,6 +778,8 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
       const img = new Image()
       img.sizes = zoomImg?.sizes ?? ''
       img.srcset = zoomImg?.srcSet ?? ''
+      // @ts-expect-error crossOrigin type is odd
+      img.crossOrigin = zoomImg?.crossOrigin ?? undefined
       img.src = zoomImgSrc
 
       const setLoaded = () => {
