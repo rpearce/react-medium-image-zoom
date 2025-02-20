@@ -20,4 +20,13 @@ export default {
   docs: {
     autodocs: 'tag',
   },
+  // NOTE: For testing crossorigin
+  //webpackFinal: async (config) => {
+  //  config.devServer = {
+  //    headers: {
+  //      'Access-Control-Allow-Origin': '*',
+  //    },
+  //  }
+  //  return config
+  //},
 }

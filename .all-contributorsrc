@@ -873,6 +873,15 @@
         "ideas",
         "review"
       ]
+    },
+    {
+      "login": "wenerme",
+      "name": "陈杨文",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1777211?v=4",
+      "profile": "https://wener.me/",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
