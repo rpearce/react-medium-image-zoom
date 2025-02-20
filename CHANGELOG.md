@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.2.14
+
+### Patch Changes
+
+- d59b9f1: fix crossorigin images not loading when copied
+
 ## 5.2.13
 
 ### Patch Changes
