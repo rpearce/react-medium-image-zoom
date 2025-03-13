@@ -37,9 +37,10 @@ Requirements to know about:
 * Package build target is `ES2021`. If you need to support older environments,
   run this package through your build system.
 
-## Media
+## Media and Tutorials
 
 * [2024-08-2024 — _React Round Up_ — "Building a Seamless Image Zoom Feature"](https://topenddevs.com/podcasts/react-round-up/episodes/building-a-seamless-image-zoom-feature-rru-265)
+* [Build a React.js Image Zoom Feature with react-medium-image-zoom Library and State Management](https://www.youtube.com/watch?v=w24gLJzmXp0)
 
 ## Quickstart
 
