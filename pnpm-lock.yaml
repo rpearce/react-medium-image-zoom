@@ -25,7 +25,7 @@ importers:
         version: 8.6.7(storybook@8.6.7(prettier@2.8.8))
       '@storybook/addon-docs':
         specifier: ^8.6.7
-        version: 8.6.7(@types/react@19.0.10)(storybook@8.6.7(prettier@2.8.8))
+        version: 8.6.7(@types/react@19.0.11)(storybook@8.6.7(prettier@2.8.8))
       '@storybook/addon-interactions':
         specifier: ^8.6.7
         version: 8.6.7(storybook@8.6.7(prettier@2.8.8))
@@ -54,11 +54,11 @@ importers:
         specifier: ^22.13.10
         version: 22.13.10
       '@types/react':
-        specifier: ^19.0.10
-        version: 19.0.10
+        specifier: ^19.0.11
+        version: 19.0.11
       '@types/react-dom':
         specifier: ^19.0.4
-        version: 19.0.4(@types/react@19.0.10)
+        version: 19.0.4(@types/react@19.0.11)
       all-contributors-cli:
         specifier: ^6.26.1
         version: 6.26.1
@@ -1257,8 +1257,8 @@ packages:
     peerDependencies:
       '@types/react': ^19.0.0
 
-  '@types/react@19.0.10':
-    resolution: {integrity: sha512-JuRQ9KXLEjaUNjTWpzuR231Z2WpIwczOkBEIvbHNCzQefFIT0L8IqE6NV6ULLyC1SI/i234JnDoMkfg+RjQj2g==}
+  '@types/react@19.0.11':
+    resolution: {integrity: sha512-vrdxRZfo9ALXth6yPfV16PYTLZwsUWhVjjC+DkfE5t1suNSbBrWC9YqSuuxJZ8Ps6z1o2ycRpIqzZJIgklq4Tw==}
 
   '@types/resolve@1.20.6':
     resolution: {integrity: sha512-A4STmOXPhMUtHH+S6ymgE2GiBSMqf4oTvcQZMcHzokuTLVYzXTB8ttjcgxOVaAp2lGwEdzZ0J+cRbbeevQj1UQ==}
@@ -5068,10 +5068,10 @@ snapshots:
       globby: 11.1.0
       read-yaml-file: 1.1.0
 
-  '@mdx-js/react@3.1.0(@types/react@19.0.10)(react@19.0.0)':
+  '@mdx-js/react@3.1.0(@types/react@19.0.11)(react@19.0.0)':
     dependencies:
       '@types/mdx': 2.0.13
-      '@types/react': 19.0.10
+      '@types/react': 19.0.11
       react: 19.0.0
 
   '@nodelib/fs.scandir@2.1.5':
@@ -5188,9 +5188,9 @@ snapshots:
       axe-core: 4.10.3
       storybook: 8.6.7(prettier@2.8.8)
 
-  '@storybook/addon-docs@8.6.7(@types/react@19.0.10)(storybook@8.6.7(prettier@2.8.8))':
+  '@storybook/addon-docs@8.6.7(@types/react@19.0.11)(storybook@8.6.7(prettier@2.8.8))':
     dependencies:
-      '@mdx-js/react': 3.1.0(@types/react@19.0.10)(react@19.0.0)
+      '@mdx-js/react': 3.1.0(@types/react@19.0.11)(react@19.0.0)
       '@storybook/blocks': 8.6.7(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.7(prettier@2.8.8))
       '@storybook/csf-plugin': 8.6.7(storybook@8.6.7(prettier@2.8.8))
       '@storybook/react-dom-shim': 8.6.7(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.7(prettier@2.8.8))
@@ -5670,11 +5670,11 @@ snapshots:
 
   '@types/parse-json@4.0.2': {}
 
-  '@types/react-dom@19.0.4(@types/react@19.0.10)':
+  '@types/react-dom@19.0.4(@types/react@19.0.11)':
     dependencies:
-      '@types/react': 19.0.10
+      '@types/react': 19.0.11
 
-  '@types/react@19.0.10':
+  '@types/react@19.0.11':
     dependencies:
       csstype: 3.1.3
 
