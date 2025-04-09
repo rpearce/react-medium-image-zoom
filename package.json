@@ -98,7 +98,7 @@
     "@types/eslint__js": "^9.14.0",
     "@types/node": "^22.14.0",
     "@types/react": "^19.1.0",
-    "@types/react-dom": "^19.1.1",
+    "@types/react-dom": "^19.1.2",
     "all-contributors-cli": "^6.26.1",
     "concurrently": "^9.1.2",
     "eslint": "^9.24.0",
