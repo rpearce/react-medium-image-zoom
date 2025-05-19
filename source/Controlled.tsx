@@ -113,7 +113,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     swipeToUnzoomThreshold: 10,
     wrapElement: 'div',
     zoomMargin: 0,
-    zoomAlignmentY: 'center'
+    zoomAlignmentY: 'center',
   }
 
   state: ControlledState = {
@@ -164,7 +164,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
         ZoomContent,
         zoomImg,
         zoomMargin,
-        zoomAlignmentY
+        zoomAlignmentY,
       },
       refContent,
       refDialog,
@@ -231,7 +231,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
         offset: zoomMargin,
         shouldRefresh,
         targetEl: imgEl as SupportedImage,
-        zoomAlignmentY
+        zoomAlignmentY,
       })
       : {}
 

@@ -451,7 +451,7 @@ export const getStyleModalImg: GetStyleModalImg = ({
   offset,
   shouldRefresh,
   targetEl,
-  zoomAlignmentY
+  zoomAlignmentY,
 }) => {
   const hasScalableSrc =
     isSvg ||
