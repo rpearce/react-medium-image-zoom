@@ -73,6 +73,7 @@ export interface ControlledProps {
   }) => React.ReactElement
   zoomImg?: React.ImgHTMLAttributes<HTMLImageElement>
   zoomMargin?: number
+  zoomAlignment?: 'center' | 'top'
 }
 
 export function Controlled (props: ControlledProps) {
@@ -88,6 +89,7 @@ interface ControlledDefaultProps {
   swipeToUnzoomThreshold: number
   wrapElement: 'div' | 'span'
   zoomMargin: number
+  zoomAlignment: 'center' | 'top'
 }
 
 type ControlledPropsWithDefaults = ControlledDefaultProps & ControlledProps
@@ -111,6 +113,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     swipeToUnzoomThreshold: 10,
     wrapElement: 'div',
     zoomMargin: 0,
+    zoomAlignment: 'center'
   }
 
   state: ControlledState = {
@@ -161,6 +164,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
         ZoomContent,
         zoomImg,
         zoomMargin,
+        zoomAlignment
       },
       refContent,
       refDialog,
@@ -227,6 +231,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
         offset: zoomMargin,
         shouldRefresh,
         targetEl: imgEl as SupportedImage,
+        zoomAlignment
       })
       : {}
 
