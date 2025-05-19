@@ -522,19 +522,7 @@ export const getStyleModalImg: GetStyleModalImg = ({
 
     const translateX = viewportX - childCenterX
     const translateY = zoomAlignment === 'center' ? viewportY - childCenterY : -style.top
-
-    console.log('zoomAlignment',zoomAlignment);
-    console.log('viewportY',viewportY)
-    console.log('childCenterY',childCenterY);
-    console.log('translateY',translateY);
-    console.log('-style.top',-style.top)
-
-    /**
-     * translateY current: -106
-     * translateY needed: -253
-     * */
-
-
+    
     // For scenarios like resizing the browser window
     if (shouldRefresh) {
       style.transitionDuration = '0.01ms'
