@@ -438,6 +438,7 @@ export interface GetStyleModalImg {
     offset: number,
     shouldRefresh: boolean,
     targetEl: SupportedImage,
+    zoomAlignment: 'top' | 'center'
   }): React.CSSProperties
 }
 
@@ -450,6 +451,7 @@ export const getStyleModalImg: GetStyleModalImg = ({
   offset,
   shouldRefresh,
   targetEl,
+  zoomAlignment
 }) => {
   const hasScalableSrc =
     isSvg ||
@@ -519,7 +521,19 @@ export const getStyleModalImg: GetStyleModalImg = ({
     const childCenterY = parseFloat(String(style.top || 0)) + (parseFloat(String(style.height || 0)) / 2)
 
     const translateX = viewportX - childCenterX
-    const translateY = viewportY - childCenterY
+    const translateY = zoomAlignment === 'center' ? viewportY - childCenterY : -style.top
+
+    console.log('zoomAlignment',zoomAlignment);
+    console.log('viewportY',viewportY)
+    console.log('childCenterY',childCenterY);
+    console.log('translateY',translateY);
+    console.log('-style.top',-style.top)
+
+    /**
+     * translateY current: -106
+     * translateY needed: -253
+     * */
+
 
     // For scenarios like resizing the browser window
     if (shouldRefresh) {
