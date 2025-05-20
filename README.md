@@ -124,7 +124,7 @@ export interface UncontrolledProps {
 
   // Align the zoomed image vertically to the top or center of the viewport.
   // Default: 'center'
-  zoomAlignmentY?: 'center' | 'top'
+  zoomAlignmentY?: 'top' | 'center' | 'bottom'
 }
 ```
 
