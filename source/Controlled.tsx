@@ -72,6 +72,7 @@ export interface ControlledProps {
     onUnzoom: () => void
   }) => React.ReactElement
   zoomImg?: React.ImgHTMLAttributes<HTMLImageElement>
+  zoomAlignmentY?: 'top' | 'center' | 'bottom'
   zoomMargin?: number
 }
 
@@ -87,6 +88,7 @@ interface ControlledDefaultProps {
   IconZoom: React.ElementType
   swipeToUnzoomThreshold: number
   wrapElement: 'div' | 'span'
+  zoomAlignmentY: 'top' | 'center' | 'bottom'
   zoomMargin: number
 }
 
@@ -110,6 +112,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     IconZoom: IEnlarge,
     swipeToUnzoomThreshold: 10,
     wrapElement: 'div',
+    zoomAlignmentY: 'center',
     zoomMargin: 0,
   }
 
@@ -160,6 +163,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
         wrapElement: WrapElement,
         ZoomContent,
         zoomImg,
+        zoomAlignmentY,
         zoomMargin,
       },
       refContent,
@@ -227,6 +231,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
         offset: zoomMargin,
         shouldRefresh,
         targetEl: imgEl as SupportedImage,
+        zoomAlignmentY,
       })
       : {}
 
