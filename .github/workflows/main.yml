@@ -22,25 +22,14 @@ on:
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout repo under GH workspace
       uses: actions/checkout@v4
 
-    - name: Use pnpm
-      uses: pnpm/action-setup@v4
-      with:
-        version: 'latest'
-
-    - name: Use nodejs
-      uses: actions/setup-node@v4
-      with:
-        node-version: 'latest'
-        cache: 'pnpm'
-
-    - name: Install dependencies
-      run: pnpm install --frozen-lockfile --ignore-scripts
+    - name: Install
+      uses: ./.github/actions/install
 
     - name: Run the CI script
       run: pnpm run ci
