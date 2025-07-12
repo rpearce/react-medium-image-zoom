@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import type { Meta } from '@storybook/react'
+import type { Meta } from '@storybook/react-webpack5'
 
 import { Controlled as Zoom } from '../source'
 import '../source/styles.css'

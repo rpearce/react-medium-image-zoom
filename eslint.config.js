@@ -1,3 +1,6 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from 'eslint-plugin-storybook'
+
 // @ts-check
 
 import eslint from '@eslint/js'
@@ -43,17 +46,21 @@ export default [
       '@stylistic/jsx-wrap-multilines': 'off',
       '@stylistic/space-before-function-paren': 'off',
       '@stylistic/spaced-comment': 'off',
-      'comma-dangle': ['error', {
-        arrays: 'always-multiline',
-        exports: 'always-multiline',
-        functions: 'ignore',
-        imports: 'always-multiline',
-        objects: 'always-multiline',
-      }],
+      'comma-dangle': [
+        'error',
+        {
+          arrays: 'always-multiline',
+          exports: 'always-multiline',
+          functions: 'ignore',
+          imports: 'always-multiline',
+          objects: 'always-multiline',
+        },
+      ],
       'react-hooks/exhaustive-deps': 'error',
       'react-hooks/rules-of-hooks': 'error',
       'react/prop-types': 'off',
       '@typescript-eslint/prefer-function-type': 'off',
     },
   },
+  ...storybook.configs['flat/recommended'],
 ]
