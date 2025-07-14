@@ -123,7 +123,7 @@ export interface UncontrolledProps {
   zoomMargin?: number
 
   // Disables the zoom/unzoom behavior
-  disabled?: boolean
+  isDisabled?: boolean
 }
 ```
 
