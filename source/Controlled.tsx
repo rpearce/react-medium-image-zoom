@@ -65,10 +65,12 @@ export interface ControlledProps {
   onZoomChange?: (value: boolean) => void
   swipeToUnzoomThreshold?: number
   wrapElement?: 'div' | 'span'
+  disabled?: boolean;
   ZoomContent?: (data: {
     img: React.ReactElement | null
     buttonUnzoom: React.ReactElement<HTMLButtonElement>
-    modalState: ModalState
+    modalState: ModalState,
+    isZoomImageLoaded: boolean,
     onUnzoom: () => void
   }) => React.ReactElement
   zoomImg?: React.ImgHTMLAttributes<HTMLImageElement>
@@ -88,6 +90,7 @@ interface ControlledDefaultProps {
   swipeToUnzoomThreshold: number
   wrapElement: 'div' | 'span'
   zoomMargin: number
+  disabled?: boolean
 }
 
 type ControlledPropsWithDefaults = ControlledDefaultProps & ControlledProps
@@ -111,6 +114,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     swipeToUnzoomThreshold: 10,
     wrapElement: 'div',
     zoomMargin: 0,
+    disabled: false,
   }
 
   state: ControlledState = {
@@ -273,6 +277,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
             buttonUnzoom={modalBtnUnzoom}
             modalState={modalState}
             img={modalImg}
+            isZoomImageLoaded={isZoomImgLoaded}
             onUnzoom={handleUnzoom}
           />
         : <>{modalImg}{modalBtnUnzoom}</>
@@ -523,7 +528,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
    * Report that zooming should occur
    */
   handleZoom = () => {
-    if (this.hasImage()) {
+    if (this.hasImage() && !this.props?.disabled) {
       this.props.onZoomChange?.(true)
     }
   }
@@ -532,6 +537,10 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
    * Report that unzooming should occur
    */
   handleUnzoom = () => {
+    if (this.props.disabled) {
+      return
+    }
+
     this.props.onZoomChange?.(false)
   }
 
