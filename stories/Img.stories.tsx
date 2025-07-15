@@ -320,7 +320,8 @@ const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({
   buttonUnzoom,
   modalState,
   img,
-  //onUnzooom, // Not used here, but could be
+  // isZoomImgLoaded, // Not used in this example
+  // onUnzooom, // Not used in this example
 }) => {
   const [isLoaded, setIsLoaded] = React.useState(false)
 
