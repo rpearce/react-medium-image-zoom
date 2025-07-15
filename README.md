@@ -97,6 +97,10 @@ export interface UncontrolledProps {
   // Default: IEnlarge
   IconZoom?: ElementType
 
+  // Disables the zoom/unzoom behavior.
+  // Default: false
+  isDisabled?: boolean
+
   // Swipe gesture threshold after which to unzoom.
   // Default: 10
   swipeToUnzoomThreshold?: number
@@ -121,9 +125,6 @@ export interface UncontrolledProps {
   // be from the window's boundaries.
   // Default: 0
   zoomMargin?: number
-
-  // Disables the zoom/unzoom behavior
-  isDisabled?: boolean
 }
 ```
 
@@ -285,13 +286,13 @@ export const MyImg = () => (
 )
 
 const CustomZoomContent = ({
-  buttonUnzoom, // default unzoom button
-  modalState,   // current state of the zoom modal: UNLOADED, LOADING, LOADED, UNLOADING
-  img,          // your image, prepped for zooming
-  isZoomImageLoaded // state to check if zoom img is loaded (useful to show loading)
-  //onUnzoom,   // unused here, but a callback to manually unzoom the image and
-                //   close the modal if you want to use your own buttons or
-                //   listeners in your custom experience
+  buttonUnzoom,    // default unzoom button
+  modalState,      // current state of the zoom modal: UNLOADED, LOADING, LOADED, UNLOADING
+  img,             // your image, prepped for zooming
+  isZoomImgLoaded, // state to check if zoom img is loaded (useful to show loading)
+  //onUnzoom,      // unused here, but a callback to manually unzoom the image and
+                   //   close the modal if you want to use your own buttons or
+                   //   listeners in your custom experience
 }) => {
   const [isLoaded, setIsLoaded] = useState(false)
 
