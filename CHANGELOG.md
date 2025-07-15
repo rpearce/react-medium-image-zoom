@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.3.0
+
+### Minor Changes
+
+- b54ea57: Added `isDisabled` prop; provided `isZoomImgLoaded` for `ZoomContent`
+
 ## 5.2.14
 
 ### Patch Changes
