@@ -286,13 +286,23 @@ export const MyImg = () => (
 )
 
 const CustomZoomContent = ({
-  buttonUnzoom,    // default unzoom button
-  modalState,      // current state of the zoom modal: UNLOADED, LOADING, LOADED, UNLOADING
-  img,             // your image, prepped for zooming
-  isZoomImgLoaded, // state to check if zoom img is loaded (useful to show loading)
-  //onUnzoom,      // unused here, but a callback to manually unzoom the image and
-                   //   close the modal if you want to use your own buttons or
-                   //   listeners in your custom experience
+  /** Default unzoom button */
+  buttonUnzoom,
+
+  /** Current state of the zoom modal: UNLOADED, LOADING, LOADED, UNLOADING */
+  modalState,
+
+  /** Your image, prepped for zooming */
+  img,
+
+  /** A state to check if the zoom img is loaded (useful for loading state) */
+  // isZoomImgLoaded,
+
+  /**
+   * A callback to manually unzoom the image and close the modal if you want to
+   * use your own buttons or listeners in your custom experience.
+   */
+  //onUnzoom,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false)
 
