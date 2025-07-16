@@ -216,6 +216,10 @@ export const ZoomImgLoader = (props: typeof Zoom) => (
         <code>isZoomImgLoaded</code> prop to display a loading spinner while the
         high-resolution image is being downloaded.
       </p>
+      <p>
+        Here the loading spinner is shown on every zoom, but in real-world case
+        the browser caches the image, so you&apos;ll only see the loader at first load
+      </p>
       <Zoom
         {...props}
         zoomImg={{
@@ -226,6 +230,39 @@ export const ZoomImgLoader = (props: typeof Zoom) => (
       >
         <img alt={imgKeaSmall.alt} src={imgKeaSmall.src} width="150" />
       </Zoom>
+      <p>
+        Here&apos;s the zoom component with loading spinner
+      </p>
+      <pre>
+        <code>
+          {`
+const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({
+  img,
+  isZoomImgLoaded,
+}) => {
+  return (
+    <>
+      {img}
+      {!isZoomImgLoaded && (
+        <div className='loader-wrapper'>
+          <div className='loader' />
+        </div>
+      )}
+    </>
+  )
+}
+
+<Zoom
+  zoomImg={{
+    src: 'higher-res-image.jpg',
+  }}
+  ZoomContent={CustomZoomContent}
+>
+  <img src='low-res-image.jpg' width="150" />
+</Zoom>
+          `}
+        </code>
+      </pre>
     </div>
   </main>
 )
