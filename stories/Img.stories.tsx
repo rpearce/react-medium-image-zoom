@@ -231,7 +231,7 @@ export const ZoomImgLoader = (props: typeof Zoom) => (
         <img alt={imgKeaSmall.alt} src={imgKeaSmall.src} width="150" />
       </Zoom>
       <p>
-        Here&apos;s the zoom component with loading spinner
+        Zoom component with loading spinner
       </p>
       <pre>
         <code>
