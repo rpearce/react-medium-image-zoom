@@ -126,6 +126,24 @@ img {
   margin-top: 1.5rem;
 }
 .zoom-caption-link {
-   color: #fff;
-   text-underline-offset: 0.5rem;
+  color: #fff;
+  text-underline-offset: 0.5rem;
+}
+.zoom-img-loader-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+}
+.zoom-img-loader {
+  width: 32px;
+  height: 32px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

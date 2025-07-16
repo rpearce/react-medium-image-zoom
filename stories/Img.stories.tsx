@@ -170,6 +170,68 @@ export const ProvideZoomImg = (props: typeof Zoom) => (
 
 // =============================================================================
 
+const CustomZoomContentWithLoader: UncontrolledProps['ZoomContent'] = ({
+  img,
+  isZoomImgLoaded,
+  modalState,
+}) => {
+  const [
+    showLoader,
+    setShowLoader,
+  ] = React.useState(!isZoomImgLoaded)
+
+  /**
+   * Delay the loader so the loading spinner is noticeable
+   */
+  React.useEffect(() => {
+    if (modalState === 'LOADING') {
+      setShowLoader(true)
+      if (isZoomImgLoaded) {
+        setTimeout(() => setShowLoader(false), 1000)
+      }
+    }
+  }, [isZoomImgLoaded, modalState])
+
+  return (
+    <>
+      {img}
+      {showLoader && (
+        <div className='zoom-img-loader-wrapper'>
+          <div className='zoom-img-loader' />
+        </div>
+      )}
+    </>
+  )
+}
+
+export const ZoomImgLoader = (props: typeof Zoom) => (
+  <main aria-label="Story">
+    <h1>
+      ZoomImg with Loading State
+    </h1>
+    <div className="mw-600">
+      <p>
+        This example shows how to provide loading feedback when using a high-resolution&nbsp;
+        <code>zoomImg</code>. The <code>ZoomContent</code> component uses the&nbsp;
+        <code>isZoomImgLoaded</code> prop to display a loading spinner while the
+        high-resolution image is being downloaded.
+      </p>
+      <Zoom
+        {...props}
+        zoomImg={{
+          alt: imgKeaLarge.alt,
+          src: imgKeaLarge.src,
+        }}
+        ZoomContent={CustomZoomContentWithLoader}
+      >
+        <img alt={imgKeaSmall.alt} src={imgKeaSmall.src} width="150" />
+      </Zoom>
+    </div>
+  </main>
+)
+
+// =============================================================================
+
 export const SmallSrcSize = (props: typeof Zoom) => (
   <main aria-label="Story">
     <h1>An image with a small size</h1>
