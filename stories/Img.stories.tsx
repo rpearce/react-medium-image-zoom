@@ -211,14 +211,14 @@ export const ZoomImgLoader = (props: typeof Zoom) => (
     </h1>
     <div className="mw-600">
       <p>
-        This example shows how to provide loading feedback when using a high-resolution&nbsp;
-        <code>zoomImg</code>. The <code>ZoomContent</code> component uses the&nbsp;
+        This example shows how to provide loading feedback when using a high-resolution{' '}
+        <code>zoomImg</code>. The <code>ZoomContent</code> component uses the{' '}
         <code>isZoomImgLoaded</code> prop to display a loading spinner while the
         high-resolution image is being downloaded.
       </p>
       <p>
-        Here the loading spinner is shown on every zoom, but in real-world case
-        the browser caches the image, so you&apos;ll only see the loader at first load
+        Here the loading spinner is shown on every zoom, but in a real-world case,
+        the browser caches the image, so you&apos;ll only see the loader at first load.
       </p>
       <Zoom
         {...props}
@@ -230,9 +230,7 @@ export const ZoomImgLoader = (props: typeof Zoom) => (
       >
         <img alt={imgKeaSmall.alt} src={imgKeaSmall.src} width="150" />
       </Zoom>
-      <p>
-        Zoom component with loading spinner
-      </p>
+      <h2>Code</h2>
       <pre>
         <code>
           {`
