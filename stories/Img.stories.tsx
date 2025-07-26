@@ -1,5 +1,8 @@
 import React from 'react'
+import { createPortal } from 'react-dom'
 import type { Meta } from '@storybook/react-webpack5'
+import * as Dialog from '@radix-ui/react-dialog'
+import * as Drawer from 'vaul'
 
 import { waitFor, within, userEvent, expect } from 'storybook/test'
 
@@ -390,6 +393,136 @@ export const ZoomImageFromInsideDialog = (props: typeof Zoom) => {
     </main>
   )
 }
+
+// =============================================================================
+
+export const ZoomImageInsideRadixDialog = () => (
+  <main aria-label="Story">
+    <h1>Zoom Image From Inside Radix Dialog</h1>
+    <Dialog.Root>
+      <Dialog.Trigger asChild>
+        <button>
+          Open Dialog
+        </button>
+      </Dialog.Trigger>
+
+      <Dialog.Portal>
+        <Dialog.Overlay
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            position: 'fixed',
+            inset: 0,
+          }}
+        />
+        <Dialog.Content
+          style={{
+            backgroundColor: 'white',
+            borderRadius: '8px',
+            padding: '2rem',
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            boxShadow: '0px 10px 38px -10px rgba(22, 23, 24, 0.35)',
+          }}
+        >
+          <p>Zoom works inside a Radix Dialog!</p>
+          <Zoom>
+            <img
+              alt={imgThatWanakaTree.alt}
+              src={imgThatWanakaTree.src}
+              width="300"
+              style={{ marginTop: '1rem', cursor: 'zoom-in' }}
+            />
+          </Zoom>
+          <Dialog.Close
+            asChild
+            style={{
+              marginTop: '1rem',
+              display: 'inline-block',
+              padding: '0.5rem 1rem',
+              background: '#eee',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+          >
+            <button>Close</button>
+          </Dialog.Close>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
+  </main>
+)
+
+// =============================================================================
+
+export const ZoomImageInsideVaulDrawer = () => {
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [drawerContentEl, setDrawerContentEl] = React.useState<HTMLDivElement | null>(null)
+
+  const zoomComp = (
+    <Zoom>
+      <img
+        alt={imgThatWanakaTree.alt}
+        src={imgThatWanakaTree.src}
+        width="300"
+        style={{ marginTop: '1rem', cursor: 'zoom-in' }}
+      />
+    </Zoom>
+  )
+
+  return (
+    <main aria-label="Story">
+      <h1>Zoom Image From Inside Vaul Drawer</h1>
+      <button onClick={() => setIsOpen(true)}>Open Drawer</button>
+      <div style={{ display: 'none' }}>{zoomComp}</div>
+      {isOpen && (
+        <Drawer.Root open={isOpen} onOpenChange={setIsOpen}>
+          <Drawer.Portal>
+            <Drawer.Overlay
+              style={{
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                position: 'fixed',
+                inset: 0,
+              }}
+            />
+            <Drawer.Content
+              ref={(el) => setDrawerContentEl(el)}
+              style={{
+                backgroundColor: 'white',
+                borderTopLeftRadius: '10px',
+                borderTopRightRadius: '10px',
+                padding: '2rem',
+                position: 'fixed',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                maxHeight: '80vh',
+                overflowY: 'auto',
+                boxShadow: '0 -10px 38px -10px rgba(22, 23, 24, 0.35)',
+              }}
+            >
+              <div
+                style={{
+                  width: '100%',
+                  height: '4px',
+                  backgroundColor: '#ccc',
+                  borderRadius: '2px',
+                  margin: '0 auto 1rem',
+                  maxWidth: '40px',
+                }}
+              />
+              <p>Zoom works inside a Vaul Drawer!</p>
+              {drawerContentEl && createPortal(zoomComp, drawerContentEl)}
+              <button onClick={() => setIsOpen(false)}>Close</button>
+            </Drawer.Content>
+          </Drawer.Portal>
+        </Drawer.Root>
+      )}
+    </main>
+  )
+}
+
 // =============================================================================
 
 export const ModalFigureCaption = (props: typeof Zoom) => (
