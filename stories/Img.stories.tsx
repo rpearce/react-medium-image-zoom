@@ -735,6 +735,65 @@ export const SwipeToUnzoomThreshold = (props: typeof Zoom) => (
 )
 
 // =============================================================================
+
+export const SelectCards = (props: typeof Zoom) => {
+  return (
+    <main aria-label="Story">
+      <h1>Selecting cards and zooming without triggering selection state</h1>
+      <div className="mw-600" style={{ display: 'flex', flexDirection: 'column' }}>
+        <ul className="cards">
+          <CardItem
+            alt={imgThatWanakaTree.alt}
+            src={imgThatWanakaTree.src}
+            zoomProps={props}
+          />
+          <CardItem
+            alt={imgGlenorchyLagoon.alt}
+            src={imgGlenorchyLagoon.src}
+            zoomProps={props}
+          />
+        </ul>
+      </div>
+    </main>
+  )
+}
+
+function CardItem({
+  alt,
+  src,
+  zoomProps,
+}: {
+  alt: string,
+  src: string,
+  zoomProps: typeof Zoom,
+}) {
+  const [isSelected, setIsSelected] = React.useState(false)
+
+  const handleItemClick = React.useCallback(() => {
+    setIsSelected(isSelected => !isSelected)
+  }, [])
+
+  return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
+    <li className="card" onClick={handleItemClick}>
+      <label>
+        <input aria-label="Select item" checked={isSelected} type="checkbox" />
+      </label>
+      <Zoom {...zoomProps} wrapElement="span">
+        <img
+          alt={alt}
+          src={src}
+          height="320"
+          width="320"
+          decoding="async"
+          loading="lazy"
+        />
+      </Zoom>
+    </li>
+  )
+}
+
+// =============================================================================
 // INTERACTIONS
 
 export const AutomatedTest = Regular.bind({}, { title: '(Automated Test)' })

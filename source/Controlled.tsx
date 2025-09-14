@@ -527,8 +527,11 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
   /**
    * Report that zooming should occur
    */
-  handleZoom = () => {
+  handleZoom = (e: React.MouseEvent<HTMLButtonElement> | Event) => {
     if (!this.props.isDisabled && this.hasImage()) {
+      e.preventDefault()
+      e.stopPropagation()
+
       this.props.onZoomChange?.(true)
     }
   }
