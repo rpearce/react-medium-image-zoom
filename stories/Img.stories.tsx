@@ -45,11 +45,17 @@ function shuffle<T extends unknown[]>(xs: T): T {
 // =============================================================================
 
 export const Regular = (props: typeof Zoom) => {
+  const handleZoomChange = React.useCallback<
+    NonNullable<React.ComponentProps<typeof Zoom>['onZoomChange']>
+  >((value, { event }) => {
+    console.log('handleZoomChange info!', { value, event })
+  }, [])
+
   return (
     <main aria-label="Story">
       <h1>Zooming a regular image</h1>
       <div className="mw-600" style={{ display: 'flex', flexDirection: 'column' }}>
-        <Zoom {...props} wrapElement="span">
+        <Zoom {...props} onZoomChange={handleZoomChange} wrapElement="span">
           <img
             alt={imgThatWanakaTree.alt}
             src={imgThatWanakaTree.src}
