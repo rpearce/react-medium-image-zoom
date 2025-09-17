@@ -1,5 +1,5 @@
 import React from 'react'
-import { Controlled, ControlledProps } from './Controlled'
+import { Controlled, type ControlledProps } from './Controlled'
 
 // =============================================================================
 
@@ -9,10 +9,9 @@ export type UncontrolledProps =
 export function Uncontrolled ({ onZoomChange, ...props }: UncontrolledProps) {
   const [isZoomed, setIsZoomed] = React.useState(false)
 
-  const handleZoomChange = React.useCallback((
-    value: boolean,
-    { event }: { event: React.SyntheticEvent | Event }
-  ) => {
+  const handleZoomChange = React.useCallback<
+    NonNullable<ControlledProps['onZoomChange']>
+  >((value, { event }) => {
     setIsZoomed(value)
     onZoomChange?.(value, { event })
   }, [onZoomChange])

@@ -3,7 +3,7 @@ import type { Meta } from '@storybook/react-webpack5'
 
 import { waitFor, within, userEvent, expect } from 'storybook/test'
 
-import Zoom, { UncontrolledProps } from '../source'
+import Zoom, { type UncontrolledProps } from '../source'
 import '../source/styles.css'
 import './base.css'
 
