@@ -529,7 +529,6 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
    */
   handleZoom = (e: React.SyntheticEvent | Event) => {
     if (!this.props.isDisabled && this.hasImage()) {
-      e.stopPropagation()
       this.props.onZoomChange?.(true, { event: e })
     }
   }

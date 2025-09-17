@@ -787,6 +787,17 @@ function CardItem({
     setIsSelected(e.currentTarget.checked)
   }, [])
 
+  const handleZoomChange = React.useCallback<
+    NonNullable<React.ComponentProps<typeof Zoom>['onZoomChange']>
+  >((value, { event }) => {
+    event.stopPropagation()
+
+    console.log(
+      'handleZoomChange (after event.stopPropagation())',
+      { value, event }
+    )
+  }, [])
+
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
     <li className="card" onClick={handleItemClick}>
@@ -799,7 +810,7 @@ function CardItem({
           type="checkbox"
         />
       </label>
-      <Zoom {...zoomProps} wrapElement="span">
+      <Zoom {...zoomProps} onZoomChange={handleZoomChange} wrapElement="span">
         <img
           alt={alt}
           src={src}
