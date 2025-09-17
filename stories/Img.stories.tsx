@@ -773,11 +773,25 @@ function CardItem({
     setIsSelected(isSelected => !isSelected)
   }, [])
 
+  const handleInputClick: React.MouseEventHandler<HTMLInputElement> = React.useCallback((e) => {
+    e.stopPropagation()
+  }, [])
+
+  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = React.useCallback((e) => {
+    setIsSelected(e.currentTarget.checked)
+  }, [])
+
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
     <li className="card" onClick={handleItemClick}>
       <label>
-        <input aria-label="Select item" checked={isSelected} type="checkbox" />
+        <input
+          aria-label="Select item"
+          checked={isSelected}
+          onChange={handleInputChange}
+          onClick={handleInputClick}
+          type="checkbox"
+        />
       </label>
       <Zoom {...zoomProps} wrapElement="span">
         <img

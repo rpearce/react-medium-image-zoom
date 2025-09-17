@@ -63,7 +63,7 @@ export interface ControlledProps {
   IconZoom?: React.ElementType
   isDisabled?: boolean
   isZoomed: boolean
-  onZoomChange?: (value: boolean) => void
+  onZoomChange?: (value: boolean, data: { event: React.SyntheticEvent | Event }) => void
   swipeToUnzoomThreshold?: number
   wrapElement?: 'div' | 'span'
   ZoomContent?: (data: {
@@ -71,7 +71,7 @@ export interface ControlledProps {
     img: React.ReactElement | null
     isZoomImgLoaded: boolean
     modalState: ModalState
-    onUnzoom: () => void
+    onUnzoom: (e: Event) => void
   }) => React.ReactElement
   zoomImg?: React.ImgHTMLAttributes<HTMLImageElement>
   zoomMargin?: number
@@ -527,21 +527,19 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
   /**
    * Report that zooming should occur
    */
-  handleZoom = (e: React.MouseEvent<HTMLButtonElement> | Event) => {
+  handleZoom = (e: React.SyntheticEvent | Event) => {
     if (!this.props.isDisabled && this.hasImage()) {
-      e.preventDefault()
       e.stopPropagation()
-
-      this.props.onZoomChange?.(true)
+      this.props.onZoomChange?.(true, { event: e })
     }
   }
 
   /**
    * Report that unzooming should occur
    */
-  handleUnzoom = () => {
+  handleUnzoom = (e: React.SyntheticEvent | Event) => {
     if (!this.props.isDisabled) {
-      this.props.onZoomChange?.(false)
+      this.props.onZoomChange?.(false, { event: e })
     }
   }
 
@@ -553,7 +551,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
   handleBtnUnzoomClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     e.stopPropagation()
-    this.handleUnzoom()
+    this.handleUnzoom(e)
   }
 
   // ===========================================================================
@@ -573,7 +571,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
   handleDialogClick = (e: React.MouseEvent<HTMLDialogElement>) => {
     if (e.target === this.refModalContent.current || e.target === this.refModalImg.current) {
       e.stopPropagation()
-      this.handleUnzoom()
+      this.handleUnzoom(e)
     }
   }
 
@@ -584,7 +582,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
    */
   handleDialogClose = (e: React.SyntheticEvent<HTMLDialogElement>) => {
     e.stopPropagation()
-    this.handleUnzoom()
+    this.handleUnzoom(e)
   }
 
   // ===========================================================================
@@ -596,7 +594,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     if (e.key === 'Escape' || e.keyCode === 27) {
       e.preventDefault()
       e.stopPropagation()
-      this.handleUnzoom()
+      this.handleUnzoom(e)
     }
   }
 
@@ -611,7 +609,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
 
     e.stopPropagation()
     queueMicrotask(() => {
-      this.handleUnzoom()
+      this.handleUnzoom(e)
     })
   }
 
@@ -653,7 +651,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
       if (delta > this.props.swipeToUnzoomThreshold) {
         this.touchYStart = undefined
         this.touchYEnd = undefined
-        this.handleUnzoom()
+        this.handleUnzoom(e)
       }
     }
   }

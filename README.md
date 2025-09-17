@@ -101,6 +101,12 @@ export interface UncontrolledProps {
   // Default: false
   isDisabled?: boolean
 
+  // First argument: boolean value of a new zoomed state (Uncontrolled
+  // component) or a suggested new state (Controlled component).
+  // Second argument: object containing the event that triggered the change.
+  // Default: undefined
+  onZoomChange?: (value: boolean, data: { event: React.SyntheticEvent | Event }) => void
+
   // Swipe gesture threshold after which to unzoom.
   // Default: 10
   swipeToUnzoomThreshold?: number
@@ -137,10 +143,6 @@ export interface ControlledProps {
   // Tell the component whether or not it should be zoomed
   // Default: false
   isZoomed: boolean
-
-  // Listen for hints from the component about when you
-  // should zoom (`true` value) or unzoom (`false` value)
-  onZoomChange?: (value: boolean) => void
 }
 ```
 
