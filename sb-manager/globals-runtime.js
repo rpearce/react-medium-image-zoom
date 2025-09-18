@@ -65338,6 +65338,7 @@ Ao();
 var EM = sd(
   { ...U8 },
   {
+    getKeys: /* @__PURE__ */ a((e) => Object.keys(e).filter((t) => t !== "eventWrapper"), "getKeys"),
     intercept: /* @__PURE__ */ a((e, t) => t[0] === "fireEvent" || e.startsWith("find") || e.startsWith("waitFor"), "intercept")
   }
 );
@@ -65424,7 +65425,7 @@ var {
   prettyFormat: Prt
 } = EM, Trt = _h, { userEvent: Art } = sd(
   { userEvent: _h },
-  { intercept: !0 }
+  { intercept: !0, getKeys: /* @__PURE__ */ a((e) => Object.keys(e).filter((t) => t !== "eventWrapper"), "getKeys") }
 );
 
 // src/test/index.ts
@@ -69025,7 +69026,7 @@ Ct();
 var Ime = N(Wa(), 1), Nn = N(Tme(), 1);
 
 // src/manager-api/version.ts
-var Ame = "9.1.5";
+var Ame = "9.1.6";
 
 // src/manager-api/modules/versions.ts
 var { VERSIONCHECK: wst } = Z, Ome = (0, Ime.default)(1)(() => {
