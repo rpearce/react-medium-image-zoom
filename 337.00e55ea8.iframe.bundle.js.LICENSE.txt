@@ -1,6 +1,6 @@
 /**
  * @license React
- * react.production.js
+ * react-dom.production.js
  *
  * Copyright (c) Meta Platforms, Inc. and affiliates.
  *
