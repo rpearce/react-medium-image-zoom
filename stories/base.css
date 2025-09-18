@@ -143,6 +143,38 @@ img {
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
+.cards {
+  align-items: baseline;
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 2rem;
+}
+.card {
+  border: 1px solid #c0c0c0;
+  border-radius: 8px;
+  flex-shrink: 0;
+  padding-block: 3.2rem 1.2rem;
+  padding-inline: 1.2rem;
+  position: relative;
+}
+.card label {
+  align-items: center;
+  background-color: #fff;
+  display: flex;
+  height: max-content;
+  inset-block-start: 0.8rem;
+  inset-inline: auto 1rem;
+  justify-content: center;
+  position: absolute;
+  width: max-content;
+}
+.card img {
+  object-fit: cover;
+  object-position: center;
+  user-select: none;
+}
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }

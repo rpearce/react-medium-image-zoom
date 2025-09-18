@@ -3,7 +3,7 @@ import type { Meta } from '@storybook/react-webpack5'
 
 import { waitFor, within, userEvent, expect } from 'storybook/test'
 
-import Zoom, { UncontrolledProps } from '../source'
+import Zoom, { type UncontrolledProps } from '../source'
 import '../source/styles.css'
 import './base.css'
 
@@ -45,11 +45,17 @@ function shuffle<T extends unknown[]>(xs: T): T {
 // =============================================================================
 
 export const Regular = (props: typeof Zoom) => {
+  const handleZoomChange = React.useCallback<
+    NonNullable<React.ComponentProps<typeof Zoom>['onZoomChange']>
+  >((value, { event }) => {
+    console.log('handleZoomChange info!', { value, event })
+  }, [])
+
   return (
     <main aria-label="Story">
       <h1>Zooming a regular image</h1>
       <div className="mw-600" style={{ display: 'flex', flexDirection: 'column' }}>
-        <Zoom {...props} wrapElement="span">
+        <Zoom {...props} onZoomChange={handleZoomChange} wrapElement="span">
           <img
             alt={imgThatWanakaTree.alt}
             src={imgThatWanakaTree.src}
@@ -733,6 +739,90 @@ export const SwipeToUnzoomThreshold = (props: typeof Zoom) => (
     </div>
   </main>
 )
+
+// =============================================================================
+
+export const SelectCards = (props: typeof Zoom) => {
+  return (
+    <main aria-label="Story">
+      <h1>Selecting cards and zooming without triggering selection state</h1>
+      <div className="mw-600" style={{ display: 'flex', flexDirection: 'column' }}>
+        <ul className="cards">
+          <CardItem
+            alt={imgThatWanakaTree.alt}
+            src={imgThatWanakaTree.src}
+            zoomProps={props}
+          />
+          <CardItem
+            alt={imgGlenorchyLagoon.alt}
+            src={imgGlenorchyLagoon.src}
+            zoomProps={props}
+          />
+        </ul>
+      </div>
+    </main>
+  )
+}
+
+function CardItem({
+  alt,
+  src,
+  zoomProps,
+}: {
+  alt: string,
+  src: string,
+  zoomProps: typeof Zoom,
+}) {
+  const [isSelected, setIsSelected] = React.useState(false)
+
+  const handleItemClick = React.useCallback(() => {
+    setIsSelected(isSelected => !isSelected)
+  }, [])
+
+  const handleInputClick: React.MouseEventHandler<HTMLInputElement> = React.useCallback((e) => {
+    e.stopPropagation()
+  }, [])
+
+  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = React.useCallback((e) => {
+    setIsSelected(e.currentTarget.checked)
+  }, [])
+
+  const handleZoomChange = React.useCallback<
+    NonNullable<React.ComponentProps<typeof Zoom>['onZoomChange']>
+  >((value, { event }) => {
+    event.stopPropagation()
+
+    console.log(
+      'handleZoomChange (after event.stopPropagation())',
+      { value, event }
+    )
+  }, [])
+
+  return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
+    <li className="card" onClick={handleItemClick}>
+      <label>
+        <input
+          aria-label="Select item"
+          checked={isSelected}
+          onChange={handleInputChange}
+          onClick={handleInputClick}
+          type="checkbox"
+        />
+      </label>
+      <Zoom {...zoomProps} onZoomChange={handleZoomChange} wrapElement="span">
+        <img
+          alt={alt}
+          src={src}
+          height="320"
+          width="320"
+          decoding="async"
+          loading="lazy"
+        />
+      </Zoom>
+    </li>
+  )
+}
 
 // =============================================================================
 // INTERACTIONS
