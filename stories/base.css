@@ -21,7 +21,6 @@ body {
   font-size: 1.6rem;
   font-family: monospace;
   line-height: 1.5;
-  color: #333;
 }
 body,
 input,
@@ -40,6 +39,12 @@ h2 {
 img {
   display: block;
   max-width: 100%;
+}
+.bg-dark {
+  color: #fff;
+}
+.bg-light {
+  color: #333;
 }
 .display-none {
   display: none;

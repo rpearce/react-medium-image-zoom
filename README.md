@@ -1,6 +1,6 @@
 # react-medium-image-zoom
 
-[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![react-medium-image-zoom bundlejs badge](https://deno.bundlejs.com/?q=react-medium-image-zoom&badge=&config={%22esbuild%22:{%22external%22:[%22react%22,%22react-dom%22]}})](https://bundlejs.com/?q=react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-91-orange.svg)](#contributors-)
+[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![react-medium-image-zoom bundlejs badge](https://deno.bundlejs.com/?q=react-medium-image-zoom&badge=&config={%22esbuild%22:{%22external%22:[%22react%22,%22react-dom%22]}})](https://bundlejs.com/?q=react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-92-orange.svg)](#contributors-)
 
 The original [medium.com-inspired image zooming](https://medium.design/image-zoom-on-medium-24d146fc0c20)
 library for [React](https://reactjs.org).
@@ -484,6 +484,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://wener.me/"><img src="https://avatars.githubusercontent.com/u/1777211?v=4?s=40" width="40px;" alt="陈杨文"/><br /><sub><b>陈杨文</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Awenerme" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/napstar-420"><img src="https://avatars.githubusercontent.com/u/100934169?v=4?s=40" width="40px;" alt="Zohaib Khan"/><br /><sub><b>Zohaib Khan</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/commits?author=napstar-420" title="Code">💻</a> <a href="#example-napstar-420" title="Examples">💡</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/rdestefa"><img src="https://avatars.githubusercontent.com/u/67760716?v=4?s=40" width="40px;" alt="Ryan DeStefano"/><br /><sub><b>Ryan DeStefano</b></sub></a><br /><a href="#ideas-rdestefa" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/rpearce/react-medium-image-zoom/pulls?q=is%3Apr+reviewed-by%3Ardestefa" title="Reviewed Pull Requests">👀</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Akhileswar6"><img src="https://avatars.githubusercontent.com/u/159161616?v=4?s=40" width="40px;" alt="Akhileswar Kamale"/><br /><sub><b>Akhileswar Kamale</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3AAkhileswar6" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
