@@ -902,6 +902,15 @@
         "ideas",
         "review"
       ]
+    },
+    {
+      "login": "Akhileswar6",
+      "name": "Akhileswar Kamale",
+      "avatar_url": "https://avatars.githubusercontent.com/u/159161616?v=4",
+      "profile": "https://github.com/Akhileswar6",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "repoType": "github",
