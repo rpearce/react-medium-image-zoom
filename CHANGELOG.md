@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.4.0
+
+### Minor Changes
+
+- 8d950e4: Add support for onZoomChange reporting to Uncontrolled components and include additional argument housing the fired event
+
+### Patch Changes
+
+- 855bc02: ensure open modal has pointer-events to fix 3rd party probs
+
 ## 5.3.0
 
 ### Minor Changes
