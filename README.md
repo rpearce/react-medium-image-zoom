@@ -105,7 +105,10 @@ export interface UncontrolledProps {
   // component) or a suggested new state (Controlled component).
   // Second argument: object containing the event that triggered the change.
   // Default: undefined
-  onZoomChange?: (value: boolean, data: { event: React.SyntheticEvent | Event }) => void
+  onZoomChange?: (
+    value: boolean,
+    data: { event: React.SyntheticEvent | Event }
+  ) => void
 
   // Swipe gesture threshold after which to unzoom.
   // Default: 10
