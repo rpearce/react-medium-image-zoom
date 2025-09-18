@@ -892,6 +892,16 @@
         "code",
         "example"
       ]
+    },
+    {
+      "login": "rdestefa",
+      "name": "Ryan DeStefano",
+      "avatar_url": "https://avatars.githubusercontent.com/u/67760716?v=4",
+      "profile": "https://github.com/rdestefa",
+      "contributions": [
+        "ideas",
+        "review"
+      ]
     }
   ],
   "repoType": "github",
