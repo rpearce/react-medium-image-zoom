@@ -105,7 +105,7 @@
     "neostandard": "^0.12.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "rollup": "^4.52.3",
+    "rollup": "^4.52.4",
     "rollup-plugin-dts": "^6.2.3",
     "storybook": "^9.1.10",
     "typescript": "^5.9.3",
