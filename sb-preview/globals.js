@@ -1,12 +1,7 @@
-import ESM_COMPAT_Module from "node:module";
-import { fileURLToPath as ESM_COMPAT_fileURLToPath } from 'node:url';
-import { dirname as ESM_COMPAT_dirname } from 'node:path';
-const __filename = ESM_COMPAT_fileURLToPath(import.meta.url);
-const __dirname = ESM_COMPAT_dirname(__filename);
-const require = ESM_COMPAT_Module.createRequire(import.meta.url);
+import "../_browser-chunks/chunk-MM7DTO55.js";
 
 // src/preview/globals/globals.ts
-var _ = {
+var globalsNameReferenceMap = {
   "@storybook/global": "__STORYBOOK_MODULE_GLOBAL__",
   "storybook/test": "__STORYBOOK_MODULE_TEST__",
   "storybook/actions": "__STORYBOOK_MODULE_ACTIONS__",
@@ -16,10 +11,11 @@ var _ = {
   "storybook/internal/core-events": "__STORYBOOK_MODULE_CORE_EVENTS__",
   "storybook/internal/preview-errors": "__STORYBOOK_MODULE_CORE_EVENTS_PREVIEW_ERRORS__",
   "storybook/internal/types": "__STORYBOOK_MODULE_TYPES__",
-  // @deprecated TODO: Remove in 9.1
+  // @deprecated TODO: Remove in 9.1 or some point in the future, I guess
   "storybook/internal/preview-api": "__STORYBOOK_MODULE_PREVIEW_API__"
-}, o = Object.keys(_);
+};
+var globalPackages = Object.keys(globalsNameReferenceMap);
 export {
-  o as globalPackages,
-  _ as globalsNameReferenceMap
+  globalPackages,
+  globalsNameReferenceMap
 };
