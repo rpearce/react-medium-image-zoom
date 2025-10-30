@@ -82702,7 +82702,7 @@ var import_memoizerific10 = __toESM(require_memoizerific(), 1);
 var import_semver = __toESM(require_semver2(), 1);
 
 // src/manager-api/version.ts
-var version = "10.0.0";
+var version = "10.0.1";
 
 // src/manager-api/modules/versions.ts
 var { VERSIONCHECK } = scope;
