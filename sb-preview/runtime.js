@@ -42370,20 +42370,27 @@ var enhanceContext = /* @__PURE__ */ __name(async (context) => {
       get: /* @__PURE__ */ __name(() => clipboard, "get"),
       configurable: true
     });
-    let currentFocus = HTMLElement.prototype.focus;
     if (!patchedFocus) {
+      const originalFocus = HTMLElement.prototype.focus;
+      let currentFocus = HTMLElement.prototype.focus;
+      const focusingElements = /* @__PURE__ */ new Set();
       Object.defineProperties(HTMLElement.prototype, {
         focus: {
           configurable: true,
           set: /* @__PURE__ */ __name((newFocus) => {
             currentFocus = newFocus;
-            patchedFocus = true;
           }, "set"),
-          get: /* @__PURE__ */ __name(() => {
+          get() {
+            if (focusingElements.has(this)) {
+              return originalFocus;
+            }
+            focusingElements.add(this);
+            setTimeout(() => focusingElements.delete(this), 0);
             return currentFocus;
-          }, "get")
+          }
         }
       });
+      patchedFocus = true;
     }
   }
 }, "enhanceContext");
