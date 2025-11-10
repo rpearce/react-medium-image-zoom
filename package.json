@@ -89,7 +89,7 @@
     "@rollup/plugin-typescript": "^12.3.0",
     "@storybook/addon-a11y": "^10.0.6",
     "@storybook/addon-docs": "^10.0.6",
-    "@storybook/addon-webpack5-compiler-swc": "^4.0.1",
+    "@storybook/addon-webpack5-compiler-swc": "^4.0.2",
     "@storybook/react-webpack5": "^10.0.6",
     "@storybook/test-runner": "^0.24.1",
     "@types/eslint__js": "^9.14.0",
@@ -105,11 +105,11 @@
     "neostandard": "^0.12.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "rollup": "^4.53.0",
+    "rollup": "^4.53.2",
     "rollup-plugin-dts": "^6.2.3",
     "storybook": "^10.0.6",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.3",
+    "typescript-eslint": "^8.46.4",
     "eslint-plugin-storybook": "10.0.6"
   },
   "peerDependencies": {
