@@ -12341,7 +12341,7 @@ function throttle(func, throttleMs, { signal, edges = ["leading", "trailing"] } 
         debounced.cancel();
       }
     }
-    debounced(...args);
+    debounced.apply(this, args);
   }, "throttled");
   throttled.cancel = debounced.cancel;
   throttled.flush = debounced.flush;
