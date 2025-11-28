@@ -1,4 +1,4 @@
-import "../_browser-chunks/chunk-MM7DTO55.js";
+import "../_browser-chunks/chunk-A242L54C.js";
 
 // src/preview/globals/globals.ts
 var globalsNameReferenceMap = {
@@ -13,8 +13,7 @@ var globalsNameReferenceMap = {
   "storybook/internal/types": "__STORYBOOK_MODULE_TYPES__",
   // @deprecated TODO: Remove in 9.1 or some point in the future, I guess
   "storybook/internal/preview-api": "__STORYBOOK_MODULE_PREVIEW_API__"
-};
-var globalPackages = Object.keys(globalsNameReferenceMap);
+}, globalPackages = Object.keys(globalsNameReferenceMap);
 export {
   globalPackages,
   globalsNameReferenceMap
