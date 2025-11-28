@@ -6544,6 +6544,7 @@ var SUPPORTED_FRAMEWORKS = [
   "preact-vite" /* PREACT_VITE */,
   "react-native-web-vite" /* REACT_NATIVE_WEB_VITE */,
   "react-vite" /* REACT_VITE */,
+  "solid" /* SOLID */,
   "svelte-vite" /* SVELTE_VITE */,
   "sveltekit" /* SVELTEKIT */,
   "vue3-vite" /* VUE3_VITE */,
@@ -10739,7 +10740,7 @@ var CodeWrapper = styled.div(({ theme }) => ({
         },
         {
           id: "renderComponent",
-          label: "Render a component",
+          label: "Render your first component",
           criteria: "A story finished rendering successfully",
           subscribe: ({ api, done }) => api.on(
             STORY_FINISHED,
@@ -10804,7 +10805,6 @@ export const Primary: Story = {
         },
         {
           id: "moreComponents",
-          after: ["renderComponent"],
           label: "Add 5 components",
           content: ({ api }) => react_default.createElement(react_default.Fragment, null, react_default.createElement("p", null, "Storybook gets better as you add more components. Start with the easy ones, like Button or Avatar, and work your way up to more complex components, like Select, Autocomplete, or even full pages."), react_default.createElement(
             "img",
@@ -10838,7 +10838,6 @@ export const Primary: Story = {
         },
         {
           id: "moreStories",
-          after: ["renderComponent"],
           label: "Add 20 stories",
           content: ({ api }) => react_default.createElement(react_default.Fragment, null, react_default.createElement("p", null, "More stories for your components means better documentation and more test coverage."), react_default.createElement(
             "img",
@@ -10885,7 +10884,6 @@ export const Primary: Story = {
       items: [
         {
           id: "controls",
-          after: ["renderComponent"],
           label: "Change a story with Controls",
           available: () => !!globalThis?.FEATURES?.controls,
           criteria: "Story args are updated",
@@ -10914,7 +10912,6 @@ export const Primary: Story = {
         },
         {
           id: "viewports",
-          after: ["renderComponent"],
           label: "Check responsiveness with Viewports",
           available: () => !!globalThis?.FEATURES?.viewport,
           criteria: "Viewport global is updated",
@@ -10943,7 +10940,6 @@ export const Primary: Story = {
         },
         {
           id: "organizeStories",
-          after: ["renderComponent"],
           label: "Group your components",
           criteria: "A root node exists in the index",
           subscribe: subscribeToIndex(
@@ -11084,7 +11080,6 @@ export default {
         },
         {
           id: "writeInteractions",
-          after: ["renderComponent"],
           label: "Test functionality with interactions",
           available: () => !!globalThis?.FEATURES?.interactions,
           criteria: "At least one story with a play or test function",
