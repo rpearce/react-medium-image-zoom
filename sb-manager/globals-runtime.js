@@ -59891,7 +59891,7 @@ init_dist();
 var import_memoizerific8 = __toESM(require_memoizerific(), 1), import_semver = __toESM(require_semver2(), 1);
 
 // src/manager-api/version.ts
-var version = "10.1.2";
+var version = "10.1.3";
 
 // src/manager-api/modules/versions.ts
 var { VERSIONCHECK } = scope, getVersionCheckData = (0, import_memoizerific8.default)(1)(() => {
@@ -67755,7 +67755,7 @@ var TooltipProvider = ({
         placement,
         offset: offset3,
         onOpenChange,
-        style: { outlineColor: "transparent" },
+        style: { outline: "none" },
         ...props
       },
       tooltip
@@ -73412,24 +73412,16 @@ var PopoverProvider = ({
       ...props
     },
     import_react156.default.createElement($3b117e43dc0ca95d$export$27c701ed9e449e99, null, children),
-    import_react156.default.createElement(
-      $07b14b47974efb58$export$5b6b19405a83ff9d,
+    import_react156.default.createElement($07b14b47974efb58$export$5b6b19405a83ff9d, { placement, offset: offset3, style: { outline: "none" } }, import_react156.default.createElement(
+      Popover,
       {
-        placement,
-        offset: offset3,
-        style: { outlineColor: "transparent" }
+        hasChrome,
+        hideLabel: closeLabel,
+        onHide: hasCloseButton ? onHide : void 0,
+        padding
       },
-      import_react156.default.createElement(
-        Popover,
-        {
-          hasChrome,
-          hideLabel: closeLabel,
-          onHide: hasCloseButton ? onHide : void 0,
-          padding
-        },
-        typeof popover == "function" ? popover({ onHide }) : popover
-      )
-    )
+      typeof popover == "function" ? popover({ onHide }) : popover
+    ))
   );
 };
 

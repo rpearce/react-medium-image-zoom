@@ -18244,7 +18244,7 @@ var groupByType = (filters) => filters.reduce(
     if (!(count === 0 && type === "built-in"))
       return {
         id: `filter-${type}-${id}`,
-        content: react_default.createElement(ActionList.HoverItem, { targetId: `filter-${type}-${id}` }, react_default.createElement(ActionList.Action, { as: "label", tabIndex: -1, tooltip: toggleTooltip }, react_default.createElement(ActionList.Icon, null, isExcluded ? react_default.createElement(DeleteIcon, null) : isIncluded ? null : icon, react_default.createElement(
+        content: react_default.createElement(ActionList.HoverItem, { targetId: `filter-${type}-${id}` }, react_default.createElement(ActionList.Action, { as: "label", ariaLabel: !1, tabIndex: -1, tooltip: toggleTooltip }, react_default.createElement(ActionList.Icon, null, isExcluded ? react_default.createElement(DeleteIcon, null) : isIncluded ? null : icon, react_default.createElement(
           Form.Checkbox,
           {
             checked: isChecked,
@@ -18299,6 +18299,7 @@ var groupByType = (filters) => filters.reduce(
   ))), links.map((group) => react_default.createElement(ActionList, { key: group.map((link) => link.id).join("_") }, group.map((link) => react_default.createElement(Fragment, { key: link.id }, link.content)))), !hasUserTags && react_default.createElement(ActionList, { as: "div" }, react_default.createElement(ActionList.Item, { as: "div" }, react_default.createElement(
     ActionList.Link,
     {
+      ariaLabel: !1,
       href: api.getDocsUrl({ subpath: "writing-stories/tags#custom-tags" }),
       target: "_blank"
     },
