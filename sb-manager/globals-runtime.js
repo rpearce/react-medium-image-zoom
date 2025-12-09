@@ -39224,7 +39224,26 @@ var StorybookError = class _StorybookError extends Error {
      * user.
      */
     this.isHandledError = !1;
-    this.category = props.category, this.documentation = props.documentation ?? !1, this.code = props.code, this.isHandledError = props.isHandledError ?? !1, this.name = props.name;
+    /**
+     * A collection of sub errors which relate to a parent error.
+     *
+     * Sub-errors are used to represent multiple related errors that occurred together. When a
+     * StorybookError with sub-errors is sent to telemetry, both the parent error and each sub-error
+     * are sent as separate telemetry events. This allows for better error tracking and debugging.
+     *
+     * @example
+     *
+     * ```ts
+     * const error1 = new SomeError();
+     * const error2 = new AnotherError();
+     * const parentError = new ParentError({
+     *   // ... other props
+     *   subErrors: [error1, error2],
+     * });
+     * ```
+     */
+    this.subErrors = [];
+    this.category = props.category, this.documentation = props.documentation ?? !1, this.code = props.code, this.isHandledError = props.isHandledError ?? !1, this.name = props.name, this.subErrors = props.subErrors ?? [];
   }
   get fullErrorCode() {
     return parseErrorCode({ code: this.code, category: this.category });
@@ -59891,7 +59910,7 @@ init_dist();
 var import_memoizerific8 = __toESM(require_memoizerific(), 1), import_semver = __toESM(require_semver2(), 1);
 
 // src/manager-api/version.ts
-var version = "10.1.4";
+var version = "10.1.5";
 
 // src/manager-api/modules/versions.ts
 var { VERSIONCHECK } = scope, getVersionCheckData = (0, import_memoizerific8.default)(1)(() => {
