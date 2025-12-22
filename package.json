@@ -105,11 +105,11 @@
     "neostandard": "^0.12.2",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "rollup": "^4.53.5",
+    "rollup": "^4.54.0",
     "rollup-plugin-dts": "^6.3.0",
     "storybook": "^10.1.10",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.50.0",
+    "typescript-eslint": "^8.50.1",
     "eslint-plugin-storybook": "10.1.10"
   },
   "peerDependencies": {
