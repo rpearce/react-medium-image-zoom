@@ -32669,20 +32669,20 @@ var checkGlobals = (parameters2) => {
   parameters2 && (checkGlobals(parameters2), checkStorySort(parameters2));
 };
 function processCSFFile(moduleExports, importPath, title) {
-  let { default: defaultExport, __namedExportsOrder, ...namedExports } = moduleExports, firstStory = Object.values(namedExports)[0];
-  if (isStory(firstStory)) {
-    let meta2 = normalizeComponentAnnotations(firstStory.meta.input, title, importPath);
+  let { default: defaultExport, __namedExportsOrder, ...namedExports } = moduleExports, factoryStory = Object.values(namedExports).find((it) => isStory(it));
+  if (factoryStory) {
+    let meta2 = normalizeComponentAnnotations(factoryStory.meta.input, title, importPath);
     checkDisallowedParameters(meta2.parameters);
     let csfFile2 = { meta: meta2, stories: {}, moduleExports };
     return Object.keys(namedExports).forEach((key) => {
-      if (isExportStory(key, meta2)) {
+      if (isExportStory(key, meta2) && isStory(namedExports[key])) {
         let story = namedExports[key], storyMeta = normalizeStory(key, story.input, meta2);
         checkDisallowedParameters(storyMeta.parameters), csfFile2.stories[storyMeta.id] = storyMeta, getStoryChildren(story).forEach((child) => {
           let name = child.input.name, childId = toTestId(storyMeta.id, name);
           child.input.parameters ??= {}, child.input.parameters.__id = childId, csfFile2.stories[childId] = normalizeStory(name, child.input, meta2);
         });
       }
-    }), csfFile2.projectAnnotations = firstStory.meta.preview.composed, csfFile2;
+    }), csfFile2.projectAnnotations = factoryStory.meta.preview.composed, csfFile2;
   }
   let meta = normalizeComponentAnnotations(
     defaultExport,
