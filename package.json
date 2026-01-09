@@ -84,7 +84,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
-    "@eslint/compat": "^2.0.0",
+    "@eslint/compat": "^2.0.1",
     "@eslint/js": "^9.39.2",
     "@rollup/plugin-typescript": "^12.3.0",
     "@storybook/addon-a11y": "^10.1.11",
