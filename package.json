@@ -93,7 +93,7 @@
     "@storybook/react-webpack5": "^10.1.11",
     "@storybook/test-runner": "^0.24.2",
     "@types/eslint__js": "^9.14.0",
-    "@types/node": "^25.0.7",
+    "@types/node": "^25.0.9",
     "@types/react": "^19.2.8",
     "@types/react-dom": "^19.2.3",
     "all-contributors-cli": "^6.26.1",
