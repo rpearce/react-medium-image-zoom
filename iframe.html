@@ -137,7 +137,13 @@
     margin: auto;
     padding: 30px;
     border-radius: 10px;
-    background: rgba(0, 0, 0, 0.03);
+    background: rgb(247, 247, 247);
+    color: rgb(46, 52, 56);
+
+    & * {
+      background: rgb(247, 247, 247);
+      color: rgb(46, 52, 56);
+    }
   }
 
   .sb-nopreview_heading {
@@ -151,10 +157,33 @@
     width: 100vw;
     min-height: 100vh;
     box-sizing: border-box;
+  }
+
+  .sb-errordisplay_main {
+    margin: auto;
+    padding: 24px;
+    display: flex;
+    box-sizing: border-box;
+
+    flex-direction: column;
+    min-height: 100%;
+    width: 100%;
+    border-radius: 6px;
+    background: white;
+    color: black;
+    border: 1px solid #ff0000;
+    box-shadow: 0 0 64px rgba(0, 0, 0, 0.1);
+    gap: 24px;
 
     & ol {
       padding-left: 18px;
       margin: 0;
+    }
+
+    /* Redefine colors to ensure readability regardless of user-provided * selectors. */
+    * {
+      background: white;
+      color: black;
     }
 
     & h1 {
@@ -194,46 +223,35 @@
     & a {
       color: currentColor;
     }
-  }
 
-  .sb-errordisplay_main {
-    margin: auto;
-    padding: 24px;
-    display: flex;
-    box-sizing: border-box;
+    & .sb-errordisplay_code {
+      padding: 10px;
+      flex: 1;
+      background: #242424;
+      color: #c6c6c6;
+      box-sizing: border-box;
 
-    flex-direction: column;
-    min-height: 100%;
-    width: 100%;
-    border-radius: 6px;
-    background: white;
-    border: 1px solid #ff0000;
-    box-shadow: 0 0 64px rgba(0, 0, 0, 0.1);
-    gap: 24px;
-  }
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 19px;
+      border-radius: 4px;
 
-  .sb-errordisplay_code {
-    padding: 10px;
-    flex: 1;
-    background: #242424;
-    color: #c6c6c6;
-    box-sizing: border-box;
+      font-family:
+        'Operator Mono', 'Fira Code Retina', 'Fira Code', 'FiraCode-Retina', 'Andale Mono',
+        'Lucida Console', Consolas, Monaco, monospace;
+      margin: 0;
+      overflow: auto;
 
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 19px;
-    border-radius: 4px;
+      & code {
+        background-color: inherit;
+        color: inherit;
+      }
+    }
 
-    font-family:
-      'Operator Mono', 'Fira Code Retina', 'Fira Code', 'FiraCode-Retina', 'Andale Mono',
-      'Lucida Console', Consolas, Monaco, monospace;
-    margin: 0;
-    overflow: auto;
-  }
-
-  .sb-errordisplay pre {
-    white-space: pre-wrap;
-    white-space: revert;
+    & .sb-errordisplay pre {
+      white-space: pre-wrap;
+      white-space: revert;
+    }
   }
 
   @-webkit-keyframes sb-rotate360 {
@@ -507,7 +525,7 @@
           
       
           
-            window['FEATURES'] = {"argTypeTargetsV7":true,"legacyDecoratorFileOrder":false,"disallowImplicitActionsInRenderV8":true,"viewport":true,"highlight":true,"controls":true,"interactions":true,"actions":true,"backgrounds":true,"outline":true,"measure":true,"interactionsDebugger":true};
+            window['FEATURES'] = {"argTypeTargetsV7":true,"legacyDecoratorFileOrder":false,"disallowImplicitActionsInRenderV8":true,"viewport":true,"highlight":true,"controls":true,"interactions":true,"actions":true,"backgrounds":true,"outline":true,"measure":true,"sidebarOnboardingChecklist":true,"interactionsDebugger":true};
           
       
           
@@ -526,8 +544,8 @@
       
       import './mocker-runtime-injected.js';
       
-      import './runtime~main.7a9a9aeb.iframe.bundle.js';
+      import './runtime~main.07c03a51.iframe.bundle.js';
       
-      import './445.f4097460.iframe.bundle.js';
+      import './592.6490aa7d.iframe.bundle.js';
       
-      import './main.0af1caea.iframe.bundle.js';</script></body></html>
+      import './main.22181a50.iframe.bundle.js';</script></body></html>
