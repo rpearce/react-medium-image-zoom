@@ -259,7 +259,7 @@ Closes #164, #166, #213, #227, #259, #265, #281, #282
 - Renamed `openText` to `a11yNameButtonZoom`
 - Images must meet these `querySelector` criteria to be found:
   ```js
-  ':is(img, svg, [role="img"], [data-zoom]):not([aria-hidden="true"])';
+  ':is(img, svg, [role="img"], [data-zoom]):not([aria-hidden="true"])'
   ```
 
 ### Removed

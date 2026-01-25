@@ -18,9 +18,6 @@ jobs:
       - name: Install
         uses: ./.github/actions/install
 
-      - name: Run the CI script
-        run: pnpm run ci
-
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1

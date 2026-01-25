@@ -1,5 +1,5 @@
 import React from 'react'
-import type { Meta } from '@storybook/react-webpack5'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 import Zoom from '../source'
 import '../source/styles.css'
@@ -14,7 +14,11 @@ const meta: Meta<typeof Zoom> = {
 
 export default meta
 
-export const Picture = (props) => (
+// =============================================================================
+
+type Story = StoryFn<typeof Zoom>
+
+export const Picture: Story = props => (
   <main aria-label="Story">
     <h1>{'Zoom an <img /> in a <picture> element with a <source />'}</h1>
     <div className="mw-600">

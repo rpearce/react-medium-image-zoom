@@ -1,5 +1,5 @@
 import React from 'react'
-import type { Meta } from '@storybook/react-webpack5'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 import { waitFor, within, userEvent, expect } from 'storybook/test'
 
@@ -26,6 +26,8 @@ const meta: Meta<typeof Zoom> = {
 
 export default meta
 
+type Story = StoryFn<typeof meta>
+
 // =============================================================================
 
 // Modern Fisher-Yates shuffle algo
@@ -44,7 +46,7 @@ function shuffle<T extends unknown[]>(xs: T): T {
 
 // =============================================================================
 
-export const Regular = (props: typeof Zoom) => {
+export const Regular: Story = props => {
   const handleZoomChange = React.useCallback<
     NonNullable<React.ComponentProps<typeof Zoom>['onZoomChange']>
   >((value, { event }) => {
@@ -54,7 +56,10 @@ export const Regular = (props: typeof Zoom) => {
   return (
     <main aria-label="Story">
       <h1>Zooming a regular image</h1>
-      <div className="mw-600" style={{ display: 'flex', flexDirection: 'column' }}>
+      <div
+        className="mw-600"
+        style={{ display: 'flex', flexDirection: 'column' }}
+      >
         <Zoom {...props} onZoomChange={handleZoomChange} wrapElement="span">
           <img
             alt={imgThatWanakaTree.alt}
@@ -71,7 +76,7 @@ export const Regular = (props: typeof Zoom) => {
 
 // =============================================================================
 
-export const ZoomMargin = (props: typeof Zoom) => (
+export const ZoomMargin: Story = props => (
   <main aria-label="Story">
     <h1>Setting a zoomMargin of 45(px)</h1>
     <div className="mw-600">
@@ -93,7 +98,7 @@ export const ZoomMargin = (props: typeof Zoom) => (
 
 // =============================================================================
 
-export const SmallPortrait = (props: typeof Zoom) => (
+export const SmallPortrait: Story = props => (
   <main aria-label="Story">
     <h1>A portrait image with a small width specified</h1>
     <div className="mw-600">
@@ -113,7 +118,7 @@ export const SmallPortrait = (props: typeof Zoom) => (
 
 // =============================================================================
 
-export const SVGSource = (props: typeof Zoom) => (
+export const SVGSource: Story = props => (
   <main aria-label="Story">
     <h1>An image with an SVG src</h1>
     <div className="mw-600">
@@ -132,7 +137,7 @@ export const SVGSource = (props: typeof Zoom) => (
 
 // =============================================================================
 
-export const DataSVGSource = () => (
+export const DataSVGSource: Story = () => (
   <main aria-label="Story">
     <h1>
       An image with a <code>data:image/svg+xml</code> <code>src</code>
@@ -150,7 +155,7 @@ export const DataSVGSource = () => (
 
 // =============================================================================
 
-export const ProvideZoomImg = (props: typeof Zoom) => (
+export const ProvideZoomImg: Story = props => (
   <main aria-label="Story">
     <h1>
       An image with a larger <code>zoomImg</code>
@@ -181,10 +186,7 @@ const CustomZoomContentWithLoader: UncontrolledProps['ZoomContent'] = ({
   isZoomImgLoaded,
   modalState,
 }) => {
-  const [
-    showLoader,
-    setShowLoader,
-  ] = React.useState(!isZoomImgLoaded)
+  const [showLoader, setShowLoader] = React.useState(!isZoomImgLoaded)
 
   /**
    * Delay the loader so the loading spinner is noticeable
@@ -202,29 +204,28 @@ const CustomZoomContentWithLoader: UncontrolledProps['ZoomContent'] = ({
     <>
       {img}
       {showLoader && (
-        <div className='zoom-img-loader-wrapper'>
-          <div className='zoom-img-loader' />
+        <div className="zoom-img-loader-wrapper">
+          <div className="zoom-img-loader" />
         </div>
       )}
     </>
   )
 }
 
-export const ZoomImgLoader = (props: typeof Zoom) => (
+export const ZoomImgLoader: Story = props => (
   <main aria-label="Story">
-    <h1>
-      ZoomImg with Loading State
-    </h1>
+    <h1>ZoomImg with Loading State</h1>
     <div className="mw-600">
       <p>
-        This example shows how to provide loading feedback when using a high-resolution{' '}
-        <code>zoomImg</code>. The <code>ZoomContent</code> component uses the{' '}
-        <code>isZoomImgLoaded</code> prop to display a loading spinner while the
-        high-resolution image is being downloaded.
+        This example shows how to provide loading feedback when using a
+        high-resolution <code>zoomImg</code>. The <code>ZoomContent</code>{' '}
+        component uses the <code>isZoomImgLoaded</code> prop to display a
+        loading spinner while the high-resolution image is being downloaded.
       </p>
       <p>
-        Here the loading spinner is shown on every zoom, but in a real-world case,
-        the browser caches the image, so you&apos;ll only see the loader at first load.
+        Here the loading spinner is shown on every zoom, but in a real-world
+        case, the browser caches the image, so you&apos;ll only see the loader
+        at first load.
       </p>
       <Zoom
         {...props}
@@ -273,7 +274,7 @@ const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({
 
 // =============================================================================
 
-export const SmallSrcSize = (props: typeof Zoom) => (
+export const SmallSrcSize: Story = props => (
   <main aria-label="Story">
     <h1>An image with a small size</h1>
     <div className="mw-600">
@@ -290,7 +291,7 @@ export const SmallSrcSize = (props: typeof Zoom) => (
 
 // =============================================================================
 
-export const CustomModalStyles = (props: typeof Zoom) => {
+export const CustomModalStyles: Story = props => {
   return (
     <main aria-label="Story">
       <h1>Custom Modal Styles</h1>
@@ -345,7 +346,7 @@ export const CustomModalStyles = (props: typeof Zoom) => {
 
 // =============================================================================
 
-export const ZoomImageFromInsideDialog = (props: typeof Zoom) => {
+export const ZoomImageFromInsideDialog: Story = props => {
   const refBtn = React.useRef<HTMLButtonElement>(null)
   const refModal = React.useRef<HTMLDialogElement>(null)
 
@@ -398,7 +399,7 @@ export const ZoomImageFromInsideDialog = (props: typeof Zoom) => {
 }
 // =============================================================================
 
-export const ModalFigureCaption = (props: typeof Zoom) => (
+export const ModalFigureCaption: Story = props => (
   <main aria-label="Story">
     <h1>Modal With Figure And Caption</h1>
     <p>
@@ -486,7 +487,7 @@ interface DelayedImgProps {
   src: string
   width: string
   height: string
-};
+}
 
 const DelayedImg = (props: DelayedImgProps) => {
   const { alt, height, src, timer, width } = props
@@ -526,7 +527,7 @@ const DelayedImg = (props: DelayedImgProps) => {
   )
 }
 
-export const DelayedImageRender = (props: typeof Zoom) => {
+export const DelayedImageRender: Story = props => {
   const { timer } = useTimer(5000)
 
   return (
@@ -557,7 +558,7 @@ export const DelayedImageRender = (props: typeof Zoom) => {
 
 // =============================================================================
 
-export const DelayedDisplayNone = (props: typeof Zoom) => {
+export const DelayedDisplayNone: Story = props => {
   const { timer } = useTimer(5000)
   const classImg = timer === 0 ? undefined : 'display-none'
 
@@ -591,7 +592,7 @@ export const DelayedDisplayNone = (props: typeof Zoom) => {
 
 // =============================================================================
 
-export const CustomButtonIcons = (props: typeof Zoom) => {
+export const CustomButtonIcons: Story = props => {
   React.useEffect(() => {
     document.body.classList.add('change-icons')
 
@@ -621,7 +622,7 @@ export const CustomButtonIcons = (props: typeof Zoom) => {
 
 // =============================================================================
 
-export const InlineImage = (props: typeof Zoom) => (
+export const InlineImage: Story = props => (
   <main aria-label="Story">
     <h1>Inline Image</h1>
     <p className="inline">
@@ -641,24 +642,28 @@ export const InlineImage = (props: typeof Zoom) => (
 
 // =============================================================================
 
-export const CycleImages = (props: typeof Zoom) => {
-  const [img, setImg] = React.useState(imgThatWanakaTree)
+export const CycleImages: Story = props => {
+  const [img, setImg] = React.useState<{ alt: string; src: string }>(
+    imgThatWanakaTree,
+  )
 
   React.useEffect(() => {
     async function runCycle() {
       while (true) {
         await delay(3000)
 
-        setImg(shuffle([
-          imgThatWanakaTree,
-          imgEarth,
-          imgNzMap,
-          imgTekapo,
-          imgKeaLarge,
-          imgTeAraiPoint,
-          imgGlenorchyLagoon,
-          imgHookerValleyTrack,
-        ])[0])
+        setImg(
+          shuffle([
+            imgThatWanakaTree,
+            imgEarth,
+            imgNzMap,
+            imgTekapo,
+            imgKeaLarge,
+            imgTeAraiPoint,
+            imgGlenorchyLagoon,
+            imgHookerValleyTrack,
+          ] as const)[0],
+        )
       }
     }
 
@@ -690,13 +695,12 @@ export const CycleImages = (props: typeof Zoom) => {
 
 // =============================================================================
 
-export const SwipeToUnzoomDisabled = (props: typeof Zoom) => (
+export const SwipeToUnzoomDisabled: Story = props => (
   <main aria-label="Story">
     <h1>Swipe to Unzoom Disabled</h1>
     <p>
-      This example demonstrates preventing swipe gestures from
-      unzooming when an image is zoomed. This is best tested on
-      a touchscreen device!
+      This example demonstrates preventing swipe gestures from unzooming when an
+      image is zoomed. This is best tested on a touchscreen device!
     </p>
     <div>
       <Zoom {...props} canSwipeToUnzoom={false}>
@@ -712,19 +716,18 @@ export const SwipeToUnzoomDisabled = (props: typeof Zoom) => (
   </main>
 )
 
-export const SwipeToUnzoomThreshold = (props: typeof Zoom) => (
+export const SwipeToUnzoomThreshold: Story = props => (
   <main aria-label="Story">
     <h1>Swipe to Unzoom Threshold</h1>
     <p>
-      This example demonstrates increasing the threshold
-      required for a swipe gesture on a touchscreen device to
-      unzoom when an image is zoomed. This is best tested on
-      a touchscreen device!
+      This example demonstrates increasing the threshold required for a swipe
+      gesture on a touchscreen device to unzoom when an image is zoomed. This is
+      best tested on a touchscreen device!
     </p>
     <p>
-      The default is <code>10</code> (px), but this example
-      is set to <code>200</code> (px); that&apos;s how far
-      you&apos;ll have to move your finger across the screen.
+      The default is <code>10</code> (px), but this example is set to{' '}
+      <code>200</code> (px); that&apos;s how far you&apos;ll have to move your
+      finger across the screen.
     </p>
     <div>
       <Zoom {...props} swipeToUnzoomThreshold={200}>
@@ -742,21 +745,24 @@ export const SwipeToUnzoomThreshold = (props: typeof Zoom) => (
 
 // =============================================================================
 
-export const SelectCards = (props: typeof Zoom) => {
+export const SelectCards: Story = props => {
   return (
     <main aria-label="Story">
       <h1>Selecting cards and zooming without triggering selection state</h1>
-      <div className="mw-600" style={{ display: 'flex', flexDirection: 'column' }}>
+      <div
+        className="mw-600"
+        style={{ display: 'flex', flexDirection: 'column' }}
+      >
         <ul className="cards">
           <CardItem
             alt={imgThatWanakaTree.alt}
             src={imgThatWanakaTree.src}
-            zoomProps={props}
+            zoomProps={props as UncontrolledProps}
           />
           <CardItem
             alt={imgGlenorchyLagoon.alt}
             src={imgGlenorchyLagoon.src}
-            zoomProps={props}
+            zoomProps={props as UncontrolledProps}
           />
         </ul>
       </div>
@@ -769,9 +775,9 @@ function CardItem({
   src,
   zoomProps,
 }: {
-  alt: string,
-  src: string,
-  zoomProps: typeof Zoom,
+  alt: string
+  src: string
+  zoomProps: UncontrolledProps
 }) {
   const [isSelected, setIsSelected] = React.useState(false)
 
@@ -779,23 +785,25 @@ function CardItem({
     setIsSelected(isSelected => !isSelected)
   }, [])
 
-  const handleInputClick: React.MouseEventHandler<HTMLInputElement> = React.useCallback((e) => {
-    e.stopPropagation()
-  }, [])
+  const handleInputClick: React.MouseEventHandler<HTMLInputElement> =
+    React.useCallback(e => {
+      e.stopPropagation()
+    }, [])
 
-  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = React.useCallback((e) => {
-    setIsSelected(e.currentTarget.checked)
-  }, [])
+  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> =
+    React.useCallback(e => {
+      setIsSelected(e.currentTarget.checked)
+    }, [])
 
   const handleZoomChange = React.useCallback<
     NonNullable<React.ComponentProps<typeof Zoom>['onZoomChange']>
   >((value, { event }) => {
     event.stopPropagation()
 
-    console.log(
-      'handleZoomChange (after event.stopPropagation())',
-      { value, event }
-    )
+    console.log('handleZoomChange (after event.stopPropagation())', {
+      value,
+      event,
+    })
   }, [])
 
   return (
@@ -827,14 +835,15 @@ function CardItem({
 // =============================================================================
 // INTERACTIONS
 
-export const AutomatedTest = Regular.bind({}, { title: '(Automated Test)' })
+export const AutomatedTest: Story = Regular.bind({})
+AutomatedTest.args = { ...Regular.args, title: '(Automated Test)' }
 AutomatedTest.storyName = '(Automated Test)'
 AutomatedTest.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement)
 
   await waitFor(async () => {
     await expect(
-      canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`)
+      canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`),
     ).toBeVisible()
   })
 
@@ -853,10 +862,10 @@ AutomatedTest.play = async ({ canvasElement }) => {
 
     await expect(dialog).toHaveAttribute('open')
     await expect(
-      dialog.querySelector(`img[alt="${imgThatWanakaTree.alt}"]`)
+      dialog.querySelector(`img[alt="${imgThatWanakaTree.alt}"]`),
     ).toBeVisible()
     await expect(
-      dialog.querySelector('[aria-label="Minimize image"')
+      dialog.querySelector('[aria-label="Minimize image"'),
     ).toHaveFocus()
   })
 
@@ -867,7 +876,7 @@ AutomatedTest.play = async ({ canvasElement }) => {
   await waitFor(async () => {
     await expect(document.querySelector('dialog')).not.toHaveAttribute('open')
     await expect(
-      canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`)
+      canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`),
     ).toHaveFocus()
   })
 }
@@ -888,7 +897,7 @@ const cx = (mods: Record<string, boolean>): string => {
 }
 
 const delay = (duration: number): Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, duration))
+  new Promise(resolve => setTimeout(resolve, duration))
 
 const useTimer = (duration: number) => {
   const [timer, setTimer] = React.useState(duration)
@@ -896,13 +905,15 @@ const useTimer = (duration: number) => {
   React.useEffect(() => {
     const interval = setInterval(function () {
       if (timer === 0) {
-        clearInterval(this)
+        clearInterval(interval)
       } else {
         setTimer(timer - 1000)
       }
     }, 1000)
 
-    return () => clearInterval(interval)
+    return () => {
+      clearInterval(interval)
+    }
   }, [timer])
 
   return { timer }
