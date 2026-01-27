@@ -12,7 +12,7 @@ const meta: Meta<typeof Zoom> = {
 
 export default meta
 
-export const AnimatingSquare = (props) => (
+export const AnimatingSquare = props => (
   <main aria-label="Story">
     <h1>An animating square SVG with its width & height set via style</h1>
     <div className="mw-600">

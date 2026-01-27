@@ -1,19 +1,19 @@
 version: 2
 updates:
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "daily"
+      interval: 'daily'
 
-  - package-ecosystem: "npm"
+  - package-ecosystem: 'npm'
     allow:
-      - dependency-type: "direct"
-    directory: "/"
+      - dependency-type: 'direct'
+    directory: '/'
     open-pull-requests-limit: 5
     schedule:
-      interval: "daily"
-    versioning-strategy: "increase"
+      interval: 'daily'
+    versioning-strategy: 'increase'
     groups:
       dev-dependencies:
         patterns:
-          - "*"
+          - '*'

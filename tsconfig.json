@@ -4,11 +4,10 @@
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false,
     "declaration": true,
-    "emitDeclarationOnly": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
-    "lib": ["esnext", "dom"],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
     "noImplicitAny": true,
     "noUncheckedIndexedAccess": true,
@@ -16,9 +15,10 @@
     "noUnusedParameters": true,
     "outDir": "./dist",
     "removeComments": true,
+    "skipLibCheck": true,
     "sourceMap": false,
     "strict": true,
     "target": "es2021"
   },
-  "include": ["./source/index.ts"]
+  "include": ["./source/**/*", "stories/**/*"]
 }

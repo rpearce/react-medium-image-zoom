@@ -1,5 +1,7 @@
 export type SupportedImage =
-    HTMLImageElement
+  | HTMLImageElement
   | HTMLDivElement
   | HTMLSpanElement
   | SVGElement
+
+export type StyleObject = Record<string, string | number | undefined>

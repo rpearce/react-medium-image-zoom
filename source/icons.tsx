@@ -2,7 +2,7 @@ import React from 'react'
 
 // =============================================================================
 
-export function ICompress () {
+export function ICompress() {
   return (
     <svg
       aria-hidden="true"
@@ -19,7 +19,7 @@ export function ICompress () {
 
 // =============================================================================
 
-export function IEnlarge () {
+export function IEnlarge() {
   return (
     <svg
       aria-hidden="true"

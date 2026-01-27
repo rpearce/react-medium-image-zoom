@@ -14,7 +14,7 @@ const meta: Meta<typeof Zoom> = {
 
 export default meta
 
-export const Picture = (props) => (
+export const Picture = props => (
   <main aria-label="Story">
     <h1>{'Zoom an <img /> in a <picture> element with a <source />'}</h1>
     <div className="mw-600">

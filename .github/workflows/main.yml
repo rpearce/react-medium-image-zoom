@@ -25,18 +25,18 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repo under GH workspace
-      uses: actions/checkout@v6
+      - name: Checkout repo under GH workspace
+        uses: actions/checkout@v6
 
-    - name: Install
-      uses: ./.github/actions/install
+      - name: Install
+        uses: ./.github/actions/install
 
-    - name: Run the CI script
-      run: pnpm run ci
+      - name: Run the CI script
+        run: pnpm run ci
 
-    - name: Deploy to gh-pages
-      uses: peaceiris/actions-gh-pages@v4
-      if: ${{ github.ref == 'refs/heads/main' }}
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./docs
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs

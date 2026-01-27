@@ -5,8 +5,8 @@ const BackgroundWrapper = ({
   children,
   context,
 }: {
-  children: React.ReactNode,
-  context: StoryContext,
+  children: React.ReactNode
+  context: StoryContext
 }) => {
   const bg = context.globals.backgrounds.value ?? 'light'
 

@@ -54,7 +54,10 @@ export const Regular = (props: typeof Zoom) => {
   return (
     <main aria-label="Story">
       <h1>Zooming a regular image</h1>
-      <div className="mw-600" style={{ display: 'flex', flexDirection: 'column' }}>
+      <div
+        className="mw-600"
+        style={{ display: 'flex', flexDirection: 'column' }}
+      >
         <Zoom {...props} onZoomChange={handleZoomChange} wrapElement="span">
           <img
             alt={imgThatWanakaTree.alt}
@@ -181,10 +184,7 @@ const CustomZoomContentWithLoader: UncontrolledProps['ZoomContent'] = ({
   isZoomImgLoaded,
   modalState,
 }) => {
-  const [
-    showLoader,
-    setShowLoader,
-  ] = React.useState(!isZoomImgLoaded)
+  const [showLoader, setShowLoader] = React.useState(!isZoomImgLoaded)
 
   /**
    * Delay the loader so the loading spinner is noticeable
@@ -202,8 +202,8 @@ const CustomZoomContentWithLoader: UncontrolledProps['ZoomContent'] = ({
     <>
       {img}
       {showLoader && (
-        <div className='zoom-img-loader-wrapper'>
-          <div className='zoom-img-loader' />
+        <div className="zoom-img-loader-wrapper">
+          <div className="zoom-img-loader" />
         </div>
       )}
     </>
@@ -212,19 +212,18 @@ const CustomZoomContentWithLoader: UncontrolledProps['ZoomContent'] = ({
 
 export const ZoomImgLoader = (props: typeof Zoom) => (
   <main aria-label="Story">
-    <h1>
-      ZoomImg with Loading State
-    </h1>
+    <h1>ZoomImg with Loading State</h1>
     <div className="mw-600">
       <p>
-        This example shows how to provide loading feedback when using a high-resolution{' '}
-        <code>zoomImg</code>. The <code>ZoomContent</code> component uses the{' '}
-        <code>isZoomImgLoaded</code> prop to display a loading spinner while the
-        high-resolution image is being downloaded.
+        This example shows how to provide loading feedback when using a
+        high-resolution <code>zoomImg</code>. The <code>ZoomContent</code>{' '}
+        component uses the <code>isZoomImgLoaded</code> prop to display a
+        loading spinner while the high-resolution image is being downloaded.
       </p>
       <p>
-        Here the loading spinner is shown on every zoom, but in a real-world case,
-        the browser caches the image, so you&apos;ll only see the loader at first load.
+        Here the loading spinner is shown on every zoom, but in a real-world
+        case, the browser caches the image, so you&apos;ll only see the loader
+        at first load.
       </p>
       <Zoom
         {...props}
@@ -486,7 +485,7 @@ interface DelayedImgProps {
   src: string
   width: string
   height: string
-};
+}
 
 const DelayedImg = (props: DelayedImgProps) => {
   const { alt, height, src, timer, width } = props
@@ -649,16 +648,18 @@ export const CycleImages = (props: typeof Zoom) => {
       while (true) {
         await delay(3000)
 
-        setImg(shuffle([
-          imgThatWanakaTree,
-          imgEarth,
-          imgNzMap,
-          imgTekapo,
-          imgKeaLarge,
-          imgTeAraiPoint,
-          imgGlenorchyLagoon,
-          imgHookerValleyTrack,
-        ])[0])
+        setImg(
+          shuffle([
+            imgThatWanakaTree,
+            imgEarth,
+            imgNzMap,
+            imgTekapo,
+            imgKeaLarge,
+            imgTeAraiPoint,
+            imgGlenorchyLagoon,
+            imgHookerValleyTrack,
+          ])[0],
+        )
       }
     }
 
@@ -694,9 +695,8 @@ export const SwipeToUnzoomDisabled = (props: typeof Zoom) => (
   <main aria-label="Story">
     <h1>Swipe to Unzoom Disabled</h1>
     <p>
-      This example demonstrates preventing swipe gestures from
-      unzooming when an image is zoomed. This is best tested on
-      a touchscreen device!
+      This example demonstrates preventing swipe gestures from unzooming when an
+      image is zoomed. This is best tested on a touchscreen device!
     </p>
     <div>
       <Zoom {...props} canSwipeToUnzoom={false}>
@@ -716,15 +716,14 @@ export const SwipeToUnzoomThreshold = (props: typeof Zoom) => (
   <main aria-label="Story">
     <h1>Swipe to Unzoom Threshold</h1>
     <p>
-      This example demonstrates increasing the threshold
-      required for a swipe gesture on a touchscreen device to
-      unzoom when an image is zoomed. This is best tested on
-      a touchscreen device!
+      This example demonstrates increasing the threshold required for a swipe
+      gesture on a touchscreen device to unzoom when an image is zoomed. This is
+      best tested on a touchscreen device!
     </p>
     <p>
-      The default is <code>10</code> (px), but this example
-      is set to <code>200</code> (px); that&apos;s how far
-      you&apos;ll have to move your finger across the screen.
+      The default is <code>10</code> (px), but this example is set to{' '}
+      <code>200</code> (px); that&apos;s how far you&apos;ll have to move your
+      finger across the screen.
     </p>
     <div>
       <Zoom {...props} swipeToUnzoomThreshold={200}>
@@ -746,7 +745,10 @@ export const SelectCards = (props: typeof Zoom) => {
   return (
     <main aria-label="Story">
       <h1>Selecting cards and zooming without triggering selection state</h1>
-      <div className="mw-600" style={{ display: 'flex', flexDirection: 'column' }}>
+      <div
+        className="mw-600"
+        style={{ display: 'flex', flexDirection: 'column' }}
+      >
         <ul className="cards">
           <CardItem
             alt={imgThatWanakaTree.alt}
@@ -769,9 +771,9 @@ function CardItem({
   src,
   zoomProps,
 }: {
-  alt: string,
-  src: string,
-  zoomProps: typeof Zoom,
+  alt: string
+  src: string
+  zoomProps: typeof Zoom
 }) {
   const [isSelected, setIsSelected] = React.useState(false)
 
@@ -779,23 +781,25 @@ function CardItem({
     setIsSelected(isSelected => !isSelected)
   }, [])
 
-  const handleInputClick: React.MouseEventHandler<HTMLInputElement> = React.useCallback((e) => {
-    e.stopPropagation()
-  }, [])
+  const handleInputClick: React.MouseEventHandler<HTMLInputElement> =
+    React.useCallback(e => {
+      e.stopPropagation()
+    }, [])
 
-  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = React.useCallback((e) => {
-    setIsSelected(e.currentTarget.checked)
-  }, [])
+  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> =
+    React.useCallback(e => {
+      setIsSelected(e.currentTarget.checked)
+    }, [])
 
   const handleZoomChange = React.useCallback<
     NonNullable<React.ComponentProps<typeof Zoom>['onZoomChange']>
   >((value, { event }) => {
     event.stopPropagation()
 
-    console.log(
-      'handleZoomChange (after event.stopPropagation())',
-      { value, event }
-    )
+    console.log('handleZoomChange (after event.stopPropagation())', {
+      value,
+      event,
+    })
   }, [])
 
   return (
@@ -834,7 +838,7 @@ AutomatedTest.play = async ({ canvasElement }) => {
 
   await waitFor(async () => {
     await expect(
-      canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`)
+      canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`),
     ).toBeVisible()
   })
 
@@ -853,10 +857,10 @@ AutomatedTest.play = async ({ canvasElement }) => {
 
     await expect(dialog).toHaveAttribute('open')
     await expect(
-      dialog.querySelector(`img[alt="${imgThatWanakaTree.alt}"]`)
+      dialog.querySelector(`img[alt="${imgThatWanakaTree.alt}"]`),
     ).toBeVisible()
     await expect(
-      dialog.querySelector('[aria-label="Minimize image"')
+      dialog.querySelector('[aria-label="Minimize image"'),
     ).toHaveFocus()
   })
 
@@ -867,7 +871,7 @@ AutomatedTest.play = async ({ canvasElement }) => {
   await waitFor(async () => {
     await expect(document.querySelector('dialog')).not.toHaveAttribute('open')
     await expect(
-      canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`)
+      canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`),
     ).toHaveFocus()
   })
 }
@@ -888,7 +892,7 @@ const cx = (mods: Record<string, boolean>): string => {
 }
 
 const delay = (duration: number): Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, duration))
+  new Promise(resolve => setTimeout(resolve, duration))
 
 const useTimer = (duration: number) => {
   const [timer, setTimer] = React.useState(duration)

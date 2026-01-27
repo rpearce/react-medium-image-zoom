@@ -125,7 +125,7 @@ export const DivImageGallery = () => {
       imgPortWaikato,
       imgKea,
     ],
-    []
+    [],
   )
 
   const [bgSize, setBgSize] = useState('cover')

@@ -14,7 +14,7 @@ const meta: Meta<typeof Zoom> = {
 
 export default meta
 
-export const JAndKZoomUnzoom = (props) => {
+export const JAndKZoomUnzoom = props => {
   const [isZoomed, setIsZoomed] = useState(false)
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {

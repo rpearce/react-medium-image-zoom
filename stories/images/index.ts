@@ -34,17 +34,17 @@ export const imgHookerValleyTrack = {
 }
 
 export const imgKeaSmall = {
-  alt: 'Kea (alpine parrot) in Arthur\'s Pass, New Zealand by Pablo Heimplatz',
+  alt: "Kea (alpine parrot) in Arthur's Pass, New Zealand by Pablo Heimplatz",
   src: keaSmall,
 }
 
 export const imgKea = {
-  alt: 'Kea (alpine parrot) in Arthur\'s Pass, New Zealand by Pablo Heimplatz',
+  alt: "Kea (alpine parrot) in Arthur's Pass, New Zealand by Pablo Heimplatz",
   src: kea,
 }
 
 export const imgKeaLarge = {
-  alt: 'Kea (alpine parrot) in Arthur\'s Pass, New Zealand by Pablo Heimplatz',
+  alt: "Kea (alpine parrot) in Arthur's Pass, New Zealand by Pablo Heimplatz",
   src: keaLarge,
 }
 
