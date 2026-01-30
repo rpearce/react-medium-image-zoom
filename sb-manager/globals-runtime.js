@@ -59652,8 +59652,16 @@ async function handleRequest(request) {
     let response = await request;
     if (response === !1 || response === !0)
       throw new Error("Unexpected boolean response");
-    if (!response.ok)
+    if (!response.ok) {
+      if (response.status === 401)
+        try {
+          let json4 = await response.json();
+          if (json4.loginUrl)
+            return { loginUrl: json4.loginUrl };
+        } catch {
+        }
       throw new Error(`Unexpected response not OK: ${response.statusText}`);
+    }
     let json3 = await response.json();
     return json3.entries || json3.stories ? { storyIndex: json3 } : json3;
   } catch (err) {
@@ -62099,7 +62107,7 @@ var parseBoolean = (value) => {
       } = options;
       if (refId && !refs[refId])
         throw new Error(`Invalid refId: ${refId}`);
-      let originAddress = scope.window.location.origin + location4.pathname, networkAddress = scope.STORYBOOK_NETWORK_ADDRESS ?? originAddress, managerBase = base === "origin" ? originAddress : base === "network" ? networkAddress : location4.pathname, previewBase = refId ? refs[refId].url + "/iframe.html" : scope.PREVIEW_URL || `${managerBase}iframe.html`, refParam = refId ? `&refId=${encodeURIComponent(refId)}` : "", { args = "", globals = "", ...otherParams } = queryParams, argsParam = inheritArgs ? mergeSerializedParams(customQueryParams?.args ?? "", args) : args, globalsParam = inheritGlobals ? mergeSerializedParams(customQueryParams?.globals ?? "", globals) : globals, customManagerParams = (0, import_picoquery5.stringify)(otherParams, {
+      let pathname = location4.pathname || "/", originAddress = scope.window.location.origin + pathname, networkAddress = scope.STORYBOOK_NETWORK_ADDRESS ?? originAddress, managerBase = base === "origin" ? originAddress : base === "network" ? networkAddress : pathname, previewBase = refId ? refs[refId].url + "/iframe.html" : scope.PREVIEW_URL || `${managerBase.replace(/\/[^/]*$/, "/")}iframe.html`, refParam = refId ? `&refId=${encodeURIComponent(refId)}` : "", { args = "", globals = "", ...otherParams } = queryParams, argsParam = inheritArgs ? mergeSerializedParams(customQueryParams?.args ?? "", args) : args, globalsParam = inheritGlobals ? mergeSerializedParams(customQueryParams?.globals ?? "", globals) : globals, customManagerParams = (0, import_picoquery5.stringify)(otherParams, {
         nesting: !0,
         nestingSyntax: "js"
       }), customPreviewParams = (0, import_picoquery5.stringify)(omit(otherParams, ["id", "viewMode"]), {
@@ -62174,7 +62182,7 @@ init_dist();
 var import_memoizerific8 = __toESM(require_memoizerific(), 1), import_semver = __toESM(require_semver2(), 1);
 
 // src/manager-api/version.ts
-var version = "10.2.1";
+var version = "10.2.3";
 
 // src/manager-api/modules/versions.ts
 var { VERSIONCHECK } = scope, getVersionCheckData = (0, import_memoizerific8.default)(1)(() => {
