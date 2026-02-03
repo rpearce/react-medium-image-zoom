@@ -5769,7 +5769,7 @@ var Wrapper2 = styled.span(({ theme }) => ({
 })), Shortcut = ({ keys }) => react_default.createElement(Wrapper2, null, keys.map((key) => react_default.createElement(Key, { key }, shortcutToHumanString([key]))));
 
 // src/manager/components/preview/tools/zoom.tsx
-var ZOOM_LEVELS = [0.25, 0.5, 0.75, 0.9, 1, 1.1, 1.25, 1.5, 2, 3, 4, 8], INITIAL_ZOOM_LEVEL = 1, ZoomButton = styled(Button)({
+var ZOOM_LEVELS = [0.25, 0.5, 0.75, 0.9, 1, 1.1, 1.25, 1.5, 2, 3, 4, 8], INITIAL_ZOOM_LEVEL = 1, ZoomButton = styled(ToggleButton)({
   minWidth: 48
 }), Context = createContext({ value: INITIAL_ZOOM_LEVEL, set: (v2) => {
 } }), ZoomInput = styled(NumericInput)({
@@ -5849,7 +5849,7 @@ var ZOOM_LEVELS = [0.25, 0.5, 0.75, 0.9, 1, 1.1, 1.25, 1.5, 2, 3, 4, 8], INITIAL
         padding: "small",
         variant: "ghost",
         ariaLabel: "Change zoom level",
-        active: value !== INITIAL_ZOOM_LEVEL
+        pressed: value !== INITIAL_ZOOM_LEVEL
       },
       Math.round(value * 100),
       "%"
