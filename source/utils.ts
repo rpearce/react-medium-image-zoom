@@ -29,10 +29,10 @@ export const testSvg = (el: unknown): el is SVGElement => testElType('SVG', el)
 // =============================================================================
 
 interface GetScaleToWindow {
-  (data: { width: number; height: number; offset: number }): number
+  (width: number, height: number, offset: number): number
 }
 
-const getScaleToWindow: GetScaleToWindow = ({ height, offset, width }) => {
+const getScaleToWindow: GetScaleToWindow = (width, height, offset) => {
   return Math.min(
     (window.innerWidth - offset * 2) / width, // scale X-axis
     (window.innerHeight - offset * 2) / height, // scale Y-axis
@@ -42,27 +42,23 @@ const getScaleToWindow: GetScaleToWindow = ({ height, offset, width }) => {
 // =============================================================================
 
 interface GetScaleToWindowMax {
-  (data: {
-    containerHeight: number
-    containerWidth: number
-    offset: number
-    targetHeight: number
-    targetWidth: number
-  }): number
+  (
+    containerWidth: number,
+    containerHeight: number,
+    targetWidth: number,
+    targetHeight: number,
+    offset: number,
+  ): number
 }
 
-const getScaleToWindowMax: GetScaleToWindowMax = ({
-  containerHeight,
+const getScaleToWindowMax: GetScaleToWindowMax = (
   containerWidth,
-  offset,
-  targetHeight,
+  containerHeight,
   targetWidth,
-}) => {
-  const scale = getScaleToWindow({
-    height: targetHeight,
-    offset,
-    width: targetWidth,
-  })
+  targetHeight,
+  offset,
+) => {
+  const scale = getScaleToWindow(targetWidth, targetHeight, offset)
 
   const ratio =
     targetWidth > targetHeight
@@ -75,41 +71,37 @@ const getScaleToWindowMax: GetScaleToWindowMax = ({
 // =============================================================================
 
 interface GetScale {
-  (data: {
-    containerHeight: number
-    containerWidth: number
-    hasScalableSrc: boolean
-    offset: number
-    targetHeight: number
-    targetWidth: number
-  }): number
+  (
+    containerHeight: number,
+    containerWidth: number,
+    hasScalableSrc: boolean,
+    offset: number,
+    targetHeight: number,
+    targetWidth: number,
+  ): number
 }
 
-const getScale: GetScale = ({
+const getScale: GetScale = (
   containerHeight,
   containerWidth,
   hasScalableSrc,
   offset,
   targetHeight,
   targetWidth,
-}) => {
+) => {
   if (!containerHeight || !containerWidth) {
     return 1
   }
 
   return !hasScalableSrc && targetHeight && targetWidth
-    ? getScaleToWindowMax({
-        containerHeight,
+    ? getScaleToWindowMax(
         containerWidth,
-        offset,
-        targetHeight,
+        containerHeight,
         targetWidth,
-      })
-    : getScaleToWindow({
-        height: containerHeight,
+        targetHeight,
         offset,
-        width: containerWidth,
-      })
+      )
+    : getScaleToWindow(containerWidth, containerHeight, offset)
 }
 
 // =============================================================================
@@ -175,14 +167,14 @@ const getImgRegularStyle: GetImgRegularStyle = ({
   targetHeight,
   targetWidth,
 }) => {
-  const scale = getScale({
+  const scale = getScale(
     containerHeight,
     containerWidth,
     hasScalableSrc,
     offset,
     targetHeight,
     targetWidth,
-  })
+  )
 
   return {
     top: containerTop,
@@ -196,10 +188,10 @@ const getImgRegularStyle: GetImgRegularStyle = ({
 // =============================================================================
 
 interface ParsePosition {
-  (data: { position: string; relativeNum: number }): number
+  (position: string, relativeNum: number): number
 }
 
-const parsePosition: ParsePosition = ({ position, relativeNum }) => {
+const parsePosition: ParsePosition = (position, relativeNum) => {
   const positionNum = parseFloat(position)
 
   return position.endsWith('%')
@@ -254,23 +246,17 @@ const getImgObjectFitStyle: GetImgObjectFitStyle = ({
         : Math.min(widthRatio, heightRatio)
 
     const [posLeft = '50%', posTop = '50%'] = objectPosition.split(' ')
-    const posX = parsePosition({
-      position: posLeft,
-      relativeNum: containerWidth - targetWidth * ratio,
-    })
-    const posY = parsePosition({
-      position: posTop,
-      relativeNum: containerHeight - targetHeight * ratio,
-    })
+    const posX = parsePosition(posLeft, containerWidth - targetWidth * ratio)
+    const posY = parsePosition(posTop, containerHeight - targetHeight * ratio)
 
-    const scale = getScale({
-      containerHeight: targetHeight * ratio,
-      containerWidth: targetWidth * ratio,
+    const scale = getScale(
+      targetHeight * ratio,
+      targetWidth * ratio,
       hasScalableSrc,
       offset,
       targetHeight,
       targetWidth,
-    })
+    )
 
     return {
       top: containerTop + posY,
@@ -281,23 +267,17 @@ const getImgObjectFitStyle: GetImgObjectFitStyle = ({
     }
   } else if (objectFit === 'none') {
     const [posLeft = '50%', posTop = '50%'] = objectPosition.split(' ')
-    const posX = parsePosition({
-      position: posLeft,
-      relativeNum: containerWidth - targetWidth,
-    })
-    const posY = parsePosition({
-      position: posTop,
-      relativeNum: containerHeight - targetHeight,
-    })
+    const posX = parsePosition(posLeft, containerWidth - targetWidth)
+    const posY = parsePosition(posTop, containerHeight - targetHeight)
 
-    const scale = getScale({
-      containerHeight: targetHeight,
-      containerWidth: targetWidth,
+    const scale = getScale(
+      targetHeight,
+      targetWidth,
       hasScalableSrc,
       offset,
       targetHeight,
       targetWidth,
-    })
+    )
 
     return {
       top: containerTop + posY,
@@ -311,14 +291,14 @@ const getImgObjectFitStyle: GetImgObjectFitStyle = ({
     const heightRatio = containerHeight / targetHeight
     const ratio = Math.max(widthRatio, heightRatio)
 
-    const scale = getScale({
-      containerHeight: targetHeight * ratio,
-      containerWidth: targetWidth * ratio,
+    const scale = getScale(
+      targetHeight * ratio,
+      targetWidth * ratio,
       hasScalableSrc,
       offset,
       targetHeight,
       targetWidth,
-    })
+    )
 
     return {
       width: containerWidth * scale,
@@ -369,23 +349,17 @@ const getDivImgStyle: GetDivImgStyle = ({
         : Math.min(widthRatio, heightRatio)
 
     const [posLeft = '50%', posTop = '50%'] = backgroundPosition.split(' ')
-    const posX = parsePosition({
-      position: posLeft,
-      relativeNum: containerWidth - targetWidth * ratio,
-    })
-    const posY = parsePosition({
-      position: posTop,
-      relativeNum: containerHeight - targetHeight * ratio,
-    })
+    const posX = parsePosition(posLeft, containerWidth - targetWidth * ratio)
+    const posY = parsePosition(posTop, containerHeight - targetHeight * ratio)
 
-    const scale = getScale({
-      containerHeight: targetHeight * ratio,
-      containerWidth: targetWidth * ratio,
+    const scale = getScale(
+      targetHeight * ratio,
+      targetWidth * ratio,
       hasScalableSrc,
       offset,
       targetHeight,
       targetWidth,
-    })
+    )
 
     return {
       top: containerTop + posY,
@@ -396,23 +370,17 @@ const getDivImgStyle: GetDivImgStyle = ({
     }
   } else if (backgroundSize === 'auto') {
     const [posLeft = '50%', posTop = '50%'] = backgroundPosition.split(' ')
-    const posX = parsePosition({
-      position: posLeft,
-      relativeNum: containerWidth - targetWidth,
-    })
-    const posY = parsePosition({
-      position: posTop,
-      relativeNum: containerHeight - targetHeight,
-    })
+    const posX = parsePosition(posLeft, containerWidth - targetWidth)
+    const posY = parsePosition(posTop, containerHeight - targetHeight)
 
-    const scale = getScale({
-      containerHeight: targetHeight,
-      containerWidth: targetWidth,
+    const scale = getScale(
+      targetHeight,
+      targetWidth,
       hasScalableSrc,
       offset,
       targetHeight,
       targetWidth,
-    })
+    )
 
     return {
       top: containerTop + posY,
@@ -423,14 +391,8 @@ const getDivImgStyle: GetDivImgStyle = ({
     }
   } else {
     const [sizeW = '50%', sizeH = '50%'] = backgroundSize.split(' ')
-    const sizeWidth = parsePosition({
-      position: sizeW,
-      relativeNum: containerWidth,
-    })
-    const sizeHeight = parsePosition({
-      position: sizeH,
-      relativeNum: containerHeight,
-    })
+    const sizeWidth = parsePosition(sizeW, containerWidth)
+    const sizeHeight = parsePosition(sizeH, containerHeight)
 
     const widthRatio = sizeWidth / targetWidth
     const heightRatio = sizeHeight / targetHeight
@@ -439,23 +401,17 @@ const getDivImgStyle: GetDivImgStyle = ({
     const ratio = Math.min(widthRatio, heightRatio)
 
     const [posLeft = '50%', posTop = '50%'] = backgroundPosition.split(' ')
-    const posX = parsePosition({
-      position: posLeft,
-      relativeNum: containerWidth - targetWidth * ratio,
-    })
-    const posY = parsePosition({
-      position: posTop,
-      relativeNum: containerHeight - targetHeight * ratio,
-    })
+    const posX = parsePosition(posLeft, containerWidth - targetWidth * ratio)
+    const posY = parsePosition(posTop, containerHeight - targetHeight * ratio)
 
-    const scale = getScale({
-      containerHeight: targetHeight * ratio,
-      containerWidth: targetWidth * ratio,
+    const scale = getScale(
+      targetHeight * ratio,
+      targetWidth * ratio,
       hasScalableSrc,
       offset,
       targetHeight,
       targetWidth,
-    })
+    )
 
     return {
       top: containerTop + posY,
@@ -496,7 +452,7 @@ export const getStyleModalImg: GetStyleModalImg = ({
 }) => {
   const hasScalableSrc =
     isSvg ||
-    imgSrc?.slice?.(0, 18) === 'data:image/svg+xml' ||
+    imgSrc?.slice(0, 18) === 'data:image/svg+xml' ||
     hasZoomImg ||
     !!(imgSrc && SRC_SVG_REGEX.test(imgSrc))
 
@@ -547,12 +503,11 @@ export const getStyleModalImg: GetStyleModalImg = ({
       })
     : undefined
 
-  const style: StyleObject = Object.assign(
-    {},
-    styleImgRegular ?? {},
-    styleImgObjectFit ?? {},
-    styleDivImg ?? {},
-  )
+  const style: StyleObject = {
+    ...styleImgRegular,
+    ...styleImgObjectFit,
+    ...styleDivImg,
+  }
 
   if (isZoomed) {
     const viewportX = window.innerWidth / 2
@@ -643,7 +598,7 @@ export const adjustSvgIDs = (svgEl: SVGElement): void => {
   const idMap = new Map()
 
   // Update SVG element's ID, if present
-  if (svgEl.hasAttribute('id')) {
+  if (svgEl.id) {
     const oldId = svgEl.id
     const newId = oldId + newIdSuffix
     idMap.set(oldId, newId)
