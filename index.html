@@ -48,9 +48,9 @@
     
     <link href="./sb-addons/storybook-core-server-presets-0/common-manager-bundle.js" rel="modulepreload" />
     
-    <link href="./sb-addons/docs-1/manager-bundle.js" rel="modulepreload" />
+    <link href="./sb-addons/a11y-1/manager-bundle.js" rel="modulepreload" />
     
-    <link href="./sb-addons/a11y-2/manager-bundle.js" rel="modulepreload" />
+    <link href="./sb-addons/docs-2/manager-bundle.js" rel="modulepreload" />
        
 
     <style>
@@ -80,8 +80,7 @@
   "backgrounds": true,
   "outline": true,
   "measure": true,
-  "sidebarOnboardingChecklist": true,
-  "interactionsDebugger": true
+  "sidebarOnboardingChecklist": true
 };
         
       
@@ -112,11 +111,11 @@
         
       
         
-          window['STORYBOOK_BUILDER'] = "webpack5";
+          window['STORYBOOK_BUILDER'] = "vite";
         
       
         
-          window['STORYBOOK_FRAMEWORK'] = "react-webpack5";
+          window['STORYBOOK_FRAMEWORK'] = "react-vite";
         
       
         
@@ -134,9 +133,9 @@
       
         import './sb-addons/storybook-core-server-presets-0/common-manager-bundle.js';
       
-        import './sb-addons/docs-1/manager-bundle.js';
+        import './sb-addons/a11y-1/manager-bundle.js';
       
-        import './sb-addons/a11y-2/manager-bundle.js';
+        import './sb-addons/docs-2/manager-bundle.js';
       
 
       import './sb-manager/runtime.js';

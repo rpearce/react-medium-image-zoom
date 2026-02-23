@@ -31564,6 +31564,9 @@ __export(core_events_exports, {
   SET_WHATS_NEW_CACHE: () => SET_WHATS_NEW_CACHE,
   SHARED_STATE_CHANGED: () => SHARED_STATE_CHANGED,
   SHARED_STATE_SET: () => SHARED_STATE_SET,
+  SHARE_ISOLATE_MODE: () => SHARE_ISOLATE_MODE,
+  SHARE_POPOVER_OPENED: () => SHARE_POPOVER_OPENED,
+  SHARE_STORY_LINK: () => SHARE_STORY_LINK,
   STORIES_COLLAPSE_ALL: () => STORIES_COLLAPSE_ALL,
   STORIES_EXPAND_ALL: () => STORIES_EXPAND_ALL,
   STORY_ARGS_UPDATED: () => STORY_ARGS_UPDATED,
@@ -31587,7 +31590,7 @@ __export(core_events_exports, {
   UPDATE_STORY_ARGS: () => UPDATE_STORY_ARGS,
   default: () => core_events_default
 });
-var events = /* @__PURE__ */ ((events2) => (events2.CHANNEL_WS_DISCONNECT = "channelWSDisconnect", events2.CHANNEL_CREATED = "channelCreated", events2.CONFIG_ERROR = "configError", events2.STORY_INDEX_INVALIDATED = "storyIndexInvalidated", events2.STORY_SPECIFIED = "storySpecified", events2.SET_CONFIG = "setConfig", events2.SET_STORIES = "setStories", events2.SET_INDEX = "setIndex", events2.SET_CURRENT_STORY = "setCurrentStory", events2.CURRENT_STORY_WAS_SET = "currentStoryWasSet", events2.FORCE_RE_RENDER = "forceReRender", events2.FORCE_REMOUNT = "forceRemount", events2.PRELOAD_ENTRIES = "preloadStories", events2.STORY_PREPARED = "storyPrepared", events2.DOCS_PREPARED = "docsPrepared", events2.STORY_CHANGED = "storyChanged", events2.STORY_UNCHANGED = "storyUnchanged", events2.STORY_RENDERED = "storyRendered", events2.STORY_FINISHED = "storyFinished", events2.STORY_MISSING = "storyMissing", events2.STORY_ERRORED = "storyErrored", events2.STORY_THREW_EXCEPTION = "storyThrewException", events2.STORY_RENDER_PHASE_CHANGED = "storyRenderPhaseChanged", events2.STORY_HOT_UPDATED = "storyHotUpdated", events2.PLAY_FUNCTION_THREW_EXCEPTION = "playFunctionThrewException", events2.UNHANDLED_ERRORS_WHILE_PLAYING = "unhandledErrorsWhilePlaying", events2.UPDATE_STORY_ARGS = "updateStoryArgs", events2.STORY_ARGS_UPDATED = "storyArgsUpdated", events2.RESET_STORY_ARGS = "resetStoryArgs", events2.SET_FILTER = "setFilter", events2.SET_GLOBALS = "setGlobals", events2.UPDATE_GLOBALS = "updateGlobals", events2.GLOBALS_UPDATED = "globalsUpdated", events2.REGISTER_SUBSCRIPTION = "registerSubscription", events2.PREVIEW_INITIALIZED = "previewInitialized", events2.PREVIEW_KEYDOWN = "previewKeydown", events2.PREVIEW_BUILDER_PROGRESS = "preview_builder_progress", events2.SELECT_STORY = "selectStory", events2.STORIES_COLLAPSE_ALL = "storiesCollapseAll", events2.STORIES_EXPAND_ALL = "storiesExpandAll", events2.DOCS_RENDERED = "docsRendered", events2.SHARED_STATE_CHANGED = "sharedStateChanged", events2.SHARED_STATE_SET = "sharedStateSet", events2.NAVIGATE_URL = "navigateUrl", events2.UPDATE_QUERY_PARAMS = "updateQueryParams", events2.REQUEST_WHATS_NEW_DATA = "requestWhatsNewData", events2.RESULT_WHATS_NEW_DATA = "resultWhatsNewData", events2.SET_WHATS_NEW_CACHE = "setWhatsNewCache", events2.TOGGLE_WHATS_NEW_NOTIFICATIONS = "toggleWhatsNewNotifications", events2.TELEMETRY_ERROR = "telemetryError", events2.FILE_COMPONENT_SEARCH_REQUEST = "fileComponentSearchRequest", events2.FILE_COMPONENT_SEARCH_RESPONSE = "fileComponentSearchResponse", events2.SAVE_STORY_REQUEST = "saveStoryRequest", events2.SAVE_STORY_RESPONSE = "saveStoryResponse", events2.ARGTYPES_INFO_REQUEST = "argtypesInfoRequest", events2.ARGTYPES_INFO_RESPONSE = "argtypesInfoResponse", events2.CREATE_NEW_STORYFILE_REQUEST = "createNewStoryfileRequest", events2.CREATE_NEW_STORYFILE_RESPONSE = "createNewStoryfileResponse", events2.GHOST_STORIES_REQUEST = "ghostStoriesRequest", events2.GHOST_STORIES_RESPONSE = "ghostStoriesResponse", events2.OPEN_IN_EDITOR_REQUEST = "openInEditorRequest", events2.OPEN_IN_EDITOR_RESPONSE = "openInEditorResponse", events2.MANAGER_INERT_ATTRIBUTE_CHANGED = "managerInertAttributeChanged", events2))(events || {}), core_events_default = events, {
+var events = /* @__PURE__ */ ((events2) => (events2.CHANNEL_WS_DISCONNECT = "channelWSDisconnect", events2.CHANNEL_CREATED = "channelCreated", events2.CONFIG_ERROR = "configError", events2.STORY_INDEX_INVALIDATED = "storyIndexInvalidated", events2.STORY_SPECIFIED = "storySpecified", events2.SET_CONFIG = "setConfig", events2.SET_STORIES = "setStories", events2.SET_INDEX = "setIndex", events2.SET_CURRENT_STORY = "setCurrentStory", events2.CURRENT_STORY_WAS_SET = "currentStoryWasSet", events2.FORCE_RE_RENDER = "forceReRender", events2.FORCE_REMOUNT = "forceRemount", events2.PRELOAD_ENTRIES = "preloadStories", events2.STORY_PREPARED = "storyPrepared", events2.DOCS_PREPARED = "docsPrepared", events2.STORY_CHANGED = "storyChanged", events2.STORY_UNCHANGED = "storyUnchanged", events2.STORY_RENDERED = "storyRendered", events2.STORY_FINISHED = "storyFinished", events2.STORY_MISSING = "storyMissing", events2.STORY_ERRORED = "storyErrored", events2.STORY_THREW_EXCEPTION = "storyThrewException", events2.STORY_RENDER_PHASE_CHANGED = "storyRenderPhaseChanged", events2.STORY_HOT_UPDATED = "storyHotUpdated", events2.PLAY_FUNCTION_THREW_EXCEPTION = "playFunctionThrewException", events2.UNHANDLED_ERRORS_WHILE_PLAYING = "unhandledErrorsWhilePlaying", events2.UPDATE_STORY_ARGS = "updateStoryArgs", events2.STORY_ARGS_UPDATED = "storyArgsUpdated", events2.RESET_STORY_ARGS = "resetStoryArgs", events2.SET_FILTER = "setFilter", events2.SET_GLOBALS = "setGlobals", events2.UPDATE_GLOBALS = "updateGlobals", events2.GLOBALS_UPDATED = "globalsUpdated", events2.REGISTER_SUBSCRIPTION = "registerSubscription", events2.PREVIEW_INITIALIZED = "previewInitialized", events2.PREVIEW_KEYDOWN = "previewKeydown", events2.PREVIEW_BUILDER_PROGRESS = "preview_builder_progress", events2.SELECT_STORY = "selectStory", events2.STORIES_COLLAPSE_ALL = "storiesCollapseAll", events2.STORIES_EXPAND_ALL = "storiesExpandAll", events2.DOCS_RENDERED = "docsRendered", events2.SHARED_STATE_CHANGED = "sharedStateChanged", events2.SHARED_STATE_SET = "sharedStateSet", events2.NAVIGATE_URL = "navigateUrl", events2.UPDATE_QUERY_PARAMS = "updateQueryParams", events2.REQUEST_WHATS_NEW_DATA = "requestWhatsNewData", events2.RESULT_WHATS_NEW_DATA = "resultWhatsNewData", events2.SET_WHATS_NEW_CACHE = "setWhatsNewCache", events2.TOGGLE_WHATS_NEW_NOTIFICATIONS = "toggleWhatsNewNotifications", events2.TELEMETRY_ERROR = "telemetryError", events2.FILE_COMPONENT_SEARCH_REQUEST = "fileComponentSearchRequest", events2.FILE_COMPONENT_SEARCH_RESPONSE = "fileComponentSearchResponse", events2.SAVE_STORY_REQUEST = "saveStoryRequest", events2.SAVE_STORY_RESPONSE = "saveStoryResponse", events2.ARGTYPES_INFO_REQUEST = "argtypesInfoRequest", events2.ARGTYPES_INFO_RESPONSE = "argtypesInfoResponse", events2.CREATE_NEW_STORYFILE_REQUEST = "createNewStoryfileRequest", events2.CREATE_NEW_STORYFILE_RESPONSE = "createNewStoryfileResponse", events2.GHOST_STORIES_REQUEST = "ghostStoriesRequest", events2.GHOST_STORIES_RESPONSE = "ghostStoriesResponse", events2.OPEN_IN_EDITOR_REQUEST = "openInEditorRequest", events2.OPEN_IN_EDITOR_RESPONSE = "openInEditorResponse", events2.MANAGER_INERT_ATTRIBUTE_CHANGED = "managerInertAttributeChanged", events2.SHARE_STORY_LINK = "shareStoryLink", events2.SHARE_ISOLATE_MODE = "shareIsolateMode", events2.SHARE_POPOVER_OPENED = "sharePopoverOpened", events2))(events || {}), core_events_default = events, {
   CHANNEL_WS_DISCONNECT,
   CHANNEL_CREATED,
   CONFIG_ERROR,
@@ -31650,7 +31653,10 @@ var events = /* @__PURE__ */ ((events2) => (events2.CHANNEL_WS_DISCONNECT = "cha
   GHOST_STORIES_RESPONSE,
   OPEN_IN_EDITOR_REQUEST,
   OPEN_IN_EDITOR_RESPONSE,
-  MANAGER_INERT_ATTRIBUTE_CHANGED
+  MANAGER_INERT_ATTRIBUTE_CHANGED,
+  SHARE_STORY_LINK,
+  SHARE_ISOLATE_MODE,
+  SHARE_POPOVER_OPENED
 } = events;
 
 // src/manager/globals/globals.ts
@@ -55893,7 +55899,12 @@ var eventInitializer = {
 };
 function createEvent2(type5, target, init16) {
   let window2 = getWindow(target), { EventType, defaultInit } = eventMap2[type5], event = new (getEventConstructors(window2))[EventType](type5, defaultInit);
-  return eventInitializer[EventType].forEach((f4) => f4(event, init16 ?? {})), event;
+  var eventInit = {};
+  for (var key in init16)
+    Object.prototype.hasOwnProperty.call(init16, key) && (eventInit[key] = init16[key]);
+  return eventInit.view = window2, eventInitializer[EventType].forEach(function(f4) {
+    f4(event, eventInit);
+  }), event;
 }
 function getEventConstructors(window2) {
   var _window_Event;
@@ -59642,7 +59653,7 @@ var TITLE_PATH_SEPARATOR = /\s*\/\s*/, denormalizeStoryParameters = ({
 
 // src/manager-api/modules/refs.ts
 var { location: location3, fetch: fetch2 } = scope, getSourceType = (source, refId) => {
-  let { origin: localOrigin, pathname: localPathname } = location3, { origin: sourceOrigin, pathname: sourcePathname } = new URL(source), localFull = `${localOrigin + localPathname}`.replace("/iframe.html", "").replace(/\/$/, ""), sourceFull = `${sourceOrigin + sourcePathname}`.replace("/iframe.html", "").replace(/\/$/, "");
+  let { origin: localOrigin, pathname: localPathname } = location3, { origin: sourceOrigin, pathname: sourcePathname } = new URL(source), localFull = `${localOrigin + localPathname}`.replace(/\/[^\/]*$/, ""), sourceFull = `${sourceOrigin + sourcePathname}`.replace(/\/[^\/]*$/, "");
   return localFull === sourceFull ? ["local", sourceFull] : refId || source ? ["external", sourceFull] : [null, null];
 }, defaultStoryMapper = (b, a3) => ({ ...a3, kind: a3.kind.replace("|", "/") }), addRefIds = (input2, ref) => Object.entries(input2).reduce((acc, [id, item]) => ({ ...acc, [id]: { ...item, refId: ref.id } }), {});
 async function handleRequest(request) {
@@ -62182,7 +62193,7 @@ init_dist();
 var import_memoizerific8 = __toESM(require_memoizerific(), 1), import_semver = __toESM(require_semver2(), 1);
 
 // src/manager-api/version.ts
-var version = "10.2.4";
+var version = "10.2.9";
 
 // src/manager-api/modules/versions.ts
 var { VERSIONCHECK } = scope, getVersionCheckData = (0, import_memoizerific8.default)(1)(() => {
@@ -72049,6 +72060,7 @@ var StyledButton3 = styled(Button)(
     onChange,
     tooltip,
     ariaLabel,
+    showSelectedOptionTitle = !0,
     ...props
   }, ref) => {
     let [isOpen, setIsOpen] = (0, import_react124.useState)(props.defaultOpen || !1), [shouldRefocusTrigger, setShouldRefocusTrigger] = (0, import_react124.useState)(!1), triggerRef = $df56164dff5785e2$export$4338b53315abf666(ref), id = (0, import_react124.useMemo)(() => "select-" + Math.random().toString(36).substring(2, 15), []), listboxId = `${id}-listbox`, listboxRef = (0, import_react124.useRef)(null), otState = $fc909762b330b746$export$61c6a8c84e605fb6({
@@ -72168,7 +72180,7 @@ var StyledButton3 = styled(Button)(
         "aria-expanded": isOpen,
         "aria-haspopup": "listbox"
       },
-      !multiSelect && import_react124.default.createElement(import_react124.default.Fragment, null, icon, selectedOptions[0]?.title ?? children),
+      !multiSelect && import_react124.default.createElement(import_react124.default.Fragment, null, icon, showSelectedOptionTitle && selectedOptions[0]?.title || children),
       multiSelect && import_react124.default.createElement(import_react124.default.Fragment, null, icon, children, !!selectedOptions.length && import_react124.default.createElement(
         SelectedOptionCount,
         {
