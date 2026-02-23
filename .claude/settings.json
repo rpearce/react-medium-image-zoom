@@ -1,0 +1,56 @@
+{
+  "permissions": {
+    "additionalDirectories": [],
+    "allow": [
+      "Bash(./scripts/*)",
+      "Bash(find :*)",
+      "Bash(git branch)",
+      "Bash(git diff)",
+      "Bash(git diff :*)",
+      "Bash(gh browse)",
+      "Bash(gh browse :*)",
+      "Bash(gh pr diff :*)",
+      "Bash(gh pr view :*)",
+      "Bash(gh issue status --repo rpearce/react-medium-image-zoom :*)",
+      "Bash(gh issue view --repo rpearce/react-medium-image-zoom :*)",
+      "Bash(git log)",
+      "Bash(git show)",
+      "Bash(git status)",
+      "Bash(grep :*)",
+      "Bash(ls :*)",
+      "Bash(node --version)",
+      "Bash(pnpm run :*)",
+      "Bash(rg :*)",
+      "Bash(which :*)"
+    ],
+    "deny": [
+      "Bash(chown :*)",
+      "Bash(git commit)",
+      "Bash(git commit :*)",
+      "Bash(git merge :*)",
+      "Bash(git push)",
+      "Bash(git push :*)",
+      "Bash(git rebase :*)",
+      "Bash(git reset :*)",
+      "Bash(ln :*)",
+      "Bash(npm i :*)",
+      "Bash(npm install :*)",
+      "Bash(npx :*)",
+      "Bash(sudo)",
+      "Bash(sudo :*)",
+      "Bash(yarn add :*)",
+      "Bash(wget :*)"
+    ],
+    "ask": [
+      "Bash(./node_modules/.bin/*)",
+      "Bash(chmod :*)",
+      "Bash(cp :*)",
+      "Bash(curl :*)",
+      "Bash(mkdir :*)",
+      "Bash(mv :*)",
+      "Bash(pnpm i :*)",
+      "Bash(pnpm install :*)",
+      "Bash(rm :*)"
+    ]
+  }
+}
