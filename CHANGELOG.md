@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.4.1
+
+### Patch Changes
+
+- b8a6851: switch from Rollup to plain tsc output
+
 ## 5.4.0
 
 ### Minor Changes
