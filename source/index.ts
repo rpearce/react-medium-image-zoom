@@ -1,6 +1,6 @@
 'use client'
 
-export { Uncontrolled as default } from './Uncontrolled'
-export { Controlled } from './Controlled'
-export type { UncontrolledProps } from './Uncontrolled'
-export type { ControlledProps } from './Controlled'
+export { Uncontrolled as default } from './Uncontrolled.js'
+export { Controlled } from './Controlled.js'
+export type { UncontrolledProps } from './Uncontrolled.js'
+export type { ControlledProps } from './Controlled.js'

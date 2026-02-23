@@ -64,6 +64,7 @@ export default [
       'react-hooks/rules-of-hooks': 'error',
       'react/prop-types': 'off',
       '@typescript-eslint/prefer-function-type': 'off',
+      '@typescript-eslint/consistent-type-imports': ['error', { fixStyle: 'inline-type-imports' }],
     },
   },
 ]
