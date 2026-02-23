@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import type { Meta } from '@storybook/react-webpack5'
+import React from 'react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 import { Controlled as Zoom } from '../source'
 import '../source/styles.css'
@@ -14,10 +14,14 @@ const meta: Meta<typeof Zoom> = {
 
 export default meta
 
-export const JAndKZoomUnzoom = (props) => {
-  const [isZoomed, setIsZoomed] = useState(false)
+// =============================================================================
 
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+type Story = StoryFn<typeof Zoom>
+
+export const JAndKZoomUnzoom: Story = props => {
+  const [isZoomed, setIsZoomed] = React.useState(false)
+
+  const handleKeyDown = React.useCallback((e: KeyboardEvent) => {
     if (e.key === 'j' || e.keyCode === 74) {
       setIsZoomed(true)
     } else if (e.key === 'k' || e.keyCode === 75) {
@@ -25,7 +29,7 @@ export const JAndKZoomUnzoom = (props) => {
     }
   }, [])
 
-  useEffect(() => {
+  React.useEffect(() => {
     document.addEventListener('keydown', handleKeyDown)
 
     return () => {

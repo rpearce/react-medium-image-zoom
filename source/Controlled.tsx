@@ -1,10 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import type { SupportedImage } from './types'
 import { IEnlarge, ICompress } from './icons'
 
 import {
+  type StyleObject,
+  type SupportedImage,
   adjustSvgIDs,
   getImgAlt,
   getImgSrc,
@@ -31,7 +32,7 @@ const enum ModalState {
   LOADED = 'LOADED',
   LOADING = 'LOADING',
   UNLOADED = 'UNLOADED',
-  UNLOADING = 'UNLOADING'
+  UNLOADING = 'UNLOADING',
 }
 
 // =============================================================================
@@ -63,7 +64,10 @@ export interface ControlledProps {
   IconZoom?: React.ElementType
   isDisabled?: boolean
   isZoomed: boolean
-  onZoomChange?: (value: boolean, data: { event: React.SyntheticEvent | Event }) => void
+  onZoomChange?: (
+    value: boolean,
+    data: { event: React.SyntheticEvent | Event },
+  ) => void
   swipeToUnzoomThreshold?: number
   wrapElement?: 'div' | 'span'
   ZoomContent?: (data: {
@@ -77,7 +81,7 @@ export interface ControlledProps {
   zoomMargin?: number
 }
 
-export function Controlled (props: ControlledProps) {
+export function Controlled(props: ControlledProps) {
   return <ControlledBase {...props} />
 }
 
@@ -96,15 +100,18 @@ interface ControlledDefaultProps {
 type ControlledPropsWithDefaults = ControlledDefaultProps & ControlledProps
 
 interface ControlledState {
-  id: string,
+  id: string
   isZoomImgLoaded: boolean
   loadedImgEl: HTMLImageElement | undefined
   modalState: ModalState
   shouldRefresh: boolean
-  styleGhost: React.CSSProperties
+  styleGhost: StyleObject
 }
 
-class ControlledBase extends React.Component<ControlledPropsWithDefaults, ControlledState> {
+class ControlledBase extends React.Component<
+  ControlledPropsWithDefaults,
+  ControlledState
+> {
   static defaultProps: ControlledDefaultProps = {
     a11yNameButtonUnzoom: 'Minimize image',
     a11yNameButtonZoom: 'Expand image',
@@ -138,7 +145,7 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
   private imgElResizeObserver: ResizeObserver | undefined
   private isScaling = false
   private prevBodyAttrs: BodyAttrs = defaultBodyAttrs
-  private styleModalImg: React.CSSProperties = {}
+  private styleModalImg: StyleObject = {}
   private touchYStart?: number
   private touchYEnd?: number
 
@@ -204,8 +211,8 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
       ? `${a11yNameButtonZoom}: ${imgAlt}`
       : a11yNameButtonZoom
 
-    const isModalActive = modalState === ModalState.LOADING ||
-      modalState === ModalState.LOADED
+    const isModalActive =
+      modalState === ModalState.LOADING || modalState === ModalState.LOADED
 
     const dataContentState = hasImage ? 'found' : 'not-found'
 
@@ -223,15 +230,15 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     // Share this with UNSAFE_handleSvg
     this.styleModalImg = hasImage
       ? getStyleModalImg({
-        hasZoomImg,
-        imgSrc,
-        isSvg,
-        isZoomed: isZoomed && isModalActive,
-        loadedImgEl,
-        offset: zoomMargin,
-        shouldRefresh,
-        targetEl: imgEl as SupportedImage,
-      })
+          hasZoomImg,
+          imgSrc,
+          isSvg,
+          isZoomed: isZoomed && isModalActive,
+          loadedImgEl,
+          offset: zoomMargin,
+          shouldRefresh,
+          targetEl: imgEl as SupportedImage,
+        })
       : {}
 
     // =========================================================================
@@ -239,15 +246,18 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     let modalContent = null
 
     if (hasImage) {
-      const modalImg = isImg || isDiv
-        ? <img
+      const modalImg =
+        isImg || isDiv ? (
+          <img
             alt={imgAlt}
             // @ts-expect-error crossOrigin type is odd
             crossOrigin={imgCrossOrigin}
             sizes={imgSizes}
             src={imgSrc}
             srcSet={imgSrcSet}
-            {...isZoomImgLoaded && modalState === ModalState.LOADED ? zoomImg : {}}
+            {...(isZoomImgLoaded && modalState === ModalState.LOADED
+              ? zoomImg
+              : {})}
             data-rmiz-modal-img=""
             height={this.styleModalImg.height || undefined}
             id={idModalImg}
@@ -255,71 +265,85 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
             style={this.styleModalImg}
             width={this.styleModalImg.width || undefined}
           />
-        : isSvg
-          ? <div
-              data-rmiz-modal-img
-              ref={refModalImg}
-              style={this.styleModalImg}
-            />
-          : null
-
-      const modalBtnUnzoom = <button
-        aria-label={a11yNameButtonUnzoom}
-        data-rmiz-btn-unzoom=""
-        onClick={handleBtnUnzoomClick}
-        type="button"
-      >
-        <IconUnzoom />
-      </button>
-
-      modalContent = ZoomContent
-        ? <ZoomContent
-            buttonUnzoom={modalBtnUnzoom}
-            modalState={modalState}
-            img={modalImg}
-            isZoomImgLoaded={isZoomImgLoaded}
-            onUnzoom={handleUnzoom}
+        ) : isSvg ? (
+          <div
+            data-rmiz-modal-img
+            ref={refModalImg}
+            style={this.styleModalImg}
           />
-        : <>{modalImg}{modalBtnUnzoom}</>
+        ) : null
+
+      const modalBtnUnzoom = (
+        <button
+          aria-label={a11yNameButtonUnzoom}
+          data-rmiz-btn-unzoom=""
+          onClick={handleBtnUnzoomClick}
+          type="button"
+        >
+          <IconUnzoom />
+        </button>
+      )
+
+      modalContent = ZoomContent ? (
+        <ZoomContent
+          buttonUnzoom={modalBtnUnzoom}
+          modalState={modalState}
+          img={modalImg}
+          isZoomImgLoaded={isZoomImgLoaded}
+          onUnzoom={handleUnzoom}
+        />
+      ) : (
+        <>
+          {modalImg}
+          {modalBtnUnzoom}
+        </>
+      )
     }
 
     // =========================================================================
 
     return (
       <WrapElement aria-owns={idModal} data-rmiz="" ref={refWrap}>
-        <WrapElement data-rmiz-content={dataContentState} ref={refContent} style={styleContent}>
+        <WrapElement
+          data-rmiz-content={dataContentState}
+          ref={refContent}
+          style={styleContent}
+        >
           {children}
         </WrapElement>
-        {hasImage && <WrapElement data-rmiz-ghost="" style={styleGhost}>
-          <button
-            aria-label={labelBtnZoom}
-            data-rmiz-btn-zoom=""
-            onClick={handleZoom}
-            type="button"
-          >
-            <IconZoom />
-          </button>
-        </WrapElement>}
-        {hasImage && ReactDOM.createPortal(
-          <dialog /* eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
-            aria-labelledby={idModalImg}
-            aria-modal="true"
-            className={classDialog}
-            data-rmiz-modal=""
-            id={idModal}
-            onClick={handleDialogClick}
-            onClose={handleDialogClose}
-            onCancel={handleDialogCancel}
-            ref={refDialog}
-            role="dialog"
-          >
-            <div data-rmiz-modal-overlay={dataOverlayState} />
-            <div data-rmiz-modal-content="" ref={refModalContent}>
-              {modalContent}
-            </div>
-          </dialog>
-          , this.getDialogContainer()
+        {hasImage && (
+          <WrapElement data-rmiz-ghost="" style={styleGhost}>
+            <button
+              aria-label={labelBtnZoom}
+              data-rmiz-btn-zoom=""
+              onClick={handleZoom}
+              type="button"
+            >
+              <IconZoom />
+            </button>
+          </WrapElement>
         )}
+        {hasImage &&
+          ReactDOM.createPortal(
+            <dialog /* eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
+              aria-labelledby={idModalImg}
+              aria-modal="true"
+              className={classDialog}
+              data-rmiz-modal=""
+              id={idModal}
+              onClick={handleDialogClick}
+              onClose={handleDialogClose}
+              onCancel={handleDialogCancel}
+              ref={refDialog}
+              role="dialog"
+            >
+              <div data-rmiz-modal-overlay={dataOverlayState} />
+              <div data-rmiz-modal-content="" ref={refModalContent}>
+                {modalContent}
+              </div>
+            </dialog>,
+            this.getDialogContainer(),
+          )}
       </WrapElement>
     )
   }
@@ -342,7 +366,10 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     this.imgElResizeObserver?.disconnect?.()
     this.imgEl?.removeEventListener?.('load', this.handleImgLoad)
     this.imgEl?.removeEventListener?.('click', this.handleZoom)
-    this.refModalImg.current?.removeEventListener?.('transitionend', this.handleImgTransitionEnd)
+    this.refModalImg.current?.removeEventListener?.(
+      'transitionend',
+      this.handleImgTransitionEnd,
+    )
     window.removeEventListener('wheel', this.handleWheel)
     window.removeEventListener('touchstart', this.handleTouchStart)
     window.removeEventListener('touchmove', this.handleTouchMove)
@@ -354,7 +381,10 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
 
   // ===========================================================================
 
-  componentDidUpdate(prevProps: ControlledPropsWithDefaults, prevState: ControlledState) {
+  componentDidUpdate(
+    prevProps: ControlledPropsWithDefaults,
+    prevState: ControlledState,
+  ) {
     this.handleModalStateChange(prevState.modalState)
     this.UNSAFE_handleSvg()
     this.handleIfZoomChanged(prevProps.isZoomed)
@@ -363,17 +393,34 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
   handleModalStateChange = (prevModalState: ControlledState['modalState']) => {
     const { modalState } = this.state
 
-    if (prevModalState !== ModalState.LOADING && modalState === ModalState.LOADING) {
+    if (
+      prevModalState !== ModalState.LOADING &&
+      modalState === ModalState.LOADING
+    ) {
       this.loadZoomImg()
       window.addEventListener('resize', this.handleResize, { passive: true })
-      window.addEventListener('touchstart', this.handleTouchStart, { passive: true })
-      window.addEventListener('touchmove', this.handleTouchMove, { passive: true })
-      window.addEventListener('touchend', this.handleTouchEnd, { passive: true })
-      window.addEventListener('touchcancel', this.handleTouchCancel, { passive: true })
+      window.addEventListener('touchstart', this.handleTouchStart, {
+        passive: true,
+      })
+      window.addEventListener('touchmove', this.handleTouchMove, {
+        passive: true,
+      })
+      window.addEventListener('touchend', this.handleTouchEnd, {
+        passive: true,
+      })
+      window.addEventListener('touchcancel', this.handleTouchCancel, {
+        passive: true,
+      })
       document.addEventListener('keydown', this.handleKeyDown, true)
-    } else if (prevModalState !== ModalState.LOADED && modalState === ModalState.LOADED) {
+    } else if (
+      prevModalState !== ModalState.LOADED &&
+      modalState === ModalState.LOADED
+    ) {
       window.addEventListener('wheel', this.handleWheel, { passive: true })
-    } else if (prevModalState !== ModalState.UNLOADING && modalState === ModalState.UNLOADING) {
+    } else if (
+      prevModalState !== ModalState.UNLOADING &&
+      modalState === ModalState.UNLOADING
+    ) {
       this.ensureImgTransitionEnd()
       window.removeEventListener('wheel', this.handleWheel)
       window.removeEventListener('touchstart', this.handleTouchStart)
@@ -381,10 +428,16 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
       window.removeEventListener('touchend', this.handleTouchEnd)
       window.removeEventListener('touchcancel', this.handleTouchCancel)
       document.removeEventListener('keydown', this.handleKeyDown, true)
-    } else if (prevModalState !== ModalState.UNLOADED && modalState === ModalState.UNLOADED) {
+    } else if (
+      prevModalState !== ModalState.UNLOADED &&
+      modalState === ModalState.UNLOADED
+    ) {
       this.bodyScrollEnable()
       window.removeEventListener('resize', this.handleResize)
-      this.refModalImg.current?.removeEventListener?.('transitionend', this.handleImgTransitionEnd)
+      this.refModalImg.current?.removeEventListener?.(
+        'transitionend',
+        this.handleImgTransitionEnd,
+      )
       this.refDialog.current?.close?.()
     }
   }
@@ -458,11 +511,20 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
           this.setState({ styleGhost: getStyleGhost(this.imgEl) })
         })
 
-        this.contentChangeObserver.observe(contentEl, { attributes: true, childList: true, subtree: true })
+        this.contentChangeObserver.observe(contentEl, {
+          attributes: true,
+          childList: true,
+          subtree: true,
+        })
       }
     } else if (!this.contentNotFoundChangeObserver) {
-      this.contentNotFoundChangeObserver = new MutationObserver(this.setAndTrackImg)
-      this.contentNotFoundChangeObserver.observe(contentEl, { childList: true, subtree: true })
+      this.contentNotFoundChangeObserver = new MutationObserver(
+        this.setAndTrackImg,
+      )
+      this.contentNotFoundChangeObserver.observe(contentEl, {
+        childList: true,
+        subtree: true,
+      })
     }
   }
 
@@ -568,7 +630,10 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
    *  Have dialog.click() only close in certain situations
    */
   handleDialogClick = (e: React.MouseEvent<HTMLDialogElement>) => {
-    if (e.target === this.refModalContent.current || e.target === this.refModalImg.current) {
+    if (
+      e.target === this.refModalContent.current ||
+      e.target === this.refModalImg.current
+    ) {
       e.stopPropagation()
       this.handleUnzoom(e)
     }
@@ -638,7 +703,8 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
     if (
       this.props.canSwipeToUnzoom &&
       !this.isScaling &&
-      browserScale <= 1 && this.touchYStart != null &&
+      browserScale <= 1 &&
+      this.touchYStart != null &&
       e.changedTouches[0]
     ) {
       this.touchYEnd = e.changedTouches[0].screenY
@@ -688,9 +754,11 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
    * Check if we have a loaded image to work with
    */
   hasImage = () => {
-    return this.imgEl &&
+    return (
+      this.imgEl &&
       (this.state.loadedImgEl || testSvg(this.imgEl)) &&
       window.getComputedStyle(this.imgEl).display !== 'none'
+    )
   }
 
   // ===========================================================================
@@ -701,7 +769,10 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
   zoom = () => {
     this.bodyScrollDisable()
     this.refDialog.current?.showModal?.()
-    this.refModalImg.current?.addEventListener?.('transitionend', this.handleImgTransitionEnd) // must be added after showModal
+    this.refModalImg.current?.addEventListener?.(
+      'transitionend',
+      this.handleImgTransitionEnd,
+    ) // must be added after showModal
     this.setState({ modalState: ModalState.LOADING })
   }
 
@@ -735,12 +806,17 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
    */
   ensureImgTransitionEnd = () => {
     if (this.refModalImg.current) {
-      const td = window.getComputedStyle(this.refModalImg.current).transitionDuration
+      const td = window.getComputedStyle(
+        this.refModalImg.current,
+      ).transitionDuration
       const tdFloat = parseFloat(td)
 
       if (tdFloat) {
         const tdMs = tdFloat * (td.endsWith('ms') ? 1 : 1000) + 50
-        this.timeoutTransitionEnd = setTimeout(this.handleImgTransitionEnd, tdMs)
+        this.timeoutTransitionEnd = setTimeout(
+          this.handleImgTransitionEnd,
+          tdMs,
+        )
       }
     }
   }
@@ -778,7 +854,9 @@ class ControlledBase extends React.Component<ControlledPropsWithDefaults, Contro
    * Load the zoomImg manually
    */
   loadZoomImg = () => {
-    const { props: { zoomImg } } = this
+    const {
+      props: { zoomImg },
+    } = this
     const zoomImgSrc = zoomImg?.src
 
     if (zoomImgSrc) {

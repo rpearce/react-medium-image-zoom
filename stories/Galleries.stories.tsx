@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo, useState } from 'react'
-import type { Meta } from '@storybook/react-webpack5'
+import React from 'react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 import Zoom from '../source'
 import '../source/styles.css'
@@ -24,9 +24,13 @@ const meta: Meta<typeof Zoom> = {
 
 export default meta
 
+// =============================================================================
+
+type Story = StoryFn<typeof Zoom>
+
 type ObjectFit = 'contain' | 'cover' | 'fill' | 'none' | 'scale-down'
 
-export const ImageGallery = () => {
+export const ImageGallery: Story = () => {
   const images = [
     imgGlenorchyLagoon,
     imgThatWanakaTree,
@@ -39,17 +43,20 @@ export const ImageGallery = () => {
     imgKea,
   ]
 
-  const [objectFit, setObjectFit] = useState('cover' as ObjectFit)
-  const [objectPosition, setObjectPosition] = useState('50% 50%')
+  const [objectFit, setObjectFit] = React.useState('cover' as ObjectFit)
+  const [objectPosition, setObjectPosition] = React.useState('50% 50%')
 
-  const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleSubmit = React.useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
 
-    const data = new FormData(e.currentTarget)
+      const data = new FormData(e.currentTarget)
 
-    setObjectFit(data.get('objectFit') as ObjectFit)
-    setObjectPosition(data.get('objectPosition') as string)
-  }, [])
+      setObjectFit(data.get('objectFit') as ObjectFit)
+      setObjectPosition(data.get('objectPosition') as string)
+    },
+    [],
+  )
 
   return (
     <main aria-label="Story">
@@ -112,8 +119,8 @@ export const ImageGallery = () => {
   )
 }
 
-export const DivImageGallery = () => {
-  const images = useMemo(
+export const DivImageGallery: Story = () => {
+  const images = React.useMemo(
     () => [
       imgGlenorchyLagoon,
       imgThatWanakaTree,
@@ -125,22 +132,25 @@ export const DivImageGallery = () => {
       imgPortWaikato,
       imgKea,
     ],
-    []
+    [],
   )
 
-  const [bgSize, setBgSize] = useState('cover')
-  const [bgPosition, setBgPosition] = useState('50%')
-  const [aspectRatio, setAspectRatio] = useState('56%')
+  const [bgSize, setBgSize] = React.useState('cover')
+  const [bgPosition, setBgPosition] = React.useState('50%')
+  const [aspectRatio, setAspectRatio] = React.useState('56%')
 
-  const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleSubmit = React.useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
 
-    const data = new FormData(e.currentTarget)
+      const data = new FormData(e.currentTarget)
 
-    setBgSize(data.get('backgroundSize') as string)
-    setBgPosition(data.get('backgroundPosition') as string)
-    setAspectRatio(data.get('aspectRatio') as string)
-  }, [])
+      setBgSize(data.get('backgroundSize') as string)
+      setBgPosition(data.get('backgroundPosition') as string)
+      setAspectRatio(data.get('aspectRatio') as string)
+    },
+    [],
+  )
 
   return (
     <main aria-label="Story">

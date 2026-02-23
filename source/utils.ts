@@ -1,5 +1,10 @@
-import React from 'react'
-import type { SupportedImage } from './types'
+export type SupportedImage =
+  | HTMLImageElement
+  | HTMLDivElement
+  | HTMLSpanElement
+  | SVGElement
+
+export type StyleObject = Record<string, string | number | undefined>
 
 // =============================================================================
 
@@ -10,41 +15,43 @@ interface TestElType {
 const testElType: TestElType = (type, el) =>
   type === (el as Element)?.tagName?.toUpperCase?.()
 
-export const testDiv = (el: unknown): el is HTMLDivElement | HTMLSpanElement => testElType('DIV', el) || testElType('SPAN', el)
-export const testImg = (el: unknown): el is HTMLImageElement => testElType('IMG', el)
-export const testImgLoaded = (el: HTMLImageElement) => el.complete && el.naturalHeight !== 0
+export const testDiv = (el: unknown): el is HTMLDivElement | HTMLSpanElement =>
+  testElType('DIV', el) || testElType('SPAN', el)
+
+export const testImg = (el: unknown): el is HTMLImageElement =>
+  testElType('IMG', el)
+
+export const testImgLoaded = (el: HTMLImageElement) =>
+  el.complete && el.naturalHeight !== 0
+
 export const testSvg = (el: unknown): el is SVGElement => testElType('SVG', el)
 
 // =============================================================================
 
-export interface GetScaleToWindow {
-  (data: {
-    width: number,
-    height: number,
-    offset: number
-  }): number
+interface GetScaleToWindow {
+  (data: { width: number; height: number; offset: number }): number
 }
 
-export const getScaleToWindow: GetScaleToWindow = ({ height, offset, width }) => {
+const getScaleToWindow: GetScaleToWindow = ({ height, offset, width }) => {
   return Math.min(
     (window.innerWidth - offset * 2) / width, // scale X-axis
-    (window.innerHeight - offset * 2) / height // scale Y-axis
+    (window.innerHeight - offset * 2) / height, // scale Y-axis
   )
 }
 
 // =============================================================================
 
-export interface GetScaleToWindowMax {
+interface GetScaleToWindowMax {
   (data: {
-    containerHeight: number,
-    containerWidth: number,
-    offset: number,
-    targetHeight: number,
-    targetWidth: number,
+    containerHeight: number
+    containerWidth: number
+    offset: number
+    targetHeight: number
+    targetWidth: number
   }): number
 }
 
-export const getScaleToWindowMax: GetScaleToWindowMax = ({
+const getScaleToWindowMax: GetScaleToWindowMax = ({
   containerHeight,
   containerWidth,
   offset,
@@ -57,27 +64,28 @@ export const getScaleToWindowMax: GetScaleToWindowMax = ({
     width: targetWidth,
   })
 
-  const ratio = targetWidth > targetHeight
-    ? targetWidth / containerWidth
-    : targetHeight / containerHeight
+  const ratio =
+    targetWidth > targetHeight
+      ? targetWidth / containerWidth
+      : targetHeight / containerHeight
 
   return scale > 1 ? ratio : scale * ratio
 }
 
 // =============================================================================
 
-export interface GetScale {
+interface GetScale {
   (data: {
-    containerHeight: number,
-    containerWidth: number,
-    hasScalableSrc: boolean,
-    offset: number,
-    targetHeight: number,
-    targetWidth: number,
+    containerHeight: number
+    containerWidth: number
+    hasScalableSrc: boolean
+    offset: number
+    targetHeight: number
+    targetWidth: number
   }): number
 }
 
-export const getScale: GetScale = ({
+const getScale: GetScale = ({
   containerHeight,
   containerWidth,
   hasScalableSrc,
@@ -91,28 +99,28 @@ export const getScale: GetScale = ({
 
   return !hasScalableSrc && targetHeight && targetWidth
     ? getScaleToWindowMax({
-      containerHeight,
-      containerWidth,
-      offset,
-      targetHeight,
-      targetWidth,
-    })
+        containerHeight,
+        containerWidth,
+        offset,
+        targetHeight,
+        targetWidth,
+      })
     : getScaleToWindow({
-      height: containerHeight,
-      offset,
-      width: containerWidth,
-    })
+        height: containerHeight,
+        offset,
+        width: containerWidth,
+      })
 }
 
 // =============================================================================
 
 const URL_REGEX = /url(?:\(['"]?)(.*?)(?:['"]?\))/
 
-export interface GetImgSrc {
+interface GetImgSrc {
   (imgEl: SupportedImage | null): string | undefined
 }
 
-export const getImgSrc: GetImgSrc = (imgEl) => {
+export const getImgSrc: GetImgSrc = imgEl => {
   if (imgEl) {
     if (testImg(imgEl)) {
       return imgEl.currentSrc
@@ -128,11 +136,11 @@ export const getImgSrc: GetImgSrc = (imgEl) => {
 
 // =============================================================================
 
-export interface GetImgAlt {
+interface GetImgAlt {
   (imgEl: SupportedImage | null): string | undefined
 }
 
-export const getImgAlt: GetImgAlt = (imgEl) => {
+export const getImgAlt: GetImgAlt = imgEl => {
   if (imgEl) {
     if (testImg(imgEl)) {
       return imgEl.alt ?? undefined
@@ -144,20 +152,20 @@ export const getImgAlt: GetImgAlt = (imgEl) => {
 
 // =============================================================================
 
-export interface GetImgRegularStyle {
+interface GetImgRegularStyle {
   (data: {
-    containerHeight: number,
-    containerLeft: number,
-    containerTop: number,
-    containerWidth: number,
-    hasScalableSrc: boolean,
-    offset: number,
-    targetHeight: number,
-    targetWidth: number,
-  }): React.CSSProperties
+    containerHeight: number
+    containerLeft: number
+    containerTop: number
+    containerWidth: number
+    hasScalableSrc: boolean
+    offset: number
+    targetHeight: number
+    targetWidth: number
+  }): StyleObject
 }
 
-export const getImgRegularStyle: GetImgRegularStyle = ({
+const getImgRegularStyle: GetImgRegularStyle = ({
   containerHeight,
   containerLeft,
   containerTop,
@@ -187,39 +195,36 @@ export const getImgRegularStyle: GetImgRegularStyle = ({
 
 // =============================================================================
 
-export interface ParsePosition {
-  (data: {
-    position: string,
-    relativeNum: number
-  }): number
+interface ParsePosition {
+  (data: { position: string; relativeNum: number }): number
 }
 
-export const parsePosition: ParsePosition = ({ position, relativeNum }) => {
+const parsePosition: ParsePosition = ({ position, relativeNum }) => {
   const positionNum = parseFloat(position)
 
   return position.endsWith('%')
-    ? relativeNum * positionNum / 100
+    ? (relativeNum * positionNum) / 100
     : positionNum
 }
 
 // =============================================================================
 
-export interface GetImgObjectFitStyle {
+interface GetImgObjectFitStyle {
   (data: {
-    containerHeight: number,
-    containerLeft: number,
-    containerTop: number,
-    containerWidth: number,
-    hasScalableSrc: boolean,
-    objectFit: string,
-    objectPosition: string,
-    offset: number,
-    targetHeight: number,
-    targetWidth: number,
-  }): React.CSSProperties
+    containerHeight: number
+    containerLeft: number
+    containerTop: number
+    containerWidth: number
+    hasScalableSrc: boolean
+    objectFit: string
+    objectPosition: string
+    offset: number
+    targetHeight: number
+    targetWidth: number
+  }): StyleObject
 }
 
-export const getImgObjectFitStyle: GetImgObjectFitStyle = ({
+const getImgObjectFitStyle: GetImgObjectFitStyle = ({
   containerHeight,
   containerLeft,
   containerTop,
@@ -243,13 +248,20 @@ export const getImgObjectFitStyle: GetImgObjectFitStyle = ({
     const widthRatio = containerWidth / targetWidth
     const heightRatio = containerHeight / targetHeight
 
-    const ratio = objectFit === 'cover'
-      ? Math.max(widthRatio, heightRatio)
-      : Math.min(widthRatio, heightRatio)
+    const ratio =
+      objectFit === 'cover'
+        ? Math.max(widthRatio, heightRatio)
+        : Math.min(widthRatio, heightRatio)
 
     const [posLeft = '50%', posTop = '50%'] = objectPosition.split(' ')
-    const posX = parsePosition({ position: posLeft, relativeNum: containerWidth - targetWidth * ratio })
-    const posY = parsePosition({ position: posTop, relativeNum: containerHeight - targetHeight * ratio })
+    const posX = parsePosition({
+      position: posLeft,
+      relativeNum: containerWidth - targetWidth * ratio,
+    })
+    const posY = parsePosition({
+      position: posTop,
+      relativeNum: containerHeight - targetHeight * ratio,
+    })
 
     const scale = getScale({
       containerHeight: targetHeight * ratio,
@@ -269,8 +281,14 @@ export const getImgObjectFitStyle: GetImgObjectFitStyle = ({
     }
   } else if (objectFit === 'none') {
     const [posLeft = '50%', posTop = '50%'] = objectPosition.split(' ')
-    const posX = parsePosition({ position: posLeft, relativeNum: containerWidth - targetWidth })
-    const posY = parsePosition({ position: posTop, relativeNum: containerHeight - targetHeight })
+    const posX = parsePosition({
+      position: posLeft,
+      relativeNum: containerWidth - targetWidth,
+    })
+    const posY = parsePosition({
+      position: posTop,
+      relativeNum: containerHeight - targetHeight,
+    })
 
     const scale = getScale({
       containerHeight: targetHeight,
@@ -314,22 +332,22 @@ export const getImgObjectFitStyle: GetImgObjectFitStyle = ({
 
 // =============================================================================
 
-export interface GetDivImgStyle {
+interface GetDivImgStyle {
   (data: {
-    backgroundPosition: string,
-    backgroundSize: string,
-    containerHeight: number,
-    containerLeft: number,
-    containerTop: number,
-    containerWidth: number,
-    hasScalableSrc: boolean,
-    offset: number,
-    targetHeight: number,
-    targetWidth: number,
-  }): React.CSSProperties
+    backgroundPosition: string
+    backgroundSize: string
+    containerHeight: number
+    containerLeft: number
+    containerTop: number
+    containerWidth: number
+    hasScalableSrc: boolean
+    offset: number
+    targetHeight: number
+    targetWidth: number
+  }): StyleObject
 }
 
-export const getDivImgStyle: GetDivImgStyle = ({
+const getDivImgStyle: GetDivImgStyle = ({
   backgroundPosition,
   backgroundSize,
   containerHeight,
@@ -345,13 +363,20 @@ export const getDivImgStyle: GetDivImgStyle = ({
     const widthRatio = containerWidth / targetWidth
     const heightRatio = containerHeight / targetHeight
 
-    const ratio = backgroundSize === 'cover'
-      ? Math.max(widthRatio, heightRatio)
-      : Math.min(widthRatio, heightRatio)
+    const ratio =
+      backgroundSize === 'cover'
+        ? Math.max(widthRatio, heightRatio)
+        : Math.min(widthRatio, heightRatio)
 
     const [posLeft = '50%', posTop = '50%'] = backgroundPosition.split(' ')
-    const posX = parsePosition({ position: posLeft, relativeNum: containerWidth - targetWidth * ratio })
-    const posY = parsePosition({ position: posTop, relativeNum: containerHeight - targetHeight * ratio })
+    const posX = parsePosition({
+      position: posLeft,
+      relativeNum: containerWidth - targetWidth * ratio,
+    })
+    const posY = parsePosition({
+      position: posTop,
+      relativeNum: containerHeight - targetHeight * ratio,
+    })
 
     const scale = getScale({
       containerHeight: targetHeight * ratio,
@@ -371,8 +396,14 @@ export const getDivImgStyle: GetDivImgStyle = ({
     }
   } else if (backgroundSize === 'auto') {
     const [posLeft = '50%', posTop = '50%'] = backgroundPosition.split(' ')
-    const posX = parsePosition({ position: posLeft, relativeNum: containerWidth - targetWidth })
-    const posY = parsePosition({ position: posTop, relativeNum: containerHeight - targetHeight })
+    const posX = parsePosition({
+      position: posLeft,
+      relativeNum: containerWidth - targetWidth,
+    })
+    const posY = parsePosition({
+      position: posTop,
+      relativeNum: containerHeight - targetHeight,
+    })
 
     const scale = getScale({
       containerHeight: targetHeight,
@@ -392,8 +423,14 @@ export const getDivImgStyle: GetDivImgStyle = ({
     }
   } else {
     const [sizeW = '50%', sizeH = '50%'] = backgroundSize.split(' ')
-    const sizeWidth = parsePosition({ position: sizeW, relativeNum: containerWidth })
-    const sizeHeight = parsePosition({ position: sizeH, relativeNum: containerHeight })
+    const sizeWidth = parsePosition({
+      position: sizeW,
+      relativeNum: containerWidth,
+    })
+    const sizeHeight = parsePosition({
+      position: sizeH,
+      relativeNum: containerHeight,
+    })
 
     const widthRatio = sizeWidth / targetWidth
     const heightRatio = sizeHeight / targetHeight
@@ -402,8 +439,14 @@ export const getDivImgStyle: GetDivImgStyle = ({
     const ratio = Math.min(widthRatio, heightRatio)
 
     const [posLeft = '50%', posTop = '50%'] = backgroundPosition.split(' ')
-    const posX = parsePosition({ position: posLeft, relativeNum: containerWidth - targetWidth * ratio })
-    const posY = parsePosition({ position: posTop, relativeNum: containerHeight - targetHeight * ratio })
+    const posX = parsePosition({
+      position: posLeft,
+      relativeNum: containerWidth - targetWidth * ratio,
+    })
+    const posY = parsePosition({
+      position: posTop,
+      relativeNum: containerHeight - targetHeight * ratio,
+    })
 
     const scale = getScale({
       containerHeight: targetHeight * ratio,
@@ -428,17 +471,17 @@ export const getDivImgStyle: GetDivImgStyle = ({
 
 const SRC_SVG_REGEX = /\.svg$/i
 
-export interface GetStyleModalImg {
+interface GetStyleModalImg {
   (data: {
-    hasZoomImg: boolean,
-    imgSrc: string | undefined,
-    isSvg: boolean,
-    isZoomed: boolean,
-    loadedImgEl: HTMLImageElement | undefined,
-    offset: number,
-    shouldRefresh: boolean,
-    targetEl: SupportedImage,
-  }): React.CSSProperties
+    hasZoomImg: boolean
+    imgSrc: string | undefined
+    isSvg: boolean
+    isZoomed: boolean
+    loadedImgEl: HTMLImageElement | undefined
+    offset: number
+    shouldRefresh: boolean
+    targetEl: SupportedImage
+  }): StyleObject
 }
 
 export const getStyleModalImg: GetStyleModalImg = ({
@@ -476,47 +519,51 @@ export const getStyleModalImg: GetStyleModalImg = ({
 
   const styleImgObjectFit = isImgObjectFit
     ? getImgObjectFitStyle({
-      containerHeight: imgRect.height,
-      containerLeft: imgRect.left,
-      containerTop: imgRect.top,
-      containerWidth: imgRect.width,
-      hasScalableSrc,
-      objectFit: targetElComputedStyle.objectFit,
-      objectPosition: targetElComputedStyle.objectPosition,
-      offset,
-      targetHeight: loadedImgEl?.naturalHeight || imgRect.height,
-      targetWidth: loadedImgEl?.naturalWidth || imgRect.width,
-    })
+        containerHeight: imgRect.height,
+        containerLeft: imgRect.left,
+        containerTop: imgRect.top,
+        containerWidth: imgRect.width,
+        hasScalableSrc,
+        objectFit: targetElComputedStyle.objectFit,
+        objectPosition: targetElComputedStyle.objectPosition,
+        offset,
+        targetHeight: loadedImgEl?.naturalHeight || imgRect.height,
+        targetWidth: loadedImgEl?.naturalWidth || imgRect.width,
+      })
     : undefined
 
   const styleDivImg = isDivImg
     ? getDivImgStyle({
-      backgroundPosition: targetElComputedStyle.backgroundPosition,
-      backgroundSize: targetElComputedStyle.backgroundSize,
-      containerHeight: imgRect.height,
-      containerLeft: imgRect.left,
-      containerTop: imgRect.top,
-      containerWidth: imgRect.width,
-      hasScalableSrc,
-      offset,
-      targetHeight: loadedImgEl?.naturalHeight || imgRect.height,
-      targetWidth: loadedImgEl?.naturalWidth || imgRect.width,
-    })
+        backgroundPosition: targetElComputedStyle.backgroundPosition,
+        backgroundSize: targetElComputedStyle.backgroundSize,
+        containerHeight: imgRect.height,
+        containerLeft: imgRect.left,
+        containerTop: imgRect.top,
+        containerWidth: imgRect.width,
+        hasScalableSrc,
+        offset,
+        targetHeight: loadedImgEl?.naturalHeight || imgRect.height,
+        targetWidth: loadedImgEl?.naturalWidth || imgRect.width,
+      })
     : undefined
 
-  const style = Object.assign(
+  const style: StyleObject = Object.assign(
     {},
-    styleImgRegular,
-    styleImgObjectFit,
-    styleDivImg
+    styleImgRegular ?? {},
+    styleImgObjectFit ?? {},
+    styleDivImg ?? {},
   )
 
   if (isZoomed) {
     const viewportX = window.innerWidth / 2
     const viewportY = window.innerHeight / 2
 
-    const childCenterX = parseFloat(String(style.left || 0)) + (parseFloat(String(style.width || 0)) / 2)
-    const childCenterY = parseFloat(String(style.top || 0)) + (parseFloat(String(style.height || 0)) / 2)
+    const childCenterX =
+      parseFloat(String(style.left || 0)) +
+      parseFloat(String(style.width || 0)) / 2
+    const childCenterY =
+      parseFloat(String(style.top || 0)) +
+      parseFloat(String(style.height || 0)) / 2
 
     const translateX = viewportX - childCenterX
     const translateY = viewportY - childCenterY
@@ -534,11 +581,11 @@ export const getStyleModalImg: GetStyleModalImg = ({
 
 // =============================================================================
 
-export interface GetStyleGhost {
-  (imgEl: SupportedImage | null): React.CSSProperties
+interface GetStyleGhost {
+  (imgEl: SupportedImage | null): StyleObject
 }
 
-export const getStyleGhost: GetStyleGhost = (imgEl) => {
+export const getStyleGhost: GetStyleGhost = imgEl => {
   if (!imgEl) {
     return {}
   }
@@ -631,7 +678,10 @@ export const adjustSvgIDs = (svgEl: SVGElement): void => {
   svgEl.querySelectorAll('style').forEach(styleEl => {
     idMap.forEach((newId, oldId) => {
       if (styleEl.textContent) {
-        styleEl.textContent = styleEl.textContent.replaceAll(`#${oldId}`, `#${newId}`)
+        styleEl.textContent = styleEl.textContent.replaceAll(
+          `#${oldId}`,
+          `#${newId}`,
+        )
       }
     })
   })

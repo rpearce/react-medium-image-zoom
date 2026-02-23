@@ -10,37 +10,37 @@ to see various usages.
 
 Features:
 
-* `<img />`, including all [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit)
+- `<img />`, including all [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit)
   values, any [`object-position`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-position),
   and [`loading="lazy"`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-loading)
-* `<div>` and `<span>` with any [`background-image`](https://developer.mozilla.org/en-US/docs/Web/CSS/background-image),
+- `<div>` and `<span>` with any [`background-image`](https://developer.mozilla.org/en-US/docs/Web/CSS/background-image),
   [`background-size`](https://developer.mozilla.org/en-US/docs/Web/CSS/background-size),
   and [`background-position`](https://developer.mozilla.org/en-US/docs/Web/CSS/background-position)
-* `<picture>` with `<source />` and `<img />`
-* `<figure>` with `<img />`
-* `<svg>`
-* [Custom zoom modal content](#custom-zoom-modal-content) (👇)
-* Accessibility:
-  * JAWS in Chrome, Edge, and Firefox (Windows)
-  * NVDA in Chrome, Edge, and Firefox (Windows)
-  * VoiceOver in Safari (macOS, iOS)
-  * TalkBack in Chrome (Android)
-* Supports popular tools:
-  * [Gatsby](https://www.gatsbyjs.com) and [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/)
-  * [Next.js](https://nextjs.org/docs/api-reference/next/image)
-* Zero `dependencies`
+- `<picture>` with `<source />` and `<img />`
+- `<figure>` with `<img />`
+- `<svg>`
+- [Custom zoom modal content](#custom-zoom-modal-content) (👇)
+- Accessibility:
+  - JAWS in Chrome, Edge, and Firefox (Windows)
+  - NVDA in Chrome, Edge, and Firefox (Windows)
+  - VoiceOver in Safari (macOS, iOS)
+  - TalkBack in Chrome (Android)
+- Supports popular tools:
+  - [Gatsby](https://www.gatsbyjs.com) and [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/)
+  - [Next.js](https://nextjs.org/docs/api-reference/next/image)
+- Zero `dependencies`
 
 Requirements to know about:
 
-* `<dialog>` element ([caniuse dialog](https://caniuse.com/dialog))
-* `ResizeObserver` ([caniuse ResizeObserver](https://caniuse.com/mdn-api_resizeobserver))
-* Package build target is `ES2021`. If you need to support older environments,
+- `<dialog>` element ([caniuse dialog](https://caniuse.com/dialog))
+- `ResizeObserver` ([caniuse ResizeObserver](https://caniuse.com/mdn-api_resizeobserver))
+- Package build target is `ES2021`. If you need to support older environments,
   run this package through your build system.
 
 ## Media and Tutorials
 
-* [2024-08-2024 — _React Round Up_ — "Building a Seamless Image Zoom Feature"](https://topenddevs.com/podcasts/react-round-up/episodes/building-a-seamless-image-zoom-feature-rru-265)
-* [Build a React.js Image Zoom Feature with react-medium-image-zoom Library and State Management](https://www.youtube.com/watch?v=w24gLJzmXp0)
+- [2024-08-2024 — _React Round Up_ — "Building a Seamless Image Zoom Feature"](https://topenddevs.com/podcasts/react-round-up/episodes/building-a-seamless-image-zoom-feature-rru-265)
+- [Build a React.js Image Zoom Feature with react-medium-image-zoom Library and State Management](https://www.youtube.com/watch?v=w24gLJzmXp0)
 
 ## Quickstart
 
@@ -107,7 +107,7 @@ export interface UncontrolledProps {
   // Default: undefined
   onZoomChange?: (
     value: boolean,
-    data: { event: React.SyntheticEvent | Event }
+    data: { event: React.SyntheticEvent | Event },
   ) => void
 
   // Swipe gesture threshold after which to unzoom.
@@ -122,10 +122,10 @@ export interface UncontrolledProps {
 
   // Provide your own custom modal content component.
   ZoomContent?: (props: {
-    img: ReactElement | null;
-    buttonUnzoom: ReactElement<HTMLButtonElement>;
-    onUnzoom: () => void;
-  }) => ReactElement;
+    img: ReactElement | null
+    buttonUnzoom: ReactElement<HTMLButtonElement>
+    onUnzoom: () => void
+  }) => ReactElement
 
   // Higher quality image attributes to use on zoom.
   zoomImg?: ImgHTMLAttributes<HTMLImageElement>
@@ -323,23 +323,29 @@ const CustomZoomContent = ({
     ? 'zoom-caption zoom-caption--loaded'
     : 'zoom-caption'
 
-  return <>
-    {buttonUnzoom}
+  return (
+    <>
+      {buttonUnzoom}
 
-    <figure>
-      {img}
-      <figcaption className={classCaption}>
-        That Wanaka Tree, also known as the Wanaka Willow, is a willow tree
-        located at the southern end of Lake Wānaka in the Otago region of New
-        Zealand.
-        <cite className="zoom-caption-cite">
-          Wikipedia, <a className="zoom-caption-link" href="https://en.wikipedia.org/wiki/That_Wanaka_Tree">
-            That Wanaka Tree
-          </a>
-        </cite>
-      </figcaption>
-    </figure>
-  </>
+      <figure>
+        {img}
+        <figcaption className={classCaption}>
+          That Wanaka Tree, also known as the Wanaka Willow, is a willow tree
+          located at the southern end of Lake Wānaka in the Otago region of New
+          Zealand.
+          <cite className="zoom-caption-cite">
+            Wikipedia,{' '}
+            <a
+              className="zoom-caption-link"
+              href="https://en.wikipedia.org/wiki/That_Wanaka_Tree"
+            >
+              That Wanaka Tree
+            </a>
+          </cite>
+        </figcaption>
+      </figure>
+    </>
+  )
 }
 ```
 
@@ -347,15 +353,15 @@ const CustomZoomContent = ({
 
 Here are the prop changes from `v4` to be aware of:
 
-* `closeText` was renamed to `a11yNameButtonUnzoom`
-* `openText` was renamed to `a11yNameButtonZoom`
-* `overlayBgColorStart` was removed and is now controlled via the CSS selector `[data-rmiz-modal-overlay="hidden"]`
-* `overlayBgColorEnd` was removed and is now controlled via the CSS selector `[data-rmiz-modal-overlay="visible"]`
-* `portalEl` was removed, for we are using the `<dialog>` element now
-* `transitionDuration` was removed and is now controlled via the CSS selectors `[data-rmiz-modal-overlay]` and `[data-rmiz-modal-img]`
-* `wrapElement` was removed then added back in `v5.1.0`
-* `wrapStyle` was removed
-* `zoomZindex` was removed, for we are using the `<dialog>` element now
+- `closeText` was renamed to `a11yNameButtonUnzoom`
+- `openText` was renamed to `a11yNameButtonZoom`
+- `overlayBgColorStart` was removed and is now controlled via the CSS selector `[data-rmiz-modal-overlay="hidden"]`
+- `overlayBgColorEnd` was removed and is now controlled via the CSS selector `[data-rmiz-modal-overlay="visible"]`
+- `portalEl` was removed, for we are using the `<dialog>` element now
+- `transitionDuration` was removed and is now controlled via the CSS selectors `[data-rmiz-modal-overlay]` and `[data-rmiz-modal-img]`
+- `wrapElement` was removed then added back in `v5.1.0`
+- `wrapStyle` was removed
+- `zoomZindex` was removed, for we are using the `<dialog>` element now
 
 And you can now provide `zoomImg` props to specify a different image to load when zooming.
 

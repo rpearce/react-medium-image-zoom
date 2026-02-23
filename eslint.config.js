@@ -4,6 +4,7 @@ import storybook from 'eslint-plugin-storybook'
 // @ts-check
 
 import eslint from '@eslint/js'
+import eslintConfigPrettier from 'eslint-config-prettier'
 import eslintPluginJSXA11y from 'eslint-plugin-jsx-a11y'
 import eslintPluginReact from 'eslint-plugin-react'
 import eslintPluginReactHooks from 'eslint-plugin-react-hooks'
@@ -11,6 +12,7 @@ import neostandard from 'neostandard'
 import tseslint from 'typescript-eslint'
 import { fixupPluginRules } from '@eslint/compat'
 
+/** @type {import('@typescript-eslint/utils').TSESLint.FlatConfig.ConfigFile} */
 export default [
   {
     ignores: [
@@ -29,6 +31,8 @@ export default [
   eslintPluginJSXA11y.flatConfigs.strict,
   ...tseslint.configs.strict,
   ...tseslint.configs.stylistic,
+  ...storybook.configs['flat/recommended'],
+  eslintConfigPrettier,
   {
     plugins: {
       'react-hooks': fixupPluginRules(eslintPluginReactHooks),
@@ -62,5 +66,4 @@ export default [
       '@typescript-eslint/prefer-function-type': 'off',
     },
   },
-  ...storybook.configs['flat/recommended'],
 ]

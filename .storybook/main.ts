@@ -1,22 +1,17 @@
-export default {
-  addons: [
-    '@storybook/addon-docs',
-    '@storybook/addon-a11y',
-    '@storybook/addon-webpack5-compiler-swc',
+import type { StorybookConfig } from '@storybook/react-vite'
+
+const config: StorybookConfig = {
+  stories: [
+    '../stories/**/*.mdx',
+    '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
-
-  stories: ['../stories/**/*.mdx', '../stories/**/*.stories.@(js|jsx|ts|tsx)'],
-
-  features: {
-    interactionsDebugger: true,
-  },
-
+  addons: ['@storybook/addon-a11y', '@storybook/addon-docs'],
   framework: {
-    name: '@storybook/react-webpack5',
+    name: '@storybook/react-vite',
     options: {},
   },
-
-  core: {
-    disableTelemetry: true,
+  typescript: {
+    check: false,
   },
 }
+export default config

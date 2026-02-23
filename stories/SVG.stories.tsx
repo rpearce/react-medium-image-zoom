@@ -1,5 +1,5 @@
 import React from 'react'
-import type { Meta } from '@storybook/react-webpack5'
+import type { Meta, StoryFn } from '@storybook/react-vite'
 
 import Zoom from '../source'
 import '../source/styles.css'
@@ -12,7 +12,11 @@ const meta: Meta<typeof Zoom> = {
 
 export default meta
 
-export const AnimatingSquare = (props) => (
+// =============================================================================
+
+type Story = StoryFn<typeof Zoom>
+
+export const AnimatingSquare: Story = props => (
   <main aria-label="Story">
     <h1>An animating square SVG with its width & height set via style</h1>
     <div className="mw-600">
@@ -45,7 +49,7 @@ export const AnimatingSquare = (props) => (
   </main>
 )
 
-export const BirdOnBackground = () => (
+export const BirdOnBackground: Story = () => (
   <main aria-label="Story">
     <h1>A bird SVG on a non-SVG background</h1>
     <div className="mw-600">
@@ -75,7 +79,7 @@ export const BirdOnBackground = () => (
 )
 
 // https://github.com/rpearce/react-medium-image-zoom/issues/438
-export const Excalidraw = () => (
+export const Excalidraw: Story = () => (
   <main aria-label="Story">
     <h1>A series of shapes connected by arrows with descriptive text</h1>
     <div className="mw-600">
