@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import { IEnlarge, ICompress } from './icons'
+import { IEnlarge, ICompress } from './icons.js'
 
 import {
   type StyleObject,
@@ -15,7 +15,7 @@ import {
   testImg,
   testImgLoaded,
   testSvg,
-} from './utils'
+} from './utils.js'
 
 // =============================================================================
 
