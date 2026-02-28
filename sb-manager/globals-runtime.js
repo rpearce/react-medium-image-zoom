@@ -33452,11 +33452,11 @@ var { WebSocket } = scope, HEARTBEAT_INTERVAL = 15e3, HEARTBEAT_MAX_LATENCY = 5e
 };
 
 // src/channels/index.ts
-var { CONFIG_TYPE } = scope, channels_default = Channel;
+var { CHANNEL_OPTIONS, CONFIG_TYPE } = scope, channels_default = Channel;
 function createBrowserChannel({ page, extraTransports = [] }) {
   let transports = [new PostMessageTransport({ page }), ...extraTransports];
   if (CONFIG_TYPE === "DEVELOPMENT") {
-    let protocol = window.location.protocol === "http:" ? "ws" : "wss", { hostname, port } = window.location, channelUrl = `${protocol}://${hostname}:${port}/storybook-server-channel`;
+    let protocol = window.location.protocol === "http:" ? "ws" : "wss", { hostname, port } = window.location, { wsToken } = CHANNEL_OPTIONS || {}, channelUrl = `${protocol}://${hostname}:${port}/storybook-server-channel?token=${wsToken}`;
     transports.push(new WebsocketTransport({ url: channelUrl, onError: () => {
     }, page }));
   }
@@ -62193,7 +62193,7 @@ init_dist();
 var import_memoizerific8 = __toESM(require_memoizerific(), 1), import_semver = __toESM(require_semver2(), 1);
 
 // src/manager-api/version.ts
-var version = "10.2.9";
+var version = "10.2.10";
 
 // src/manager-api/modules/versions.ts
 var { VERSIONCHECK } = scope, getVersionCheckData = (0, import_memoizerific8.default)(1)(() => {
