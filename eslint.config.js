@@ -1,6 +1,3 @@
-// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from 'eslint-plugin-storybook'
-
 // @ts-check
 
 import eslint from '@eslint/js'
@@ -8,9 +5,9 @@ import eslintConfigPrettier from 'eslint-config-prettier'
 import eslintPluginJSXA11y from 'eslint-plugin-jsx-a11y'
 import eslintPluginReact from 'eslint-plugin-react'
 import eslintPluginReactHooks from 'eslint-plugin-react-hooks'
+import eslintPluginStorybook from 'eslint-plugin-storybook'
 import neostandard from 'neostandard'
 import tseslint from 'typescript-eslint'
-import { fixupPluginRules } from '@eslint/compat'
 
 /** @type {import('@typescript-eslint/utils').TSESLint.FlatConfig.ConfigFile} */
 export default [
@@ -29,14 +26,12 @@ export default [
   ...neostandard(),
   eslintPluginReact.configs.flat.recommended,
   eslintPluginJSXA11y.flatConfigs.strict,
+  eslintPluginReactHooks.configs.flat['recommended-latest'],
   ...tseslint.configs.strict,
   ...tseslint.configs.stylistic,
-  ...storybook.configs['flat/recommended'],
+  ...eslintPluginStorybook.configs['flat/recommended'],
   eslintConfigPrettier,
   {
-    plugins: {
-      'react-hooks': fixupPluginRules(eslintPluginReactHooks),
-    },
     settings: {
       react: {
         version: 'detect',
@@ -64,7 +59,10 @@ export default [
       'react-hooks/rules-of-hooks': 'error',
       'react/prop-types': 'off',
       '@typescript-eslint/prefer-function-type': 'off',
-      '@typescript-eslint/consistent-type-imports': ['error', { fixStyle: 'inline-type-imports' }],
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        { fixStyle: 'inline-type-imports' },
+      ],
     },
   },
 ]
