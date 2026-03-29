@@ -1,0 +1,4347 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Components Manifest</title>
+  <style>
+      :root {
+          --bg: #0b0c10;
+          --panel: #121318;
+          --muted: #9aa0a6;
+          --fg: #e8eaed;
+          --ok: #22c55e;
+          --info: #1e88e5;
+          --err: #c62828;
+          --ok-bg: #0c1a13;
+          --info-bg: #0c1624;
+          --err-bg: #1a0e0e;
+          --chip: #1f2330;
+          --border: #2b2f3a;
+          --link: #8ab4f8;
+          --active-ring: 1px; /* 1px active ring for pills and toggles */
+      }
+
+      * {
+          box-sizing: border-box;
+      }
+
+      html,
+      body {
+          margin: 0;
+          background: var(--bg);
+          color: var(--fg);
+          font: 14px/1.5 system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Ubuntu,
+          Cantarell,
+          'Helvetica Neue',
+          Arial,
+          'Noto Sans';
+      }
+
+      .wrap {
+          max-width: 1100px;
+          margin: 0 auto;
+          padding: 16px 20px;
+      }
+
+      header {
+          position: sticky;
+          top: 0;
+          backdrop-filter: blur(6px);
+          background: color-mix(in srgb, var(--bg) 84%, transparent);
+          border-bottom: 1px solid var(--border);
+          z-index: 10;
+      }
+
+      h1 {
+          font-size: 20px;
+          margin: 0 0 6px;
+      }
+
+      .summary {
+          display: flex;
+          gap: 12px;
+          flex-wrap: wrap;
+          align-items: center;
+      }
+
+      /* Top filter pills */
+      .filter-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 6px 12px;
+          border: 1px solid var(--border);
+          border-radius: 999px;
+          background: var(--panel);
+          text-decoration: none;
+          cursor: pointer;
+          user-select: none;
+          color: var(--fg);
+      }
+
+      .filter-pill.ok {
+          color: #b9f6ca;
+          border-color: color-mix(in srgb, var(--ok) 55%, var(--border));
+          background: color-mix(in srgb, var(--ok) 18%, #000);
+      }
+
+      .filter-pill.info {
+          color: #b3d9ff;
+          border-color: color-mix(in srgb, var(--info) 55%, var(--border));
+          background: var(--info-bg);
+      }
+
+      .filter-pill.err {
+          color: #ff9aa0;
+          border-color: color-mix(in srgb, var(--err) 55%, var(--border));
+          background: var(--err-bg);
+      }
+
+      .filter-pill.all {
+          color: #d7dbe0;
+          border-color: var(--border);
+          background: var(--panel);
+      }
+
+      .filter-pill[aria-disabled='true'] {
+          cursor: default;
+          text-decoration: none;
+      }
+
+      .filter-pill:focus,
+      .filter-pill:active {
+          outline: none;
+          box-shadow: none;
+      }
+
+      /* Selected top pill ring via :target */
+      #filter-all:target ~ header .filter-pill[data-k='all'],
+      #filter-errors:target ~ header .filter-pill[data-k='errors'],
+      #filter-infos:target ~ header .filter-pill[data-k='infos'],
+      #filter-story-errors:target ~ header .filter-pill[data-k='story-errors'],
+      #filter-doc-errors:target ~ header .filter-pill[data-k='docs'],
+      #filter-docs:target ~ header .filter-pill[data-k='docs'] {
+          box-shadow: 0 0 0 var(--active-ring) currentColor;
+          border-color: currentColor;
+      }
+
+      /* Hidden targets for filtering */
+      #filter-all,
+      #filter-errors,
+      #filter-infos,
+      #filter-story-errors,
+      #filter-doc-errors,
+      #filter-docs {
+          display: none;
+      }
+
+      main {
+          padding: 36px 0 40px;
+      }
+
+      .grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 18px;
+      }
+
+      /* one card per row */
+
+      .card {
+          border: 1px solid var(--border);
+          background: var(--panel);
+          border-radius: 14px;
+          padding: 14px;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+      }
+
+      .head {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+      }
+
+      .title {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+      }
+
+      .title h2 {
+          font-size: 16px;
+          margin: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+      }
+
+      .meta {
+          font-size: 12px;
+          color: var(--muted);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+      }
+
+      .kv {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+      }
+
+      .chip {
+          font-size: 12px;
+          padding: 4px 8px;
+          border-radius: 999px;
+          background: var(--chip);
+          border: 1px solid var(--border);
+      }
+
+      .hint {
+          color: var(--muted);
+          font-size: 12px;
+      }
+
+      .badges {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+      }
+
+      /* Per-card badges: labels become toggles when clickable */
+      .badge {
+          font-size: 12px;
+          padding: 3px 8px;
+          border-radius: 999px;
+          border: 1px solid var(--border);
+          background: var(--chip);
+          color: #d7dbe0;
+      }
+
+      .badge.ok {
+          color: #b9f6ca;
+          border-color: color-mix(in srgb, var(--ok) 55%, var(--border));
+      }
+
+      .badge.info {
+          color: #b3d9ff;
+          border-color: color-mix(in srgb, var(--info) 55%, var(--border));
+      }
+
+      .badge.err {
+          color: #ff9aa0;
+          border-color: color-mix(in srgb, var(--err) 55%, var(--border));
+      }
+
+      .as-toggle {
+          cursor: pointer;
+      }
+
+      /* 1px ring on active toggle */
+      .tg-err:checked + label.as-toggle,
+      .tg-info:checked + label.as-toggle,
+      .tg-stories:checked + label.as-toggle,
+      .tg-docs:checked + label.as-toggle,
+      .tg-content:checked + label.as-toggle,
+      .tg-props:checked + label.as-toggle {
+          box-shadow: 0 0 0 var(--active-ring) currentColor;
+          border-color: currentColor;
+      }
+
+      /* Panels: hidden by default, shown when respective toggle checked */
+      .panels {
+          display: grid;
+          gap: 10px;
+      }
+
+      .panel {
+          display: none;
+      }
+
+      .tg-err:checked ~ .panels .panel-err {
+          display: grid;
+      }
+
+      .tg-info:checked ~ .panels .panel-info {
+          display: grid;
+          gap: 8px;
+      }
+
+      .tg-stories:checked ~ .panels .panel-stories {
+          display: grid;
+          gap: 8px;
+      }
+
+      .tg-docs:checked ~ .panels .panel-docs {
+          display: grid;
+          gap: 8px;
+      }
+
+      .tg-content:checked ~ .panels .panel-content {
+          display: grid;
+          gap: 8px;
+      }
+
+      .tg-props:checked ~ .panels .panel-props {
+          display: grid;
+      }
+
+      /* Colored notes for prop type error + info */
+      .note {
+          padding: 12px;
+          border: 1px solid var(--border);
+          border-radius: 10px;
+      }
+
+      .note.err {
+          border-color: color-mix(in srgb, var(--err) 55%, var(--border));
+          background: var(--err-bg);
+          color: #ffd1d4;
+      }
+
+      .note.info {
+          border-color: color-mix(in srgb, var(--info) 55%, var(--border));
+          background: var(--info-bg);
+          color: #d6e8ff;
+      }
+
+      .note.ok {
+          border-color: color-mix(in srgb, var(--ok) 55%, var(--border));
+          background: var(--ok-bg);
+          color: var(--fg);
+      }
+
+      .note-title {
+          font-weight: 600;
+          margin-bottom: 6px;
+      }
+
+      .note-body {
+          white-space: normal;
+      }
+
+      /* Story error cards */
+      .ex {
+          padding: 10px;
+          border: 1px solid var(--border);
+          border-radius: 10px;
+          background: #0f131b;
+      }
+
+      .ex.err {
+          border-color: color-mix(in srgb, var(--err) 55%, var(--border));
+      }
+
+      .row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
+      }
+
+      .status-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          display: inline-block;
+      }
+
+      .dot-ok {
+          background: var(--ok);
+      }
+
+      .dot-err {
+          background: var(--err);
+      }
+
+      .ex-name {
+          font-weight: 600;
+      }
+
+      /* Error groups (visible in errors filter) */
+      .error-groups {
+          display: none;
+          margin-bottom: 16px;
+      }
+
+      .group {
+          border: 1px solid var(--border);
+          background: var(--panel);
+          border-radius: 14px;
+          overflow: hidden;
+      }
+
+      .group + .group {
+          margin-top: 12px;
+      }
+
+      .group-header {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 12px 14px;
+          cursor: pointer;
+          border-bottom: 1px solid var(--border);
+      }
+
+      .group-header:hover {
+          background: #141722;
+      }
+
+      .group-title {
+          font-weight: 600;
+          flex: 1;
+      }
+
+      .group-count {
+          font-size: 12px;
+          color: var(--muted);
+      }
+
+      .group-cards {
+          display: none;
+          padding: 12px;
+      }
+
+      .group .card {
+          margin: 12px 0;
+      }
+
+      .group .card:first-child {
+          margin-top: 0;
+      }
+
+      .group .card:last-child {
+          margin-bottom: 0;
+      }
+
+      /* caret rotation */
+      .group-tg:checked + label .caret {
+          transform: rotate(90deg);
+      }
+
+      .caret {
+          transition: transform 0.15s ease;
+      }
+
+      /* toggle body */
+      .group-tg:checked ~ .group-cards {
+          display: block;
+      }
+
+      /* CSS-only filtering of cards via top pills */
+      #filter-errors:target ~ main .card:not(.has-error):not(.has-story-error) {
+          display: none;
+      }
+
+      #filter-infos:target ~ main .card:not(.has-info) {
+          display: none;
+      }
+
+      #filter-story-errors:target ~ main .card:not(.has-story-error) {
+          display: none;
+      }
+
+      #filter-doc-errors:target ~ main .card:not(.has-doc-error) {
+          display: none;
+      }
+
+      #filter-docs:target ~ main .card:has(> .tg-docs),
+      #filter-docs:target ~ main .card.is-doc {
+          display: block;
+      }
+
+      #filter-docs:target ~ main .card:not(:has(> .tg-docs)):not(.is-doc) {
+          display: none;
+      }
+
+      #filter-all:target ~ main .card {
+          display: block;
+      }
+
+      /* In errors view, hide standalone component-error cards in the regular grid (they will appear in groups) */
+      #filter-errors:target ~ main .grid .card.has-error {
+          display: none;
+      }
+
+      /* Show grouped section only in errors view */
+      #filter-errors:target ~ main .error-groups {
+          display: block;
+      }
+
+      /* Section titles */
+      .section-title {
+          font-size: 16px;
+          font-weight: 600;
+          color: var(--muted);
+          margin: 24px 0 12px;
+          padding-bottom: 8px;
+          border-bottom: 1px solid var(--border);
+      }
+      .section-title:first-child {
+          margin-top: 0;
+      }
+
+      /* When a toggle is checked, show the corresponding panel */
+      .card > .tg-err:checked ~ .panels .panel-err {
+          display: grid;
+      }
+      
+      .card > .tg-info:checked ~ .panels .panel-info {
+          display: grid;
+      }
+      
+      .card > .tg-stories:checked ~ .panels .panel-stories {
+          display: grid;
+      }
+
+      .card > .tg-docs:checked ~ .panels .panel-docs {
+          display: grid;
+      }
+
+      .card > .tg-content:checked ~ .panels .panel-content {
+          display: grid;
+      }
+
+      /* Add vertical spacing around panels only when any panel is visible */
+      .card > .tg-err:checked ~ .panels,
+      .card > .tg-info:checked ~ .panels,
+      .card > .tg-stories:checked ~ .panels,
+      .card > .tg-docs:checked ~ .panels,
+      .card > .tg-content:checked ~ .panels,
+      .card > .tg-props:checked ~ .panels {
+          margin: 10px 0;
+      }
+
+      /* Optional: a subtle 1px ring on the active badge, using :has() if available */
+      @supports selector(.card:has(.tg-err:checked)) {
+          .card:has(.tg-err:checked) label[for$='-err'],
+          .card:has(.tg-info:checked) label[for$='-info'],
+          .card:has(.tg-stories:checked) label[for$='-stories'],
+          .card:has(.tg-docs:checked) label[for$='-docs'],
+          .card:has(.tg-content:checked) label[for$='-content'],
+          .card:has(.tg-props:checked) label[for$='-props'] {
+              box-shadow: 0 0 0 1px currentColor;
+              border-color: currentColor;
+          }
+      }
+
+      /* Wrap long lines in code blocks at ~120 characters */
+      pre, code {
+          font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      }
+      pre {
+          white-space: pre-wrap;
+          overflow-wrap: anywhere;
+          word-break: break-word;
+          overflow-x: auto; /* fallback for extremely long tokens */
+          margin: 8px 0 0;
+      }
+      pre > code {
+          display: block;
+          white-space: inherit;
+          overflow-wrap: inherit;
+          word-break: inherit;
+          inline-size: min(100%, 120ch);
+      }
+
+      /* MDX content container for docs */
+      .mdx-content {
+          background: #0f131b;
+          border: 1px solid var(--border);
+          border-radius: 10px;
+          padding: 12px;
+          max-height: 400px;
+          overflow-y: auto;
+          margin-top: 8px;
+      }
+  </style>
+</head>
+<body>
+<!-- Hidden targets for the top-level filters -->
+<span id="filter-all"></span>
+<span id="filter-errors"></span>
+<span id="filter-infos"></span>
+<span id="filter-story-errors"></span>
+<span id="filter-doc-errors"></span>
+<span id="filter-docs"></span>
+<header>
+  <div class="wrap">
+    <h1>Manifest Debugger</h1>
+    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><a class="filter-pill err" data-k="errors" href="#filter-errors">6/6 prop type errors</a><a class="filter-pill info" data-k="infos" href="#filter-infos">6/6 infos</a><span class="filter-pill ok" aria-disabled="true">28 stories ok</span><a class="filter-pill ok" data-k="docs" href="#filter-docs">1 doc ok</a></div>
+  </div>
+</header>
+<main>
+  <div class="wrap">
+    <div class="note info" style="margin-bottom: 16px;">
+            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>0.8s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
+            <pre><code>typescript: {
+  reactDocgen: 'react-docgen-typescript',
+}</code></pre>
+            Note: <code>react-docgen-typescript</code> can be slower. If performance is acceptable for your project, it generally produces better results.
+            <a href="https://storybook.js.org/docs/api/main-config/main-config-typescript#reactdocgen" target="_blank">Learn more</a>
+          </div>
+    <h2 class="section-title">Components</h2>
+    <div class="grid" role="list">
+      
+<article
+  class="card 
+  has-error 
+  has-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="Zoom">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-err"></span> Zoom</h2>
+      <div class="badges">
+        <label for="c-0-galleries-err" class="badge err as-toggle">prop type error</label>
+        <label for="c-0-galleries-info" class="badge info as-toggle">1 info</label>
+        <label for="c-0-galleries-stories" class="badge ok as-toggle">2 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./stories/Galleries.stories.tsx">galleries · ./stories/Galleries.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  <input id="c-0-galleries-err" class="tg tg-err" type="checkbox" hidden />
+  <input id="c-0-galleries-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-0-galleries-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+
+  <div class="panels">
+    
+        <div class="panel panel-err">
+          
+    <div class="note err">
+      <div class="note-title">Prop type error</div>
+      <div class="note-body"><pre><code>File: /home/runner/work/react-medium-image-zoom/react-medium-image-zoom/source/index.ts
+Error:
+No suitable component definition found.
+You can debug your component file in this playground: https://react-docgen.dev/playground
+Code:
+&#39;use client&#39;
+
+export { Uncontrolled as default } from &#39;./Uncontrolled.js&#39;
+export { Controlled } from &#39;./Controlled.js&#39;
+export type { UncontrolledProps } from &#39;./Uncontrolled.js&#39;
+export type { ControlledProps } from &#39;./Controlled.js&#39;
+</code></pre></div>
+    </div>
+        </div>
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Zoom } from "react-medium-image-zoom";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Image Gallery</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const ImageGallery = () =&gt; {
+  const images = [
+    imgGlenorchyLagoon,
+    imgThatWanakaTree,
+    imgNzBeach,
+    imgHobbiton,
+    imgHookerValleyTrack,
+    imgQueenstown,
+    imgTekapo,
+    imgPortWaikato,
+    imgKea,
+  ]
+
+  const [objectFit, setObjectFit] = React.useState(&#39;cover&#39; as ObjectFit)
+  const [objectPosition, setObjectPosition] = React.useState(&#39;50% 50%&#39;)
+
+  const handleSubmit = React.useCallback(
+    (e: React.FormEvent&lt;HTMLFormElement&gt;) =&gt; {
+      e.preventDefault()
+
+      const data = new FormData(e.currentTarget)
+
+      setObjectFit(data.get(&#39;objectFit&#39;) as ObjectFit)
+      setObjectPosition(data.get(&#39;objectPosition&#39;) as string)
+    },
+    [],
+  )
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;{&#39;Image gallery using &lt;img /&gt;, object-fit, &amp; object-position&#39;}&lt;/h1&gt;
+      &lt;form style={{ marginBottom: &#39;3rem&#39; }} onSubmit={handleSubmit}&gt;
+        &lt;div style={{ marginBottom: &#39;1rem&#39; }}&gt;
+          &lt;label&gt;
+            &lt;code&gt;object-fit:&lt;/code&gt;
+            &lt;select defaultValue={objectFit} name=&quot;objectFit&quot;&gt;
+              &lt;option value=&quot;cover&quot;&gt;cover&lt;/option&gt;
+              &lt;option value=&quot;contain&quot;&gt;contain&lt;/option&gt;
+              &lt;option value=&quot;none&quot;&gt;none&lt;/option&gt;
+              &lt;option value=&quot;scale-down&quot;&gt;scale-down&lt;/option&gt;
+              &lt;option value=&quot;fill&quot;&gt;fill&lt;/option&gt;
+            &lt;/select&gt;
+          &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div style={{ marginBottom: &#39;1rem&#39; }}&gt;
+          &lt;label&gt;
+            &lt;code&gt;object-position:&lt;/code&gt;
+            &lt;input
+              defaultValue={objectPosition}
+              name=&quot;objectPosition&quot;
+              type=&quot;text&quot;
+            /&gt;
+          &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;button type=&quot;submit&quot;&gt;Apply changes&lt;/button&gt;
+      &lt;/form&gt;
+      &lt;ul /* eslint-disable-line jsx-a11y/no-redundant-roles */
+        style={{
+          display: &#39;grid&#39;,
+          gridTemplateColumns: &#39;2fr 2fr 2fr&#39;,
+          gridGap: &#39;2rem&#39;,
+          listStyle: &#39;none&#39;,
+          margin: 0,
+          padding: 0,
+        }}
+        role=&quot;list&quot;
+      &gt;
+        {images.map((img, i) =&gt; (
+          &lt;li /* eslint-disable-line jsx-a11y/no-redundant-roles */
+            key={i}
+            role=&quot;listitem&quot;
+          &gt;
+            &lt;Zoom&gt;
+              &lt;img
+                alt={img.alt}
+                loading=&quot;lazy&quot;
+                src={img.src}
+                style={{ objectFit, objectPosition, width: &#39;100%&#39; }}
+                width=&quot;250&quot;
+                height=&quot;500&quot;
+              /&gt;
+            &lt;/Zoom&gt;
+          &lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Div Image Gallery</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const DivImageGallery = () =&gt; {
+  const images = React.useMemo(
+    () =&gt; [
+      imgGlenorchyLagoon,
+      imgThatWanakaTree,
+      imgNzBeach,
+      imgHobbiton,
+      imgHookerValleyTrack,
+      imgQueenstown,
+      imgTekapo,
+      imgPortWaikato,
+      imgKea,
+    ],
+    [],
+  )
+
+  const [bgSize, setBgSize] = React.useState(&#39;cover&#39;)
+  const [bgPosition, setBgPosition] = React.useState(&#39;50%&#39;)
+  const [aspectRatio, setAspectRatio] = React.useState(&#39;56%&#39;)
+
+  const handleSubmit = React.useCallback(
+    (e: React.FormEvent&lt;HTMLFormElement&gt;) =&gt; {
+      e.preventDefault()
+
+      const data = new FormData(e.currentTarget)
+
+      setBgSize(data.get(&#39;backgroundSize&#39;) as string)
+      setBgPosition(data.get(&#39;backgroundPosition&#39;) as string)
+      setAspectRatio(data.get(&#39;aspectRatio&#39;) as string)
+    },
+    [],
+  )
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;{&#39;Image gallery using &lt;div&gt;s, background images, and padding&#39;}&lt;/h1&gt;
+      &lt;form style={{ marginBottom: &#39;3rem&#39; }} onSubmit={handleSubmit}&gt;
+        &lt;div style={{ marginBottom: &#39;1rem&#39; }}&gt;
+          &lt;label&gt;
+            &lt;code&gt;background-size:&lt;/code&gt;
+            &lt;input defaultValue={bgSize} name=&quot;backgroundSize&quot; type=&quot;text&quot; /&gt;
+          &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div style={{ marginBottom: &#39;1rem&#39; }}&gt;
+          &lt;label&gt;
+            &lt;code&gt;background-position:&lt;/code&gt;
+            &lt;input
+              defaultValue={bgPosition}
+              name=&quot;backgroundPosition&quot;
+              type=&quot;text&quot;
+            /&gt;
+          &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div style={{ marginBottom: &#39;1rem&#39; }}&gt;
+          &lt;label&gt;
+            &lt;code&gt;aspect ratio:&lt;/code&gt;
+            &lt;select defaultValue={aspectRatio} name=&quot;aspectRatio&quot;&gt;
+              &lt;option value=&quot;56%&quot;&gt;16:9&lt;/option&gt;
+              &lt;option value=&quot;75%&quot;&gt;4:3&lt;/option&gt;
+              &lt;option value=&quot;33%&quot;&gt;3:1&lt;/option&gt;
+              &lt;option value=&quot;100%&quot;&gt;1:1&lt;/option&gt;
+            &lt;/select&gt;
+          &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;button type=&quot;submit&quot;&gt;Apply changes&lt;/button&gt;
+      &lt;/form&gt;
+      &lt;ul
+        style={{
+          display: &#39;flex&#39;,
+          flexWrap: &#39;wrap&#39;,
+          listStyle: &#39;none&#39;,
+          margin: 0,
+          padding: 0,
+        }}
+      &gt;
+        {images.map((img, i) =&gt; (
+          &lt;li
+            key={i}
+            style={{ margin: &#39;0 1rem 1rem 0&#39;, width: &#39;calc(33% - 1rem)&#39; }}
+          &gt;
+            &lt;Zoom&gt;
+              &lt;div
+                aria-label={img.alt}
+                role=&quot;img&quot;
+                style={{
+                  backgroundColor: &#39;#fff&#39;,
+                  backgroundImage: `url(${img.src})`,
+                  backgroundPosition: bgPosition,
+                  backgroundRepeat: &#39;no-repeat&#39;,
+                  backgroundSize: bgSize,
+                  height: &#39;0&#39;,
+                  paddingBottom: aspectRatio,
+                  width: &#39;100%&#39;,
+                }}
+              /&gt;
+            &lt;/Zoom&gt;
+          &lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  has-error 
+  has-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="Zoom">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-err"></span> Zoom</h2>
+      <div class="badges">
+        <label for="c-1-img-err" class="badge err as-toggle">prop type error</label>
+        <label for="c-1-img-info" class="badge info as-toggle">1 info</label>
+        <label for="c-1-img-stories" class="badge ok as-toggle">20 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./stories/Img.stories.tsx">img · ./stories/Img.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  <input id="c-1-img-err" class="tg tg-err" type="checkbox" hidden />
+  <input id="c-1-img-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-1-img-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+
+  <div class="panels">
+    
+        <div class="panel panel-err">
+          
+    <div class="note err">
+      <div class="note-title">Prop type error</div>
+      <div class="note-body"><pre><code>File: /home/runner/work/react-medium-image-zoom/react-medium-image-zoom/source/index.ts
+Error:
+No suitable component definition found.
+You can debug your component file in this playground: https://react-docgen.dev/playground
+Code:
+&#39;use client&#39;
+
+export { Uncontrolled as default } from &#39;./Uncontrolled.js&#39;
+export { Controlled } from &#39;./Controlled.js&#39;
+export type { UncontrolledProps } from &#39;./Uncontrolled.js&#39;
+export type { ControlledProps } from &#39;./Controlled.js&#39;
+</code></pre></div>
+    </div>
+        </div>
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Zoom } from "react-medium-image-zoom";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Regular</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Regular = props =&gt; {
+  const handleZoomChange = React.useCallback&lt;
+    NonNullable&lt;React.ComponentProps&lt;typeof Zoom&gt;[&#39;onZoomChange&#39;]&gt;
+  &gt;((value, { event }) =&gt; {
+    console.log(&#39;handleZoomChange info!&#39;, { value, event })
+  }, [])
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;Zooming a regular image&lt;/h1&gt;
+      &lt;div
+        className=&quot;mw-600&quot;
+        style={{ display: &#39;flex&#39;, flexDirection: &#39;column&#39; }}
+      &gt;
+        &lt;Zoom {...props} onZoomChange={handleZoomChange} wrapElement=&quot;span&quot;&gt;
+          &lt;img
+            alt={imgThatWanakaTree.alt}
+            src={imgThatWanakaTree.src}
+            height=&quot;320&quot;
+            decoding=&quot;async&quot;
+            loading=&quot;lazy&quot;
+          /&gt;
+        &lt;/Zoom&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Zoom Margin</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const ZoomMargin = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;Setting a zoomMargin of 45(px)&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;
+        This example should always be offset from the window by at least 45px
+      &lt;/p&gt;
+      &lt;Zoom {...props} zoomMargin={45}&gt;
+        &lt;img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height=&quot;320&quot;
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Small Portrait</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const SmallPortrait = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;A portrait image with a small width specified&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;Small size specifications scale well, too — even on mobile.&lt;/p&gt;
+      &lt;Zoom {...props}&gt;
+        &lt;img
+          alt={imgTeAraiPoint.alt}
+          src={imgTeAraiPoint.src}
+          height=&quot;112&quot;
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">SVG Source</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const SVGSource = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;An image with an SVG src&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;Zoom {...props}&gt;
+        &lt;img
+          alt={imgNzMap.alt}
+          src={imgNzMap.src}
+          width=&quot;150&quot;
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Data SVG Source</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const DataSVGSource = () =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;
+      An image with a &lt;code&gt;data:image/svg+xml&lt;/code&gt; &lt;code&gt;src&lt;/code&gt;
+    &lt;/h1&gt;
+    &lt;div className=&quot;data-uri-img mw-600&quot;&gt;
+      &lt;Zoom&gt;
+        &lt;img
+          alt=&quot;Gatsby G Logo&quot;
+          src=&quot;data:image/svg+xml,%3Csvg width=&#39;24&#39; height=&#39;24&#39; fill=&#39;none&#39; xmlns=&#39;http://www.w3.org/2000/svg&#39;%3E%3Cpath d=&#39;M12 2a10 10 0 110 20 10 10 0 010-20zm0 2c-3.73 0-6.86 2.55-7.75 6L14 19.75c3.45-.89 6-4.02 6-7.75h-5.25v1.5h3.45a6.37 6.37 0 01-3.89 4.44L6.06 9.69C7 7.31 9.3 5.63 12 5.63c2.13 0 4 1.04 5.18 2.65l1.23-1.06A7.959 7.959 0 0012 4zm-8 8a8 8 0 008 8c.04 0 .09 0-8-8z&#39; fill=&#39;%23639&#39;/%3E%3C/svg%3E&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Provide Zoom Img</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const ProvideZoomImg = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;
+      An image with a larger &lt;code&gt;zoomImg&lt;/code&gt;
+    &lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;
+        When zoomed, the original image will scale to as large as the window
+        will allow, and then it will be replaced by an image that is downloaded
+        in the background.
+      &lt;/p&gt;
+      &lt;Zoom
+        {...props}
+        zoomImg={{
+          alt: imgKeaLarge.alt,
+          src: imgKeaLarge.src,
+        }}
+      &gt;
+        &lt;img alt={imgKeaSmall.alt} src={imgKeaSmall.src} width=&quot;150&quot; /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Zoom Img Loader</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const ZoomImgLoader = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;ZoomImg with Loading State&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;
+        This example shows how to provide loading feedback when using a
+        high-resolution &lt;code&gt;zoomImg&lt;/code&gt;. The &lt;code&gt;ZoomContent&lt;/code&gt;{&#39; &#39;}
+        component uses the &lt;code&gt;isZoomImgLoaded&lt;/code&gt; prop to display a
+        loading spinner while the high-resolution image is being downloaded.
+      &lt;/p&gt;
+      &lt;p&gt;
+        Here the loading spinner is shown on every zoom, but in a real-world
+        case, the browser caches the image, so you&amp;apos;ll only see the loader
+        at first load.
+      &lt;/p&gt;
+      &lt;Zoom
+        {...props}
+        zoomImg={{
+          alt: imgKeaLarge.alt,
+          src: imgKeaLarge.src,
+        }}
+        ZoomContent={CustomZoomContentWithLoader}
+      &gt;
+        &lt;img alt={imgKeaSmall.alt} src={imgKeaSmall.src} width=&quot;150&quot; /&gt;
+      &lt;/Zoom&gt;
+      &lt;h2&gt;Code&lt;/h2&gt;
+      &lt;pre&gt;
+        &lt;code&gt;
+          {`
+const CustomZoomContent: UncontrolledProps[&#39;ZoomContent&#39;] = ({
+  img,
+  isZoomImgLoaded,
+}) =&gt; {
+  return (
+    &lt;&gt;
+      {img}
+      {!isZoomImgLoaded &amp;&amp; (
+        &lt;div className=&#39;loader-wrapper&#39;&gt;
+          &lt;div className=&#39;loader&#39; /&gt;
+        &lt;/div&gt;
+      )}
+    &lt;/&gt;
+  )
+}
+
+&lt;Zoom
+  zoomImg={{
+    src: &#39;higher-res-image.jpg&#39;,
+  }}
+  ZoomContent={CustomZoomContent}
+&gt;
+  &lt;img src=&#39;low-res-image.jpg&#39; width=&quot;150&quot; /&gt;
+&lt;/Zoom&gt;
+          `}
+        &lt;/code&gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Small Src Size</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const SmallSrcSize = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;An image with a small size&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;
+        In order to prevent blurry images, An image won&amp;apos;t scale up larger
+        than its natural dimensions.
+      &lt;/p&gt;
+      &lt;Zoom {...props}&gt;
+        &lt;img alt={imgKeaSmall.alt} src={imgKeaSmall.src} width=&quot;150&quot; /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Custom Modal Styles</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const CustomModalStyles = props =&gt; {
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;Custom Modal Styles&lt;/h1&gt;
+      &lt;div className=&quot;mw-600&quot;&gt;
+        &lt;p&gt;Use CSS to customize the zoom modal styles.&lt;/p&gt;
+        &lt;p&gt;
+          Here, we slow down the transition time and use a different overlay
+          color.
+        &lt;/p&gt;
+        &lt;div&gt;
+          &lt;Zoom {...props} classDialog=&quot;custom-zoom&quot;&gt;
+            &lt;img
+              alt={imgGlenorchyLagoon.alt}
+              src={imgGlenorchyLagoon.src}
+              width=&quot;400&quot;
+            /&gt;
+          &lt;/Zoom&gt;
+        &lt;/div&gt;
+        &lt;p&gt;
+          The CSS class, &lt;code&gt;custom-zoom&lt;/code&gt;, is sent to the component via
+          the &lt;code&gt;classDialog&lt;/code&gt; string prop. Here are the styles used:
+        &lt;/p&gt;
+        &lt;pre&gt;
+          &lt;code&gt;
+            {`
+.custom-zoom [data-rmiz-modal-overlay],
+.custom-zoom [data-rmiz-modal-img] {
+  transition-duration: 0.8s;
+  transition-timing-function: linear;
+}
+.custom-zoom [data-rmiz-modal-overlay=&quot;hidden&quot;] {
+  background-color: rgb(56, 58, 89, 0);
+}
+.custom-zoom [data-rmiz-modal-overlay=&quot;visible&quot;] {
+  background-color: rgb(56, 58, 89, 1);
+}
+.custom-zoom [data-rmiz-btn-unzoom] {
+  background-color: #bd93f9;
+  color: #000;
+}
+.custom-zoom [data-rmiz-btn-unzoom]:focus-visible {
+  outline-offset: 0.4rem;
+  outline: 0.2rem solid #bd93f9;
+}
+`}
+          &lt;/code&gt;
+        &lt;/pre&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Zoom Image From Inside Dialog</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const ZoomImageFromInsideDialog = props =&gt; {
+  const refBtn = React.useRef&lt;HTMLButtonElement&gt;(null)
+  const refModal = React.useRef&lt;HTMLDialogElement&gt;(null)
+
+  const handleBtnClick = React.useCallback(() =&gt; {
+    refModal.current?.showModal()
+  }, [])
+
+  React.useEffect(() =&gt; {
+    const handleDocumentClick = (e: MouseEvent) =&gt; {
+      if (
+        !refBtn.current?.contains(e.target as Element) &amp;&amp;
+        !refModal.current?.contains(e.target as Element)
+      ) {
+        refModal.current?.close()
+      }
+    }
+
+    document.addEventListener(&#39;click&#39;, handleDocumentClick)
+
+    return () =&gt; {
+      document.removeEventListener(&#39;click&#39;, handleDocumentClick)
+    }
+  }, [])
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;Zoom Image From Inside Dialog&lt;/h1&gt;
+      &lt;div className=&quot;mw-600&quot;&gt;
+        &lt;button onClick={handleBtnClick} ref={refBtn} type=&quot;button&quot;&gt;
+          Open Modal
+        &lt;/button&gt;
+        &lt;dialog aria-modal=&quot;true&quot; ref={refModal}&gt;
+          &lt;form method=&quot;dialog&quot;&gt;
+            &lt;button type=&quot;submit&quot;&gt;Close&lt;/button&gt;
+          &lt;/form&gt;
+          &lt;h1&gt;Zooming should work!&lt;/h1&gt;
+          &lt;div&gt;
+            &lt;Zoom {...props}&gt;
+              &lt;img
+                alt={imgGlenorchyLagoon.alt}
+                src={imgGlenorchyLagoon.src}
+                width=&quot;400&quot;
+              /&gt;
+            &lt;/Zoom&gt;
+          &lt;/div&gt;
+        &lt;/dialog&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Modal Figure Caption</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const ModalFigureCaption = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;Modal With Figure And Caption&lt;/h1&gt;
+    &lt;p&gt;
+      If you want more control over the zoom modal&amp;apos;s content, you can pass
+      a &lt;code&gt;ZoomContent&lt;/code&gt; component
+    &lt;/p&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;Zoom {...props} ZoomContent={CustomZoomContent}&gt;
+        &lt;img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height=&quot;320&quot;
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Delayed Image Render</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const DelayedImageRender = props =&gt; {
+  const { timer } = useTimer(5000)
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;A sub-component which delays rendering&lt;/h1&gt;
+      &lt;div className=&quot;mw-600&quot;&gt;
+        &lt;p&gt;
+          This examples simulates an issue caused by the gatsby-plugin-image
+          (and potentially others) where the actual image element isn&amp;apos;t
+          found on the first render.
+        &lt;/p&gt;
+        &lt;div&gt;
+          Image loads in: &lt;span role=&quot;timer&quot;&gt;{timer / 1000}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;Zoom {...props}&gt;
+          &lt;DelayedImg
+            timer={timer}
+            alt={imgEarth.alt}
+            src={imgEarth.src}
+            height=&quot;200&quot;
+            width=&quot;400&quot;
+          /&gt;
+        &lt;/Zoom&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Delayed Display None</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const DelayedDisplayNone = props =&gt; {
+  const { timer } = useTimer(5000)
+  const classImg = timer === 0 ? undefined : &#39;display-none&#39;
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;
+        A delayed &lt;code&gt;display: none;&lt;/code&gt; image
+      &lt;/h1&gt;
+      &lt;div className=&quot;mw-600&quot;&gt;
+        &lt;p&gt;
+          This examples simulates an image being hidden with CSS and then shown
+          after the countdown.
+        &lt;/p&gt;
+        &lt;div&gt;
+          Image loads in: &lt;span role=&quot;timer&quot;&gt;{timer / 1000}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;Zoom {...props}&gt;
+          &lt;img
+            alt={imgTekapo.alt}
+            src={imgTekapo.src}
+            className={classImg}
+            height=&quot;320&quot;
+            decoding=&quot;async&quot;
+            loading=&quot;lazy&quot;
+          /&gt;
+        &lt;/Zoom&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Custom Button Icons</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const CustomButtonIcons = props =&gt; {
+  React.useEffect(() =&gt; {
+    document.body.classList.add(&#39;change-icons&#39;)
+
+    return () =&gt; {
+      document.body.classList.remove(&#39;change-icons&#39;)
+    }
+  }, [])
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;An image with custom zoom &amp;amp; unzoom icons&lt;/h1&gt;
+      &lt;div className=&quot;mw-600&quot;&gt;
+        &lt;p&gt;Press TAB to activate the zoom button&lt;/p&gt;
+        &lt;div&gt;
+          &lt;Zoom {...props} IconZoom={() =&gt; &lt;&gt;+&lt;/&gt;} IconUnzoom={() =&gt; &lt;&gt;-&lt;/&gt;}&gt;
+            &lt;img
+              alt={imgHookerValleyTrack.alt}
+              src={imgHookerValleyTrack.src}
+              width=&quot;400&quot;
+            /&gt;
+          &lt;/Zoom&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Inline Image</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const InlineImage = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;Inline Image&lt;/h1&gt;
+    &lt;p className=&quot;inline&quot;&gt;
+      This example is of an image that is inline with text.
+      &lt;Zoom {...props} wrapElement=&quot;span&quot;&gt;
+        &lt;img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height=&quot;320&quot;
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/p&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Cycle Images</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const CycleImages = props =&gt; {
+  const [img, setImg] = React.useState&lt;{ alt: string; src: string }&gt;(
+    imgThatWanakaTree,
+  )
+
+  React.useEffect(() =&gt; {
+    async function runCycle() {
+      while (true) {
+        await delay(3000)
+
+        setImg(
+          shuffle([
+            imgThatWanakaTree,
+            imgEarth,
+            imgNzMap,
+            imgTekapo,
+            imgKeaLarge,
+            imgTeAraiPoint,
+            imgGlenorchyLagoon,
+            imgHookerValleyTrack,
+          ] as const)[0],
+        )
+      }
+    }
+
+    runCycle()
+  }, [])
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;Cycle through images&lt;/h1&gt;
+      &lt;p&gt;
+        This helps to test the ghost element that positions the button. Press
+        Tab to focus the button, then sit and watch it reposition with each new
+        image!
+      &lt;/p&gt;
+      &lt;p&gt;
+        &lt;Zoom {...props} wrapElement=&quot;span&quot;&gt;
+          &lt;img
+            alt={img.alt}
+            src={img.src}
+            height=&quot;320&quot;
+            decoding=&quot;async&quot;
+            loading=&quot;lazy&quot;
+          /&gt;
+        &lt;/Zoom&gt;
+      &lt;/p&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Swipe To Unzoom Disabled</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const SwipeToUnzoomDisabled = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;Swipe to Unzoom Disabled&lt;/h1&gt;
+    &lt;p&gt;
+      This example demonstrates preventing swipe gestures from unzooming when an
+      image is zoomed. This is best tested on a touchscreen device!
+    &lt;/p&gt;
+    &lt;div&gt;
+      &lt;Zoom {...props} canSwipeToUnzoom={false}&gt;
+        &lt;img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height=&quot;320&quot;
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Swipe To Unzoom Threshold</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const SwipeToUnzoomThreshold = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;Swipe to Unzoom Threshold&lt;/h1&gt;
+    &lt;p&gt;
+      This example demonstrates increasing the threshold required for a swipe
+      gesture on a touchscreen device to unzoom when an image is zoomed. This is
+      best tested on a touchscreen device!
+    &lt;/p&gt;
+    &lt;p&gt;
+      The default is &lt;code&gt;10&lt;/code&gt; (px), but this example is set to{&#39; &#39;}
+      &lt;code&gt;200&lt;/code&gt; (px); that&amp;apos;s how far you&amp;apos;ll have to move your
+      finger across the screen.
+    &lt;/p&gt;
+    &lt;div&gt;
+      &lt;Zoom {...props} swipeToUnzoomThreshold={200}&gt;
+        &lt;img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height=&quot;320&quot;
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Select Cards</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const SelectCards = props =&gt; {
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;Selecting cards and zooming without triggering selection state&lt;/h1&gt;
+      &lt;div
+        className=&quot;mw-600&quot;
+        style={{ display: &#39;flex&#39;, flexDirection: &#39;column&#39; }}
+      &gt;
+        &lt;ul className=&quot;cards&quot;&gt;
+          &lt;CardItem
+            alt={imgThatWanakaTree.alt}
+            src={imgThatWanakaTree.src}
+            zoomProps={props as UncontrolledProps}
+          /&gt;
+          &lt;CardItem
+            alt={imgGlenorchyLagoon.alt}
+            src={imgGlenorchyLagoon.src}
+            zoomProps={props as UncontrolledProps}
+          /&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">(Automated Test)</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const AutomatedTest = props =&gt; {
+  const handleZoomChange = React.useCallback&lt;
+    NonNullable&lt;React.ComponentProps&lt;typeof Zoom&gt;[&#39;onZoomChange&#39;]&gt;
+  &gt;((value, { event }) =&gt; {
+    console.log(&#39;handleZoomChange info!&#39;, { value, event })
+  }, [])
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;Zooming a regular image&lt;/h1&gt;
+      &lt;div
+        className=&quot;mw-600&quot;
+        style={{ display: &#39;flex&#39;, flexDirection: &#39;column&#39; }}
+      &gt;
+        &lt;Zoom {...props} onZoomChange={handleZoomChange} wrapElement=&quot;span&quot;&gt;
+          &lt;img
+            alt={imgThatWanakaTree.alt}
+            src={imgThatWanakaTree.src}
+            height=&quot;320&quot;
+            decoding=&quot;async&quot;
+            loading=&quot;lazy&quot;
+          /&gt;
+        &lt;/Zoom&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  has-error 
+  has-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="Zoom">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-err"></span> Zoom</h2>
+      <div class="badges">
+        <label for="c-2-svg-err" class="badge err as-toggle">prop type error</label>
+        <label for="c-2-svg-info" class="badge info as-toggle">1 info</label>
+        <label for="c-2-svg-stories" class="badge ok as-toggle">3 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./stories/SVG.stories.tsx">svg · ./stories/SVG.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  <input id="c-2-svg-err" class="tg tg-err" type="checkbox" hidden />
+  <input id="c-2-svg-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-2-svg-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+
+  <div class="panels">
+    
+        <div class="panel panel-err">
+          
+    <div class="note err">
+      <div class="note-title">Prop type error</div>
+      <div class="note-body"><pre><code>File: /home/runner/work/react-medium-image-zoom/react-medium-image-zoom/source/index.ts
+Error:
+No suitable component definition found.
+You can debug your component file in this playground: https://react-docgen.dev/playground
+Code:
+&#39;use client&#39;
+
+export { Uncontrolled as default } from &#39;./Uncontrolled.js&#39;
+export { Controlled } from &#39;./Controlled.js&#39;
+export type { UncontrolledProps } from &#39;./Uncontrolled.js&#39;
+export type { ControlledProps } from &#39;./Controlled.js&#39;
+</code></pre></div>
+    </div>
+        </div>
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Zoom } from "react-medium-image-zoom";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Animating Square</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const AnimatingSquare = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;An animating square SVG with its width &amp; height set via style&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;figure&gt;
+        &lt;Zoom {...props}&gt;
+          &lt;svg
+            aria-label=&quot;SVG animating from a circle to a square and back again on repeat&quot;
+            role=&quot;img&quot;
+            style={{ width: &#39;10rem&#39;, height: &#39;10rem&#39; }}
+            viewBox=&quot;0 0 10 10&quot;
+            xmlns=&quot;http://www.w3.org/2000/svg&quot;
+          &gt;
+            &lt;rect width=&quot;10&quot; height=&quot;10&quot;&gt;
+              &lt;animate
+                attributeName=&quot;rx&quot;
+                values=&quot;0;5;0&quot;
+                dur=&quot;10s&quot;
+                repeatCount=&quot;indefinite&quot;
+              /&gt;
+            &lt;/rect&gt;
+          &lt;/svg&gt;
+        &lt;/Zoom&gt;
+        &lt;figcaption&gt;
+          &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/SVG/Element/animate&quot;&gt;
+            Animation MDN source
+          &lt;/a&gt;
+        &lt;/figcaption&gt;
+      &lt;/figure&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Bird On Background</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const BirdOnBackground = () =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;A bird SVG on a non-SVG background&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;div
+        style={{
+          backgroundColor: &#39;#ccebff&#39;,
+          borderRadius: &#39;0 30px 0 30px&#39;,
+          padding: &#39;1rem&#39;,
+          width: &#39;20rem&#39;,
+          height: &#39;auto&#39;,
+        }}
+      &gt;
+        &lt;Zoom&gt;
+          &lt;svg
+            aria-label=&quot;Outline of a bird&quot;
+            role=&quot;img&quot;
+            viewBox=&quot;203.337 154.583 197.077 399.551&quot;
+            xmlSpace=&quot;preserve&quot;
+            xmlns=&quot;http://www.w3.org/2000/svg&quot;
+          &gt;
+            &lt;path d=&quot;M382.92 542.2c-9.764-18.504-9.496-18.288-14.537-11.773-2.346 3.033-4.813 5.515-5.482 5.515-1.146 0-2.381-5.274-3.749-15.993-.326-2.553-2.368-11.909-4.539-20.795-2.171-8.884-3.947-17.755-3.947-19.713 0-5.187-8.713-32.977-11.055-35.258-1.098-1.068-5.249-2.104-9.227-2.301-6.258-.309-7.674.195-10.506 3.745-1.8 2.257-5.454 5.011-8.12 6.12-6.331 2.636-34.301 27.32-35.628 31.443-.565 1.755-.208 7.019.794 11.697 2.196 10.26.744 15.06-5.986 19.785-4.401 3.091-6.587 2.529-3.192-.818 2.655-2.618 3.638-15.329 1.567-20.26-1.059-2.521-2.457-4.582-3.107-4.582-1.438 0-15.973 14.122-19.175 18.63-1.265 1.781-2.299 2.383-2.299 1.338 0-3.677 4.293-11.697 8.982-16.782 2.607-2.827 4.375-5.722 3.93-6.434-1.133-1.808-12.523-1.623-13.679.221-1.171 1.868-3.838 1.996-3.838.183 0-2.261 7.987-4.643 18.241-5.438 11.055-.858 14.614-3.177 34.988-22.78l11.044-10.628-.046-11.537c-.045-11.305-.16-11.645-5.653-16.704-10.138-9.337-8.35-8.974-35.732-7.271l-25.145 1.563-4.955 5.651-4.955 5.651.924-4.92c.903-4.806.797-4.92-4.587-4.92-5.253 0-13.199 5.064-19.003 12.111-1.663 2.018-1.875 2.018-1.914 0-.075-3.941 5.929-12.126 10.018-13.66 4.691-1.758 3.587-4.506-1.81-4.506-2.111 0-3.473-.583-3.027-1.295s17.413-.958 37.705-.545c30.851.627 36.888.406 36.862-1.354-.017-1.158-4.187-7.555-9.266-14.215-11.746-15.405-23.752-39.382-26.152-52.227-2.618-14.016-2.633-41.653-.027-49.956 6.496-20.695 12.631-38.346 14.702-42.295 4.322-8.24 3.126-13.504-4.76-20.954-8.465-7.997-10.757-7.984-29.315.167-15.287 6.714-18.843 7.754-18.843 5.507 0-1.773 4.448-6.357 16.537-17.042 6.143-5.429 6.492-6.187 6.492-14.078 0-4.587 1.009-10.264 2.242-12.615 2.798-5.335 24.339-22.823 28.114-22.823.72 0 4.721-1.607 8.89-3.572 13.678-6.446 18.768-7.454 33.749-6.681 22.029 1.136 38.123 9.608 49.848 26.24 6.537 9.276 18.056 35.586 18.546 42.366.237 3.292 3.162 11.434 6.497 18.095 15.755 31.461 20.018 50.267 20.074 88.559.046 31.502-1.649 40.68-13.039 70.58-4.748 12.462-6 17.826-6 25.7 0 9.021 3.813 45.038 5.354 50.562.348 1.248 1.043 7.721 1.545 14.381.501 6.66 1.259 13.884 1.685 16.051.425 2.166 1.35 12.708 2.055 23.428 1.91 27.91.58 29.59-9.02 11.4zm4.8-25.18c-.824-3.331-1.937-10.824-2.473-16.652s-2.283-22.177-3.883-36.331c-1.6-14.155-3.365-30.072-3.923-35.372-.879-8.355-2.854-12.956-14.855-34.596-12.692-22.887-21.591-42.298-23.288-50.796-.369-1.853-2.504-8.818-4.742-15.479-5.297-15.758-5.547-33.847-.648-46.929 6.752-18.03 14.971-30.776 29.343-45.511l7.478-7.666-2.163-8.986c-2.478-10.29-12.282-31.084-16.383-34.743-2.614-2.333-2.911-1.991-5.486 6.347-2.913 9.427-3.211 20.345-1.036 37.957.955 7.742.824 12.222-.445 15.199-1.011 2.37-9.133 9.942-18.514 17.261-19.104 14.904-36.065 31.987-40.75 41.041-4.958 9.584-8.874 21.833-11.224 35.113-2.631 14.869-.703 28.211 6.868 47.511 3.939 10.043 7.183 15.161 15.535 24.506l10.555 11.81v13.72c0 11.406.403 13.719 2.39 13.719 2.707 0 10.998-8.393 12.307-12.457 1.033-3.207 5.262-3.608 5.262-.498 0 1.486 2.08 2.333 6.506 2.65 5.812.415 6.862 1.109 9.868 6.521 3.452 6.214 8.831 24.556 10.547 35.967.532 3.531 2.26 11.869 3.841 18.53 1.582 6.661 3.342 15.687 3.91 20.059 1.134 8.706 2.834 9.986 5.525 4.162 3.406-7.373 6.353-4.643 17.969 16.652l2.478 4.542.466-10.598c.23-5.81-.24-13.31-1.06-16.64zm-70.46-259.57c8.086-9.312 13.233-25.08 14.345-43.947 1.056-17.908 2.918-26.446 7.003-32.102 1.749-2.422 2.911-4.67 2.582-4.994-.33-.325-6.795-1.042-14.369-1.595l-13.77-1.004-2.984 5.088c-3.554 6.057-4.399 6.893-12.378 12.229-6.64 4.44-15.773 8.079-17.07 6.799-.441-.435.335-2.959 1.725-5.61 3.479-6.634 2.114-9.112-4.939-8.971-10.112.203-17.733 3.329-21.481 8.813-1.905 2.787-3.034 5.751-2.51 6.587s2.002-.186 3.286-2.271c3.331-5.413 9.781-8.704 17.056-8.704 5.064 0 6.288.538 6.288 2.764 0 5.977-14.439 13.688-22.086 11.796-2.206-.546-3.524-.18-3.564.991-.035 1.022-.541 3.616-1.125 5.765-.903 3.322-.185 4.556 4.797 8.245 3.222 2.386 13.804 11.19 23.515 19.566 30.57 26.37 30.59 26.38 35.66 20.54z&quot; /&gt;
+          &lt;/svg&gt;
+        &lt;/Zoom&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Excalidraw</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Excalidraw = () =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;A series of shapes connected by arrows with descriptive text&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;Zoom&gt;
+        &lt;svg
+          version=&quot;1.1&quot;
+          xmlns=&quot;http://www.w3.org/2000/svg&quot;
+          viewBox=&quot;0 0 626.29296875 489.6796875&quot;
+          width=&quot;626.2929&quot;
+          height=&quot;489.6796&quot;
+        &gt;
+          &lt;rect
+            x=&quot;0&quot;
+            y=&quot;0&quot;
+            width=&quot;626.29296875&quot;
+            height=&quot;489.6796875&quot;
+            fill=&quot;#ffff&quot;
+          /&gt;
+          &lt;g
+            strokeLinecap=&quot;round&quot;
+            transform=&quot;translate(20 20.55078125) rotate(0 56.818359375 46.0390625)&quot;
+          &gt;
+            &lt;path
+              d=&quot;M76.44 1.84 C85.17 3.54, 93.63 10.5, 99.59 16.35 C105.54 22.19, 110.29 29.57, 112.17 36.9 C114.06 44.24, 113.8 52.94, 110.9 60.34 C107.99 67.74, 102.04 76, 94.77 81.3 C87.49 86.6, 76.65 90.75, 67.24 92.15 C57.82 93.54, 47.35 92.35, 38.28 89.64 C29.2 86.93, 18.87 81.58, 12.77 75.86 C6.68 70.14, 3.38 62.93, 1.69 55.33 C0 47.72, -0.46 37.43, 2.61 30.23 C5.68 23.02, 12.85 17.08, 20.1 12.11 C27.36 7.14, 35.75 1.58, 46.16 0.4 C56.56 -0.79, 75.29 3.46, 82.55 4.99 C89.82 6.52, 90.11 8.8, 89.75 9.59 M35.64 2.79 C43.74 -0.96, 54.48 -2, 63.94 -0.74 C73.41 0.52, 84.69 5.74, 92.42 10.36 C100.16 14.97, 107.02 20.2, 110.34 26.97 C113.67 33.75, 113.56 43.07, 112.35 51 C111.13 58.94, 108.74 68.38, 103.05 74.59 C97.35 80.8, 86.83 85.62, 78.16 88.27 C69.49 90.92, 60.26 91.36, 51.04 90.48 C41.81 89.6, 30.55 87.38, 22.82 82.99 C15.09 78.6, 8.53 71.2, 4.68 64.11 C0.82 57.02, -1.35 48.06, -0.32 40.45 C0.7 32.83, 5.17 24.66, 10.82 18.44 C16.47 12.23, 29.67 5.29, 33.59 3.16 C37.51 1.03, 33.75 4.79, 34.36 5.67&quot;
+              stroke=&quot;#000000&quot;
+              strokeWidth=&quot;1&quot;
+              fill=&quot;none&quot;
+            /&gt;
+          &lt;/g&gt;
+          &lt;g
+            strokeLinecap=&quot;round&quot;
+            transform=&quot;translate(392.59375 20) rotate(0 67.927734375 50.771484375)&quot;
+          &gt;
+            &lt;path
+              d=&quot;M73.65 -0.19 C83.82 -0.22, 95.32 4.01, 104.01 8.36 C112.7 12.7, 120.45 19.29, 125.8 25.89 C131.16 32.49, 135.56 40.37, 136.12 47.97 C136.69 55.57, 133.69 64.14, 129.19 71.5 C124.69 78.87, 117.51 87.27, 109.13 92.17 C100.75 97.07, 89.51 99.76, 78.91 100.92 C68.31 102.09, 55.39 101.58, 45.52 99.18 C35.66 96.78, 26.88 92.24, 19.74 86.53 C12.59 80.81, 5.68 72.47, 2.64 64.87 C-0.39 57.28, -0.58 48.52, 1.51 40.96 C3.61 33.39, 8.57 25.47, 15.22 19.48 C21.87 13.5, 31.33 8.4, 41.44 5.05 C51.54 1.69, 69.9 0.1, 75.86 -0.63 C81.82 -1.35, 77.44 -0.22, 77.21 0.69 M45.05 3.73 C54.51 0.92, 68.17 0.28, 78.84 1.45 C89.51 2.62, 100.52 6.49, 109.08 10.73 C117.64 14.96, 125.67 19.96, 130.21 26.86 C134.75 33.76, 136.83 43.91, 136.32 52.15 C135.81 60.4, 132.24 69.74, 127.14 76.32 C122.05 82.91, 114.62 87.6, 105.74 91.66 C96.85 95.73, 84.29 99.63, 73.85 100.69 C63.41 101.75, 52.54 100.93, 43.1 98.01 C33.66 95.09, 23.96 89.11, 17.22 83.17 C10.48 77.22, 5.02 70.2, 2.66 62.37 C0.3 54.54, 0.37 44.03, 3.06 36.18 C5.75 28.34, 11.66 21.06, 18.79 15.32 C25.92 9.58, 41.46 3.48, 45.84 1.75 C50.23 0.02, 44.77 3.93, 45.08 4.92&quot;
+              stroke=&quot;#000000&quot;
+              strokeWidth=&quot;1&quot;
+              fill=&quot;none&quot;
+            /&gt;
+          &lt;/g&gt;
+          &lt;g mask=&quot;url(#mask-ooJ4ibF08UocumcqOa1EM)&quot; strokeLinecap=&quot;round&quot;&gt;
+            &lt;g transform=&quot;translate(145.59428097835973 59.070939438578705) rotate(0 115.39682997613369 -0.4915348908477881)&quot;&gt;
+              &lt;path
+                d=&quot;M0.15 -0.24 C38.69 -0.34, 193.23 -0.72, 231.49 -0.81 M-1.23 -1.41 C37.2 -1.27, 192.03 0.48, 230.91 0.82&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+            &lt;g transform=&quot;translate(145.59428097835973 59.070939438578705) rotate(0 115.39682997613369 -0.4915348908477881)&quot;&gt;
+              &lt;path
+                d=&quot;M202.21 11.96 C211.96 5.78, 221.05 4.29, 230.39 -0.44 M202.16 11.32 C212.6 8.26, 221.12 3.41, 231.42 0.63&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+            &lt;g transform=&quot;translate(145.59428097835973 59.070939438578705) rotate(0 115.39682997613369 -0.4915348908477881)&quot;&gt;
+              &lt;path
+                d=&quot;M202.42 -8.56 C212.06 -8.19, 221.09 -3.13, 230.39 -0.44 M202.37 -9.2 C212.71 -5.25, 221.16 -3.08, 231.42 0.63&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+          &lt;/g&gt;
+          &lt;mask id=&quot;mask-ooJ4ibF08UocumcqOa1EM&quot;&gt;
+            &lt;rect
+              x=&quot;0&quot;
+              y=&quot;0&quot;
+              fill=&quot;#fff&quot;
+              width=&quot;476.3879409306271&quot;
+              height=&quot;160.05400922027428&quot;
+            /&gt;
+            &lt;rect
+              x=&quot;236.2111350633802&quot;
+              y=&quot;46.07940454773092&quot;
+              fill=&quot;#000&quot;
+              width=&quot;49.55995178222656&quot;
+              height=&quot;25&quot;
+              opacity=&quot;1&quot;
+            /&gt;
+          &lt;/mask&gt;
+          &lt;g transform=&quot;translate(236.2111350633802 46.07940454773092) rotate(0 24.512669051224293 12.696544553246326)&quot;&gt;
+            &lt;text
+              x=&quot;24.77997589111328&quot;
+              y=&quot;0&quot;
+              fontFamily=&quot;Virgil, Segoe UI Emoji&quot;
+              fontSize=&quot;20px&quot;
+              fill=&quot;#000000&quot;
+              textAnchor=&quot;middle&quot;
+              style={{ whiteSpace: &#39;pre&#39; }}
+              direction=&quot;ltr&quot;
+              dominantBaseline=&quot;text-before-edge&quot;
+            &gt;
+              Text
+            &lt;/text&gt;
+          &lt;/g&gt;
+          &lt;g mask=&quot;url(#mask-SzkdVd0dyrggj1A8lYRnx)&quot; strokeLinecap=&quot;round&quot;&gt;
+            &lt;g transform=&quot;translate(101.609375 126.671875) rotate(0 37.703125 82.224609375)&quot;&gt;
+              &lt;path
+                d=&quot;M1.16 1.1 C13.46 28.52, 62.75 137.7, 74.96 164.96 M0.32 0.63 C12.31 27.65, 61.03 135.53, 73.78 163.11&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+            &lt;g transform=&quot;translate(101.609375 126.671875) rotate(0 37.703125 82.224609375)&quot;&gt;
+              &lt;path
+                d=&quot;M54.58 140.97 C62.05 148.39, 69.93 157.55, 74.43 161.75 M51.86 142.36 C59.42 148.76, 65.4 156.07, 73.14 163.54&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+            &lt;g transform=&quot;translate(101.609375 126.671875) rotate(0 37.703125 82.224609375)&quot;&gt;
+              &lt;path
+                d=&quot;M73.25 132.45 C73.31 143.45, 73.76 156, 74.43 161.75 M70.53 133.84 C72.19 142.85, 72.24 152.87, 73.14 163.54&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+          &lt;/g&gt;
+          &lt;mask id=&quot;mask-SzkdVd0dyrggj1A8lYRnx&quot;&gt;
+            &lt;rect
+              x=&quot;0&quot;
+              y=&quot;0&quot;
+              fill=&quot;#fff&quot;
+              width=&quot;277.015625&quot;
+              height=&quot;391.12109375&quot;
+            /&gt;
+            &lt;rect
+              x=&quot;82.74254608154297&quot;
+              y=&quot;196.396484375&quot;
+              fill=&quot;#000&quot;
+              width=&quot;113.13990783691406&quot;
+              height=&quot;25&quot;
+              opacity=&quot;1&quot;
+            /&gt;
+          &lt;/mask&gt;
+          &lt;g transform=&quot;translate(82.74254608154297 196.396484375) rotate(0 56.50484466232359 13.071097182855027)&quot;&gt;
+            &lt;text
+              x=&quot;56.56995391845703&quot;
+              y=&quot;0&quot;
+              fontFamily=&quot;Virgil, Segoe UI Emoji&quot;
+              fontSize=&quot;20px&quot;
+              fill=&quot;#000000&quot;
+              textAnchor=&quot;middle&quot;
+              style={{ whiteSpace: &#39;pre&#39; }}
+              direction=&quot;ltr&quot;
+              dominantBaseline=&quot;text-before-edge&quot;
+            &gt;
+              Text Arrow
+            &lt;/text&gt;
+          &lt;/g&gt;
+          &lt;g
+            strokeLinecap=&quot;round&quot;
+            transform=&quot;translate(174.39453125 244) rotate(0 94.26953125 68.515625)&quot;
+          &gt;
+            &lt;path
+              d=&quot;M118.75 17.25 M118.75 17.25 C136.41 30.62, 149.3 43.12, 164.79 51.75 M118.75 17.25 C134.22 27.86, 149.75 41.11, 164.79 51.75 M164.79 51.75 C186.66 67.31, 189.85 67.4, 164.79 86.25 M164.79 51.75 C187.4 70.11, 188.16 67.21, 164.79 86.25 M164.79 86.25 C147.25 100.24, 129.87 110.32, 118.75 119.78 M164.79 86.25 C150.71 95.77, 136.22 107.08, 118.75 119.78 M118.75 119.78 C96.45 135.91, 95.43 136.4, 71.25 119.78 M118.75 119.78 C95.24 136.6, 94.84 137.75, 71.25 119.78 M71.25 119.78 C56.5 110.18, 39.52 99.98, 23.75 86.25 M71.25 119.78 C61.78 112.63, 51.46 106.26, 23.75 86.25 M23.75 86.25 C-1.23 68.64, 1.79 69.34, 23.75 51.75 M23.75 86.25 C1.18 69.81, -2.01 68.03, 23.75 51.75 M23.75 51.75 C33.82 43.77, 48.63 33.66, 71.25 17.25 M23.75 51.75 C37.67 41.71, 52.89 30.07, 71.25 17.25 M71.25 17.25 C96 -0.01, 93.11 -1.17, 118.75 17.25 M71.25 17.25 C93.47 0.15, 96.36 -1.46, 118.75 17.25&quot;
+              stroke=&quot;#000000&quot;
+              strokeWidth=&quot;1&quot;
+              fill=&quot;none&quot;
+            /&gt;
+          &lt;/g&gt;
+          &lt;g mask=&quot;url(#mask-GrRrUWX5cd0_tTvab9KPU)&quot; strokeLinecap=&quot;round&quot;&gt;
+            &lt;g transform=&quot;translate(488.734375 135.21875) rotate(0 14.822265625 92.8828125)&quot;&gt;
+              &lt;path
+                d=&quot;M-0.96 -1.04 C4.08 29.88, 25.02 155.15, 30.2 186.25 M0.74 1.03 C5.67 31.52, 24.73 153.42, 29.54 184.37&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+            &lt;g transform=&quot;translate(488.734375 135.21875) rotate(0 14.822265625 92.8828125)&quot;&gt;
+              &lt;path
+                d=&quot;M13.32 159.02 C20.33 166.8, 23.47 174.35, 30.77 182.75 M15.65 158.92 C19.5 166.51, 24.96 174.51, 30.32 185.21&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+            &lt;g transform=&quot;translate(488.734375 135.21875) rotate(0 14.822265625 92.8828125)&quot;&gt;
+              &lt;path
+                d=&quot;M33.6 155.86 C34.59 164.42, 31.68 172.91, 30.77 182.75 M35.93 155.75 C33.27 164.25, 32.21 173.27, 30.32 185.21&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+          &lt;/g&gt;
+          &lt;mask id=&quot;mask-GrRrUWX5cd0_tTvab9KPU&quot;&gt;
+            &lt;rect
+              x=&quot;0&quot;
+              y=&quot;0&quot;
+              fill=&quot;#fff&quot;
+              width=&quot;618.37890625&quot;
+              height=&quot;420.984375&quot;
+            /&gt;
+            &lt;rect
+              x=&quot;406.3067092895508&quot;
+              y=&quot;215.6015625&quot;
+              fill=&quot;#000&quot;
+              width=&quot;194.49986267089844&quot;
+              height=&quot;25&quot;
+              opacity=&quot;1&quot;
+            /&gt;
+          &lt;/mask&gt;
+          &lt;g transform=&quot;translate(406.3067092895508 215.6015625) rotate(0 97.04689681343734 12.220587964728452)&quot;&gt;
+            &lt;text
+              x=&quot;97.24993133544922&quot;
+              y=&quot;0&quot;
+              fontFamily=&quot;Virgil, Segoe UI Emoji&quot;
+              fontSize=&quot;20px&quot;
+              fill=&quot;#000000&quot;
+              textAnchor=&quot;middle&quot;
+              style={{ whiteSpace: &#39;pre&#39; }}
+              direction=&quot;ltr&quot;
+              dominantBaseline=&quot;text-before-edge&quot;
+            &gt;
+              Random Text Arrow
+            &lt;/text&gt;
+          &lt;/g&gt;
+          &lt;g
+            strokeLinecap=&quot;round&quot;
+            transform=&quot;translate(458.45703125 325.26171875) rotate(0 73.91796875 72.208984375)&quot;
+          &gt;
+            &lt;path
+              d=&quot;M32 0 M32 0 C59.59 -0.4, 88.53 0.12, 115.84 0 M32 0 C54.4 -1.14, 74.38 -0.62, 115.84 0 M115.84 0 C137.69 1.49, 145.9 11.96, 147.84 32 M115.84 0 C137.47 0.64, 146.34 10.98, 147.84 32 M147.84 32 C148.28 48.33, 145.78 65.81, 147.84 112.42 M147.84 32 C146.26 58.81, 147.92 86.35, 147.84 112.42 M147.84 112.42 C149.33 133.71, 138.22 145.63, 115.84 144.42 M147.84 112.42 C149.49 133.66, 138.02 144.09, 115.84 144.42 M115.84 144.42 C97.9 143.38, 76.73 142.11, 32 144.42 M115.84 144.42 C89 144.85, 62.01 145.17, 32 144.42 M32 144.42 C10.37 142.96, -0.67 135.22, 0 112.42 M32 144.42 C10.33 146.48, 1.7 132.31, 0 112.42 M0 112.42 C0.69 85.82, -2.2 56.5, 0 32 M0 112.42 C0.4 96.54, 0.21 79.98, 0 32 M0 32 C-1.83 9.28, 9.25 -1.34, 32 0 M0 32 C-2.19 8.75, 12.95 -0.69, 32 0&quot;
+              stroke=&quot;#000000&quot;
+              strokeWidth=&quot;1&quot;
+              fill=&quot;none&quot;
+            /&gt;
+          &lt;/g&gt;
+          &lt;g strokeLinecap=&quot;round&quot;&gt;
+            &lt;g transform=&quot;translate(337.21484375 348.984375) rotate(0 52.912109375 13.373046875)&quot;&gt;
+              &lt;path
+                d=&quot;M0.12 0.48 C17.85 4.98, 88.64 21.82, 106.2 26.39 M-1.27 -0.31 C16.34 4.42, 87.81 23.33, 105.45 27.74&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+            &lt;g transform=&quot;translate(337.21484375 348.984375) rotate(0 52.912109375 13.373046875)&quot;&gt;
+              &lt;path
+                d=&quot;M76.39 31.24 C83.64 29.16, 94.76 29.29, 106.39 26.92 M76.04 29.84 C83.93 29.99, 92.75 29.2, 104.74 27.03&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+            &lt;g transform=&quot;translate(337.21484375 348.984375) rotate(0 52.912109375 13.373046875)&quot;&gt;
+              &lt;path
+                d=&quot;M81.53 11.37 C87.19 15.05, 96.82 20.92, 106.39 26.92 M81.18 9.98 C87.65 15.55, 95.07 20.17, 104.74 27.03&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+          &lt;/g&gt;
+          &lt;mask /&gt;
+        &lt;/svg&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  has-error 
+  has-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="Zoom">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-err"></span> Zoom</h2>
+      <div class="badges">
+        <label for="c-3-picture-err" class="badge err as-toggle">prop type error</label>
+        <label for="c-3-picture-info" class="badge info as-toggle">1 info</label>
+        <label for="c-3-picture-stories" class="badge ok as-toggle">1 story</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./stories/Picture.stories.tsx">picture · ./stories/Picture.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  <input id="c-3-picture-err" class="tg tg-err" type="checkbox" hidden />
+  <input id="c-3-picture-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-3-picture-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+
+  <div class="panels">
+    
+        <div class="panel panel-err">
+          
+    <div class="note err">
+      <div class="note-title">Prop type error</div>
+      <div class="note-body"><pre><code>File: /home/runner/work/react-medium-image-zoom/react-medium-image-zoom/source/index.ts
+Error:
+No suitable component definition found.
+You can debug your component file in this playground: https://react-docgen.dev/playground
+Code:
+&#39;use client&#39;
+
+export { Uncontrolled as default } from &#39;./Uncontrolled.js&#39;
+export { Controlled } from &#39;./Controlled.js&#39;
+export type { UncontrolledProps } from &#39;./Uncontrolled.js&#39;
+export type { ControlledProps } from &#39;./Controlled.js&#39;
+</code></pre></div>
+    </div>
+        </div>
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Zoom } from "react-medium-image-zoom";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Picture</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Picture = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;{&#39;Zoom an &lt;img /&gt; in a &lt;picture&gt; element with a &lt;source /&gt;&#39;}&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;
+        Hint: reduce the window&amp;apos;s width to see a portrait picture, instead.
+      &lt;/p&gt;
+      &lt;Zoom {...props}&gt;
+        &lt;picture&gt;
+          &lt;source media=&quot;(max-width: 800px)&quot; srcSet={imgTeAraiPoint.src} /&gt;
+          &lt;img alt={imgNzBeach.alt} src={imgNzBeach.src} width=&quot;500&quot; /&gt;
+        &lt;/picture&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  has-error 
+  has-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="Zoom">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-err"></span> Zoom</h2>
+      <div class="badges">
+        <label for="c-4-figure-err" class="badge err as-toggle">prop type error</label>
+        <label for="c-4-figure-info" class="badge info as-toggle">1 info</label>
+        <label for="c-4-figure-stories" class="badge ok as-toggle">1 story</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./stories/Figure.stories.tsx">figure · ./stories/Figure.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  <input id="c-4-figure-err" class="tg tg-err" type="checkbox" hidden />
+  <input id="c-4-figure-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-4-figure-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+
+  <div class="panels">
+    
+        <div class="panel panel-err">
+          
+    <div class="note err">
+      <div class="note-title">Prop type error</div>
+      <div class="note-body"><pre><code>File: /home/runner/work/react-medium-image-zoom/react-medium-image-zoom/source/index.ts
+Error:
+No suitable component definition found.
+You can debug your component file in this playground: https://react-docgen.dev/playground
+Code:
+&#39;use client&#39;
+
+export { Uncontrolled as default } from &#39;./Uncontrolled.js&#39;
+export { Controlled } from &#39;./Controlled.js&#39;
+export type { UncontrolledProps } from &#39;./Uncontrolled.js&#39;
+export type { ControlledProps } from &#39;./Controlled.js&#39;
+</code></pre></div>
+    </div>
+        </div>
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Zoom } from "react-medium-image-zoom";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Figure</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Figure = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;{&#39;Zoom an &lt;img /&gt; in a &lt;figure&gt; element&#39;}&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;figure&gt;
+        &lt;Zoom {...props}&gt;
+          &lt;img alt={imgHobbiton.alt} src={imgHobbiton.src} width=&quot;500&quot; /&gt;
+        &lt;/Zoom&gt;
+        &lt;figcaption&gt;
+          &lt;a href=&quot;https://www.newzealand.com/in/plan/business/hobbiton-movie-set-tours/&quot;&gt;
+            Hobbiton
+          &lt;/a&gt;
+        &lt;/figcaption&gt;
+      &lt;/figure&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  has-error 
+  has-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="Zoom">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-err"></span> Zoom</h2>
+      <div class="badges">
+        <label for="c-5-custom-controls-err" class="badge err as-toggle">prop type error</label>
+        <label for="c-5-custom-controls-info" class="badge info as-toggle">1 info</label>
+        <label for="c-5-custom-controls-stories" class="badge ok as-toggle">1 story</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./stories/CustomControls.stories.tsx">custom-controls · ./stories/CustomControls.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  <input id="c-5-custom-controls-err" class="tg tg-err" type="checkbox" hidden />
+  <input id="c-5-custom-controls-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-5-custom-controls-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+
+  <div class="panels">
+    
+        <div class="panel panel-err">
+          
+    <div class="note err">
+      <div class="note-title">Prop type error</div>
+      <div class="note-body"><pre><code>File: /home/runner/work/react-medium-image-zoom/react-medium-image-zoom/source/index.ts
+Error:
+No suitable component definition found.
+You can debug your component file in this playground: https://react-docgen.dev/playground
+Code:
+&#39;use client&#39;
+
+export { Uncontrolled as default } from &#39;./Uncontrolled.js&#39;
+export { Controlled } from &#39;./Controlled.js&#39;
+export type { UncontrolledProps } from &#39;./Uncontrolled.js&#39;
+export type { ControlledProps } from &#39;./Controlled.js&#39;
+</code></pre></div>
+    </div>
+        </div>
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Controlled as Zoom } from "react-medium-image-zoom";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">J And K Zoom Unzoom</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const JAndKZoomUnzoom = props =&gt; {
+  const [isZoomed, setIsZoomed] = React.useState(false)
+
+  const handleKeyDown = React.useCallback((e: KeyboardEvent) =&gt; {
+    if (e.key === &#39;j&#39; || e.keyCode === 74) {
+      setIsZoomed(true)
+    } else if (e.key === &#39;k&#39; || e.keyCode === 75) {
+      setIsZoomed(false)
+    }
+  }, [])
+
+  React.useEffect(() =&gt; {
+    document.addEventListener(&#39;keydown&#39;, handleKeyDown)
+
+    return () =&gt; {
+      document.removeEventListener(&#39;keydown&#39;, handleKeyDown)
+    }
+  }, [handleKeyDown])
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;Custom zoom and unzoom controls&lt;/h1&gt;
+      &lt;div className=&quot;jk mw-600&quot;&gt;
+        &lt;p&gt;
+          Click into this window, then use &amp;quot;j&amp;quot; to zoom and
+          &amp;quot;k&amp;quot; to unzoom
+        &lt;/p&gt;
+        &lt;Zoom
+          {...props}
+          isZoomed={isZoomed}
+          onZoomChange={undefined /* do nothing */}
+        &gt;
+          &lt;img
+            alt={imgThatWanakaTree.alt}
+            src={imgThatWanakaTree.src}
+            width=&quot;500&quot;
+          /&gt;
+        &lt;/Zoom&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+    </div>
+    <div class="error-groups" role="region" aria-label="Prop type error groups">
+        <section class="group">
+          <input id="no-component-definition-found-toggle" class="group-tg" type="checkbox" hidden />
+          <label for="no-component-definition-found-toggle" class="group-header">
+            <span class="caret">▸</span>
+            <span class="group-title">No component definition found</span>
+            <span class="group-count">6</span>
+          </label>
+          <div class="group-cards">
+<article
+  class="card 
+  has-error 
+  has-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="Zoom">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-err"></span> Zoom</h2>
+      <div class="badges">
+        <label for="c-error-0-galleries-err" class="badge err as-toggle">prop type error</label>
+        <label for="c-error-0-galleries-info" class="badge info as-toggle">1 info</label>
+        <label for="c-error-0-galleries-stories" class="badge ok as-toggle">2 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./stories/Galleries.stories.tsx">galleries · ./stories/Galleries.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  <input id="c-error-0-galleries-err" class="tg tg-err" type="checkbox" hidden />
+  <input id="c-error-0-galleries-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-error-0-galleries-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+
+  <div class="panels">
+    
+        <div class="panel panel-err">
+          
+    <div class="note err">
+      <div class="note-title">Prop type error</div>
+      <div class="note-body"><pre><code>File: /home/runner/work/react-medium-image-zoom/react-medium-image-zoom/source/index.ts
+Error:
+No suitable component definition found.
+You can debug your component file in this playground: https://react-docgen.dev/playground
+Code:
+&#39;use client&#39;
+
+export { Uncontrolled as default } from &#39;./Uncontrolled.js&#39;
+export { Controlled } from &#39;./Controlled.js&#39;
+export type { UncontrolledProps } from &#39;./Uncontrolled.js&#39;
+export type { ControlledProps } from &#39;./Controlled.js&#39;
+</code></pre></div>
+    </div>
+        </div>
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Zoom } from "react-medium-image-zoom";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Image Gallery</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const ImageGallery = () =&gt; {
+  const images = [
+    imgGlenorchyLagoon,
+    imgThatWanakaTree,
+    imgNzBeach,
+    imgHobbiton,
+    imgHookerValleyTrack,
+    imgQueenstown,
+    imgTekapo,
+    imgPortWaikato,
+    imgKea,
+  ]
+
+  const [objectFit, setObjectFit] = React.useState(&#39;cover&#39; as ObjectFit)
+  const [objectPosition, setObjectPosition] = React.useState(&#39;50% 50%&#39;)
+
+  const handleSubmit = React.useCallback(
+    (e: React.FormEvent&lt;HTMLFormElement&gt;) =&gt; {
+      e.preventDefault()
+
+      const data = new FormData(e.currentTarget)
+
+      setObjectFit(data.get(&#39;objectFit&#39;) as ObjectFit)
+      setObjectPosition(data.get(&#39;objectPosition&#39;) as string)
+    },
+    [],
+  )
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;{&#39;Image gallery using &lt;img /&gt;, object-fit, &amp; object-position&#39;}&lt;/h1&gt;
+      &lt;form style={{ marginBottom: &#39;3rem&#39; }} onSubmit={handleSubmit}&gt;
+        &lt;div style={{ marginBottom: &#39;1rem&#39; }}&gt;
+          &lt;label&gt;
+            &lt;code&gt;object-fit:&lt;/code&gt;
+            &lt;select defaultValue={objectFit} name=&quot;objectFit&quot;&gt;
+              &lt;option value=&quot;cover&quot;&gt;cover&lt;/option&gt;
+              &lt;option value=&quot;contain&quot;&gt;contain&lt;/option&gt;
+              &lt;option value=&quot;none&quot;&gt;none&lt;/option&gt;
+              &lt;option value=&quot;scale-down&quot;&gt;scale-down&lt;/option&gt;
+              &lt;option value=&quot;fill&quot;&gt;fill&lt;/option&gt;
+            &lt;/select&gt;
+          &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div style={{ marginBottom: &#39;1rem&#39; }}&gt;
+          &lt;label&gt;
+            &lt;code&gt;object-position:&lt;/code&gt;
+            &lt;input
+              defaultValue={objectPosition}
+              name=&quot;objectPosition&quot;
+              type=&quot;text&quot;
+            /&gt;
+          &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;button type=&quot;submit&quot;&gt;Apply changes&lt;/button&gt;
+      &lt;/form&gt;
+      &lt;ul /* eslint-disable-line jsx-a11y/no-redundant-roles */
+        style={{
+          display: &#39;grid&#39;,
+          gridTemplateColumns: &#39;2fr 2fr 2fr&#39;,
+          gridGap: &#39;2rem&#39;,
+          listStyle: &#39;none&#39;,
+          margin: 0,
+          padding: 0,
+        }}
+        role=&quot;list&quot;
+      &gt;
+        {images.map((img, i) =&gt; (
+          &lt;li /* eslint-disable-line jsx-a11y/no-redundant-roles */
+            key={i}
+            role=&quot;listitem&quot;
+          &gt;
+            &lt;Zoom&gt;
+              &lt;img
+                alt={img.alt}
+                loading=&quot;lazy&quot;
+                src={img.src}
+                style={{ objectFit, objectPosition, width: &#39;100%&#39; }}
+                width=&quot;250&quot;
+                height=&quot;500&quot;
+              /&gt;
+            &lt;/Zoom&gt;
+          &lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Div Image Gallery</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const DivImageGallery = () =&gt; {
+  const images = React.useMemo(
+    () =&gt; [
+      imgGlenorchyLagoon,
+      imgThatWanakaTree,
+      imgNzBeach,
+      imgHobbiton,
+      imgHookerValleyTrack,
+      imgQueenstown,
+      imgTekapo,
+      imgPortWaikato,
+      imgKea,
+    ],
+    [],
+  )
+
+  const [bgSize, setBgSize] = React.useState(&#39;cover&#39;)
+  const [bgPosition, setBgPosition] = React.useState(&#39;50%&#39;)
+  const [aspectRatio, setAspectRatio] = React.useState(&#39;56%&#39;)
+
+  const handleSubmit = React.useCallback(
+    (e: React.FormEvent&lt;HTMLFormElement&gt;) =&gt; {
+      e.preventDefault()
+
+      const data = new FormData(e.currentTarget)
+
+      setBgSize(data.get(&#39;backgroundSize&#39;) as string)
+      setBgPosition(data.get(&#39;backgroundPosition&#39;) as string)
+      setAspectRatio(data.get(&#39;aspectRatio&#39;) as string)
+    },
+    [],
+  )
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;{&#39;Image gallery using &lt;div&gt;s, background images, and padding&#39;}&lt;/h1&gt;
+      &lt;form style={{ marginBottom: &#39;3rem&#39; }} onSubmit={handleSubmit}&gt;
+        &lt;div style={{ marginBottom: &#39;1rem&#39; }}&gt;
+          &lt;label&gt;
+            &lt;code&gt;background-size:&lt;/code&gt;
+            &lt;input defaultValue={bgSize} name=&quot;backgroundSize&quot; type=&quot;text&quot; /&gt;
+          &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div style={{ marginBottom: &#39;1rem&#39; }}&gt;
+          &lt;label&gt;
+            &lt;code&gt;background-position:&lt;/code&gt;
+            &lt;input
+              defaultValue={bgPosition}
+              name=&quot;backgroundPosition&quot;
+              type=&quot;text&quot;
+            /&gt;
+          &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;div style={{ marginBottom: &#39;1rem&#39; }}&gt;
+          &lt;label&gt;
+            &lt;code&gt;aspect ratio:&lt;/code&gt;
+            &lt;select defaultValue={aspectRatio} name=&quot;aspectRatio&quot;&gt;
+              &lt;option value=&quot;56%&quot;&gt;16:9&lt;/option&gt;
+              &lt;option value=&quot;75%&quot;&gt;4:3&lt;/option&gt;
+              &lt;option value=&quot;33%&quot;&gt;3:1&lt;/option&gt;
+              &lt;option value=&quot;100%&quot;&gt;1:1&lt;/option&gt;
+            &lt;/select&gt;
+          &lt;/label&gt;
+        &lt;/div&gt;
+        &lt;button type=&quot;submit&quot;&gt;Apply changes&lt;/button&gt;
+      &lt;/form&gt;
+      &lt;ul
+        style={{
+          display: &#39;flex&#39;,
+          flexWrap: &#39;wrap&#39;,
+          listStyle: &#39;none&#39;,
+          margin: 0,
+          padding: 0,
+        }}
+      &gt;
+        {images.map((img, i) =&gt; (
+          &lt;li
+            key={i}
+            style={{ margin: &#39;0 1rem 1rem 0&#39;, width: &#39;calc(33% - 1rem)&#39; }}
+          &gt;
+            &lt;Zoom&gt;
+              &lt;div
+                aria-label={img.alt}
+                role=&quot;img&quot;
+                style={{
+                  backgroundColor: &#39;#fff&#39;,
+                  backgroundImage: `url(${img.src})`,
+                  backgroundPosition: bgPosition,
+                  backgroundRepeat: &#39;no-repeat&#39;,
+                  backgroundSize: bgSize,
+                  height: &#39;0&#39;,
+                  paddingBottom: aspectRatio,
+                  width: &#39;100%&#39;,
+                }}
+              /&gt;
+            &lt;/Zoom&gt;
+          &lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  has-error 
+  has-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="Zoom">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-err"></span> Zoom</h2>
+      <div class="badges">
+        <label for="c-error-1-img-err" class="badge err as-toggle">prop type error</label>
+        <label for="c-error-1-img-info" class="badge info as-toggle">1 info</label>
+        <label for="c-error-1-img-stories" class="badge ok as-toggle">20 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./stories/Img.stories.tsx">img · ./stories/Img.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  <input id="c-error-1-img-err" class="tg tg-err" type="checkbox" hidden />
+  <input id="c-error-1-img-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-error-1-img-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+
+  <div class="panels">
+    
+        <div class="panel panel-err">
+          
+    <div class="note err">
+      <div class="note-title">Prop type error</div>
+      <div class="note-body"><pre><code>File: /home/runner/work/react-medium-image-zoom/react-medium-image-zoom/source/index.ts
+Error:
+No suitable component definition found.
+You can debug your component file in this playground: https://react-docgen.dev/playground
+Code:
+&#39;use client&#39;
+
+export { Uncontrolled as default } from &#39;./Uncontrolled.js&#39;
+export { Controlled } from &#39;./Controlled.js&#39;
+export type { UncontrolledProps } from &#39;./Uncontrolled.js&#39;
+export type { ControlledProps } from &#39;./Controlled.js&#39;
+</code></pre></div>
+    </div>
+        </div>
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Zoom } from "react-medium-image-zoom";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Regular</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Regular = props =&gt; {
+  const handleZoomChange = React.useCallback&lt;
+    NonNullable&lt;React.ComponentProps&lt;typeof Zoom&gt;[&#39;onZoomChange&#39;]&gt;
+  &gt;((value, { event }) =&gt; {
+    console.log(&#39;handleZoomChange info!&#39;, { value, event })
+  }, [])
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;Zooming a regular image&lt;/h1&gt;
+      &lt;div
+        className=&quot;mw-600&quot;
+        style={{ display: &#39;flex&#39;, flexDirection: &#39;column&#39; }}
+      &gt;
+        &lt;Zoom {...props} onZoomChange={handleZoomChange} wrapElement=&quot;span&quot;&gt;
+          &lt;img
+            alt={imgThatWanakaTree.alt}
+            src={imgThatWanakaTree.src}
+            height=&quot;320&quot;
+            decoding=&quot;async&quot;
+            loading=&quot;lazy&quot;
+          /&gt;
+        &lt;/Zoom&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Zoom Margin</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const ZoomMargin = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;Setting a zoomMargin of 45(px)&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;
+        This example should always be offset from the window by at least 45px
+      &lt;/p&gt;
+      &lt;Zoom {...props} zoomMargin={45}&gt;
+        &lt;img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height=&quot;320&quot;
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Small Portrait</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const SmallPortrait = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;A portrait image with a small width specified&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;Small size specifications scale well, too — even on mobile.&lt;/p&gt;
+      &lt;Zoom {...props}&gt;
+        &lt;img
+          alt={imgTeAraiPoint.alt}
+          src={imgTeAraiPoint.src}
+          height=&quot;112&quot;
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">SVG Source</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const SVGSource = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;An image with an SVG src&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;Zoom {...props}&gt;
+        &lt;img
+          alt={imgNzMap.alt}
+          src={imgNzMap.src}
+          width=&quot;150&quot;
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Data SVG Source</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const DataSVGSource = () =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;
+      An image with a &lt;code&gt;data:image/svg+xml&lt;/code&gt; &lt;code&gt;src&lt;/code&gt;
+    &lt;/h1&gt;
+    &lt;div className=&quot;data-uri-img mw-600&quot;&gt;
+      &lt;Zoom&gt;
+        &lt;img
+          alt=&quot;Gatsby G Logo&quot;
+          src=&quot;data:image/svg+xml,%3Csvg width=&#39;24&#39; height=&#39;24&#39; fill=&#39;none&#39; xmlns=&#39;http://www.w3.org/2000/svg&#39;%3E%3Cpath d=&#39;M12 2a10 10 0 110 20 10 10 0 010-20zm0 2c-3.73 0-6.86 2.55-7.75 6L14 19.75c3.45-.89 6-4.02 6-7.75h-5.25v1.5h3.45a6.37 6.37 0 01-3.89 4.44L6.06 9.69C7 7.31 9.3 5.63 12 5.63c2.13 0 4 1.04 5.18 2.65l1.23-1.06A7.959 7.959 0 0012 4zm-8 8a8 8 0 008 8c.04 0 .09 0-8-8z&#39; fill=&#39;%23639&#39;/%3E%3C/svg%3E&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Provide Zoom Img</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const ProvideZoomImg = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;
+      An image with a larger &lt;code&gt;zoomImg&lt;/code&gt;
+    &lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;
+        When zoomed, the original image will scale to as large as the window
+        will allow, and then it will be replaced by an image that is downloaded
+        in the background.
+      &lt;/p&gt;
+      &lt;Zoom
+        {...props}
+        zoomImg={{
+          alt: imgKeaLarge.alt,
+          src: imgKeaLarge.src,
+        }}
+      &gt;
+        &lt;img alt={imgKeaSmall.alt} src={imgKeaSmall.src} width=&quot;150&quot; /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Zoom Img Loader</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const ZoomImgLoader = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;ZoomImg with Loading State&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;
+        This example shows how to provide loading feedback when using a
+        high-resolution &lt;code&gt;zoomImg&lt;/code&gt;. The &lt;code&gt;ZoomContent&lt;/code&gt;{&#39; &#39;}
+        component uses the &lt;code&gt;isZoomImgLoaded&lt;/code&gt; prop to display a
+        loading spinner while the high-resolution image is being downloaded.
+      &lt;/p&gt;
+      &lt;p&gt;
+        Here the loading spinner is shown on every zoom, but in a real-world
+        case, the browser caches the image, so you&amp;apos;ll only see the loader
+        at first load.
+      &lt;/p&gt;
+      &lt;Zoom
+        {...props}
+        zoomImg={{
+          alt: imgKeaLarge.alt,
+          src: imgKeaLarge.src,
+        }}
+        ZoomContent={CustomZoomContentWithLoader}
+      &gt;
+        &lt;img alt={imgKeaSmall.alt} src={imgKeaSmall.src} width=&quot;150&quot; /&gt;
+      &lt;/Zoom&gt;
+      &lt;h2&gt;Code&lt;/h2&gt;
+      &lt;pre&gt;
+        &lt;code&gt;
+          {`
+const CustomZoomContent: UncontrolledProps[&#39;ZoomContent&#39;] = ({
+  img,
+  isZoomImgLoaded,
+}) =&gt; {
+  return (
+    &lt;&gt;
+      {img}
+      {!isZoomImgLoaded &amp;&amp; (
+        &lt;div className=&#39;loader-wrapper&#39;&gt;
+          &lt;div className=&#39;loader&#39; /&gt;
+        &lt;/div&gt;
+      )}
+    &lt;/&gt;
+  )
+}
+
+&lt;Zoom
+  zoomImg={{
+    src: &#39;higher-res-image.jpg&#39;,
+  }}
+  ZoomContent={CustomZoomContent}
+&gt;
+  &lt;img src=&#39;low-res-image.jpg&#39; width=&quot;150&quot; /&gt;
+&lt;/Zoom&gt;
+          `}
+        &lt;/code&gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Small Src Size</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const SmallSrcSize = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;An image with a small size&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;
+        In order to prevent blurry images, An image won&amp;apos;t scale up larger
+        than its natural dimensions.
+      &lt;/p&gt;
+      &lt;Zoom {...props}&gt;
+        &lt;img alt={imgKeaSmall.alt} src={imgKeaSmall.src} width=&quot;150&quot; /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Custom Modal Styles</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const CustomModalStyles = props =&gt; {
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;Custom Modal Styles&lt;/h1&gt;
+      &lt;div className=&quot;mw-600&quot;&gt;
+        &lt;p&gt;Use CSS to customize the zoom modal styles.&lt;/p&gt;
+        &lt;p&gt;
+          Here, we slow down the transition time and use a different overlay
+          color.
+        &lt;/p&gt;
+        &lt;div&gt;
+          &lt;Zoom {...props} classDialog=&quot;custom-zoom&quot;&gt;
+            &lt;img
+              alt={imgGlenorchyLagoon.alt}
+              src={imgGlenorchyLagoon.src}
+              width=&quot;400&quot;
+            /&gt;
+          &lt;/Zoom&gt;
+        &lt;/div&gt;
+        &lt;p&gt;
+          The CSS class, &lt;code&gt;custom-zoom&lt;/code&gt;, is sent to the component via
+          the &lt;code&gt;classDialog&lt;/code&gt; string prop. Here are the styles used:
+        &lt;/p&gt;
+        &lt;pre&gt;
+          &lt;code&gt;
+            {`
+.custom-zoom [data-rmiz-modal-overlay],
+.custom-zoom [data-rmiz-modal-img] {
+  transition-duration: 0.8s;
+  transition-timing-function: linear;
+}
+.custom-zoom [data-rmiz-modal-overlay=&quot;hidden&quot;] {
+  background-color: rgb(56, 58, 89, 0);
+}
+.custom-zoom [data-rmiz-modal-overlay=&quot;visible&quot;] {
+  background-color: rgb(56, 58, 89, 1);
+}
+.custom-zoom [data-rmiz-btn-unzoom] {
+  background-color: #bd93f9;
+  color: #000;
+}
+.custom-zoom [data-rmiz-btn-unzoom]:focus-visible {
+  outline-offset: 0.4rem;
+  outline: 0.2rem solid #bd93f9;
+}
+`}
+          &lt;/code&gt;
+        &lt;/pre&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Zoom Image From Inside Dialog</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const ZoomImageFromInsideDialog = props =&gt; {
+  const refBtn = React.useRef&lt;HTMLButtonElement&gt;(null)
+  const refModal = React.useRef&lt;HTMLDialogElement&gt;(null)
+
+  const handleBtnClick = React.useCallback(() =&gt; {
+    refModal.current?.showModal()
+  }, [])
+
+  React.useEffect(() =&gt; {
+    const handleDocumentClick = (e: MouseEvent) =&gt; {
+      if (
+        !refBtn.current?.contains(e.target as Element) &amp;&amp;
+        !refModal.current?.contains(e.target as Element)
+      ) {
+        refModal.current?.close()
+      }
+    }
+
+    document.addEventListener(&#39;click&#39;, handleDocumentClick)
+
+    return () =&gt; {
+      document.removeEventListener(&#39;click&#39;, handleDocumentClick)
+    }
+  }, [])
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;Zoom Image From Inside Dialog&lt;/h1&gt;
+      &lt;div className=&quot;mw-600&quot;&gt;
+        &lt;button onClick={handleBtnClick} ref={refBtn} type=&quot;button&quot;&gt;
+          Open Modal
+        &lt;/button&gt;
+        &lt;dialog aria-modal=&quot;true&quot; ref={refModal}&gt;
+          &lt;form method=&quot;dialog&quot;&gt;
+            &lt;button type=&quot;submit&quot;&gt;Close&lt;/button&gt;
+          &lt;/form&gt;
+          &lt;h1&gt;Zooming should work!&lt;/h1&gt;
+          &lt;div&gt;
+            &lt;Zoom {...props}&gt;
+              &lt;img
+                alt={imgGlenorchyLagoon.alt}
+                src={imgGlenorchyLagoon.src}
+                width=&quot;400&quot;
+              /&gt;
+            &lt;/Zoom&gt;
+          &lt;/div&gt;
+        &lt;/dialog&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Modal Figure Caption</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const ModalFigureCaption = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;Modal With Figure And Caption&lt;/h1&gt;
+    &lt;p&gt;
+      If you want more control over the zoom modal&amp;apos;s content, you can pass
+      a &lt;code&gt;ZoomContent&lt;/code&gt; component
+    &lt;/p&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;Zoom {...props} ZoomContent={CustomZoomContent}&gt;
+        &lt;img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height=&quot;320&quot;
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Delayed Image Render</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const DelayedImageRender = props =&gt; {
+  const { timer } = useTimer(5000)
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;A sub-component which delays rendering&lt;/h1&gt;
+      &lt;div className=&quot;mw-600&quot;&gt;
+        &lt;p&gt;
+          This examples simulates an issue caused by the gatsby-plugin-image
+          (and potentially others) where the actual image element isn&amp;apos;t
+          found on the first render.
+        &lt;/p&gt;
+        &lt;div&gt;
+          Image loads in: &lt;span role=&quot;timer&quot;&gt;{timer / 1000}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;Zoom {...props}&gt;
+          &lt;DelayedImg
+            timer={timer}
+            alt={imgEarth.alt}
+            src={imgEarth.src}
+            height=&quot;200&quot;
+            width=&quot;400&quot;
+          /&gt;
+        &lt;/Zoom&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Delayed Display None</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const DelayedDisplayNone = props =&gt; {
+  const { timer } = useTimer(5000)
+  const classImg = timer === 0 ? undefined : &#39;display-none&#39;
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;
+        A delayed &lt;code&gt;display: none;&lt;/code&gt; image
+      &lt;/h1&gt;
+      &lt;div className=&quot;mw-600&quot;&gt;
+        &lt;p&gt;
+          This examples simulates an image being hidden with CSS and then shown
+          after the countdown.
+        &lt;/p&gt;
+        &lt;div&gt;
+          Image loads in: &lt;span role=&quot;timer&quot;&gt;{timer / 1000}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;Zoom {...props}&gt;
+          &lt;img
+            alt={imgTekapo.alt}
+            src={imgTekapo.src}
+            className={classImg}
+            height=&quot;320&quot;
+            decoding=&quot;async&quot;
+            loading=&quot;lazy&quot;
+          /&gt;
+        &lt;/Zoom&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Custom Button Icons</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const CustomButtonIcons = props =&gt; {
+  React.useEffect(() =&gt; {
+    document.body.classList.add(&#39;change-icons&#39;)
+
+    return () =&gt; {
+      document.body.classList.remove(&#39;change-icons&#39;)
+    }
+  }, [])
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;An image with custom zoom &amp;amp; unzoom icons&lt;/h1&gt;
+      &lt;div className=&quot;mw-600&quot;&gt;
+        &lt;p&gt;Press TAB to activate the zoom button&lt;/p&gt;
+        &lt;div&gt;
+          &lt;Zoom {...props} IconZoom={() =&gt; &lt;&gt;+&lt;/&gt;} IconUnzoom={() =&gt; &lt;&gt;-&lt;/&gt;}&gt;
+            &lt;img
+              alt={imgHookerValleyTrack.alt}
+              src={imgHookerValleyTrack.src}
+              width=&quot;400&quot;
+            /&gt;
+          &lt;/Zoom&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Inline Image</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const InlineImage = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;Inline Image&lt;/h1&gt;
+    &lt;p className=&quot;inline&quot;&gt;
+      This example is of an image that is inline with text.
+      &lt;Zoom {...props} wrapElement=&quot;span&quot;&gt;
+        &lt;img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height=&quot;320&quot;
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/p&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Cycle Images</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const CycleImages = props =&gt; {
+  const [img, setImg] = React.useState&lt;{ alt: string; src: string }&gt;(
+    imgThatWanakaTree,
+  )
+
+  React.useEffect(() =&gt; {
+    async function runCycle() {
+      while (true) {
+        await delay(3000)
+
+        setImg(
+          shuffle([
+            imgThatWanakaTree,
+            imgEarth,
+            imgNzMap,
+            imgTekapo,
+            imgKeaLarge,
+            imgTeAraiPoint,
+            imgGlenorchyLagoon,
+            imgHookerValleyTrack,
+          ] as const)[0],
+        )
+      }
+    }
+
+    runCycle()
+  }, [])
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;Cycle through images&lt;/h1&gt;
+      &lt;p&gt;
+        This helps to test the ghost element that positions the button. Press
+        Tab to focus the button, then sit and watch it reposition with each new
+        image!
+      &lt;/p&gt;
+      &lt;p&gt;
+        &lt;Zoom {...props} wrapElement=&quot;span&quot;&gt;
+          &lt;img
+            alt={img.alt}
+            src={img.src}
+            height=&quot;320&quot;
+            decoding=&quot;async&quot;
+            loading=&quot;lazy&quot;
+          /&gt;
+        &lt;/Zoom&gt;
+      &lt;/p&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Swipe To Unzoom Disabled</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const SwipeToUnzoomDisabled = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;Swipe to Unzoom Disabled&lt;/h1&gt;
+    &lt;p&gt;
+      This example demonstrates preventing swipe gestures from unzooming when an
+      image is zoomed. This is best tested on a touchscreen device!
+    &lt;/p&gt;
+    &lt;div&gt;
+      &lt;Zoom {...props} canSwipeToUnzoom={false}&gt;
+        &lt;img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height=&quot;320&quot;
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Swipe To Unzoom Threshold</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const SwipeToUnzoomThreshold = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;Swipe to Unzoom Threshold&lt;/h1&gt;
+    &lt;p&gt;
+      This example demonstrates increasing the threshold required for a swipe
+      gesture on a touchscreen device to unzoom when an image is zoomed. This is
+      best tested on a touchscreen device!
+    &lt;/p&gt;
+    &lt;p&gt;
+      The default is &lt;code&gt;10&lt;/code&gt; (px), but this example is set to{&#39; &#39;}
+      &lt;code&gt;200&lt;/code&gt; (px); that&amp;apos;s how far you&amp;apos;ll have to move your
+      finger across the screen.
+    &lt;/p&gt;
+    &lt;div&gt;
+      &lt;Zoom {...props} swipeToUnzoomThreshold={200}&gt;
+        &lt;img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height=&quot;320&quot;
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Select Cards</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const SelectCards = props =&gt; {
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;Selecting cards and zooming without triggering selection state&lt;/h1&gt;
+      &lt;div
+        className=&quot;mw-600&quot;
+        style={{ display: &#39;flex&#39;, flexDirection: &#39;column&#39; }}
+      &gt;
+        &lt;ul className=&quot;cards&quot;&gt;
+          &lt;CardItem
+            alt={imgThatWanakaTree.alt}
+            src={imgThatWanakaTree.src}
+            zoomProps={props as UncontrolledProps}
+          /&gt;
+          &lt;CardItem
+            alt={imgGlenorchyLagoon.alt}
+            src={imgGlenorchyLagoon.src}
+            zoomProps={props as UncontrolledProps}
+          /&gt;
+        &lt;/ul&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">(Automated Test)</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const AutomatedTest = props =&gt; {
+  const handleZoomChange = React.useCallback&lt;
+    NonNullable&lt;React.ComponentProps&lt;typeof Zoom&gt;[&#39;onZoomChange&#39;]&gt;
+  &gt;((value, { event }) =&gt; {
+    console.log(&#39;handleZoomChange info!&#39;, { value, event })
+  }, [])
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;Zooming a regular image&lt;/h1&gt;
+      &lt;div
+        className=&quot;mw-600&quot;
+        style={{ display: &#39;flex&#39;, flexDirection: &#39;column&#39; }}
+      &gt;
+        &lt;Zoom {...props} onZoomChange={handleZoomChange} wrapElement=&quot;span&quot;&gt;
+          &lt;img
+            alt={imgThatWanakaTree.alt}
+            src={imgThatWanakaTree.src}
+            height=&quot;320&quot;
+            decoding=&quot;async&quot;
+            loading=&quot;lazy&quot;
+          /&gt;
+        &lt;/Zoom&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  has-error 
+  has-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="Zoom">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-err"></span> Zoom</h2>
+      <div class="badges">
+        <label for="c-error-2-svg-err" class="badge err as-toggle">prop type error</label>
+        <label for="c-error-2-svg-info" class="badge info as-toggle">1 info</label>
+        <label for="c-error-2-svg-stories" class="badge ok as-toggle">3 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./stories/SVG.stories.tsx">svg · ./stories/SVG.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  <input id="c-error-2-svg-err" class="tg tg-err" type="checkbox" hidden />
+  <input id="c-error-2-svg-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-error-2-svg-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+
+  <div class="panels">
+    
+        <div class="panel panel-err">
+          
+    <div class="note err">
+      <div class="note-title">Prop type error</div>
+      <div class="note-body"><pre><code>File: /home/runner/work/react-medium-image-zoom/react-medium-image-zoom/source/index.ts
+Error:
+No suitable component definition found.
+You can debug your component file in this playground: https://react-docgen.dev/playground
+Code:
+&#39;use client&#39;
+
+export { Uncontrolled as default } from &#39;./Uncontrolled.js&#39;
+export { Controlled } from &#39;./Controlled.js&#39;
+export type { UncontrolledProps } from &#39;./Uncontrolled.js&#39;
+export type { ControlledProps } from &#39;./Controlled.js&#39;
+</code></pre></div>
+    </div>
+        </div>
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Zoom } from "react-medium-image-zoom";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Animating Square</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const AnimatingSquare = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;An animating square SVG with its width &amp; height set via style&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;figure&gt;
+        &lt;Zoom {...props}&gt;
+          &lt;svg
+            aria-label=&quot;SVG animating from a circle to a square and back again on repeat&quot;
+            role=&quot;img&quot;
+            style={{ width: &#39;10rem&#39;, height: &#39;10rem&#39; }}
+            viewBox=&quot;0 0 10 10&quot;
+            xmlns=&quot;http://www.w3.org/2000/svg&quot;
+          &gt;
+            &lt;rect width=&quot;10&quot; height=&quot;10&quot;&gt;
+              &lt;animate
+                attributeName=&quot;rx&quot;
+                values=&quot;0;5;0&quot;
+                dur=&quot;10s&quot;
+                repeatCount=&quot;indefinite&quot;
+              /&gt;
+            &lt;/rect&gt;
+          &lt;/svg&gt;
+        &lt;/Zoom&gt;
+        &lt;figcaption&gt;
+          &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/SVG/Element/animate&quot;&gt;
+            Animation MDN source
+          &lt;/a&gt;
+        &lt;/figcaption&gt;
+      &lt;/figure&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Bird On Background</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const BirdOnBackground = () =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;A bird SVG on a non-SVG background&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;div
+        style={{
+          backgroundColor: &#39;#ccebff&#39;,
+          borderRadius: &#39;0 30px 0 30px&#39;,
+          padding: &#39;1rem&#39;,
+          width: &#39;20rem&#39;,
+          height: &#39;auto&#39;,
+        }}
+      &gt;
+        &lt;Zoom&gt;
+          &lt;svg
+            aria-label=&quot;Outline of a bird&quot;
+            role=&quot;img&quot;
+            viewBox=&quot;203.337 154.583 197.077 399.551&quot;
+            xmlSpace=&quot;preserve&quot;
+            xmlns=&quot;http://www.w3.org/2000/svg&quot;
+          &gt;
+            &lt;path d=&quot;M382.92 542.2c-9.764-18.504-9.496-18.288-14.537-11.773-2.346 3.033-4.813 5.515-5.482 5.515-1.146 0-2.381-5.274-3.749-15.993-.326-2.553-2.368-11.909-4.539-20.795-2.171-8.884-3.947-17.755-3.947-19.713 0-5.187-8.713-32.977-11.055-35.258-1.098-1.068-5.249-2.104-9.227-2.301-6.258-.309-7.674.195-10.506 3.745-1.8 2.257-5.454 5.011-8.12 6.12-6.331 2.636-34.301 27.32-35.628 31.443-.565 1.755-.208 7.019.794 11.697 2.196 10.26.744 15.06-5.986 19.785-4.401 3.091-6.587 2.529-3.192-.818 2.655-2.618 3.638-15.329 1.567-20.26-1.059-2.521-2.457-4.582-3.107-4.582-1.438 0-15.973 14.122-19.175 18.63-1.265 1.781-2.299 2.383-2.299 1.338 0-3.677 4.293-11.697 8.982-16.782 2.607-2.827 4.375-5.722 3.93-6.434-1.133-1.808-12.523-1.623-13.679.221-1.171 1.868-3.838 1.996-3.838.183 0-2.261 7.987-4.643 18.241-5.438 11.055-.858 14.614-3.177 34.988-22.78l11.044-10.628-.046-11.537c-.045-11.305-.16-11.645-5.653-16.704-10.138-9.337-8.35-8.974-35.732-7.271l-25.145 1.563-4.955 5.651-4.955 5.651.924-4.92c.903-4.806.797-4.92-4.587-4.92-5.253 0-13.199 5.064-19.003 12.111-1.663 2.018-1.875 2.018-1.914 0-.075-3.941 5.929-12.126 10.018-13.66 4.691-1.758 3.587-4.506-1.81-4.506-2.111 0-3.473-.583-3.027-1.295s17.413-.958 37.705-.545c30.851.627 36.888.406 36.862-1.354-.017-1.158-4.187-7.555-9.266-14.215-11.746-15.405-23.752-39.382-26.152-52.227-2.618-14.016-2.633-41.653-.027-49.956 6.496-20.695 12.631-38.346 14.702-42.295 4.322-8.24 3.126-13.504-4.76-20.954-8.465-7.997-10.757-7.984-29.315.167-15.287 6.714-18.843 7.754-18.843 5.507 0-1.773 4.448-6.357 16.537-17.042 6.143-5.429 6.492-6.187 6.492-14.078 0-4.587 1.009-10.264 2.242-12.615 2.798-5.335 24.339-22.823 28.114-22.823.72 0 4.721-1.607 8.89-3.572 13.678-6.446 18.768-7.454 33.749-6.681 22.029 1.136 38.123 9.608 49.848 26.24 6.537 9.276 18.056 35.586 18.546 42.366.237 3.292 3.162 11.434 6.497 18.095 15.755 31.461 20.018 50.267 20.074 88.559.046 31.502-1.649 40.68-13.039 70.58-4.748 12.462-6 17.826-6 25.7 0 9.021 3.813 45.038 5.354 50.562.348 1.248 1.043 7.721 1.545 14.381.501 6.66 1.259 13.884 1.685 16.051.425 2.166 1.35 12.708 2.055 23.428 1.91 27.91.58 29.59-9.02 11.4zm4.8-25.18c-.824-3.331-1.937-10.824-2.473-16.652s-2.283-22.177-3.883-36.331c-1.6-14.155-3.365-30.072-3.923-35.372-.879-8.355-2.854-12.956-14.855-34.596-12.692-22.887-21.591-42.298-23.288-50.796-.369-1.853-2.504-8.818-4.742-15.479-5.297-15.758-5.547-33.847-.648-46.929 6.752-18.03 14.971-30.776 29.343-45.511l7.478-7.666-2.163-8.986c-2.478-10.29-12.282-31.084-16.383-34.743-2.614-2.333-2.911-1.991-5.486 6.347-2.913 9.427-3.211 20.345-1.036 37.957.955 7.742.824 12.222-.445 15.199-1.011 2.37-9.133 9.942-18.514 17.261-19.104 14.904-36.065 31.987-40.75 41.041-4.958 9.584-8.874 21.833-11.224 35.113-2.631 14.869-.703 28.211 6.868 47.511 3.939 10.043 7.183 15.161 15.535 24.506l10.555 11.81v13.72c0 11.406.403 13.719 2.39 13.719 2.707 0 10.998-8.393 12.307-12.457 1.033-3.207 5.262-3.608 5.262-.498 0 1.486 2.08 2.333 6.506 2.65 5.812.415 6.862 1.109 9.868 6.521 3.452 6.214 8.831 24.556 10.547 35.967.532 3.531 2.26 11.869 3.841 18.53 1.582 6.661 3.342 15.687 3.91 20.059 1.134 8.706 2.834 9.986 5.525 4.162 3.406-7.373 6.353-4.643 17.969 16.652l2.478 4.542.466-10.598c.23-5.81-.24-13.31-1.06-16.64zm-70.46-259.57c8.086-9.312 13.233-25.08 14.345-43.947 1.056-17.908 2.918-26.446 7.003-32.102 1.749-2.422 2.911-4.67 2.582-4.994-.33-.325-6.795-1.042-14.369-1.595l-13.77-1.004-2.984 5.088c-3.554 6.057-4.399 6.893-12.378 12.229-6.64 4.44-15.773 8.079-17.07 6.799-.441-.435.335-2.959 1.725-5.61 3.479-6.634 2.114-9.112-4.939-8.971-10.112.203-17.733 3.329-21.481 8.813-1.905 2.787-3.034 5.751-2.51 6.587s2.002-.186 3.286-2.271c3.331-5.413 9.781-8.704 17.056-8.704 5.064 0 6.288.538 6.288 2.764 0 5.977-14.439 13.688-22.086 11.796-2.206-.546-3.524-.18-3.564.991-.035 1.022-.541 3.616-1.125 5.765-.903 3.322-.185 4.556 4.797 8.245 3.222 2.386 13.804 11.19 23.515 19.566 30.57 26.37 30.59 26.38 35.66 20.54z&quot; /&gt;
+          &lt;/svg&gt;
+        &lt;/Zoom&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Excalidraw</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Excalidraw = () =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;A series of shapes connected by arrows with descriptive text&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;Zoom&gt;
+        &lt;svg
+          version=&quot;1.1&quot;
+          xmlns=&quot;http://www.w3.org/2000/svg&quot;
+          viewBox=&quot;0 0 626.29296875 489.6796875&quot;
+          width=&quot;626.2929&quot;
+          height=&quot;489.6796&quot;
+        &gt;
+          &lt;rect
+            x=&quot;0&quot;
+            y=&quot;0&quot;
+            width=&quot;626.29296875&quot;
+            height=&quot;489.6796875&quot;
+            fill=&quot;#ffff&quot;
+          /&gt;
+          &lt;g
+            strokeLinecap=&quot;round&quot;
+            transform=&quot;translate(20 20.55078125) rotate(0 56.818359375 46.0390625)&quot;
+          &gt;
+            &lt;path
+              d=&quot;M76.44 1.84 C85.17 3.54, 93.63 10.5, 99.59 16.35 C105.54 22.19, 110.29 29.57, 112.17 36.9 C114.06 44.24, 113.8 52.94, 110.9 60.34 C107.99 67.74, 102.04 76, 94.77 81.3 C87.49 86.6, 76.65 90.75, 67.24 92.15 C57.82 93.54, 47.35 92.35, 38.28 89.64 C29.2 86.93, 18.87 81.58, 12.77 75.86 C6.68 70.14, 3.38 62.93, 1.69 55.33 C0 47.72, -0.46 37.43, 2.61 30.23 C5.68 23.02, 12.85 17.08, 20.1 12.11 C27.36 7.14, 35.75 1.58, 46.16 0.4 C56.56 -0.79, 75.29 3.46, 82.55 4.99 C89.82 6.52, 90.11 8.8, 89.75 9.59 M35.64 2.79 C43.74 -0.96, 54.48 -2, 63.94 -0.74 C73.41 0.52, 84.69 5.74, 92.42 10.36 C100.16 14.97, 107.02 20.2, 110.34 26.97 C113.67 33.75, 113.56 43.07, 112.35 51 C111.13 58.94, 108.74 68.38, 103.05 74.59 C97.35 80.8, 86.83 85.62, 78.16 88.27 C69.49 90.92, 60.26 91.36, 51.04 90.48 C41.81 89.6, 30.55 87.38, 22.82 82.99 C15.09 78.6, 8.53 71.2, 4.68 64.11 C0.82 57.02, -1.35 48.06, -0.32 40.45 C0.7 32.83, 5.17 24.66, 10.82 18.44 C16.47 12.23, 29.67 5.29, 33.59 3.16 C37.51 1.03, 33.75 4.79, 34.36 5.67&quot;
+              stroke=&quot;#000000&quot;
+              strokeWidth=&quot;1&quot;
+              fill=&quot;none&quot;
+            /&gt;
+          &lt;/g&gt;
+          &lt;g
+            strokeLinecap=&quot;round&quot;
+            transform=&quot;translate(392.59375 20) rotate(0 67.927734375 50.771484375)&quot;
+          &gt;
+            &lt;path
+              d=&quot;M73.65 -0.19 C83.82 -0.22, 95.32 4.01, 104.01 8.36 C112.7 12.7, 120.45 19.29, 125.8 25.89 C131.16 32.49, 135.56 40.37, 136.12 47.97 C136.69 55.57, 133.69 64.14, 129.19 71.5 C124.69 78.87, 117.51 87.27, 109.13 92.17 C100.75 97.07, 89.51 99.76, 78.91 100.92 C68.31 102.09, 55.39 101.58, 45.52 99.18 C35.66 96.78, 26.88 92.24, 19.74 86.53 C12.59 80.81, 5.68 72.47, 2.64 64.87 C-0.39 57.28, -0.58 48.52, 1.51 40.96 C3.61 33.39, 8.57 25.47, 15.22 19.48 C21.87 13.5, 31.33 8.4, 41.44 5.05 C51.54 1.69, 69.9 0.1, 75.86 -0.63 C81.82 -1.35, 77.44 -0.22, 77.21 0.69 M45.05 3.73 C54.51 0.92, 68.17 0.28, 78.84 1.45 C89.51 2.62, 100.52 6.49, 109.08 10.73 C117.64 14.96, 125.67 19.96, 130.21 26.86 C134.75 33.76, 136.83 43.91, 136.32 52.15 C135.81 60.4, 132.24 69.74, 127.14 76.32 C122.05 82.91, 114.62 87.6, 105.74 91.66 C96.85 95.73, 84.29 99.63, 73.85 100.69 C63.41 101.75, 52.54 100.93, 43.1 98.01 C33.66 95.09, 23.96 89.11, 17.22 83.17 C10.48 77.22, 5.02 70.2, 2.66 62.37 C0.3 54.54, 0.37 44.03, 3.06 36.18 C5.75 28.34, 11.66 21.06, 18.79 15.32 C25.92 9.58, 41.46 3.48, 45.84 1.75 C50.23 0.02, 44.77 3.93, 45.08 4.92&quot;
+              stroke=&quot;#000000&quot;
+              strokeWidth=&quot;1&quot;
+              fill=&quot;none&quot;
+            /&gt;
+          &lt;/g&gt;
+          &lt;g mask=&quot;url(#mask-ooJ4ibF08UocumcqOa1EM)&quot; strokeLinecap=&quot;round&quot;&gt;
+            &lt;g transform=&quot;translate(145.59428097835973 59.070939438578705) rotate(0 115.39682997613369 -0.4915348908477881)&quot;&gt;
+              &lt;path
+                d=&quot;M0.15 -0.24 C38.69 -0.34, 193.23 -0.72, 231.49 -0.81 M-1.23 -1.41 C37.2 -1.27, 192.03 0.48, 230.91 0.82&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+            &lt;g transform=&quot;translate(145.59428097835973 59.070939438578705) rotate(0 115.39682997613369 -0.4915348908477881)&quot;&gt;
+              &lt;path
+                d=&quot;M202.21 11.96 C211.96 5.78, 221.05 4.29, 230.39 -0.44 M202.16 11.32 C212.6 8.26, 221.12 3.41, 231.42 0.63&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+            &lt;g transform=&quot;translate(145.59428097835973 59.070939438578705) rotate(0 115.39682997613369 -0.4915348908477881)&quot;&gt;
+              &lt;path
+                d=&quot;M202.42 -8.56 C212.06 -8.19, 221.09 -3.13, 230.39 -0.44 M202.37 -9.2 C212.71 -5.25, 221.16 -3.08, 231.42 0.63&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+          &lt;/g&gt;
+          &lt;mask id=&quot;mask-ooJ4ibF08UocumcqOa1EM&quot;&gt;
+            &lt;rect
+              x=&quot;0&quot;
+              y=&quot;0&quot;
+              fill=&quot;#fff&quot;
+              width=&quot;476.3879409306271&quot;
+              height=&quot;160.05400922027428&quot;
+            /&gt;
+            &lt;rect
+              x=&quot;236.2111350633802&quot;
+              y=&quot;46.07940454773092&quot;
+              fill=&quot;#000&quot;
+              width=&quot;49.55995178222656&quot;
+              height=&quot;25&quot;
+              opacity=&quot;1&quot;
+            /&gt;
+          &lt;/mask&gt;
+          &lt;g transform=&quot;translate(236.2111350633802 46.07940454773092) rotate(0 24.512669051224293 12.696544553246326)&quot;&gt;
+            &lt;text
+              x=&quot;24.77997589111328&quot;
+              y=&quot;0&quot;
+              fontFamily=&quot;Virgil, Segoe UI Emoji&quot;
+              fontSize=&quot;20px&quot;
+              fill=&quot;#000000&quot;
+              textAnchor=&quot;middle&quot;
+              style={{ whiteSpace: &#39;pre&#39; }}
+              direction=&quot;ltr&quot;
+              dominantBaseline=&quot;text-before-edge&quot;
+            &gt;
+              Text
+            &lt;/text&gt;
+          &lt;/g&gt;
+          &lt;g mask=&quot;url(#mask-SzkdVd0dyrggj1A8lYRnx)&quot; strokeLinecap=&quot;round&quot;&gt;
+            &lt;g transform=&quot;translate(101.609375 126.671875) rotate(0 37.703125 82.224609375)&quot;&gt;
+              &lt;path
+                d=&quot;M1.16 1.1 C13.46 28.52, 62.75 137.7, 74.96 164.96 M0.32 0.63 C12.31 27.65, 61.03 135.53, 73.78 163.11&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+            &lt;g transform=&quot;translate(101.609375 126.671875) rotate(0 37.703125 82.224609375)&quot;&gt;
+              &lt;path
+                d=&quot;M54.58 140.97 C62.05 148.39, 69.93 157.55, 74.43 161.75 M51.86 142.36 C59.42 148.76, 65.4 156.07, 73.14 163.54&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+            &lt;g transform=&quot;translate(101.609375 126.671875) rotate(0 37.703125 82.224609375)&quot;&gt;
+              &lt;path
+                d=&quot;M73.25 132.45 C73.31 143.45, 73.76 156, 74.43 161.75 M70.53 133.84 C72.19 142.85, 72.24 152.87, 73.14 163.54&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+          &lt;/g&gt;
+          &lt;mask id=&quot;mask-SzkdVd0dyrggj1A8lYRnx&quot;&gt;
+            &lt;rect
+              x=&quot;0&quot;
+              y=&quot;0&quot;
+              fill=&quot;#fff&quot;
+              width=&quot;277.015625&quot;
+              height=&quot;391.12109375&quot;
+            /&gt;
+            &lt;rect
+              x=&quot;82.74254608154297&quot;
+              y=&quot;196.396484375&quot;
+              fill=&quot;#000&quot;
+              width=&quot;113.13990783691406&quot;
+              height=&quot;25&quot;
+              opacity=&quot;1&quot;
+            /&gt;
+          &lt;/mask&gt;
+          &lt;g transform=&quot;translate(82.74254608154297 196.396484375) rotate(0 56.50484466232359 13.071097182855027)&quot;&gt;
+            &lt;text
+              x=&quot;56.56995391845703&quot;
+              y=&quot;0&quot;
+              fontFamily=&quot;Virgil, Segoe UI Emoji&quot;
+              fontSize=&quot;20px&quot;
+              fill=&quot;#000000&quot;
+              textAnchor=&quot;middle&quot;
+              style={{ whiteSpace: &#39;pre&#39; }}
+              direction=&quot;ltr&quot;
+              dominantBaseline=&quot;text-before-edge&quot;
+            &gt;
+              Text Arrow
+            &lt;/text&gt;
+          &lt;/g&gt;
+          &lt;g
+            strokeLinecap=&quot;round&quot;
+            transform=&quot;translate(174.39453125 244) rotate(0 94.26953125 68.515625)&quot;
+          &gt;
+            &lt;path
+              d=&quot;M118.75 17.25 M118.75 17.25 C136.41 30.62, 149.3 43.12, 164.79 51.75 M118.75 17.25 C134.22 27.86, 149.75 41.11, 164.79 51.75 M164.79 51.75 C186.66 67.31, 189.85 67.4, 164.79 86.25 M164.79 51.75 C187.4 70.11, 188.16 67.21, 164.79 86.25 M164.79 86.25 C147.25 100.24, 129.87 110.32, 118.75 119.78 M164.79 86.25 C150.71 95.77, 136.22 107.08, 118.75 119.78 M118.75 119.78 C96.45 135.91, 95.43 136.4, 71.25 119.78 M118.75 119.78 C95.24 136.6, 94.84 137.75, 71.25 119.78 M71.25 119.78 C56.5 110.18, 39.52 99.98, 23.75 86.25 M71.25 119.78 C61.78 112.63, 51.46 106.26, 23.75 86.25 M23.75 86.25 C-1.23 68.64, 1.79 69.34, 23.75 51.75 M23.75 86.25 C1.18 69.81, -2.01 68.03, 23.75 51.75 M23.75 51.75 C33.82 43.77, 48.63 33.66, 71.25 17.25 M23.75 51.75 C37.67 41.71, 52.89 30.07, 71.25 17.25 M71.25 17.25 C96 -0.01, 93.11 -1.17, 118.75 17.25 M71.25 17.25 C93.47 0.15, 96.36 -1.46, 118.75 17.25&quot;
+              stroke=&quot;#000000&quot;
+              strokeWidth=&quot;1&quot;
+              fill=&quot;none&quot;
+            /&gt;
+          &lt;/g&gt;
+          &lt;g mask=&quot;url(#mask-GrRrUWX5cd0_tTvab9KPU)&quot; strokeLinecap=&quot;round&quot;&gt;
+            &lt;g transform=&quot;translate(488.734375 135.21875) rotate(0 14.822265625 92.8828125)&quot;&gt;
+              &lt;path
+                d=&quot;M-0.96 -1.04 C4.08 29.88, 25.02 155.15, 30.2 186.25 M0.74 1.03 C5.67 31.52, 24.73 153.42, 29.54 184.37&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+            &lt;g transform=&quot;translate(488.734375 135.21875) rotate(0 14.822265625 92.8828125)&quot;&gt;
+              &lt;path
+                d=&quot;M13.32 159.02 C20.33 166.8, 23.47 174.35, 30.77 182.75 M15.65 158.92 C19.5 166.51, 24.96 174.51, 30.32 185.21&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+            &lt;g transform=&quot;translate(488.734375 135.21875) rotate(0 14.822265625 92.8828125)&quot;&gt;
+              &lt;path
+                d=&quot;M33.6 155.86 C34.59 164.42, 31.68 172.91, 30.77 182.75 M35.93 155.75 C33.27 164.25, 32.21 173.27, 30.32 185.21&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+          &lt;/g&gt;
+          &lt;mask id=&quot;mask-GrRrUWX5cd0_tTvab9KPU&quot;&gt;
+            &lt;rect
+              x=&quot;0&quot;
+              y=&quot;0&quot;
+              fill=&quot;#fff&quot;
+              width=&quot;618.37890625&quot;
+              height=&quot;420.984375&quot;
+            /&gt;
+            &lt;rect
+              x=&quot;406.3067092895508&quot;
+              y=&quot;215.6015625&quot;
+              fill=&quot;#000&quot;
+              width=&quot;194.49986267089844&quot;
+              height=&quot;25&quot;
+              opacity=&quot;1&quot;
+            /&gt;
+          &lt;/mask&gt;
+          &lt;g transform=&quot;translate(406.3067092895508 215.6015625) rotate(0 97.04689681343734 12.220587964728452)&quot;&gt;
+            &lt;text
+              x=&quot;97.24993133544922&quot;
+              y=&quot;0&quot;
+              fontFamily=&quot;Virgil, Segoe UI Emoji&quot;
+              fontSize=&quot;20px&quot;
+              fill=&quot;#000000&quot;
+              textAnchor=&quot;middle&quot;
+              style={{ whiteSpace: &#39;pre&#39; }}
+              direction=&quot;ltr&quot;
+              dominantBaseline=&quot;text-before-edge&quot;
+            &gt;
+              Random Text Arrow
+            &lt;/text&gt;
+          &lt;/g&gt;
+          &lt;g
+            strokeLinecap=&quot;round&quot;
+            transform=&quot;translate(458.45703125 325.26171875) rotate(0 73.91796875 72.208984375)&quot;
+          &gt;
+            &lt;path
+              d=&quot;M32 0 M32 0 C59.59 -0.4, 88.53 0.12, 115.84 0 M32 0 C54.4 -1.14, 74.38 -0.62, 115.84 0 M115.84 0 C137.69 1.49, 145.9 11.96, 147.84 32 M115.84 0 C137.47 0.64, 146.34 10.98, 147.84 32 M147.84 32 C148.28 48.33, 145.78 65.81, 147.84 112.42 M147.84 32 C146.26 58.81, 147.92 86.35, 147.84 112.42 M147.84 112.42 C149.33 133.71, 138.22 145.63, 115.84 144.42 M147.84 112.42 C149.49 133.66, 138.02 144.09, 115.84 144.42 M115.84 144.42 C97.9 143.38, 76.73 142.11, 32 144.42 M115.84 144.42 C89 144.85, 62.01 145.17, 32 144.42 M32 144.42 C10.37 142.96, -0.67 135.22, 0 112.42 M32 144.42 C10.33 146.48, 1.7 132.31, 0 112.42 M0 112.42 C0.69 85.82, -2.2 56.5, 0 32 M0 112.42 C0.4 96.54, 0.21 79.98, 0 32 M0 32 C-1.83 9.28, 9.25 -1.34, 32 0 M0 32 C-2.19 8.75, 12.95 -0.69, 32 0&quot;
+              stroke=&quot;#000000&quot;
+              strokeWidth=&quot;1&quot;
+              fill=&quot;none&quot;
+            /&gt;
+          &lt;/g&gt;
+          &lt;g strokeLinecap=&quot;round&quot;&gt;
+            &lt;g transform=&quot;translate(337.21484375 348.984375) rotate(0 52.912109375 13.373046875)&quot;&gt;
+              &lt;path
+                d=&quot;M0.12 0.48 C17.85 4.98, 88.64 21.82, 106.2 26.39 M-1.27 -0.31 C16.34 4.42, 87.81 23.33, 105.45 27.74&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+            &lt;g transform=&quot;translate(337.21484375 348.984375) rotate(0 52.912109375 13.373046875)&quot;&gt;
+              &lt;path
+                d=&quot;M76.39 31.24 C83.64 29.16, 94.76 29.29, 106.39 26.92 M76.04 29.84 C83.93 29.99, 92.75 29.2, 104.74 27.03&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+            &lt;g transform=&quot;translate(337.21484375 348.984375) rotate(0 52.912109375 13.373046875)&quot;&gt;
+              &lt;path
+                d=&quot;M81.53 11.37 C87.19 15.05, 96.82 20.92, 106.39 26.92 M81.18 9.98 C87.65 15.55, 95.07 20.17, 104.74 27.03&quot;
+                stroke=&quot;#000000&quot;
+                strokeWidth=&quot;1&quot;
+                fill=&quot;none&quot;
+              /&gt;
+            &lt;/g&gt;
+          &lt;/g&gt;
+          &lt;mask /&gt;
+        &lt;/svg&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  has-error 
+  has-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="Zoom">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-err"></span> Zoom</h2>
+      <div class="badges">
+        <label for="c-error-3-picture-err" class="badge err as-toggle">prop type error</label>
+        <label for="c-error-3-picture-info" class="badge info as-toggle">1 info</label>
+        <label for="c-error-3-picture-stories" class="badge ok as-toggle">1 story</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./stories/Picture.stories.tsx">picture · ./stories/Picture.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  <input id="c-error-3-picture-err" class="tg tg-err" type="checkbox" hidden />
+  <input id="c-error-3-picture-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-error-3-picture-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+
+  <div class="panels">
+    
+        <div class="panel panel-err">
+          
+    <div class="note err">
+      <div class="note-title">Prop type error</div>
+      <div class="note-body"><pre><code>File: /home/runner/work/react-medium-image-zoom/react-medium-image-zoom/source/index.ts
+Error:
+No suitable component definition found.
+You can debug your component file in this playground: https://react-docgen.dev/playground
+Code:
+&#39;use client&#39;
+
+export { Uncontrolled as default } from &#39;./Uncontrolled.js&#39;
+export { Controlled } from &#39;./Controlled.js&#39;
+export type { UncontrolledProps } from &#39;./Uncontrolled.js&#39;
+export type { ControlledProps } from &#39;./Controlled.js&#39;
+</code></pre></div>
+    </div>
+        </div>
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Zoom } from "react-medium-image-zoom";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Picture</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Picture = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;{&#39;Zoom an &lt;img /&gt; in a &lt;picture&gt; element with a &lt;source /&gt;&#39;}&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;
+        Hint: reduce the window&amp;apos;s width to see a portrait picture, instead.
+      &lt;/p&gt;
+      &lt;Zoom {...props}&gt;
+        &lt;picture&gt;
+          &lt;source media=&quot;(max-width: 800px)&quot; srcSet={imgTeAraiPoint.src} /&gt;
+          &lt;img alt={imgNzBeach.alt} src={imgNzBeach.src} width=&quot;500&quot; /&gt;
+        &lt;/picture&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  has-error 
+  has-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="Zoom">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-err"></span> Zoom</h2>
+      <div class="badges">
+        <label for="c-error-4-figure-err" class="badge err as-toggle">prop type error</label>
+        <label for="c-error-4-figure-info" class="badge info as-toggle">1 info</label>
+        <label for="c-error-4-figure-stories" class="badge ok as-toggle">1 story</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./stories/Figure.stories.tsx">figure · ./stories/Figure.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  <input id="c-error-4-figure-err" class="tg tg-err" type="checkbox" hidden />
+  <input id="c-error-4-figure-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-error-4-figure-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+
+  <div class="panels">
+    
+        <div class="panel panel-err">
+          
+    <div class="note err">
+      <div class="note-title">Prop type error</div>
+      <div class="note-body"><pre><code>File: /home/runner/work/react-medium-image-zoom/react-medium-image-zoom/source/index.ts
+Error:
+No suitable component definition found.
+You can debug your component file in this playground: https://react-docgen.dev/playground
+Code:
+&#39;use client&#39;
+
+export { Uncontrolled as default } from &#39;./Uncontrolled.js&#39;
+export { Controlled } from &#39;./Controlled.js&#39;
+export type { UncontrolledProps } from &#39;./Uncontrolled.js&#39;
+export type { ControlledProps } from &#39;./Controlled.js&#39;
+</code></pre></div>
+    </div>
+        </div>
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Zoom } from "react-medium-image-zoom";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Figure</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const Figure = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;{&#39;Zoom an &lt;img /&gt; in a &lt;figure&gt; element&#39;}&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;figure&gt;
+        &lt;Zoom {...props}&gt;
+          &lt;img alt={imgHobbiton.alt} src={imgHobbiton.src} width=&quot;500&quot; /&gt;
+        &lt;/Zoom&gt;
+        &lt;figcaption&gt;
+          &lt;a href=&quot;https://www.newzealand.com/in/plan/business/hobbiton-movie-set-tours/&quot;&gt;
+            Hobbiton
+          &lt;/a&gt;
+        &lt;/figcaption&gt;
+      &lt;/figure&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  has-error 
+  has-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="Zoom">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-err"></span> Zoom</h2>
+      <div class="badges">
+        <label for="c-error-5-custom-controls-err" class="badge err as-toggle">prop type error</label>
+        <label for="c-error-5-custom-controls-info" class="badge info as-toggle">1 info</label>
+        <label for="c-error-5-custom-controls-stories" class="badge ok as-toggle">1 story</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./stories/CustomControls.stories.tsx">custom-controls · ./stories/CustomControls.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  <input id="c-error-5-custom-controls-err" class="tg tg-err" type="checkbox" hidden />
+  <input id="c-error-5-custom-controls-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-error-5-custom-controls-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+
+  <div class="panels">
+    
+        <div class="panel panel-err">
+          
+    <div class="note err">
+      <div class="note-title">Prop type error</div>
+      <div class="note-body"><pre><code>File: /home/runner/work/react-medium-image-zoom/react-medium-image-zoom/source/index.ts
+Error:
+No suitable component definition found.
+You can debug your component file in this playground: https://react-docgen.dev/playground
+Code:
+&#39;use client&#39;
+
+export { Uncontrolled as default } from &#39;./Uncontrolled.js&#39;
+export { Controlled } from &#39;./Controlled.js&#39;
+export type { UncontrolledProps } from &#39;./Uncontrolled.js&#39;
+export type { ControlledProps } from &#39;./Controlled.js&#39;
+</code></pre></div>
+    </div>
+        </div>
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Controlled as Zoom } from "react-medium-image-zoom";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">J And K Zoom Unzoom</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const JAndKZoomUnzoom = props =&gt; {
+  const [isZoomed, setIsZoomed] = React.useState(false)
+
+  const handleKeyDown = React.useCallback((e: KeyboardEvent) =&gt; {
+    if (e.key === &#39;j&#39; || e.keyCode === 74) {
+      setIsZoomed(true)
+    } else if (e.key === &#39;k&#39; || e.keyCode === 75) {
+      setIsZoomed(false)
+    }
+  }, [])
+
+  React.useEffect(() =&gt; {
+    document.addEventListener(&#39;keydown&#39;, handleKeyDown)
+
+    return () =&gt; {
+      document.removeEventListener(&#39;keydown&#39;, handleKeyDown)
+    }
+  }, [handleKeyDown])
+
+  return (
+    &lt;main aria-label=&quot;Story&quot;&gt;
+      &lt;h1&gt;Custom zoom and unzoom controls&lt;/h1&gt;
+      &lt;div className=&quot;jk mw-600&quot;&gt;
+        &lt;p&gt;
+          Click into this window, then use &amp;quot;j&amp;quot; to zoom and
+          &amp;quot;k&amp;quot; to unzoom
+        &lt;/p&gt;
+        &lt;Zoom
+          {...props}
+          isZoomed={isZoomed}
+          onZoomChange={undefined /* do nothing */}
+        &gt;
+          &lt;img
+            alt={imgThatWanakaTree.alt}
+            src={imgThatWanakaTree.src}
+            width=&quot;500&quot;
+          /&gt;
+        &lt;/Zoom&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+  )
+};</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article></div>
+        </section>
+      </div>
+    <h2 class="section-title">Unattached Docs</h2>
+    <div class="grid" role="list">
+      
+<article
+  class="card is-doc no-doc-error"
+  role="listitem"
+  aria-label="Docs">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-ok"></span> Introduction</h2>
+      <div class="badges">
+        
+        <label for="doc-0-introduction-docs-content" class="badge ok as-toggle">view content</label>
+      </div>
+    </div>
+    <div class="meta" title="./stories/Introduction.mdx">introduction--docs · ./stories/Introduction.mdx</div>
+    
+  </div>
+
+  <!-- Hidden toggles must be siblings BEFORE .panels -->
+  
+  <input id="doc-0-introduction-docs-content" class="tg tg-content" type="checkbox" hidden />
+
+  <div class="panels">
+    
+    
+        <div class="panel panel-content">
+          <div class="mdx-content">
+            <pre><code>import { Meta } from &#39;@storybook/addon-docs/blocks&#39;
+import &#39;./base.css&#39;
+
+&lt;Meta title=&quot;Introduction&quot; /&gt;
+
+# Introduction
+
+This site showcases different usages of
+[`react-medium-image-zoom`](https://github.com/rpearce/react-medium-image-zoom),
+the original medium.com-inspired image zooming library for React.
+
+Use the links in the sidebar to try out different features that the library
+supports.
+
+For more info, please consult the [`react-medium-image-zoom`
+README](https://github.com/rpearce/react-medium-image-zoom#readme).
+</code></pre>
+          </div>
+        </div>
+  </div>
+</article>
+    </div>
+    
+  </div>
+</main>
+</body>
+</html>  
