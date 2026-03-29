@@ -26,7 +26,7 @@ const meta: Meta<typeof Zoom> = {
 
 export default meta
 
-type Story = StoryFn<typeof meta>
+type Story = StoryFn<typeof Zoom>
 
 // =============================================================================
 
@@ -34,11 +34,9 @@ type Story = StoryFn<typeof meta>
 function shuffle<T extends unknown[]>(xs: T): T {
   const xsClone = structuredClone(xs)
 
-  for (let i = xsClone.length - 1; i > 0; i--) {
+  for (let i = xsClone.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1))
-    const tmp = xsClone[i]
-    xsClone[i] = xsClone[j]
-    xsClone[j] = tmp
+    ;[xsClone[i], xsClone[j]] = [xsClone[j], xsClone[i]]
   }
 
   return xsClone
@@ -192,10 +190,13 @@ const CustomZoomContentWithLoader: UncontrolledProps['ZoomContent'] = ({
    * Delay the loader so the loading spinner is noticeable
    */
   React.useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison -- ModalState is a const enum not exported from the library
     if (modalState === 'LOADING') {
       setShowLoader(true)
       if (isZoomImgLoaded) {
-        setTimeout(() => setShowLoader(false), 1000)
+        setTimeout(() => {
+          setShowLoader(false)
+        }, 1000)
       }
     }
   }, [isZoomImgLoaded, modalState])
@@ -291,32 +292,31 @@ export const SmallSrcSize: Story = props => (
 
 // =============================================================================
 
-export const CustomModalStyles: Story = props => {
-  return (
-    <main aria-label="Story">
-      <h1>Custom Modal Styles</h1>
-      <div className="mw-600">
-        <p>Use CSS to customize the zoom modal styles.</p>
-        <p>
-          Here, we slow down the transition time and use a different overlay
-          color.
-        </p>
-        <div>
-          <Zoom {...props} classDialog="custom-zoom">
-            <img
-              alt={imgGlenorchyLagoon.alt}
-              src={imgGlenorchyLagoon.src}
-              width="400"
-            />
-          </Zoom>
-        </div>
-        <p>
-          The CSS class, <code>custom-zoom</code>, is sent to the component via
-          the <code>classDialog</code> string prop. Here are the styles used:
-        </p>
-        <pre>
-          <code>
-            {`
+export const CustomModalStyles: Story = props => (
+  <main aria-label="Story">
+    <h1>Custom Modal Styles</h1>
+    <div className="mw-600">
+      <p>Use CSS to customize the zoom modal styles.</p>
+      <p>
+        Here, we slow down the transition time and use a different overlay
+        color.
+      </p>
+      <div>
+        <Zoom {...props} classDialog="custom-zoom">
+          <img
+            alt={imgGlenorchyLagoon.alt}
+            src={imgGlenorchyLagoon.src}
+            width="400"
+          />
+        </Zoom>
+      </div>
+      <p>
+        The CSS class, <code>custom-zoom</code>, is sent to the component via
+        the <code>classDialog</code> string prop. Here are the styles used:
+      </p>
+      <pre>
+        <code>
+          {`
 .custom-zoom [data-rmiz-modal-overlay],
 .custom-zoom [data-rmiz-modal-img] {
   transition-duration: 0.8s;
@@ -337,12 +337,11 @@ export const CustomModalStyles: Story = props => {
   outline: 0.2rem solid #bd93f9;
 }
 `}
-          </code>
-        </pre>
-      </div>
-    </main>
-  )
-}
+        </code>
+      </pre>
+    </div>
+  </main>
+)
 
 // =============================================================================
 
@@ -355,10 +354,13 @@ export const ZoomImageFromInsideDialog: Story = props => {
   }, [])
 
   React.useEffect(() => {
-    const handleDocumentClick = (e: MouseEvent) => {
+    const handleDocumentClick = (e: MouseEvent): void => {
+      const { target } = e
+      if (!(target instanceof Element)) return
+
       if (
-        !refBtn.current?.contains(e.target as Element) &&
-        !refModal.current?.contains(e.target as Element)
+        refBtn.current?.contains(target) !== true &&
+        refModal.current?.contains(target) !== true
       ) {
         refModal.current?.close()
       }
@@ -429,14 +431,17 @@ const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({
 }) => {
   const [isLoaded, setIsLoaded] = React.useState(false)
 
-  const imgProps = (img as React.ReactElement<HTMLImageElement>)?.props
-  const imgWidth = imgProps?.width
-  const imgHeight = imgProps?.height
+  const imgEl = React.isValidElement<{ width?: number; height?: number }>(img)
+    ? img
+    : null
+  const imgWidth = imgEl?.props.width
+  const imgHeight = imgEl?.props.height
 
   const classCaption = React.useMemo(() => {
-    const hasWidthHeight = imgWidth != null && imgHeight != null
-    const imgRatioLargerThanWindow =
-      imgWidth / imgHeight > window.innerWidth / window.innerHeight
+    const hasWidthHeight = imgWidth !== undefined && imgHeight !== undefined
+    const imgRatioLargerThanWindow = hasWidthHeight
+      ? imgWidth / imgHeight > window.innerWidth / window.innerHeight
+      : false
 
     return cx({
       'zoom-caption': true,
@@ -447,8 +452,10 @@ const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({
   }, [imgWidth, imgHeight, isLoaded])
 
   React.useLayoutEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison -- ModalState is a const enum not exported from the library
     if (modalState === 'LOADED') {
       setIsLoaded(true)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison -- ModalState is a const enum not exported from the library
     } else if (modalState === 'UNLOADING') {
       setIsLoaded(false)
     }
@@ -489,7 +496,7 @@ interface DelayedImgProps {
   height: string
 }
 
-const DelayedImg = (props: DelayedImgProps) => {
+const DelayedImg = (props: DelayedImgProps): React.JSX.Element => {
   const { alt, height, src, timer, width } = props
 
   const stylePlaceholder: React.CSSProperties =
@@ -500,7 +507,7 @@ const DelayedImg = (props: DelayedImgProps) => {
   React.useEffect(() => {
     const img = new Image()
     img.src = src
-    img.decode()
+    void img.decode()
   }, [src])
 
   return (
@@ -648,26 +655,24 @@ export const CycleImages: Story = props => {
   )
 
   React.useEffect(() => {
-    async function runCycle() {
-      while (true) {
-        await delay(3000)
+    const interval = setInterval(() => {
+      setImg(
+        shuffle([
+          imgThatWanakaTree,
+          imgEarth,
+          imgNzMap,
+          imgTekapo,
+          imgKeaLarge,
+          imgTeAraiPoint,
+          imgGlenorchyLagoon,
+          imgHookerValleyTrack,
+        ] as const)[0],
+      )
+    }, 3000)
 
-        setImg(
-          shuffle([
-            imgThatWanakaTree,
-            imgEarth,
-            imgNzMap,
-            imgTekapo,
-            imgKeaLarge,
-            imgTeAraiPoint,
-            imgGlenorchyLagoon,
-            imgHookerValleyTrack,
-          ] as const)[0],
-        )
-      }
+    return () => {
+      clearInterval(interval)
     }
-
-    runCycle()
   }, [])
 
   return (
@@ -745,30 +750,28 @@ export const SwipeToUnzoomThreshold: Story = props => (
 
 // =============================================================================
 
-export const SelectCards: Story = props => {
-  return (
-    <main aria-label="Story">
-      <h1>Selecting cards and zooming without triggering selection state</h1>
-      <div
-        className="mw-600"
-        style={{ display: 'flex', flexDirection: 'column' }}
-      >
-        <ul className="cards">
-          <CardItem
-            alt={imgThatWanakaTree.alt}
-            src={imgThatWanakaTree.src}
-            zoomProps={props as UncontrolledProps}
-          />
-          <CardItem
-            alt={imgGlenorchyLagoon.alt}
-            src={imgGlenorchyLagoon.src}
-            zoomProps={props as UncontrolledProps}
-          />
-        </ul>
-      </div>
-    </main>
-  )
-}
+export const SelectCards: Story = props => (
+  <main aria-label="Story">
+    <h1>Selecting cards and zooming without triggering selection state</h1>
+    <div
+      className="mw-600"
+      style={{ display: 'flex', flexDirection: 'column' }}
+    >
+      <ul className="cards">
+        <CardItem
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          zoomProps={props}
+        />
+        <CardItem
+          alt={imgGlenorchyLagoon.alt}
+          src={imgGlenorchyLagoon.src}
+          zoomProps={props}
+        />
+      </ul>
+    </div>
+  </main>
+)
 
 function CardItem({
   alt,
@@ -777,8 +780,8 @@ function CardItem({
 }: {
   alt: string
   src: string
-  zoomProps: UncontrolledProps
-}) {
+  zoomProps: Omit<React.ComponentProps<typeof Zoom>, 'children'>
+}): React.JSX.Element {
   const [isSelected, setIsSelected] = React.useState(false)
 
   const handleItemClick = React.useCallback(() => {
@@ -807,7 +810,7 @@ function CardItem({
   }, [])
 
   return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- demo card selection uses click handler on li for simplicity
     <li className="card" onClick={handleItemClick}>
       <label>
         <input
@@ -836,7 +839,7 @@ function CardItem({
 // INTERACTIONS
 
 export const AutomatedTest: Story = Regular.bind({})
-AutomatedTest.args = { ...Regular.args, title: '(Automated Test)' }
+AutomatedTest.args = { ...Regular.args }
 AutomatedTest.storyName = '(Automated Test)'
 AutomatedTest.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement)
@@ -888,7 +891,7 @@ const cx = (mods: Record<string, boolean>): string => {
   const cns: string[] = []
 
   for (const k in mods) {
-    if (mods[k]) {
+    if (mods[k] === true) {
       cns.push(k)
     }
   }
@@ -896,14 +899,18 @@ const cx = (mods: Record<string, boolean>): string => {
   return cns.join(' ')
 }
 
-const delay = (duration: number): Promise<void> =>
-  new Promise(resolve => setTimeout(resolve, duration))
+const delay = async (duration: number): Promise<void> => {
+  // eslint-disable-next-line promise/avoid-new -- setTimeout requires a Promise wrapper
+  await new Promise<void>(resolve => {
+    setTimeout(resolve, duration)
+  })
+}
 
-const useTimer = (duration: number) => {
+const useTimer = (duration: number): { timer: number } => {
   const [timer, setTimer] = React.useState(duration)
 
   React.useEffect(() => {
-    const interval = setInterval(function () {
+    const interval = setInterval(() => {
       if (timer === 0) {
         clearInterval(interval)
       } else {

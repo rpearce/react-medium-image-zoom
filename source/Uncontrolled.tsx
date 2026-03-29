@@ -5,7 +5,10 @@ import { Controlled, type ControlledProps } from './Controlled.js'
 
 export type UncontrolledProps = Omit<ControlledProps, 'isZoomed'>
 
-export function Uncontrolled({ onZoomChange, ...props }: UncontrolledProps) {
+export function Uncontrolled({
+  onZoomChange,
+  ...props
+}: UncontrolledProps): React.JSX.Element {
   const [isZoomed, setIsZoomed] = React.useState(false)
 
   const handleZoomChange = React.useCallback<

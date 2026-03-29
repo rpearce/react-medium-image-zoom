@@ -1,3 +1,4 @@
+/* eslint-disable max-lines -- this file contains a single React class component that manages zoom state and rendering */
 import React from 'react'
 import ReactDOM from 'react-dom'
 
@@ -54,6 +55,32 @@ const defaultBodyAttrs: BodyAttrs = {
 
 // =============================================================================
 
+/**
+ * Find or create a container for the dialog
+ */
+function getDialogContainer(): HTMLDivElement {
+  const existing = document.querySelector<HTMLDivElement>('[data-rmiz-portal]')
+
+  if (existing != null) {
+    return existing
+  }
+
+  const el = document.createElement('div')
+  el.setAttribute('data-rmiz-portal', '')
+  document.body.appendChild(el)
+
+  return el
+}
+
+/**
+ * Prevent the browser from removing the dialog on Escape
+ */
+function handleDialogCancelStatic(e: React.SyntheticEvent): void {
+  e.preventDefault()
+}
+
+// =============================================================================
+
 export interface ControlledProps {
   a11yNameButtonUnzoom?: string
   a11yNameButtonZoom?: string
@@ -81,7 +108,7 @@ export interface ControlledProps {
   zoomMargin?: number
 }
 
-export function Controlled(props: ControlledProps) {
+export function Controlled(props: ControlledProps): React.JSX.Element {
   return <ControlledBase {...props} />
 }
 
@@ -133,11 +160,11 @@ class ControlledBase extends React.Component<
     styleGhost: {},
   }
 
-  private refContent = React.createRef<HTMLDivElement>()
-  private refDialog = React.createRef<HTMLDialogElement>()
-  private refModalContent = React.createRef<HTMLDivElement>()
-  private refModalImg = React.createRef<HTMLImageElement>()
-  private refWrap = React.createRef<HTMLDivElement>()
+  private readonly refContent = React.createRef<HTMLDivElement>()
+  private readonly refDialog = React.createRef<HTMLDialogElement>()
+  private readonly refModalContent = React.createRef<HTMLDivElement>()
+  private readonly refModalImg = React.createRef<HTMLImageElement>()
+  private readonly refWrap = React.createRef<HTMLDivElement>()
 
   private contentChangeObserver: MutationObserver | undefined
   private contentNotFoundChangeObserver: MutationObserver | undefined
@@ -151,10 +178,10 @@ class ControlledBase extends React.Component<
 
   private timeoutTransitionEnd?: ReturnType<typeof setTimeout>
 
-  render() {
+  // eslint-disable-next-line complexity -- render method requires many conditional branches for modal states and image types
+  render(): React.ReactNode {
     const {
       handleBtnUnzoomClick,
-      handleDialogCancel,
       handleDialogClick,
       handleDialogClose,
       handleUnzoom,
@@ -203,13 +230,14 @@ class ControlledBase extends React.Component<
     const imgSrcSet = isImg ? imgEl.srcset : undefined
     const imgCrossOrigin = isImg ? imgEl.crossOrigin : undefined
 
-    const hasZoomImg = !!zoomImg?.src
+    const hasZoomImg = zoomImg?.src !== undefined && zoomImg.src !== ''
 
     const hasImage = this.hasImage()
 
-    const labelBtnZoom = imgAlt
-      ? `${a11yNameButtonZoom}: ${imgAlt}`
-      : a11yNameButtonZoom
+    const labelBtnZoom =
+      imgAlt !== undefined && imgAlt !== ''
+        ? `${a11yNameButtonZoom}: ${imgAlt}`
+        : a11yNameButtonZoom
 
     const isModalActive =
       modalState === ModalState.LOADING || modalState === ModalState.LOADED
@@ -228,18 +256,19 @@ class ControlledBase extends React.Component<
     }
 
     // Share this with UNSAFE_handleSvg
-    this.styleModalImg = hasImage
-      ? getStyleModalImg({
-          hasZoomImg,
-          imgSrc,
-          isSvg,
-          isZoomed: isZoomed && isModalActive,
-          loadedImgEl,
-          offset: zoomMargin,
-          shouldRefresh,
-          targetEl: imgEl as SupportedImage,
-        })
-      : {}
+    this.styleModalImg =
+      hasImage && imgEl !== null
+        ? getStyleModalImg({
+            hasZoomImg,
+            imgSrc,
+            isSvg,
+            isZoomed: isZoomed && isModalActive,
+            loadedImgEl,
+            offset: zoomMargin,
+            shouldRefresh,
+            targetEl: imgEl,
+          })
+        : {}
 
     // =========================================================================
 
@@ -259,11 +288,11 @@ class ControlledBase extends React.Component<
               ? zoomImg
               : {})}
             data-rmiz-modal-img=""
-            height={this.styleModalImg.height || undefined}
+            height={this.styleModalImg.height ?? undefined}
             id={idModalImg}
             ref={refModalImg}
             style={this.styleModalImg}
-            width={this.styleModalImg.width || undefined}
+            width={this.styleModalImg.width ?? undefined}
           />
         ) : isSvg ? (
           <div
@@ -284,20 +313,21 @@ class ControlledBase extends React.Component<
         </button>
       )
 
-      modalContent = ZoomContent ? (
-        <ZoomContent
-          buttonUnzoom={modalBtnUnzoom}
-          modalState={modalState}
-          img={modalImg}
-          isZoomImgLoaded={isZoomImgLoaded}
-          onUnzoom={handleUnzoom}
-        />
-      ) : (
-        <>
-          {modalImg}
-          {modalBtnUnzoom}
-        </>
-      )
+      modalContent =
+        ZoomContent == null ? (
+          <>
+            {modalImg}
+            {modalBtnUnzoom}
+          </>
+        ) : (
+          <ZoomContent
+            buttonUnzoom={modalBtnUnzoom}
+            modalState={modalState}
+            img={modalImg}
+            isZoomImgLoaded={isZoomImgLoaded}
+            onUnzoom={handleUnzoom}
+          />
+        )
     }
 
     // =========================================================================
@@ -325,7 +355,7 @@ class ControlledBase extends React.Component<
         )}
         {hasImage &&
           ReactDOM.createPortal(
-            <dialog /* eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles */
+            <dialog /* eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles -- dialog element requires these for accessibility workarounds */
               aria-labelledby={idModalImg}
               aria-modal="true"
               className={classDialog}
@@ -333,7 +363,7 @@ class ControlledBase extends React.Component<
               id={idModal}
               onClick={handleDialogClick}
               onClose={handleDialogClose}
-              onCancel={handleDialogCancel}
+              onCancel={handleDialogCancelStatic}
               ref={refDialog}
               role="dialog"
             >
@@ -342,7 +372,7 @@ class ControlledBase extends React.Component<
                 {modalContent}
               </div>
             </dialog>,
-            this.getDialogContainer(),
+            getDialogContainer(),
           )}
       </WrapElement>
     )
@@ -350,23 +380,23 @@ class ControlledBase extends React.Component<
 
   // ===========================================================================
 
-  componentDidMount() {
+  componentDidMount(): void {
     this.setId()
     this.setAndTrackImg()
     this.handleImgLoad()
     this.UNSAFE_handleSvg()
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     if (this.state.modalState !== ModalState.UNLOADED) {
       this.bodyScrollEnable()
     }
-    this.contentChangeObserver?.disconnect?.()
-    this.contentNotFoundChangeObserver?.disconnect?.()
-    this.imgElResizeObserver?.disconnect?.()
-    this.imgEl?.removeEventListener?.('load', this.handleImgLoad)
-    this.imgEl?.removeEventListener?.('click', this.handleZoom)
-    this.refModalImg.current?.removeEventListener?.(
+    this.contentChangeObserver?.disconnect()
+    this.contentNotFoundChangeObserver?.disconnect()
+    this.imgElResizeObserver?.disconnect()
+    this.imgEl?.removeEventListener('load', this.handleImgLoad)
+    this.imgEl?.removeEventListener('click', this.handleZoom)
+    this.refModalImg.current?.removeEventListener(
       'transitionend',
       this.handleImgTransitionEnd,
     )
@@ -384,14 +414,19 @@ class ControlledBase extends React.Component<
   componentDidUpdate(
     prevProps: ControlledPropsWithDefaults,
     prevState: ControlledState,
-  ) {
+  ): void {
     this.handleModalStateChange(prevState.modalState)
     this.UNSAFE_handleSvg()
     this.handleIfZoomChanged(prevProps.isZoomed)
   }
 
-  handleModalStateChange = (prevModalState: ControlledState['modalState']) => {
-    const { modalState } = this.state
+  // eslint-disable-next-line complexity -- state machine handler with one branch per modal state transition
+  handleModalStateChange = (
+    prevModalState: ControlledState['modalState'],
+  ): void => {
+    const {
+      state: { modalState },
+    } = this
 
     if (
       prevModalState !== ModalState.LOADING &&
@@ -434,29 +469,12 @@ class ControlledBase extends React.Component<
     ) {
       this.bodyScrollEnable()
       window.removeEventListener('resize', this.handleResize)
-      this.refModalImg.current?.removeEventListener?.(
+      this.refModalImg.current?.removeEventListener(
         'transitionend',
         this.handleImgTransitionEnd,
       )
-      this.refDialog.current?.close?.()
+      this.refDialog.current?.close()
     }
-  }
-
-  // ===========================================================================
-
-  /**
-   * Find or create a container for the dialog
-   */
-  getDialogContainer = (): HTMLDivElement => {
-    let el = document.querySelector('[data-rmiz-portal]')
-
-    if (el == null) {
-      el = document.createElement('div')
-      el.setAttribute('data-rmiz-portal', '')
-      document.body.appendChild(el)
-    }
-
-    return el as HTMLDivElement
   }
 
   // ===========================================================================
@@ -464,8 +482,8 @@ class ControlledBase extends React.Component<
   /**
    * Because of SSR, set a unique ID after render
    */
-  setId = () => {
-    const gen4 = () => Math.random().toString(16).slice(-4)
+  setId = (): void => {
+    const gen4 = (): string => Math.random().toString(16).slice(-4)
     this.setState({ id: gen4() + gen4() + gen4() })
   }
 
@@ -474,26 +492,29 @@ class ControlledBase extends React.Component<
   /**
    * Find and set the image we're working with
    */
-  setAndTrackImg = () => {
-    const contentEl = this.refContent.current
+  setAndTrackImg = (): void => {
+    const {
+      refContent: { current: contentEl },
+    } = this
 
-    if (!contentEl) return
+    if (contentEl == null) return
 
     this.imgEl = contentEl.querySelector(IMAGE_QUERY) as SupportedImage | null
 
-    if (this.imgEl) {
-      this.contentNotFoundChangeObserver?.disconnect?.()
+    if (this.imgEl !== null) {
+      this.contentNotFoundChangeObserver?.disconnect()
       this.imgEl.addEventListener('load', this.handleImgLoad)
       this.imgEl.addEventListener('click', this.handleZoom)
 
-      if (!this.state.loadedImgEl) {
+      if (this.state.loadedImgEl == null) {
         this.handleImgLoad()
       }
 
       this.imgElResizeObserver = new ResizeObserver(entries => {
-        const entry = entries[0]
+        const [entry] = entries
 
-        if (entry?.target) {
+        if (entry?.target !== undefined) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- ResizeObserver is observing this.imgEl which is always a SupportedImage
           this.imgEl = entry.target as SupportedImage
 
           // Update ghost and force a re-render.
@@ -506,7 +527,7 @@ class ControlledBase extends React.Component<
       this.imgElResizeObserver.observe(this.imgEl)
 
       // Watch for any reasonable DOM changes and update ghost if so
-      if (!this.contentChangeObserver) {
+      if (this.contentChangeObserver == null) {
         this.contentChangeObserver = new MutationObserver(() => {
           this.setState({ styleGhost: getStyleGhost(this.imgEl) })
         })
@@ -517,7 +538,7 @@ class ControlledBase extends React.Component<
           subtree: true,
         })
       }
-    } else if (!this.contentNotFoundChangeObserver) {
+    } else if (this.contentNotFoundChangeObserver == null) {
       this.contentNotFoundChangeObserver = new MutationObserver(
         this.setAndTrackImg,
       )
@@ -533,8 +554,10 @@ class ControlledBase extends React.Component<
   /**
    * Show modal when zoomed; hide modal when unzoomed
    */
-  handleIfZoomChanged = (prevIsZoomed: boolean) => {
-    const { isZoomed } = this.props
+  handleIfZoomChanged = (prevIsZoomed: boolean): void => {
+    const {
+      props: { isZoomed },
+    } = this
 
     if (!prevIsZoomed && isZoomed) {
       this.zoom()
@@ -548,24 +571,26 @@ class ControlledBase extends React.Component<
   /**
    * Ensure we always have the latest img src value loaded
    */
-  handleImgLoad = () => {
+  handleImgLoad = (): void => {
     const imgSrc = getImgSrc(this.imgEl)
 
-    if (!imgSrc) return
+    if (imgSrc == null || imgSrc === '') return
 
     const img = new Image()
 
-    if (testImg(this.imgEl)) {
-      img.sizes = this.imgEl.sizes
-      img.srcset = this.imgEl.srcset
-      img.crossOrigin = this.imgEl.crossOrigin
+    const { imgEl } = this
+    if (testImg(imgEl)) {
+      const { sizes, srcset, crossOrigin } = imgEl
+      img.sizes = sizes
+      img.srcset = srcset
+      img.crossOrigin = crossOrigin
     }
 
     // img.src must be set after sizes and srcset
     // because of Firefox flickering on zoom
     img.src = imgSrc
 
-    const setLoaded = () => {
+    const setLoaded = (): void => {
       this.setState({
         loadedImgEl: img,
         styleGhost: getStyleGhost(this.imgEl),
@@ -589,8 +614,8 @@ class ControlledBase extends React.Component<
   /**
    * Report that zooming should occur
    */
-  handleZoom = (e: React.SyntheticEvent | Event) => {
-    if (!this.props.isDisabled && this.hasImage()) {
+  handleZoom = (e: React.SyntheticEvent | Event): void => {
+    if (this.props.isDisabled !== true && this.hasImage()) {
       this.props.onZoomChange?.(true, { event: e })
     }
   }
@@ -598,8 +623,8 @@ class ControlledBase extends React.Component<
   /**
    * Report that unzooming should occur
    */
-  handleUnzoom = (e: React.SyntheticEvent | Event) => {
-    if (!this.props.isDisabled) {
+  handleUnzoom = (e: React.SyntheticEvent | Event): void => {
+    if (this.props.isDisabled !== true) {
       this.props.onZoomChange?.(false, { event: e })
     }
   }
@@ -609,7 +634,7 @@ class ControlledBase extends React.Component<
   /**
    * Capture click event when clicking unzoom button
    */
-  handleBtnUnzoomClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  handleBtnUnzoomClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault()
     e.stopPropagation()
     this.handleUnzoom(e)
@@ -618,18 +643,9 @@ class ControlledBase extends React.Component<
   // ===========================================================================
 
   /**
-   * Prevent the browser from removing the dialog on Escape
-   */
-  handleDialogCancel = (e: React.SyntheticEvent) => {
-    e.preventDefault()
-  }
-
-  // ===========================================================================
-
-  /**
    *  Have dialog.click() only close in certain situations
    */
-  handleDialogClick = (e: React.MouseEvent<HTMLDialogElement>) => {
+  handleDialogClick = (e: React.MouseEvent<HTMLDialogElement>): void => {
     if (
       e.target === this.refModalContent.current ||
       e.target === this.refModalImg.current
@@ -644,7 +660,7 @@ class ControlledBase extends React.Component<
   /**
    *  Prevent dialog's close event from closing a parent modal
    */
-  handleDialogClose = (e: React.SyntheticEvent<HTMLDialogElement>) => {
+  handleDialogClose = (e: React.SyntheticEvent<HTMLDialogElement>): void => {
     e.stopPropagation()
     this.handleUnzoom(e)
   }
@@ -654,8 +670,8 @@ class ControlledBase extends React.Component<
   /**
    * Intercept default dialog.close() and use ours so we can animate
    */
-  handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape' || e.keyCode === 27) {
+  handleKeyDown = (e: KeyboardEvent): void => {
+    if (e.key === 'Escape') {
       e.preventDefault()
       e.stopPropagation()
       this.handleUnzoom(e)
@@ -667,7 +683,7 @@ class ControlledBase extends React.Component<
   /**
    * Unzoom on wheel event
    */
-  handleWheel = (e: WheelEvent) => {
+  handleWheel = (e: WheelEvent): void => {
     // don't handle the event when the user is zooming with ctrl + wheel (or with pinch to zoom)
     if (e.ctrlKey) return
 
@@ -681,14 +697,17 @@ class ControlledBase extends React.Component<
    * Start tracking the Y-axis but abort if non-scroll
    * gesture is detected (like pinch-to-zoom)
    */
-  handleTouchStart = (e: TouchEvent) => {
+  handleTouchStart = (e: TouchEvent): void => {
     if (e.touches.length > 1) {
       this.isScaling = true
       return
     }
 
-    if (e.changedTouches.length === 1 && e.changedTouches[0]) {
-      this.touchYStart = e.changedTouches[0].screenY
+    const { changedTouches } = e
+    const [changedTouch] = changedTouches
+    if (changedTouches.length === 1 && changedTouch !== undefined) {
+      const { screenY } = changedTouch
+      this.touchYStart = screenY
     }
   }
 
@@ -697,17 +716,20 @@ class ControlledBase extends React.Component<
    * track how far we've moved on the Y-axis
    * and unzoom if we detect a swipe
    */
-  handleTouchMove = (e: TouchEvent) => {
+  handleTouchMove = (e: TouchEvent): void => {
     const browserScale = window.visualViewport?.scale ?? 1
+    const { changedTouches: changedTouchesMove } = e
+    const [changedTouchMove] = changedTouchesMove
 
     if (
       this.props.canSwipeToUnzoom &&
       !this.isScaling &&
       browserScale <= 1 &&
       this.touchYStart != null &&
-      e.changedTouches[0]
+      changedTouchMove !== undefined
     ) {
-      this.touchYEnd = e.changedTouches[0].screenY
+      const { screenY } = changedTouchMove
+      this.touchYEnd = screenY
 
       const max = Math.max(this.touchYStart, this.touchYEnd)
       const min = Math.min(this.touchYStart, this.touchYEnd)
@@ -724,7 +746,7 @@ class ControlledBase extends React.Component<
   /**
    * Reset the scaling check and the Y-axis start and end tracking points
    */
-  handleTouchEnd = () => {
+  handleTouchEnd = (): void => {
     this.isScaling = false
     this.touchYStart = undefined
     this.touchYEnd = undefined
@@ -733,7 +755,7 @@ class ControlledBase extends React.Component<
   /**
    * Reset the scaling check and the Y-axis start and end tracking points
    */
-  handleTouchCancel = () => {
+  handleTouchCancel = (): void => {
     this.isScaling = false
     this.touchYStart = undefined
     this.touchYEnd = undefined
@@ -744,7 +766,7 @@ class ControlledBase extends React.Component<
   /**
    * Force re-render on resize
    */
-  handleResize = () => {
+  handleResize = (): void => {
     this.setState({ shouldRefresh: true })
   }
 
@@ -753,23 +775,20 @@ class ControlledBase extends React.Component<
   /**
    * Check if we have a loaded image to work with
    */
-  hasImage = () => {
-    return (
-      this.imgEl &&
-      (this.state.loadedImgEl || testSvg(this.imgEl)) &&
-      window.getComputedStyle(this.imgEl).display !== 'none'
-    )
-  }
+  hasImage = (): boolean =>
+    this.imgEl !== null &&
+    (this.state.loadedImgEl !== undefined || testSvg(this.imgEl)) &&
+    window.getComputedStyle(this.imgEl).display !== 'none'
 
   // ===========================================================================
 
   /**
    * Perform zooming actions
    */
-  zoom = () => {
+  zoom = (): void => {
     this.bodyScrollDisable()
-    this.refDialog.current?.showModal?.()
-    this.refModalImg.current?.addEventListener?.(
+    this.refDialog.current?.showModal()
+    this.refModalImg.current?.addEventListener(
       'transitionend',
       this.handleImgTransitionEnd,
     ) // must be added after showModal
@@ -779,7 +798,7 @@ class ControlledBase extends React.Component<
   /**
    * Perform unzooming actions
    */
-  unzoom = () => {
+  unzoom = (): void => {
     this.setState({ modalState: ModalState.UNLOADING })
   }
 
@@ -790,7 +809,7 @@ class ControlledBase extends React.Component<
    *   - LOADING -> LOADED
    *   - UNLOADING -> UNLOADED
    */
-  handleImgTransitionEnd = () => {
+  handleImgTransitionEnd = (): void => {
     clearTimeout(this.timeoutTransitionEnd)
 
     if (this.state.modalState === ModalState.LOADING) {
@@ -804,14 +823,14 @@ class ControlledBase extends React.Component<
    * Ensure handleImgTransitionEnd gets called. Safari can have significant
    * delays before firing the event.
    */
-  ensureImgTransitionEnd = () => {
-    if (this.refModalImg.current) {
-      const td = window.getComputedStyle(
+  ensureImgTransitionEnd = (): void => {
+    if (this.refModalImg.current !== null) {
+      const { transitionDuration: td } = window.getComputedStyle(
         this.refModalImg.current,
-      ).transitionDuration
+      )
       const tdFloat = parseFloat(td)
 
-      if (tdFloat) {
+      if (tdFloat !== 0 && !Number.isNaN(tdFloat)) {
         const tdMs = tdFloat * (td.endsWith('ms') ? 1 : 1000) + 50
         this.timeoutTransitionEnd = setTimeout(
           this.handleImgTransitionEnd,
@@ -826,14 +845,16 @@ class ControlledBase extends React.Component<
   /**
    * Disable body scrolling
    */
-  bodyScrollDisable = () => {
+  bodyScrollDisable = (): void => {
     this.prevBodyAttrs = {
       overflow: document.body.style.overflow,
       width: document.body.style.width,
     }
 
     // Get clientWidth before setting overflow: 'hidden'
-    const clientWidth = document.body.clientWidth
+    const {
+      body: { clientWidth },
+    } = document
 
     document.body.style.overflow = 'hidden'
     document.body.style.width = `${clientWidth}px`
@@ -842,9 +863,12 @@ class ControlledBase extends React.Component<
   /**
    * Enable body scrolling
    */
-  bodyScrollEnable = () => {
-    document.body.style.width = this.prevBodyAttrs.width
-    document.body.style.overflow = this.prevBodyAttrs.overflow
+  bodyScrollEnable = (): void => {
+    const {
+      prevBodyAttrs: { overflow, width },
+    } = this
+    document.body.style.width = width
+    document.body.style.overflow = overflow
     this.prevBodyAttrs = defaultBodyAttrs
   }
 
@@ -853,21 +877,23 @@ class ControlledBase extends React.Component<
   /**
    * Load the zoomImg manually
    */
-  loadZoomImg = () => {
+  loadZoomImg = (): void => {
     const {
       props: { zoomImg },
     } = this
-    const zoomImgSrc = zoomImg?.src
+    if (zoomImg == null) return
 
-    if (zoomImgSrc) {
+    const { src: zoomImgSrc } = zoomImg
+
+    if (zoomImgSrc !== undefined && zoomImgSrc !== '') {
       const img = new Image()
-      img.sizes = zoomImg?.sizes ?? ''
-      img.srcset = zoomImg?.srcSet ?? ''
+      img.sizes = zoomImg.sizes ?? ''
+      img.srcset = zoomImg.srcSet ?? ''
       // @ts-expect-error crossOrigin type is odd
-      img.crossOrigin = zoomImg?.crossOrigin ?? undefined
+      img.crossOrigin = zoomImg.crossOrigin ?? undefined
       img.src = zoomImgSrc
 
-      const setLoaded = () => {
+      const setLoaded = (): void => {
         this.setState({ isZoomImgLoaded: true })
       }
 
@@ -889,21 +915,22 @@ class ControlledBase extends React.Component<
   /**
    * Hackily deal with SVGs because of all of their unknowns
    */
-  UNSAFE_handleSvg = () => {
+  UNSAFE_handleSvg = (): void => {
     const { imgEl, refModalImg, styleModalImg } = this
 
     if (testSvg(imgEl)) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- cloneNode of an SVGElement returns the same type
       const svgEl = imgEl.cloneNode(true) as typeof imgEl
 
       // Deal with cloned SVG ID duplicate issues from https://github.com/rpearce/react-medium-image-zoom/issues/438
       adjustSvgIDs(svgEl)
 
-      svgEl.style.width = `${styleModalImg.width || 0}px`
-      svgEl.style.height = `${styleModalImg.height || 0}px`
+      svgEl.style.width = `${styleModalImg.width ?? 0}px`
+      svgEl.style.height = `${styleModalImg.height ?? 0}px`
       svgEl.addEventListener('click', this.handleUnzoom)
 
-      refModalImg.current?.firstChild?.remove?.()
-      refModalImg.current?.appendChild?.(svgEl)
+      refModalImg.current?.firstChild?.remove()
+      refModalImg.current?.appendChild(svgEl)
     }
   }
 }

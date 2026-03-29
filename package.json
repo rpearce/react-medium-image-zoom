@@ -93,7 +93,6 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.30.0",
-    "@eslint/js": "^9.39.4",
     "@storybook/addon-a11y": "^10.3.3",
     "@storybook/addon-docs": "^10.3.3",
     "@storybook/react-vite": "^10.3.3",
@@ -103,24 +102,23 @@
     "all-contributors-cli": "^6.26.1",
     "concurrently": "^9.2.1",
     "eslint": "^9.39.4",
+    "eslint-config-love": "^151.0.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-storybook": "^10.3.3",
-    "neostandard": "^0.13.0",
     "prettier": "^3.7.4",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "storybook": "^10.3.3",
-    "typescript": "^6.0.2",
-    "typescript-eslint": "^8.57.2"
+    "typescript": "^6.0.2"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
   },
-  "packageManager": "pnpm@10.30.2+sha512.36cdc707e7b7940a988c9c1ecf88d084f8514b5c3f085f53a2e244c2921d3b2545bc20dd4ebe1fc245feec463bb298aecea7a63ed1f7680b877dc6379d8d0cb4",
+  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
   "pnpm": {
     "ignoredBuiltDependencies": [
       "esbuild"

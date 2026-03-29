@@ -30,6 +30,18 @@ type Story = StoryFn<typeof Zoom>
 
 type ObjectFit = 'contain' | 'cover' | 'fill' | 'none' | 'scale-down'
 
+const OBJECT_FIT_VALUES: readonly string[] = [
+  'contain',
+  'cover',
+  'fill',
+  'none',
+  'scale-down',
+]
+
+function isObjectFit(value: string): value is ObjectFit {
+  return OBJECT_FIT_VALUES.includes(value)
+}
+
 export const ImageGallery: Story = () => {
   const images = [
     imgGlenorchyLagoon,
@@ -43,17 +55,24 @@ export const ImageGallery: Story = () => {
     imgKea,
   ]
 
-  const [objectFit, setObjectFit] = React.useState('cover' as ObjectFit)
+  const [objectFit, setObjectFit] = React.useState<ObjectFit>('cover')
   const [objectPosition, setObjectPosition] = React.useState('50% 50%')
 
   const handleSubmit = React.useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
+    (e: React.SubmitEvent<HTMLFormElement>) => {
       e.preventDefault()
 
       const data = new FormData(e.currentTarget)
 
-      setObjectFit(data.get('objectFit') as ObjectFit)
-      setObjectPosition(data.get('objectPosition') as string)
+      const newObjectFit = data.get('objectFit')
+      const newObjectPosition = data.get('objectPosition')
+
+      if (typeof newObjectFit === 'string' && isObjectFit(newObjectFit)) {
+        setObjectFit(newObjectFit)
+      }
+      if (typeof newObjectPosition === 'string') {
+        setObjectPosition(newObjectPosition)
+      }
     },
     [],
   )
@@ -86,7 +105,7 @@ export const ImageGallery: Story = () => {
         </div>
         <button type="submit">Apply changes</button>
       </form>
-      <ul /* eslint-disable-line jsx-a11y/no-redundant-roles */
+      <ul /* eslint-disable-line jsx-a11y/no-redundant-roles -- role="list" restores VoiceOver semantics removed by list-style:none */
         style={{
           display: 'grid',
           gridTemplateColumns: '2fr 2fr 2fr',
@@ -98,7 +117,7 @@ export const ImageGallery: Story = () => {
         role="list"
       >
         {images.map((img, i) => (
-          <li /* eslint-disable-line jsx-a11y/no-redundant-roles */
+          <li /* eslint-disable-line jsx-a11y/no-redundant-roles -- role="listitem" restores VoiceOver semantics */
             key={i}
             role="listitem"
           >
@@ -140,14 +159,24 @@ export const DivImageGallery: Story = () => {
   const [aspectRatio, setAspectRatio] = React.useState('56%')
 
   const handleSubmit = React.useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
+    (e: React.SubmitEvent<HTMLFormElement>) => {
       e.preventDefault()
 
       const data = new FormData(e.currentTarget)
 
-      setBgSize(data.get('backgroundSize') as string)
-      setBgPosition(data.get('backgroundPosition') as string)
-      setAspectRatio(data.get('aspectRatio') as string)
+      const newBgSize = data.get('backgroundSize')
+      const newBgPosition = data.get('backgroundPosition')
+      const newAspectRatio = data.get('aspectRatio')
+
+      if (typeof newBgSize === 'string') {
+        setBgSize(newBgSize)
+      }
+      if (typeof newBgPosition === 'string') {
+        setBgPosition(newBgPosition)
+      }
+      if (typeof newAspectRatio === 'string') {
+        setAspectRatio(newAspectRatio)
+      }
     },
     [],
   )

@@ -1,3 +1,5 @@
+/* eslint-disable max-lines -- utils module needs to stay in a single file for cohesion */
+
 export type SupportedImage =
   | HTMLImageElement
   | HTMLDivElement
@@ -8,12 +10,12 @@ export type StyleObject = Record<string, string | number | undefined>
 
 // =============================================================================
 
-interface TestElType {
-  (type: string, el: unknown): boolean
+function isElement(el: unknown): el is Element {
+  return el instanceof Element
 }
 
-const testElType: TestElType = (type, el) =>
-  type === (el as Element)?.tagName?.toUpperCase?.()
+const testElType = (type: string, el: unknown): boolean =>
+  isElement(el) && el.tagName.toUpperCase() === type
 
 export const testDiv = (el: unknown): el is HTMLDivElement | HTMLSpanElement =>
   testElType('DIV', el) || testElType('SPAN', el)
@@ -21,7 +23,7 @@ export const testDiv = (el: unknown): el is HTMLDivElement | HTMLSpanElement =>
 export const testImg = (el: unknown): el is HTMLImageElement =>
   testElType('IMG', el)
 
-export const testImgLoaded = (el: HTMLImageElement) =>
+export const testImgLoaded = (el: HTMLImageElement): boolean =>
   el.complete && el.naturalHeight !== 0
 
 export const testSvg = (el: unknown): el is SVGElement => testElType('SVG', el)
@@ -32,12 +34,11 @@ interface GetScaleToWindow {
   (data: { width: number; height: number; offset: number }): number
 }
 
-const getScaleToWindow: GetScaleToWindow = ({ height, offset, width }) => {
-  return Math.min(
+const getScaleToWindow: GetScaleToWindow = ({ height, offset, width }) =>
+  Math.min(
     (window.innerWidth - offset * 2) / width, // scale X-axis
     (window.innerHeight - offset * 2) / height, // scale Y-axis
   )
-}
 
 // =============================================================================
 
@@ -93,11 +94,11 @@ const getScale: GetScale = ({
   targetHeight,
   targetWidth,
 }) => {
-  if (!containerHeight || !containerWidth) {
+  if (containerHeight === 0 || containerWidth === 0) {
     return 1
   }
 
-  return !hasScalableSrc && targetHeight && targetWidth
+  return !hasScalableSrc && targetHeight !== 0 && targetWidth !== 0
     ? getScaleToWindowMax({
         containerHeight,
         containerWidth,
@@ -114,20 +115,20 @@ const getScale: GetScale = ({
 
 // =============================================================================
 
-const URL_REGEX = /url(?:\(['"]?)(.*?)(?:['"]?\))/
+const URL_REGEX = /url(?:\(['"]?)(?<url>.*?)(?:['"]?\))/
 
 interface GetImgSrc {
   (imgEl: SupportedImage | null): string | undefined
 }
 
 export const getImgSrc: GetImgSrc = imgEl => {
-  if (imgEl) {
+  if (imgEl !== null) {
     if (testImg(imgEl)) {
       return imgEl.currentSrc
     } else if (testDiv(imgEl)) {
-      const bgImg = window.getComputedStyle(imgEl).backgroundImage
+      const { backgroundImage: bgImg } = window.getComputedStyle(imgEl)
 
-      if (bgImg) {
+      if (bgImg !== '') {
         return URL_REGEX.exec(bgImg)?.[1]
       }
     }
@@ -141,9 +142,9 @@ interface GetImgAlt {
 }
 
 export const getImgAlt: GetImgAlt = imgEl => {
-  if (imgEl) {
+  if (imgEl !== null) {
     if (testImg(imgEl)) {
-      return imgEl.alt ?? undefined
+      return imgEl.alt
     } else {
       return imgEl.getAttribute('aria-label') ?? undefined
     }
@@ -230,26 +231,29 @@ const getImgObjectFitStyle: GetImgObjectFitStyle = ({
   containerTop,
   containerWidth,
   hasScalableSrc,
-  objectFit,
+  objectFit: objectFitParam,
   objectPosition,
   offset,
   targetHeight,
   targetWidth,
+  // eslint-disable-next-line complexity -- object-fit style calculation requires handling many layout modes
 }) => {
-  if (objectFit === 'scale-down') {
+  let resolvedObjectFit = objectFitParam
+
+  if (resolvedObjectFit === 'scale-down') {
     if (targetWidth <= containerWidth && targetHeight <= containerHeight) {
-      objectFit = 'none'
+      resolvedObjectFit = 'none'
     } else {
-      objectFit = 'contain'
+      resolvedObjectFit = 'contain'
     }
   }
 
-  if (objectFit === 'cover' || objectFit === 'contain') {
+  if (resolvedObjectFit === 'cover' || resolvedObjectFit === 'contain') {
     const widthRatio = containerWidth / targetWidth
     const heightRatio = containerHeight / targetHeight
 
     const ratio =
-      objectFit === 'cover'
+      resolvedObjectFit === 'cover'
         ? Math.max(widthRatio, heightRatio)
         : Math.min(widthRatio, heightRatio)
 
@@ -279,7 +283,7 @@ const getImgObjectFitStyle: GetImgObjectFitStyle = ({
       height: targetHeight * ratio * scale,
       transform: `translate(0,0) scale(${1 / scale})`,
     }
-  } else if (objectFit === 'none') {
+  } else if (resolvedObjectFit === 'none') {
     const [posLeft = '50%', posTop = '50%'] = objectPosition.split(' ')
     const posX = parsePosition({
       position: posLeft,
@@ -306,7 +310,7 @@ const getImgObjectFitStyle: GetImgObjectFitStyle = ({
       height: targetHeight * scale,
       transform: `translate(0,0) scale(${1 / scale})`,
     }
-  } else if (objectFit === 'fill') {
+  } else if (resolvedObjectFit === 'fill') {
     const widthRatio = containerWidth / targetWidth
     const heightRatio = containerHeight / targetHeight
     const ratio = Math.max(widthRatio, heightRatio)
@@ -358,6 +362,7 @@ const getDivImgStyle: GetDivImgStyle = ({
   offset,
   targetHeight,
   targetWidth,
+  // eslint-disable-next-line complexity -- div background image style calculation requires handling many layout modes
 }) => {
   if (backgroundSize === 'cover' || backgroundSize === 'contain') {
     const widthRatio = containerWidth / targetWidth
@@ -493,18 +498,28 @@ export const getStyleModalImg: GetStyleModalImg = ({
   offset,
   shouldRefresh,
   targetEl,
+  // eslint-disable-next-line complexity -- modal image style calculation requires handling many layout combinations
 }) => {
   const hasScalableSrc =
     isSvg ||
-    imgSrc?.slice?.(0, 18) === 'data:image/svg+xml' ||
+    imgSrc?.slice(0, 18) === 'data:image/svg+xml' ||
     hasZoomImg ||
-    !!(imgSrc && SRC_SVG_REGEX.test(imgSrc))
+    (imgSrc !== undefined && SRC_SVG_REGEX.test(imgSrc))
 
   const imgRect = targetEl.getBoundingClientRect()
   const targetElComputedStyle = window.getComputedStyle(targetEl)
 
   const isDivImg = loadedImgEl != null && testDiv(targetEl)
   const isImgObjectFit = loadedImgEl != null && !isDivImg
+
+  const targetHeight =
+    loadedImgEl != null && loadedImgEl.naturalHeight !== 0
+      ? loadedImgEl.naturalHeight
+      : imgRect.height
+  const targetWidth =
+    loadedImgEl != null && loadedImgEl.naturalWidth !== 0
+      ? loadedImgEl.naturalWidth
+      : imgRect.width
 
   const styleImgRegular = getImgRegularStyle({
     containerHeight: imgRect.height,
@@ -513,8 +528,8 @@ export const getStyleModalImg: GetStyleModalImg = ({
     containerWidth: imgRect.width,
     hasScalableSrc,
     offset,
-    targetHeight: loadedImgEl?.naturalHeight || imgRect.height,
-    targetWidth: loadedImgEl?.naturalWidth || imgRect.width,
+    targetHeight,
+    targetWidth,
   })
 
   const styleImgObjectFit = isImgObjectFit
@@ -527,8 +542,8 @@ export const getStyleModalImg: GetStyleModalImg = ({
         objectFit: targetElComputedStyle.objectFit,
         objectPosition: targetElComputedStyle.objectPosition,
         offset,
-        targetHeight: loadedImgEl?.naturalHeight || imgRect.height,
-        targetWidth: loadedImgEl?.naturalWidth || imgRect.width,
+        targetHeight,
+        targetWidth,
       })
     : undefined
 
@@ -542,28 +557,27 @@ export const getStyleModalImg: GetStyleModalImg = ({
         containerWidth: imgRect.width,
         hasScalableSrc,
         offset,
-        targetHeight: loadedImgEl?.naturalHeight || imgRect.height,
-        targetWidth: loadedImgEl?.naturalWidth || imgRect.width,
+        targetHeight,
+        targetWidth,
       })
     : undefined
 
-  const style: StyleObject = Object.assign(
-    {},
-    styleImgRegular ?? {},
-    styleImgObjectFit ?? {},
-    styleDivImg ?? {},
-  )
+  const style: StyleObject = {
+    ...styleImgRegular,
+    ...styleImgObjectFit,
+    ...styleDivImg,
+  }
 
   if (isZoomed) {
     const viewportX = window.innerWidth / 2
     const viewportY = window.innerHeight / 2
 
     const childCenterX =
-      parseFloat(String(style.left || 0)) +
-      parseFloat(String(style.width || 0)) / 2
+      parseFloat(String(style.left ?? 0)) +
+      parseFloat(String(style.width ?? 0)) / 2
     const childCenterY =
-      parseFloat(String(style.top || 0)) +
-      parseFloat(String(style.height || 0)) / 2
+      parseFloat(String(style.top ?? 0)) +
+      parseFloat(String(style.height ?? 0)) / 2
 
     const translateX = viewportX - childCenterX
     const translateY = viewportY - childCenterY
@@ -586,15 +600,22 @@ interface GetStyleGhost {
 }
 
 export const getStyleGhost: GetStyleGhost = imgEl => {
-  if (!imgEl) {
+  if (imgEl == null) {
     return {}
   }
 
   if (testSvg(imgEl)) {
-    const parentEl = imgEl.parentElement
+    const { parentElement: parentEl } = imgEl
     const rect = imgEl.getBoundingClientRect()
 
-    if (parentEl) {
+    if (parentEl == null) {
+      return {
+        height: rect.height,
+        left: rect.left,
+        width: rect.width,
+        top: rect.top,
+      }
+    } else {
       const parentRect = parentEl.getBoundingClientRect()
 
       return {
@@ -602,13 +623,6 @@ export const getStyleGhost: GetStyleGhost = imgEl => {
         left: parentRect.left - rect.left,
         top: parentRect.top - rect.top,
         width: rect.width,
-      }
-    } else {
-      return {
-        height: rect.height,
-        left: rect.left,
-        width: rect.width,
-        top: rect.top,
       }
     }
   } else {
@@ -644,18 +658,20 @@ export const adjustSvgIDs = (svgEl: SVGElement): void => {
 
   // Update SVG element's ID, if present
   if (svgEl.hasAttribute('id')) {
-    const oldId = svgEl.id
+    const { id: oldId } = svgEl
     const newId = oldId + newIdSuffix
     idMap.set(oldId, newId)
-    svgEl.id = newId
+    const svgNode: Element = svgEl
+    svgNode.id = newId
   }
 
   // Update all old IDs to new IDs and store values mapping for later
   svgEl.querySelectorAll('[id]').forEach(el => {
-    const oldId = el.id
+    const { id: oldId } = el
     const newId = oldId + newIdSuffix
     idMap.set(oldId, newId)
-    el.id = newId
+    const node: Element = el
+    node.id = newId
   })
 
   idMap.forEach((newId, oldId) => {
@@ -677,11 +693,10 @@ export const adjustSvgIDs = (svgEl: SVGElement): void => {
   // Update any SVG `<style>` elements to update old IDs to new IDs
   svgEl.querySelectorAll('style').forEach(styleEl => {
     idMap.forEach((newId, oldId) => {
-      if (styleEl.textContent) {
-        styleEl.textContent = styleEl.textContent.replaceAll(
-          `#${oldId}`,
-          `#${newId}`,
-        )
+      const { textContent } = styleEl
+      if (textContent !== '') {
+        const styleNode: HTMLStyleElement = styleEl
+        styleNode.textContent = textContent.replaceAll(`#${oldId}`, `#${newId}`)
       }
     })
   })
