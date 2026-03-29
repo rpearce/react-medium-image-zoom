@@ -2,6 +2,8 @@ version: 2
 updates:
   - package-ecosystem: 'github-actions'
     directory: '/'
+    cooldown:
+      default-days: 2
     schedule:
       interval: 'daily'
 
@@ -10,9 +12,19 @@ updates:
       - dependency-type: 'direct'
     directory: '/'
     open-pull-requests-limit: 5
+    cooldown:
+      default-days: 2
     schedule:
       interval: 'daily'
     versioning-strategy: 'increase'
+    ignore:
+      # ESLint v10 has problems with React plugins at time of writing
+      - dependency-name: '@eslint/js'
+        update-types: ['version-update:semver-major']
+        versions: ['>=10.0.0']
+      - dependency-name: 'eslint'
+        update-types: ['version-update:semver-major']
+        versions: ['>=10.0.0']
     groups:
       dev-dependencies:
         patterns:
