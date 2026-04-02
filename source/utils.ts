@@ -124,7 +124,7 @@ interface GetImgSrc {
 export const getImgSrc: GetImgSrc = imgEl => {
   if (imgEl !== null) {
     if (testImg(imgEl)) {
-      return imgEl.currentSrc
+      return imgEl.currentSrc === '' ? undefined : imgEl.currentSrc
     } else if (testDiv(imgEl)) {
       const { backgroundImage: bgImg } = window.getComputedStyle(imgEl)
 
