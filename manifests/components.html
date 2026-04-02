@@ -582,7 +582,7 @@
 <main>
   <div class="wrap">
     <div class="note info" style="margin-bottom: 16px;">
-            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>0.8s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
+            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>0.7s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
             <pre><code>typescript: {
   reactDocgen: 'react-docgen-typescript',
 }</code></pre>
@@ -685,17 +685,24 @@ export type { ControlledProps } from &#39;./Controlled.js&#39;
     imgKea,
   ]
 
-  const [objectFit, setObjectFit] = React.useState(&#39;cover&#39; as ObjectFit)
+  const [objectFit, setObjectFit] = React.useState&lt;ObjectFit&gt;(&#39;cover&#39;)
   const [objectPosition, setObjectPosition] = React.useState(&#39;50% 50%&#39;)
 
   const handleSubmit = React.useCallback(
-    (e: React.FormEvent&lt;HTMLFormElement&gt;) =&gt; {
+    (e: React.SubmitEvent&lt;HTMLFormElement&gt;) =&gt; {
       e.preventDefault()
 
       const data = new FormData(e.currentTarget)
 
-      setObjectFit(data.get(&#39;objectFit&#39;) as ObjectFit)
-      setObjectPosition(data.get(&#39;objectPosition&#39;) as string)
+      const newObjectFit = data.get(&#39;objectFit&#39;)
+      const newObjectPosition = data.get(&#39;objectPosition&#39;)
+
+      if (typeof newObjectFit === &#39;string&#39; &amp;&amp; isObjectFit(newObjectFit)) {
+        setObjectFit(newObjectFit)
+      }
+      if (typeof newObjectPosition === &#39;string&#39;) {
+        setObjectPosition(newObjectPosition)
+      }
     },
     [],
   )
@@ -728,7 +735,7 @@ export type { ControlledProps } from &#39;./Controlled.js&#39;
         &lt;/div&gt;
         &lt;button type=&quot;submit&quot;&gt;Apply changes&lt;/button&gt;
       &lt;/form&gt;
-      &lt;ul /* eslint-disable-line jsx-a11y/no-redundant-roles */
+      &lt;ul /* eslint-disable-line jsx-a11y/no-redundant-roles -- role=&quot;list&quot; restores VoiceOver semantics removed by list-style:none */
         style={{
           display: &#39;grid&#39;,
           gridTemplateColumns: &#39;2fr 2fr 2fr&#39;,
@@ -740,7 +747,7 @@ export type { ControlledProps } from &#39;./Controlled.js&#39;
         role=&quot;list&quot;
       &gt;
         {images.map((img, i) =&gt; (
-          &lt;li /* eslint-disable-line jsx-a11y/no-redundant-roles */
+          &lt;li /* eslint-disable-line jsx-a11y/no-redundant-roles -- role=&quot;listitem&quot; restores VoiceOver semantics */
             key={i}
             role=&quot;listitem&quot;
           &gt;
@@ -789,14 +796,24 @@ export type { ControlledProps } from &#39;./Controlled.js&#39;
   const [aspectRatio, setAspectRatio] = React.useState(&#39;56%&#39;)
 
   const handleSubmit = React.useCallback(
-    (e: React.FormEvent&lt;HTMLFormElement&gt;) =&gt; {
+    (e: React.SubmitEvent&lt;HTMLFormElement&gt;) =&gt; {
       e.preventDefault()
 
       const data = new FormData(e.currentTarget)
 
-      setBgSize(data.get(&#39;backgroundSize&#39;) as string)
-      setBgPosition(data.get(&#39;backgroundPosition&#39;) as string)
-      setAspectRatio(data.get(&#39;aspectRatio&#39;) as string)
+      const newBgSize = data.get(&#39;backgroundSize&#39;)
+      const newBgPosition = data.get(&#39;backgroundPosition&#39;)
+      const newAspectRatio = data.get(&#39;aspectRatio&#39;)
+
+      if (typeof newBgSize === &#39;string&#39;) {
+        setBgSize(newBgSize)
+      }
+      if (typeof newBgPosition === &#39;string&#39;) {
+        setBgPosition(newBgPosition)
+      }
+      if (typeof newAspectRatio === &#39;string&#39;) {
+        setAspectRatio(newAspectRatio)
+      }
     },
     [],
   )
@@ -1209,32 +1226,31 @@ const CustomZoomContent: UncontrolledProps[&#39;ZoomContent&#39;] = ({
               </div>
               
               
-              <pre><code>const CustomModalStyles = props =&gt; {
-  return (
-    &lt;main aria-label=&quot;Story&quot;&gt;
-      &lt;h1&gt;Custom Modal Styles&lt;/h1&gt;
-      &lt;div className=&quot;mw-600&quot;&gt;
-        &lt;p&gt;Use CSS to customize the zoom modal styles.&lt;/p&gt;
-        &lt;p&gt;
-          Here, we slow down the transition time and use a different overlay
-          color.
-        &lt;/p&gt;
-        &lt;div&gt;
-          &lt;Zoom {...props} classDialog=&quot;custom-zoom&quot;&gt;
-            &lt;img
-              alt={imgGlenorchyLagoon.alt}
-              src={imgGlenorchyLagoon.src}
-              width=&quot;400&quot;
-            /&gt;
-          &lt;/Zoom&gt;
-        &lt;/div&gt;
-        &lt;p&gt;
-          The CSS class, &lt;code&gt;custom-zoom&lt;/code&gt;, is sent to the component via
-          the &lt;code&gt;classDialog&lt;/code&gt; string prop. Here are the styles used:
-        &lt;/p&gt;
-        &lt;pre&gt;
-          &lt;code&gt;
-            {`
+              <pre><code>const CustomModalStyles = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;Custom Modal Styles&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;Use CSS to customize the zoom modal styles.&lt;/p&gt;
+      &lt;p&gt;
+        Here, we slow down the transition time and use a different overlay
+        color.
+      &lt;/p&gt;
+      &lt;div&gt;
+        &lt;Zoom {...props} classDialog=&quot;custom-zoom&quot;&gt;
+          &lt;img
+            alt={imgGlenorchyLagoon.alt}
+            src={imgGlenorchyLagoon.src}
+            width=&quot;400&quot;
+          /&gt;
+        &lt;/Zoom&gt;
+      &lt;/div&gt;
+      &lt;p&gt;
+        The CSS class, &lt;code&gt;custom-zoom&lt;/code&gt;, is sent to the component via
+        the &lt;code&gt;classDialog&lt;/code&gt; string prop. Here are the styles used:
+      &lt;/p&gt;
+      &lt;pre&gt;
+        &lt;code&gt;
+          {`
 .custom-zoom [data-rmiz-modal-overlay],
 .custom-zoom [data-rmiz-modal-img] {
   transition-duration: 0.8s;
@@ -1255,12 +1271,11 @@ const CustomZoomContent: UncontrolledProps[&#39;ZoomContent&#39;] = ({
   outline: 0.2rem solid #bd93f9;
 }
 `}
-          &lt;/code&gt;
-        &lt;/pre&gt;
-      &lt;/div&gt;
-    &lt;/main&gt;
-  )
-};</code></pre>
+        &lt;/code&gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
             </div>
             <div class="note ok">
               <div class="row">
@@ -1278,10 +1293,13 @@ const CustomZoomContent: UncontrolledProps[&#39;ZoomContent&#39;] = ({
   }, [])
 
   React.useEffect(() =&gt; {
-    const handleDocumentClick = (e: MouseEvent) =&gt; {
+    const handleDocumentClick = (e: MouseEvent): void =&gt; {
+      const { target } = e
+      if (!(target instanceof Element)) return
+
       if (
-        !refBtn.current?.contains(e.target as Element) &amp;&amp;
-        !refModal.current?.contains(e.target as Element)
+        refBtn.current?.contains(target) !== true &amp;&amp;
+        refModal.current?.contains(target) !== true
       ) {
         refModal.current?.close()
       }
@@ -1497,26 +1515,24 @@ const CustomZoomContent: UncontrolledProps[&#39;ZoomContent&#39;] = ({
   )
 
   React.useEffect(() =&gt; {
-    async function runCycle() {
-      while (true) {
-        await delay(3000)
+    const interval = setInterval(() =&gt; {
+      setImg(
+        shuffle([
+          imgThatWanakaTree,
+          imgEarth,
+          imgNzMap,
+          imgTekapo,
+          imgKeaLarge,
+          imgTeAraiPoint,
+          imgGlenorchyLagoon,
+          imgHookerValleyTrack,
+        ] as const)[0],
+      )
+    }, 3000)
 
-        setImg(
-          shuffle([
-            imgThatWanakaTree,
-            imgEarth,
-            imgNzMap,
-            imgTekapo,
-            imgKeaLarge,
-            imgTeAraiPoint,
-            imgGlenorchyLagoon,
-            imgHookerValleyTrack,
-          ] as const)[0],
-        )
-      }
+    return () =&gt; {
+      clearInterval(interval)
     }
-
-    runCycle()
   }, [])
 
   return (
@@ -1611,30 +1627,28 @@ const CustomZoomContent: UncontrolledProps[&#39;ZoomContent&#39;] = ({
               </div>
               
               
-              <pre><code>const SelectCards = props =&gt; {
-  return (
-    &lt;main aria-label=&quot;Story&quot;&gt;
-      &lt;h1&gt;Selecting cards and zooming without triggering selection state&lt;/h1&gt;
-      &lt;div
-        className=&quot;mw-600&quot;
-        style={{ display: &#39;flex&#39;, flexDirection: &#39;column&#39; }}
-      &gt;
-        &lt;ul className=&quot;cards&quot;&gt;
-          &lt;CardItem
-            alt={imgThatWanakaTree.alt}
-            src={imgThatWanakaTree.src}
-            zoomProps={props as UncontrolledProps}
-          /&gt;
-          &lt;CardItem
-            alt={imgGlenorchyLagoon.alt}
-            src={imgGlenorchyLagoon.src}
-            zoomProps={props as UncontrolledProps}
-          /&gt;
-        &lt;/ul&gt;
-      &lt;/div&gt;
-    &lt;/main&gt;
-  )
-};</code></pre>
+              <pre><code>const SelectCards = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;Selecting cards and zooming without triggering selection state&lt;/h1&gt;
+    &lt;div
+      className=&quot;mw-600&quot;
+      style={{ display: &#39;flex&#39;, flexDirection: &#39;column&#39; }}
+    &gt;
+      &lt;ul className=&quot;cards&quot;&gt;
+        &lt;CardItem
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          zoomProps={props}
+        /&gt;
+        &lt;CardItem
+          alt={imgGlenorchyLagoon.alt}
+          src={imgGlenorchyLagoon.src}
+          zoomProps={props}
+        /&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
             </div>
             <div class="note ok">
               <div class="row">
@@ -2392,9 +2406,9 @@ export type { ControlledProps } from &#39;./Controlled.js&#39;
   const [isZoomed, setIsZoomed] = React.useState(false)
 
   const handleKeyDown = React.useCallback((e: KeyboardEvent) =&gt; {
-    if (e.key === &#39;j&#39; || e.keyCode === 74) {
+    if (e.key === &#39;j&#39;) {
       setIsZoomed(true)
-    } else if (e.key === &#39;k&#39; || e.keyCode === 75) {
+    } else if (e.key === &#39;k&#39;) {
       setIsZoomed(false)
     }
   }, [])
@@ -2538,17 +2552,24 @@ export type { ControlledProps } from &#39;./Controlled.js&#39;
     imgKea,
   ]
 
-  const [objectFit, setObjectFit] = React.useState(&#39;cover&#39; as ObjectFit)
+  const [objectFit, setObjectFit] = React.useState&lt;ObjectFit&gt;(&#39;cover&#39;)
   const [objectPosition, setObjectPosition] = React.useState(&#39;50% 50%&#39;)
 
   const handleSubmit = React.useCallback(
-    (e: React.FormEvent&lt;HTMLFormElement&gt;) =&gt; {
+    (e: React.SubmitEvent&lt;HTMLFormElement&gt;) =&gt; {
       e.preventDefault()
 
       const data = new FormData(e.currentTarget)
 
-      setObjectFit(data.get(&#39;objectFit&#39;) as ObjectFit)
-      setObjectPosition(data.get(&#39;objectPosition&#39;) as string)
+      const newObjectFit = data.get(&#39;objectFit&#39;)
+      const newObjectPosition = data.get(&#39;objectPosition&#39;)
+
+      if (typeof newObjectFit === &#39;string&#39; &amp;&amp; isObjectFit(newObjectFit)) {
+        setObjectFit(newObjectFit)
+      }
+      if (typeof newObjectPosition === &#39;string&#39;) {
+        setObjectPosition(newObjectPosition)
+      }
     },
     [],
   )
@@ -2581,7 +2602,7 @@ export type { ControlledProps } from &#39;./Controlled.js&#39;
         &lt;/div&gt;
         &lt;button type=&quot;submit&quot;&gt;Apply changes&lt;/button&gt;
       &lt;/form&gt;
-      &lt;ul /* eslint-disable-line jsx-a11y/no-redundant-roles */
+      &lt;ul /* eslint-disable-line jsx-a11y/no-redundant-roles -- role=&quot;list&quot; restores VoiceOver semantics removed by list-style:none */
         style={{
           display: &#39;grid&#39;,
           gridTemplateColumns: &#39;2fr 2fr 2fr&#39;,
@@ -2593,7 +2614,7 @@ export type { ControlledProps } from &#39;./Controlled.js&#39;
         role=&quot;list&quot;
       &gt;
         {images.map((img, i) =&gt; (
-          &lt;li /* eslint-disable-line jsx-a11y/no-redundant-roles */
+          &lt;li /* eslint-disable-line jsx-a11y/no-redundant-roles -- role=&quot;listitem&quot; restores VoiceOver semantics */
             key={i}
             role=&quot;listitem&quot;
           &gt;
@@ -2642,14 +2663,24 @@ export type { ControlledProps } from &#39;./Controlled.js&#39;
   const [aspectRatio, setAspectRatio] = React.useState(&#39;56%&#39;)
 
   const handleSubmit = React.useCallback(
-    (e: React.FormEvent&lt;HTMLFormElement&gt;) =&gt; {
+    (e: React.SubmitEvent&lt;HTMLFormElement&gt;) =&gt; {
       e.preventDefault()
 
       const data = new FormData(e.currentTarget)
 
-      setBgSize(data.get(&#39;backgroundSize&#39;) as string)
-      setBgPosition(data.get(&#39;backgroundPosition&#39;) as string)
-      setAspectRatio(data.get(&#39;aspectRatio&#39;) as string)
+      const newBgSize = data.get(&#39;backgroundSize&#39;)
+      const newBgPosition = data.get(&#39;backgroundPosition&#39;)
+      const newAspectRatio = data.get(&#39;aspectRatio&#39;)
+
+      if (typeof newBgSize === &#39;string&#39;) {
+        setBgSize(newBgSize)
+      }
+      if (typeof newBgPosition === &#39;string&#39;) {
+        setBgPosition(newBgPosition)
+      }
+      if (typeof newAspectRatio === &#39;string&#39;) {
+        setAspectRatio(newAspectRatio)
+      }
     },
     [],
   )
@@ -3062,32 +3093,31 @@ const CustomZoomContent: UncontrolledProps[&#39;ZoomContent&#39;] = ({
               </div>
               
               
-              <pre><code>const CustomModalStyles = props =&gt; {
-  return (
-    &lt;main aria-label=&quot;Story&quot;&gt;
-      &lt;h1&gt;Custom Modal Styles&lt;/h1&gt;
-      &lt;div className=&quot;mw-600&quot;&gt;
-        &lt;p&gt;Use CSS to customize the zoom modal styles.&lt;/p&gt;
-        &lt;p&gt;
-          Here, we slow down the transition time and use a different overlay
-          color.
-        &lt;/p&gt;
-        &lt;div&gt;
-          &lt;Zoom {...props} classDialog=&quot;custom-zoom&quot;&gt;
-            &lt;img
-              alt={imgGlenorchyLagoon.alt}
-              src={imgGlenorchyLagoon.src}
-              width=&quot;400&quot;
-            /&gt;
-          &lt;/Zoom&gt;
-        &lt;/div&gt;
-        &lt;p&gt;
-          The CSS class, &lt;code&gt;custom-zoom&lt;/code&gt;, is sent to the component via
-          the &lt;code&gt;classDialog&lt;/code&gt; string prop. Here are the styles used:
-        &lt;/p&gt;
-        &lt;pre&gt;
-          &lt;code&gt;
-            {`
+              <pre><code>const CustomModalStyles = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;Custom Modal Styles&lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;Use CSS to customize the zoom modal styles.&lt;/p&gt;
+      &lt;p&gt;
+        Here, we slow down the transition time and use a different overlay
+        color.
+      &lt;/p&gt;
+      &lt;div&gt;
+        &lt;Zoom {...props} classDialog=&quot;custom-zoom&quot;&gt;
+          &lt;img
+            alt={imgGlenorchyLagoon.alt}
+            src={imgGlenorchyLagoon.src}
+            width=&quot;400&quot;
+          /&gt;
+        &lt;/Zoom&gt;
+      &lt;/div&gt;
+      &lt;p&gt;
+        The CSS class, &lt;code&gt;custom-zoom&lt;/code&gt;, is sent to the component via
+        the &lt;code&gt;classDialog&lt;/code&gt; string prop. Here are the styles used:
+      &lt;/p&gt;
+      &lt;pre&gt;
+        &lt;code&gt;
+          {`
 .custom-zoom [data-rmiz-modal-overlay],
 .custom-zoom [data-rmiz-modal-img] {
   transition-duration: 0.8s;
@@ -3108,12 +3138,11 @@ const CustomZoomContent: UncontrolledProps[&#39;ZoomContent&#39;] = ({
   outline: 0.2rem solid #bd93f9;
 }
 `}
-          &lt;/code&gt;
-        &lt;/pre&gt;
-      &lt;/div&gt;
-    &lt;/main&gt;
-  )
-};</code></pre>
+        &lt;/code&gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
             </div>
             <div class="note ok">
               <div class="row">
@@ -3131,10 +3160,13 @@ const CustomZoomContent: UncontrolledProps[&#39;ZoomContent&#39;] = ({
   }, [])
 
   React.useEffect(() =&gt; {
-    const handleDocumentClick = (e: MouseEvent) =&gt; {
+    const handleDocumentClick = (e: MouseEvent): void =&gt; {
+      const { target } = e
+      if (!(target instanceof Element)) return
+
       if (
-        !refBtn.current?.contains(e.target as Element) &amp;&amp;
-        !refModal.current?.contains(e.target as Element)
+        refBtn.current?.contains(target) !== true &amp;&amp;
+        refModal.current?.contains(target) !== true
       ) {
         refModal.current?.close()
       }
@@ -3350,26 +3382,24 @@ const CustomZoomContent: UncontrolledProps[&#39;ZoomContent&#39;] = ({
   )
 
   React.useEffect(() =&gt; {
-    async function runCycle() {
-      while (true) {
-        await delay(3000)
+    const interval = setInterval(() =&gt; {
+      setImg(
+        shuffle([
+          imgThatWanakaTree,
+          imgEarth,
+          imgNzMap,
+          imgTekapo,
+          imgKeaLarge,
+          imgTeAraiPoint,
+          imgGlenorchyLagoon,
+          imgHookerValleyTrack,
+        ] as const)[0],
+      )
+    }, 3000)
 
-        setImg(
-          shuffle([
-            imgThatWanakaTree,
-            imgEarth,
-            imgNzMap,
-            imgTekapo,
-            imgKeaLarge,
-            imgTeAraiPoint,
-            imgGlenorchyLagoon,
-            imgHookerValleyTrack,
-          ] as const)[0],
-        )
-      }
+    return () =&gt; {
+      clearInterval(interval)
     }
-
-    runCycle()
   }, [])
 
   return (
@@ -3464,30 +3494,28 @@ const CustomZoomContent: UncontrolledProps[&#39;ZoomContent&#39;] = ({
               </div>
               
               
-              <pre><code>const SelectCards = props =&gt; {
-  return (
-    &lt;main aria-label=&quot;Story&quot;&gt;
-      &lt;h1&gt;Selecting cards and zooming without triggering selection state&lt;/h1&gt;
-      &lt;div
-        className=&quot;mw-600&quot;
-        style={{ display: &#39;flex&#39;, flexDirection: &#39;column&#39; }}
-      &gt;
-        &lt;ul className=&quot;cards&quot;&gt;
-          &lt;CardItem
-            alt={imgThatWanakaTree.alt}
-            src={imgThatWanakaTree.src}
-            zoomProps={props as UncontrolledProps}
-          /&gt;
-          &lt;CardItem
-            alt={imgGlenorchyLagoon.alt}
-            src={imgGlenorchyLagoon.src}
-            zoomProps={props as UncontrolledProps}
-          /&gt;
-        &lt;/ul&gt;
-      &lt;/div&gt;
-    &lt;/main&gt;
-  )
-};</code></pre>
+              <pre><code>const SelectCards = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;Selecting cards and zooming without triggering selection state&lt;/h1&gt;
+    &lt;div
+      className=&quot;mw-600&quot;
+      style={{ display: &#39;flex&#39;, flexDirection: &#39;column&#39; }}
+    &gt;
+      &lt;ul className=&quot;cards&quot;&gt;
+        &lt;CardItem
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          zoomProps={props}
+        /&gt;
+        &lt;CardItem
+          alt={imgGlenorchyLagoon.alt}
+          src={imgGlenorchyLagoon.src}
+          zoomProps={props}
+        /&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
             </div>
             <div class="note ok">
               <div class="row">
@@ -4245,9 +4273,9 @@ export type { ControlledProps } from &#39;./Controlled.js&#39;
   const [isZoomed, setIsZoomed] = React.useState(false)
 
   const handleKeyDown = React.useCallback((e: KeyboardEvent) =&gt; {
-    if (e.key === &#39;j&#39; || e.keyCode === 74) {
+    if (e.key === &#39;j&#39;) {
       setIsZoomed(true)
-    } else if (e.key === &#39;k&#39; || e.keyCode === 75) {
+    } else if (e.key === &#39;k&#39;) {
       setIsZoomed(false)
     }
   }, [])
