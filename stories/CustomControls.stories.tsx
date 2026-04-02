@@ -22,9 +22,9 @@ export const JAndKZoomUnzoom: Story = props => {
   const [isZoomed, setIsZoomed] = React.useState(false)
 
   const handleKeyDown = React.useCallback((e: KeyboardEvent) => {
-    if (e.key === 'j' || e.keyCode === 74) {
+    if (e.key === 'j') {
       setIsZoomed(true)
-    } else if (e.key === 'k' || e.keyCode === 75) {
+    } else if (e.key === 'k') {
       setIsZoomed(false)
     }
   }, [])

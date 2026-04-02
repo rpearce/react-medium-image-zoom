@@ -1,6 +1,6 @@
 import React from 'react'
 
-export function ICompress() {
+export function ICompress(): React.JSX.Element {
   return (
     <svg
       aria-hidden="true"
@@ -15,7 +15,7 @@ export function ICompress() {
   )
 }
 
-export function IEnlarge() {
+export function IEnlarge(): React.JSX.Element {
   return (
     <svg
       aria-hidden="true"

@@ -1,13 +1,11 @@
 // @ts-check
 
-import eslint from '@eslint/js'
+import eslintConfigLove from 'eslint-config-love'
 import eslintConfigPrettier from 'eslint-config-prettier'
 import eslintPluginJSXA11y from 'eslint-plugin-jsx-a11y'
 import eslintPluginReact from 'eslint-plugin-react'
 import eslintPluginReactHooks from 'eslint-plugin-react-hooks'
 import eslintPluginStorybook from 'eslint-plugin-storybook'
-import neostandard from 'neostandard'
-import tseslint from 'typescript-eslint'
 
 /** @type {import('@typescript-eslint/utils').TSESLint.FlatConfig.ConfigFile} */
 export default [
@@ -20,16 +18,34 @@ export default [
       '**/dist/',
       '**/docs/',
       '**/node_modules/',
+      'eslint.config.js',
     ],
   },
-  eslint.configs.recommended,
-  ...neostandard(),
   eslintPluginReact.configs.flat.recommended,
   eslintPluginJSXA11y.flatConfigs.strict,
   eslintPluginReactHooks.configs.flat['recommended-latest'],
-  ...tseslint.configs.strict,
-  ...tseslint.configs.stylistic,
   ...eslintPluginStorybook.configs['flat/recommended'],
+  {
+    ...eslintConfigLove,
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      ...eslintConfigLove.languageOptions,
+      parserOptions: {
+        ...eslintConfigLove.languageOptions?.parserOptions,
+        projectService: {
+          ...eslintConfigLove.languageOptions?.parserOptions?.projectService,
+          allowDefaultProject: ['.storybook/main.ts', '.storybook/preview.tsx'],
+        },
+      },
+    },
+  },
+  {
+    files: ['stories/**/*'],
+    rules: {
+      'max-lines': 'off',
+      'no-console': 'off',
+    },
+  },
   eslintConfigPrettier,
   {
     settings: {
@@ -38,25 +54,11 @@ export default [
       },
     },
     rules: {
-      ...eslintPluginReactHooks.configs.recommended.rules,
-      '@stylistic/jsx-closing-bracket-location': 'off',
-      '@stylistic/jsx-closing-tag-location': 'off',
-      '@stylistic/jsx-quotes': 'off',
-      '@stylistic/jsx-wrap-multilines': 'off',
-      '@stylistic/space-before-function-paren': 'off',
-      '@stylistic/spaced-comment': 'off',
-      'comma-dangle': [
-        'error',
-        {
-          arrays: 'always-multiline',
-          exports: 'always-multiline',
-          functions: 'ignore',
-          imports: 'always-multiline',
-          objects: 'always-multiline',
-        },
-      ],
       'react-hooks/exhaustive-deps': 'error',
       'react-hooks/rules-of-hooks': 'error',
+      '@typescript-eslint/no-magic-numbers': 'off',
+      'require-unicode-regexp': 'off',
+      eqeqeq: ['error', 'always', { null: 'ignore' }],
       'react/prop-types': 'off',
       '@typescript-eslint/prefer-function-type': 'off',
       '@typescript-eslint/consistent-type-imports': [
