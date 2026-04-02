@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.4.2
+
+### Patch Changes
+
+- c9e1560: fix "An empty string was passed to the src attribute" (#925)
+- d698488: add more TS strictness via eslint-config-love
+
 ## 5.4.1
 
 ### Patch Changes
