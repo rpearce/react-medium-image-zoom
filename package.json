@@ -70,13 +70,14 @@
     "dist/"
   ],
   "scripts": {
-    "build": "tsc --project tsconfig.build.json && cp ./source/styles.css ./dist/styles.css",
+    "build": "tsc --project tsconfig.build.json && cp ./source/styles.css ./dist/styles.css && pnpm run check:ssr",
     "build:docs": "rm -rf ./docs && mkdir ./docs && pnpm run storybook:build",
     "changeset": "changeset",
     "check:all": "conc 'pnpm:check:js' 'pnpm:check:types' 'pnpm:check:fmt'",
     "check:all:fix": "conc 'pnpm:check:js:fix' 'pnpm:check:types' 'pnpm:check:fmt:fix'",
     "check:fmt": "prettier --log-level warn --check '**/*.{ts,tsx,json,md,yml,yaml}'",
     "check:fmt:fix": "prettier --log-level warn --write '**/*.{ts,tsx,json,md,yml,yaml}'",
+    "check:ssr": "node scripts/check-ssr",
     "check:js": "eslint .",
     "check:js:fix": "eslint . --fix",
     "check:types": "tsc --noEmit --emitDeclarationOnly false",
