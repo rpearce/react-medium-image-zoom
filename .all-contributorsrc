@@ -699,6 +699,13 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/29952045?v=4",
       "profile": "https://mwspace.com/",
       "contributions": ["bug"]
+    },
+    {
+      "login": "SukkaW",
+      "name": "Sukka",
+      "avatar_url": "https://avatars.githubusercontent.com/u/40715044?v=4",
+      "profile": "https://skk.moe/",
+      "contributions": ["code"]
     }
   ],
   "repoType": "github",
