@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.4.3
+
+### Patch Changes
+
+- b21323c: fix(#1037): compatible with React server-side rendering (#1038)
+
 ## 5.4.2
 
 ### Patch Changes
