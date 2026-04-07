@@ -1,0 +1,31 @@
+#!/usr/bin/env node
+
+/**
+ * Verifies that the component can be server-side rendered without access to
+ * browser globals like Element, window, document, etc.
+ */
+
+import { createElement } from 'react'
+import { renderToString } from 'react-dom/server'
+import Zoom, { Controlled } from '../dist/index.js'
+
+try {
+  renderToString(
+    createElement(
+      Zoom,
+      null,
+      createElement('img', { src: 'test.jpg', alt: 'test' }),
+    ),
+  )
+  renderToString(
+    createElement(
+      Controlled,
+      { isZoomed: false },
+      createElement('img', { src: 'test.jpg', alt: 'test' }),
+    ),
+  )
+} catch (err) {
+  console.error('SSR check failed: component threw during server-side render')
+  console.error(err)
+  process.exit(1)
+}
