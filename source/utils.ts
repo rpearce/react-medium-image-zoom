@@ -11,6 +11,9 @@ export type StyleObject = Record<string, string | number | undefined>
 // =============================================================================
 
 function isElement(el: unknown): el is Element {
+  if (typeof Element === 'undefined') {
+    return false
+  }
   return el instanceof Element
 }
 
