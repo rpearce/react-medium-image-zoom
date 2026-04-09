@@ -95,9 +95,9 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.30.0",
-    "@storybook/addon-a11y": "^10.3.4",
-    "@storybook/addon-docs": "^10.3.4",
-    "@storybook/react-vite": "^10.3.4",
+    "@storybook/addon-a11y": "^10.3.5",
+    "@storybook/addon-docs": "^10.3.5",
+    "@storybook/react-vite": "^10.3.5",
     "@storybook/test-runner": "^0.24.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -109,11 +109,11 @@
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-storybook": "^10.3.4",
+    "eslint-plugin-storybook": "^10.3.5",
     "prettier": "^3.7.4",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "storybook": "^10.3.4",
+    "storybook": "^10.3.5",
     "typescript": "^6.0.2"
   },
   "peerDependencies": {
