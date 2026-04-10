@@ -576,13 +576,13 @@
 <header>
   <div class="wrap">
     <h1>Manifest Debugger</h1>
-    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><a class="filter-pill err" data-k="errors" href="#filter-errors">6/6 prop type errors</a><a class="filter-pill info" data-k="infos" href="#filter-infos">6/6 infos</a><span class="filter-pill ok" aria-disabled="true">28 stories ok</span><a class="filter-pill ok" data-k="docs" href="#filter-docs">1 doc ok</a></div>
+    <div class="summary"><a class="filter-pill all" data-k="all" href="#filter-all">All</a><a class="filter-pill err" data-k="errors" href="#filter-errors">7/7 prop type errors</a><a class="filter-pill info" data-k="infos" href="#filter-infos">7/7 infos</a><span class="filter-pill ok" aria-disabled="true">31 stories ok</span><a class="filter-pill ok" data-k="docs" href="#filter-docs">1 doc ok</a></div>
   </div>
 </header>
 <main>
   <div class="wrap">
     <div class="note info" style="margin-bottom: 16px;">
-            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>0.7s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
+            <strong>Tip:</strong> You are using <code>react-docgen</code> (the default). Generation took <strong>0.5s</strong>. For higher quality prop types, consider switching to <code>react-docgen-typescript</code> in your <code>main.ts</code>:
             <pre><code>typescript: {
   reactDocgen: 'react-docgen-typescript',
 }</code></pre>
@@ -2449,6 +2449,176 @@ export type { ControlledProps } from &#39;./Controlled.js&#39;
     
   </div>
 </article>
+<article
+  class="card 
+  has-error 
+  has-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="Zoom">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-err"></span> Zoom</h2>
+      <div class="badges">
+        <label for="c-6-css-transform-err" class="badge err as-toggle">prop type error</label>
+        <label for="c-6-css-transform-info" class="badge info as-toggle">1 info</label>
+        <label for="c-6-css-transform-stories" class="badge ok as-toggle">3 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./stories/CSSTransform.stories.tsx">css-transform · ./stories/CSSTransform.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  <input id="c-6-css-transform-err" class="tg tg-err" type="checkbox" hidden />
+  <input id="c-6-css-transform-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-6-css-transform-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+
+  <div class="panels">
+    
+        <div class="panel panel-err">
+          
+    <div class="note err">
+      <div class="note-title">Prop type error</div>
+      <div class="note-body"><pre><code>File: /home/runner/work/react-medium-image-zoom/react-medium-image-zoom/source/index.ts
+Error:
+No suitable component definition found.
+You can debug your component file in this playground: https://react-docgen.dev/playground
+Code:
+&#39;use client&#39;
+
+export { Uncontrolled as default } from &#39;./Uncontrolled.js&#39;
+export { Controlled } from &#39;./Controlled.js&#39;
+export type { UncontrolledProps } from &#39;./Uncontrolled.js&#39;
+export type { ControlledProps } from &#39;./Controlled.js&#39;
+</code></pre></div>
+    </div>
+        </div>
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Zoom } from "react-medium-image-zoom";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Mirror Horizontal</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const MirrorHorizontal = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;
+      Mirrored image with &lt;code&gt;transform: scaleX(-1)&lt;/code&gt;
+    &lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;
+        The zoomed image should appear mirrored horizontally, matching the
+        original.
+      &lt;/p&gt;
+      &lt;Zoom {...props}&gt;
+        &lt;img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height=&quot;320&quot;
+          style={{ transform: &#39;scaleX(-1)&#39; }}
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Mirror Vertical</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const MirrorVertical = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;
+      Mirrored image with &lt;code&gt;transform: scaleY(-1)&lt;/code&gt;
+    &lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;
+        The zoomed image should appear mirrored vertically, matching the
+        original.
+      &lt;/p&gt;
+      &lt;Zoom {...props}&gt;
+        &lt;img
+          alt={imgTeAraiPoint.alt}
+          src={imgTeAraiPoint.src}
+          height=&quot;320&quot;
+          style={{ transform: &#39;scaleY(-1)&#39; }}
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Mirror Both</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const MirrorBoth = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;
+      Mirrored image with &lt;code&gt;transform: scale(-1, -1)&lt;/code&gt;
+    &lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;
+        The zoomed image should appear mirrored both horizontally and
+        vertically, matching the original.
+      &lt;/p&gt;
+      &lt;Zoom {...props}&gt;
+        &lt;img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height=&quot;320&quot;
+          style={{ transform: &#39;scale(-1, -1)&#39; }}
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
     </div>
     <div class="error-groups" role="region" aria-label="Prop type error groups">
         <section class="group">
@@ -2456,7 +2626,7 @@ export type { ControlledProps } from &#39;./Controlled.js&#39;
           <label for="no-component-definition-found-toggle" class="group-header">
             <span class="caret">▸</span>
             <span class="group-title">No component definition found</span>
-            <span class="group-count">6</span>
+            <span class="group-count">7</span>
           </label>
           <div class="group-cards">
 <article
@@ -4311,6 +4481,176 @@ export type { ControlledProps } from &#39;./Controlled.js&#39;
     &lt;/main&gt;
   )
 };</code></pre>
+            </div>
+        </div>
+    
+  </div>
+</article>
+<article
+  class="card 
+  has-error 
+  has-info 
+  no-story-error
+  no-doc-error"
+  role="listitem"
+  aria-label="Zoom">
+  <div class="head">
+    <div class="title">
+      <h2><span class="status-dot dot-err"></span> Zoom</h2>
+      <div class="badges">
+        <label for="c-error-6-css-transform-err" class="badge err as-toggle">prop type error</label>
+        <label for="c-error-6-css-transform-info" class="badge info as-toggle">1 info</label>
+        <label for="c-error-6-css-transform-stories" class="badge ok as-toggle">3 stories</label>
+        
+      </div>
+    </div>
+    <div class="meta" title="./stories/CSSTransform.stories.tsx">css-transform · ./stories/CSSTransform.stories.tsx</div>
+    
+    
+    
+  </div>
+
+  <!-- ⬇️ Hidden toggles must be siblings BEFORE .panels -->
+  <input id="c-error-6-css-transform-err" class="tg tg-err" type="checkbox" hidden />
+  <input id="c-error-6-css-transform-info" class="tg tg-info" type="checkbox" hidden />
+  <input id="c-error-6-css-transform-stories" class="tg tg-stories" type="checkbox" hidden />
+  
+  
+
+  <div class="panels">
+    
+        <div class="panel panel-err">
+          
+    <div class="note err">
+      <div class="note-title">Prop type error</div>
+      <div class="note-body"><pre><code>File: /home/runner/work/react-medium-image-zoom/react-medium-image-zoom/source/index.ts
+Error:
+No suitable component definition found.
+You can debug your component file in this playground: https://react-docgen.dev/playground
+Code:
+&#39;use client&#39;
+
+export { Uncontrolled as default } from &#39;./Uncontrolled.js&#39;
+export { Controlled } from &#39;./Controlled.js&#39;
+export type { UncontrolledProps } from &#39;./Uncontrolled.js&#39;
+export type { ControlledProps } from &#39;./Controlled.js&#39;
+</code></pre></div>
+    </div>
+        </div>
+    
+        <div class="panel panel-info">
+          
+    <div class="note info">
+      <div class="note-title">Info</div>
+      <div class="note-body">No description found. Write a jsdoc comment such as /** Component description */.</div>
+    </div>
+        </div>
+    
+    
+        <div class="panel panel-stories">
+          
+          
+          
+          <div class="note ok">
+                <div class="row">
+                  <span class="ex-name">Imports</span>
+                </div>
+                <pre><code>import { Zoom } from "react-medium-image-zoom";</code></pre>
+              </div>
+          
+          
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Mirror Horizontal</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const MirrorHorizontal = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;
+      Mirrored image with &lt;code&gt;transform: scaleX(-1)&lt;/code&gt;
+    &lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;
+        The zoomed image should appear mirrored horizontally, matching the
+        original.
+      &lt;/p&gt;
+      &lt;Zoom {...props}&gt;
+        &lt;img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height=&quot;320&quot;
+          style={{ transform: &#39;scaleX(-1)&#39; }}
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Mirror Vertical</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const MirrorVertical = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;
+      Mirrored image with &lt;code&gt;transform: scaleY(-1)&lt;/code&gt;
+    &lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;
+        The zoomed image should appear mirrored vertically, matching the
+        original.
+      &lt;/p&gt;
+      &lt;Zoom {...props}&gt;
+        &lt;img
+          alt={imgTeAraiPoint.alt}
+          src={imgTeAraiPoint.src}
+          height=&quot;320&quot;
+          style={{ transform: &#39;scaleY(-1)&#39; }}
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
+            </div>
+            <div class="note ok">
+              <div class="row">
+                <span class="ex-name">Mirror Both</span>
+                <span class="badge ok">story ok</span>
+              </div>
+              
+              
+              <pre><code>const MirrorBoth = props =&gt; (
+  &lt;main aria-label=&quot;Story&quot;&gt;
+    &lt;h1&gt;
+      Mirrored image with &lt;code&gt;transform: scale(-1, -1)&lt;/code&gt;
+    &lt;/h1&gt;
+    &lt;div className=&quot;mw-600&quot;&gt;
+      &lt;p&gt;
+        The zoomed image should appear mirrored both horizontally and
+        vertically, matching the original.
+      &lt;/p&gt;
+      &lt;Zoom {...props}&gt;
+        &lt;img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height=&quot;320&quot;
+          style={{ transform: &#39;scale(-1, -1)&#39; }}
+          decoding=&quot;async&quot;
+          loading=&quot;lazy&quot;
+        /&gt;
+      &lt;/Zoom&gt;
+    &lt;/div&gt;
+  &lt;/main&gt;
+);</code></pre>
             </div>
         </div>
     
