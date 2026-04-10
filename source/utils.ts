@@ -519,6 +519,7 @@ export const getStyleModalImg: GetStyleModalImg = ({
     loadedImgEl != null && loadedImgEl.naturalHeight !== 0
       ? loadedImgEl.naturalHeight
       : imgRect.height
+
   const targetWidth =
     loadedImgEl != null && loadedImgEl.naturalWidth !== 0
       ? loadedImgEl.naturalWidth
@@ -571,6 +572,27 @@ export const getStyleModalImg: GetStyleModalImg = ({
     ...styleDivImg,
   }
 
+  // Preserve any CSS transform (e.g. scaleX(-1)) on the source element so
+  // the modal image matches it. The translates recenter around the element's
+  // midpoint to compensate for transform-origin: top-left (set in styles.css).
+  const { transform: userTransform } = targetElComputedStyle
+  let centeredUserTransform = ''
+
+  if (userTransform !== 'none' && userTransform !== '') {
+    const halfWidth = parseFloat(String(style.width ?? 0)) / 2
+    const halfHeight = parseFloat(String(style.height ?? 0)) / 2
+
+    centeredUserTransform = [
+      `translate(${halfWidth}px,${halfHeight}px)`,
+      userTransform,
+      `translate(${-halfWidth}px,${-halfHeight}px)`,
+    ].join(' ')
+  }
+
+  style.transform = [String(style.transform), centeredUserTransform]
+    .filter(Boolean)
+    .join(' ')
+
   if (isZoomed) {
     const viewportX = window.innerWidth / 2
     const viewportY = window.innerHeight / 2
@@ -578,6 +600,7 @@ export const getStyleModalImg: GetStyleModalImg = ({
     const childCenterX =
       parseFloat(String(style.left ?? 0)) +
       parseFloat(String(style.width ?? 0)) / 2
+
     const childCenterY =
       parseFloat(String(style.top ?? 0)) +
       parseFloat(String(style.height ?? 0)) / 2
@@ -590,7 +613,13 @@ export const getStyleModalImg: GetStyleModalImg = ({
       style.transitionDuration = '0.01ms'
     }
 
-    style.transform = `translate(${translateX}px,${translateY}px) scale(1)`
+    style.transform = [
+      `translate(${translateX}px,${translateY}px)`,
+      'scale(1)',
+      centeredUserTransform,
+    ]
+      .filter(Boolean)
+      .join(' ')
   }
 
   return style

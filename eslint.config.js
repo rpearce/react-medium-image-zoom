@@ -34,7 +34,11 @@ export default [
         ...eslintConfigLove.languageOptions?.parserOptions,
         projectService: {
           ...eslintConfigLove.languageOptions?.parserOptions?.projectService,
-          allowDefaultProject: ['.storybook/main.ts', '.storybook/preview.tsx'],
+          allowDefaultProject: [
+            '.storybook/main.ts',
+            '.storybook/preview.tsx',
+            'vitest.config.ts',
+          ],
         },
       },
     },
@@ -44,6 +48,12 @@ export default [
     rules: {
       'max-lines': 'off',
       'no-console': 'off',
+    },
+  },
+  {
+    files: ['**/*.test.ts'],
+    rules: {
+      'max-lines': 'off',
     },
   },
   eslintConfigPrettier,
