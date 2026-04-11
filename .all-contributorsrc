@@ -706,6 +706,13 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/40715044?v=4",
       "profile": "https://skk.moe/",
       "contributions": ["code"]
+    },
+    {
+      "login": "MichalKowalczyk",
+      "name": "Michał Kowalczyk",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17525378?v=4",
+      "profile": "https://github.com/MichalKowalczyk",
+      "contributions": ["bug"]
     }
   ],
   "repoType": "github",

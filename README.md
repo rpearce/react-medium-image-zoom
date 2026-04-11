@@ -1,6 +1,6 @@
 # react-medium-image-zoom
 
-[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![react-medium-image-zoom bundlejs badge](https://deno.bundlejs.com/?q=react-medium-image-zoom&badge=&config={%22esbuild%22:{%22external%22:[%22react%22,%22react-dom%22]}})](https://bundlejs.com/?q=react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-94-orange.svg)](#contributors-)
+[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![react-medium-image-zoom bundlejs badge](https://deno.bundlejs.com/?q=react-medium-image-zoom&badge=&config={%22esbuild%22:{%22external%22:[%22react%22,%22react-dom%22]}})](https://bundlejs.com/?q=react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-95-orange.svg)](#contributors-)
 
 The original [medium.com-inspired image zooming](https://medium.design/image-zoom-on-medium-24d146fc0c20)
 library for [React](https://reactjs.org).
@@ -495,6 +495,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Akhileswar6"><img src="https://avatars.githubusercontent.com/u/159161616?v=4?s=40" width="40px;" alt="Akhileswar Kamale"/><br /><sub><b>Akhileswar Kamale</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3AAkhileswar6" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://mwspace.com/"><img src="https://avatars.githubusercontent.com/u/29952045?v=4?s=40" width="40px;" alt="MwSpace llc"/><br /><sub><b>MwSpace llc</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3AMwSpaceLLC" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://skk.moe/"><img src="https://avatars.githubusercontent.com/u/40715044?v=4?s=40" width="40px;" alt="Sukka"/><br /><sub><b>Sukka</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/commits?author=SukkaW" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/MichalKowalczyk"><img src="https://avatars.githubusercontent.com/u/17525378?v=4?s=40" width="40px;" alt="Michał Kowalczyk"/><br /><sub><b>Michał Kowalczyk</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3AMichalKowalczyk" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
