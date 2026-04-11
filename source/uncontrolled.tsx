@@ -1,5 +1,5 @@
 import React from 'react'
-import { Controlled, type ControlledProps } from './Controlled.js'
+import { Controlled, type ControlledProps } from './controlled.js'
 
 // =============================================================================
 
