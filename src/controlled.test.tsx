@@ -202,6 +202,26 @@ describe('Controlled', () => {
     unmount()
     expect(document.body.style.overflow).toBe('auto')
   })
+
+  it('connects aria attributes to matching element ids', async () => {
+    const { container } = await renderZoom({ isZoomed: true })
+
+    const modalImg = getPortalModalImg()
+    if (modalImg !== null) await fireTransitionEnd(modalImg)
+
+    const wrap = container.querySelector('[data-rmiz]')
+    const dialog = getPortalDialog()
+
+    // aria-owns on wrapper points to the dialog
+    const ariaOwns = wrap?.getAttribute('aria-owns')
+    expect(ariaOwns).toBeTruthy()
+    expect(dialog?.id).toBe(ariaOwns)
+
+    // aria-labelledby on dialog points to the modal image
+    const ariaLabelledBy = dialog?.getAttribute('aria-labelledby')
+    expect(ariaLabelledBy).toBeTruthy()
+    expect(modalImg?.id).toBe(ariaLabelledBy)
+  })
 })
 
 // =============================================================================
