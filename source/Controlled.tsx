@@ -4,19 +4,18 @@ import ReactDOM from 'react-dom'
 
 import { IEnlarge, ICompress } from './icons.js'
 
+import type { StyleObject, SupportedImage } from './utils/types.js'
+import { adjustSvgIDs } from './utils/adjust-svg-ids.js'
 import {
-  type StyleObject,
-  type SupportedImage,
-  adjustSvgIDs,
-  getImgAlt,
-  getImgSrc,
-  getStyleGhost,
-  getStyleModalImg,
   testDiv,
   testImg,
   testImgLoaded,
   testSvg,
-} from './utils.js'
+} from './utils/element-tests.js'
+import { getImgAlt } from './utils/get-img-alt.js'
+import { getImgSrc } from './utils/get-img-src.js'
+import { getStyleGhost } from './utils/get-style-ghost.js'
+import { getStyleModalImg } from './utils/get-style-modal-img.js'
 
 // =============================================================================
 
