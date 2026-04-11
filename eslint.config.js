@@ -38,6 +38,7 @@ export default [
             '.storybook/main.ts',
             '.storybook/preview.tsx',
             'vitest.config.ts',
+            'test/setup.ts',
           ],
         },
       },
@@ -51,7 +52,7 @@ export default [
     },
   },
   {
-    files: ['**/*.test.ts'],
+    files: ['**/*.test.{ts,tsx}'],
     rules: {
       'max-lines': 'off',
     },
