@@ -1,9 +1,9 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["source/**/*"],
-  "exclude": ["source/**/*.test.ts", "source/**/test-helpers.ts"],
+  "include": ["src/**/*"],
+  "exclude": ["src/**/*.test.ts", "src/**/test-helpers.ts"],
   "compilerOptions": {
     "noEmit": false,
-    "rootDir": "./source"
+    "rootDir": "./src"
   }
 }

@@ -3,8 +3,8 @@ import type { Meta, StoryFn } from '@storybook/react-vite'
 
 import { waitFor, within, userEvent, expect } from 'storybook/test'
 
-import Zoom, { type UncontrolledProps } from '../source'
-import '../source/styles.css'
+import Zoom, { type UncontrolledProps } from '../src'
+import '../src/styles.css'
 import './base.css'
 
 import {

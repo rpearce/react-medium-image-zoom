@@ -71,7 +71,7 @@
     "dist/"
   ],
   "scripts": {
-    "build": "tsc --project tsconfig.build.json && cp ./source/styles.css ./dist/styles.css && pnpm run check:ssr",
+    "build": "tsc --project tsconfig.build.json && cp ./src/styles.css ./dist/styles.css && pnpm run check:ssr",
     "build:docs": "rm -rf ./docs && mkdir ./docs && pnpm run storybook:build",
     "changeset": "changeset",
     "check:all": "conc 'pnpm:check:js' 'pnpm:check:types' 'pnpm:check:fmt'",
