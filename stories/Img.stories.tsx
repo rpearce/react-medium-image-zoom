@@ -190,7 +190,6 @@ const CustomZoomContentWithLoader: UncontrolledProps['ZoomContent'] = ({
    * Delay the loader so the loading spinner is noticeable
    */
   React.useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison -- ModalState is a const enum not exported from the library
     if (modalState === 'LOADING') {
       setShowLoader(true)
       if (isZoomImgLoaded) {
@@ -452,10 +451,8 @@ const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({
   }, [imgWidth, imgHeight, isLoaded])
 
   React.useLayoutEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison -- ModalState is a const enum not exported from the library
     if (modalState === 'LOADED') {
       setIsLoaded(true)
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison -- ModalState is a const enum not exported from the library
     } else if (modalState === 'UNLOADING') {
       setIsLoaded(false)
     }
