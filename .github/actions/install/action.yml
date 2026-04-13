@@ -12,7 +12,7 @@ runs:
     - name: Use nodejs
       uses: actions/setup-node@v4
       with:
-        node-version: 'latest'
+        node-version: '24'
         cache: 'pnpm'
 
     - name: Install dependencies
