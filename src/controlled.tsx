@@ -26,12 +26,7 @@ const IMAGE_QUERY = ['img', 'svg', '[role="img"]', '[data-zoom]']
 
 // =============================================================================
 
-const enum ModalState {
-  LOADED = 'LOADED',
-  LOADING = 'LOADING',
-  UNLOADED = 'UNLOADED',
-  UNLOADING = 'UNLOADING',
-}
+type ModalState = 'LOADED' | 'LOADING' | 'UNLOADED' | 'UNLOADING'
 
 // =============================================================================
 
@@ -152,7 +147,7 @@ class ControlledBase extends React.Component<
     id: '',
     isZoomImgLoaded: false,
     loadedImgEl: undefined,
-    modalState: ModalState.UNLOADED,
+    modalState: 'UNLOADED',
     shouldRefresh: false,
     styleGhost: {},
   }
@@ -236,20 +231,19 @@ class ControlledBase extends React.Component<
         ? `${a11yNameButtonZoom}: ${imgAlt}`
         : a11yNameButtonZoom
 
-    const isModalActive =
-      modalState === ModalState.LOADING || modalState === ModalState.LOADED
+    const isModalActive = modalState === 'LOADING' || modalState === 'LOADED'
 
     const dataContentState = hasImage ? 'found' : 'not-found'
 
     const dataOverlayState =
-      modalState === ModalState.UNLOADED || modalState === ModalState.UNLOADING
+      modalState === 'UNLOADED' || modalState === 'UNLOADING'
         ? 'hidden'
         : 'visible'
 
     // =========================================================================
 
     const styleContent: React.CSSProperties = {
-      visibility: modalState === ModalState.UNLOADED ? 'visible' : 'hidden',
+      visibility: modalState === 'UNLOADED' ? 'visible' : 'hidden',
     }
 
     // Share this with UNSAFE_handleSvg
@@ -281,9 +275,7 @@ class ControlledBase extends React.Component<
             sizes={imgSizes}
             src={imgSrc}
             srcSet={imgSrcSet}
-            {...(isZoomImgLoaded && modalState === ModalState.LOADED
-              ? zoomImg
-              : {})}
+            {...(isZoomImgLoaded && modalState === 'LOADED' ? zoomImg : {})}
             data-rmiz-modal-img=""
             height={this.styleModalImg.height ?? undefined}
             id={idModalImg}
@@ -385,7 +377,7 @@ class ControlledBase extends React.Component<
   }
 
   componentWillUnmount(): void {
-    if (this.state.modalState !== ModalState.UNLOADED) {
+    if (this.state.modalState !== 'UNLOADED') {
       this.bodyScrollEnable()
     }
     this.contentChangeObserver?.disconnect()
@@ -425,10 +417,7 @@ class ControlledBase extends React.Component<
       state: { modalState },
     } = this
 
-    if (
-      prevModalState !== ModalState.LOADING &&
-      modalState === ModalState.LOADING
-    ) {
+    if (prevModalState !== 'LOADING' && modalState === 'LOADING') {
       this.loadZoomImg()
       window.addEventListener('resize', this.handleResize, { passive: true })
       window.addEventListener('touchstart', this.handleTouchStart, {
@@ -444,15 +433,9 @@ class ControlledBase extends React.Component<
         passive: true,
       })
       document.addEventListener('keydown', this.handleKeyDown, true)
-    } else if (
-      prevModalState !== ModalState.LOADED &&
-      modalState === ModalState.LOADED
-    ) {
+    } else if (prevModalState !== 'LOADED' && modalState === 'LOADED') {
       window.addEventListener('wheel', this.handleWheel, { passive: true })
-    } else if (
-      prevModalState !== ModalState.UNLOADING &&
-      modalState === ModalState.UNLOADING
-    ) {
+    } else if (prevModalState !== 'UNLOADING' && modalState === 'UNLOADING') {
       this.ensureImgTransitionEnd()
       window.removeEventListener('wheel', this.handleWheel)
       window.removeEventListener('touchstart', this.handleTouchStart)
@@ -460,10 +443,7 @@ class ControlledBase extends React.Component<
       window.removeEventListener('touchend', this.handleTouchEnd)
       window.removeEventListener('touchcancel', this.handleTouchCancel)
       document.removeEventListener('keydown', this.handleKeyDown, true)
-    } else if (
-      prevModalState !== ModalState.UNLOADED &&
-      modalState === ModalState.UNLOADED
-    ) {
+    } else if (prevModalState !== 'UNLOADED' && modalState === 'UNLOADED') {
       this.bodyScrollEnable()
       window.removeEventListener('resize', this.handleResize)
       this.refModalImg.current?.removeEventListener(
@@ -789,14 +769,14 @@ class ControlledBase extends React.Component<
       'transitionend',
       this.handleImgTransitionEnd,
     ) // must be added after showModal
-    this.setState({ modalState: ModalState.LOADING })
+    this.setState({ modalState: 'LOADING' })
   }
 
   /**
    * Perform unzooming actions
    */
   unzoom = (): void => {
-    this.setState({ modalState: ModalState.UNLOADING })
+    this.setState({ modalState: 'UNLOADING' })
   }
 
   // ===========================================================================
@@ -809,10 +789,10 @@ class ControlledBase extends React.Component<
   handleImgTransitionEnd = (): void => {
     clearTimeout(this.timeoutTransitionEnd)
 
-    if (this.state.modalState === ModalState.LOADING) {
-      this.setState({ modalState: ModalState.LOADED })
-    } else if (this.state.modalState === ModalState.UNLOADING) {
-      this.setState({ shouldRefresh: false, modalState: ModalState.UNLOADED })
+    if (this.state.modalState === 'LOADING') {
+      this.setState({ modalState: 'LOADED' })
+    } else if (this.state.modalState === 'UNLOADING') {
+      this.setState({ shouldRefresh: false, modalState: 'UNLOADED' })
     }
   }
 
