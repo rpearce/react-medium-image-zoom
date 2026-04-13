@@ -13,5 +13,5 @@
     "sourceMap": false,
     "target": "es2021"
   },
-  "include": ["source/**/*", "stories/**/*"]
+  "include": ["src/**/*", "stories/**/*"]
 }

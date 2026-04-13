@@ -4,14 +4,14 @@
 1. [Fork](https://guides.github.com/activities/forking/) this repository
 1. [Clone](https://help.github.com/articles/cloning-a-repository/) your fork
 1. Add the upstream project (this one) as a git remote:
-   ```
+   ```text
    $ git remote add upstream git@github.com:rpearce/react-medium-image-zoom.git
    $ git fetch upstream
    $ git rebase upstream/main
    ```
 1. Check out a feature branch
-   ```
-   $ git checkout -b my-feature
+   ```text
+   $ git switch -C my-feature
    ```
 1. Make your changes
 1. Push your branch to your GitHub repo
@@ -34,21 +34,5 @@
 
 ## Testing
 
-Tests are located in the `test/` folder. Here's how to run them:
-
-```
-$ npm run test
-```
-
-To test in watch mode:
-
-```
-$ npm run test --watch
-```
-
-To generate a local coverage report:
-
-```
-$ npm run test --coverage
-$ open coverage/lcov-report/index.html
-```
+Ensure sure your changes are adequately tested via the Storybook `stories/`, and
+if automated testing is possible, feel free to add test coverage.
