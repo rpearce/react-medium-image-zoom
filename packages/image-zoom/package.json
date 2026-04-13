@@ -1,0 +1,46 @@
+{
+  "name": "@rpearce/image-zoom",
+  "version": "1.0.0",
+  "license": "BSD-3-Clause",
+  "description": "Accessible image zoom web component",
+  "type": "module",
+  "main": "./dist/image-zoom.js",
+  "types": "./dist/image-zoom.d.ts",
+  "customElements": "./custom-elements.json",
+  "exports": {
+    ".": {
+      "types": "./dist/image-zoom.d.ts",
+      "default": "./dist/image-zoom.js"
+    },
+    "./react": {
+      "types": "./react.d.ts",
+      "default": "./react.js"
+    },
+    "./styles.css": "./styles.css"
+  },
+  "sideEffects": [
+    "./dist/image-zoom.js",
+    "./react.js",
+    "*.css"
+  ],
+  "files": [
+    "LICENSE",
+    "README.md",
+    "custom-elements.json",
+    "dist/",
+    "react.d.ts",
+    "react.js",
+    "styles.css"
+  ],
+  "scripts": {
+    "prebuild": "rm -rf ./dist",
+    "build": "tsc --project tsconfig.build.json && pnpm run manifest",
+    "manifest": "custom-elements-manifest analyze",
+    "check:types": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/rpearce/react-medium-image-zoom.git",
+    "directory": "packages/image-zoom"
+  }
+}

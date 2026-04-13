@@ -1,0 +1,385 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/image-zoom.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Accessible image zoom web component. Wraps an `<img>`, `<svg>`, or any\nelement carrying `role=\"img\"` / `data-zoom` and opens a full-viewport\nzoomed view on click or via the `zoomed` attribute.\n\nNon-`<img>` / non-`<svg>` elements (e.g. `<div data-zoom>`,\n`<span role=\"img\">`) must have a CSS `background-image` — that's\nwhere the modal pulls its source from. A bare `<div data-zoom>` with\nno background-image is silently non-zoomable because there's nothing\nto render in the modal.",
+          "name": "ImageZoomElement",
+          "cssProperties": [
+            {
+              "description": "Background color of the built-in zoom trigger button.",
+              "name": "--rmiz-btn-bg",
+              "default": "rgba(0,0,0,0.7)"
+            },
+            {
+              "description": "Foreground color of the built-in zoom trigger button.",
+              "name": "--rmiz-btn-color",
+              "default": "#fff"
+            },
+            {
+              "description": "Background color of the modal's unzoom button.",
+              "name": "--rmiz-btn-unzoom-bg",
+              "default": "rgba(0,0,0,0.7)"
+            },
+            {
+              "description": "Foreground color of the modal's unzoom button.",
+              "name": "--rmiz-btn-unzoom-color",
+              "default": "#fff"
+            },
+            {
+              "description": "Fully-opaque modal overlay color.",
+              "name": "--rmiz-overlay-bg",
+              "default": "rgba(255,255,255,1)"
+            },
+            {
+              "description": "Starting/ending modal overlay color used for fade-in/out.",
+              "name": "--rmiz-overlay-bg-hidden",
+              "default": "rgba(255,255,255,0)"
+            },
+            {
+              "description": "Duration of the overlay fade and image zoom transitions.",
+              "name": "--rmiz-transition-duration",
+              "default": "0.3s"
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "Invisible overlay positioned over the source image that hosts the default trigger button.",
+              "name": "ghost"
+            },
+            {
+              "description": "Wrapper around the default slot.",
+              "name": "content"
+            },
+            {
+              "description": "The built-in (fallback) zoom trigger button.",
+              "name": "btn-zoom"
+            },
+            {
+              "description": "The icon inside the built-in zoom button.",
+              "name": "btn-zoom-icon"
+            },
+            {
+              "description": "The modal `<dialog>` element.",
+              "name": "modal"
+            },
+            {
+              "description": "The opaque fade-in overlay inside the dialog.",
+              "name": "modal-overlay"
+            },
+            {
+              "description": "The positioning wrapper inside the overlay.",
+              "name": "modal-content"
+            },
+            {
+              "description": "The fallback modal image (shadow DOM).",
+              "name": "modal-img"
+            },
+            {
+              "description": "The fallback modal close button (shadow DOM).",
+              "name": "btn-unzoom"
+            },
+            {
+              "description": "The icon inside the built-in unzoom button.",
+              "name": "btn-unzoom-icon"
+            }
+          ],
+          "slots": [
+            {
+              "description": "Default slot for the source image or scalable element.",
+              "name": ""
+            },
+            {
+              "description": "Optional override for the built-in zoom trigger button. Provide a focusable element (e.g. `<button slot=\"trigger\">…</button>`) to replace the default. The fallback button stays for a11y when this slot is empty.",
+              "name": "trigger"
+            },
+            {
+              "description": "Optional override for the modal content (the part shown when the image is zoomed). The consumer's slotted content replaces the default `<img data-rmiz-modal-img>`. Put `[data-rmiz-modal-img]` on the element that should receive the zoom transform.",
+              "name": "modal"
+            },
+            {
+              "description": "Optional override for the modal's close button.",
+              "name": "modal-button"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "zoomed",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "zoomMargin",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "zoomSrc",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "zoomSrcset",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "zoomSizes",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "zoomCrossorigin",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "labelZoom",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "labelUnzoom",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "canSwipeToUnzoom",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "swipeToUnzoomThreshold",
+              "type": {
+                "text": "number"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "modalState",
+              "type": {
+                "text": "ModalState"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "isZoomImgLoaded",
+              "type": {
+                "text": "boolean"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "zoom",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              }
+            },
+            {
+              "kind": "method",
+              "name": "unzoom",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              }
+            },
+            {
+              "kind": "field",
+              "name": "modalContentContainer",
+              "type": {
+                "text": "HTMLDivElement"
+              },
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "btnUnzoom",
+              "type": {
+                "text": "HTMLButtonElement"
+              },
+              "description": "The active unzoom button inside the modal dialog. Exposed so\nconsumers can replace its icon/label or portal framework content\ninto it. Always available after construction — the dialog and its\ndefault button live in the shadow DOM from construction time. If\nthe consumer provides a `slot=\"modal-button\"` override, this returns\nthat slotted element instead of the shadow fallback.",
+              "readonly": true
+            }
+          ],
+          "events": [
+            {
+              "name": "image-zoom:state-change",
+              "type": {
+                "text": "CustomEvent<{ state: ModalState; previous: ModalState }>"
+              },
+              "description": "Fires on every transition of the internal modal state machine (`UNLOADED` → `LOADING` → `LOADED` → `UNLOADING` → `UNLOADED`)."
+            },
+            {
+              "name": "image-zoom:error",
+              "type": {
+                "text": "CustomEvent<{ src: string; type: 'load' }>"
+              },
+              "description": "Fires when the source image or optional zoom image fails to load."
+            },
+            {
+              "type": {
+                "text": "CustomEvent<{ zoomed: boolean }>"
+              },
+              "description": "Cancelable. Fires when the user initiates a zoom or unzoom. Call `event.preventDefault()` to enter controlled mode and manage the `zoomed` attribute yourself.",
+              "name": "image-zoom:zoom-change"
+            },
+            {
+              "type": {
+                "text": "CustomEvent<{ button: HTMLButtonElement }>"
+              },
+              "description": "Fires when the active unzoom button changes (e.g. because a consumer dynamically assigned `slot=\"modal-button\"`). Framework wrappers caching the `btnUnzoom` getter should re-read it on this event to keep portals targeted at the correct element.",
+              "name": "image-zoom:btn-unzoom-change"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "zoomed",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Controls whether the modal is open. Toggling dispatches `image-zoom:zoom-change`; callers can `preventDefault` it to implement controlled mode."
+            },
+            {
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "When set, clicks on the image are a no-op and bubble normally to parent handlers."
+            },
+            {
+              "name": "zoom-margin",
+              "type": {
+                "text": "number"
+              },
+              "description": "Pixel offset reserved around the zoomed image inside the viewport. Defaults to `0`."
+            },
+            {
+              "name": "zoom-src",
+              "type": {
+                "text": "string"
+              },
+              "description": "Optional higher-resolution image URL loaded lazily when the user zooms in."
+            },
+            {
+              "name": "zoom-srcset",
+              "type": {
+                "text": "string"
+              },
+              "description": "`srcset` for the zoom image (mirrors the `<img srcset>` attribute)."
+            },
+            {
+              "name": "zoom-sizes",
+              "type": {
+                "text": "string"
+              },
+              "description": "`sizes` for the zoom image."
+            },
+            {
+              "name": "zoom-crossorigin",
+              "type": {
+                "text": "string"
+              },
+              "description": "`crossorigin` for the zoom image."
+            },
+            {
+              "name": "label-zoom",
+              "type": {
+                "text": "string"
+              },
+              "description": "Accessible label for the built-in zoom trigger button. Appended with the source image's `alt` when present. Defaults to `\"Expand image\"`."
+            },
+            {
+              "name": "label-unzoom",
+              "type": {
+                "text": "string"
+              },
+              "description": "Accessible label for the modal's close button. Defaults to `\"Minimize image\"`."
+            },
+            {
+              "name": "can-swipe-to-unzoom",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "When `false`, disables the swipe-down-to-close gesture on touch devices. Defaults to `true`."
+            },
+            {
+              "name": "swipe-to-unzoom-threshold",
+              "type": {
+                "text": "number"
+              },
+              "description": "Pixel threshold for the swipe-to-close gesture. Defaults to `10`."
+            }
+          ],
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "tagName": "image-zoom",
+          "customElement": true,
+          "summary": "Accessible medium.com-style image zoom as a framework-agnostic web component."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "ImageZoomElement",
+          "declaration": {
+            "name": "ImageZoomElement",
+            "module": "src/image-zoom.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "ModalState",
+          "declaration": {
+            "name": "ModalState",
+            "module": "src/image-zoom.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "image-zoom",
+          "declaration": {
+            "name": "ImageZoomElement",
+            "module": "src/image-zoom.ts"
+          }
+        }
+      ]
+    }
+  ]
+}

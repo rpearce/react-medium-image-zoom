@@ -1,0 +1,692 @@
+import React from 'react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
+
+import { waitFor, within, userEvent, expect } from 'storybook/test'
+
+import Zoom from 'react-medium-image-zoom'
+import '@rpearce/image-zoom/styles.css'
+import './base.css'
+
+import {
+  imgEarth,
+  imgGlenorchyLagoon,
+  imgHookerValleyTrack,
+  imgKeaLarge,
+  imgKeaSmall,
+  imgNzMap,
+  imgTeAraiPoint,
+  imgTekapo,
+  imgThatWanakaTree,
+} from './images'
+
+const meta: Meta<typeof Zoom> = {
+  title: '<img>',
+  component: Zoom,
+}
+
+export default meta
+
+type Story = StoryFn<typeof Zoom>
+
+// =============================================================================
+
+// Modern Fisher-Yates shuffle algo
+function shuffle<T extends unknown[]>(xs: T): T {
+  const xsClone = structuredClone(xs)
+
+  for (let i = xsClone.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[xsClone[i], xsClone[j]] = [xsClone[j], xsClone[i]]
+  }
+
+  return xsClone
+}
+
+// =============================================================================
+
+export const Regular: Story = props => {
+  const handleZoomChange = React.useCallback<
+    NonNullable<React.ComponentProps<typeof Zoom>['onZoomChange']>
+  >((value, { event }) => {
+    console.log('handleZoomChange info!', { value, event })
+  }, [])
+
+  return (
+    <main aria-label="Story">
+      <h1>Zooming a regular image</h1>
+      <div
+        className="mw-600"
+        style={{ display: 'flex', flexDirection: 'column' }}
+      >
+        <Zoom {...props} onZoomChange={handleZoomChange}>
+          <img
+            alt={imgThatWanakaTree.alt}
+            src={imgThatWanakaTree.src}
+            height="320"
+            decoding="async"
+            loading="lazy"
+          />
+        </Zoom>
+      </div>
+    </main>
+  )
+}
+
+// =============================================================================
+
+export const ZoomMargin: Story = props => (
+  <main aria-label="Story">
+    <h1>Setting a zoomMargin of 45(px)</h1>
+    <div className="mw-600">
+      <p>
+        This example should always be offset from the window by at least 45px
+      </p>
+      <Zoom {...props} zoomMargin={45}>
+        <img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height="320"
+          decoding="async"
+          loading="lazy"
+        />
+      </Zoom>
+    </div>
+  </main>
+)
+
+// =============================================================================
+
+export const SmallPortrait: Story = props => (
+  <main aria-label="Story">
+    <h1>A portrait image with a small width specified</h1>
+    <div className="mw-600">
+      <p>Small size specifications scale well, too — even on mobile.</p>
+      <Zoom {...props}>
+        <img
+          alt={imgTeAraiPoint.alt}
+          src={imgTeAraiPoint.src}
+          height="112"
+          decoding="async"
+          loading="lazy"
+        />
+      </Zoom>
+    </div>
+  </main>
+)
+
+// =============================================================================
+
+export const SVGSource: Story = props => (
+  <main aria-label="Story">
+    <h1>An image with an SVG src</h1>
+    <div className="mw-600">
+      <Zoom {...props}>
+        <img
+          alt={imgNzMap.alt}
+          src={imgNzMap.src}
+          width="150"
+          decoding="async"
+          loading="lazy"
+        />
+      </Zoom>
+    </div>
+  </main>
+)
+
+// =============================================================================
+
+export const DataSVGSource: Story = () => (
+  <main aria-label="Story">
+    <h1>
+      An image with a <code>data:image/svg+xml</code> <code>src</code>
+    </h1>
+    <div className="data-uri-img mw-600">
+      <Zoom>
+        <img
+          alt="Gatsby G Logo"
+          src="data:image/svg+xml,%3Csvg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2a10 10 0 110 20 10 10 0 010-20zm0 2c-3.73 0-6.86 2.55-7.75 6L14 19.75c3.45-.89 6-4.02 6-7.75h-5.25v1.5h3.45a6.37 6.37 0 01-3.89 4.44L6.06 9.69C7 7.31 9.3 5.63 12 5.63c2.13 0 4 1.04 5.18 2.65l1.23-1.06A7.959 7.959 0 0012 4zm-8 8a8 8 0 008 8c.04 0 .09 0-8-8z' fill='%23639'/%3E%3C/svg%3E"
+        />
+      </Zoom>
+    </div>
+  </main>
+)
+
+// =============================================================================
+
+export const ProvideZoomImg: Story = props => (
+  <main aria-label="Story">
+    <h1>
+      An image with a larger <code>zoomImg</code>
+    </h1>
+    <div className="mw-600">
+      <p>
+        When zoomed, the original image will scale to as large as the window
+        will allow, and then it will be replaced by an image that is downloaded
+        in the background.
+      </p>
+      <Zoom
+        {...props}
+        zoomImg={{
+          alt: imgKeaLarge.alt,
+          src: imgKeaLarge.src,
+        }}
+      >
+        <img alt={imgKeaSmall.alt} src={imgKeaSmall.src} width="150" />
+      </Zoom>
+    </div>
+  </main>
+)
+
+export const SmallSrcSize: Story = props => (
+  <main aria-label="Story">
+    <h1>An image with a small size</h1>
+    <div className="mw-600">
+      <p>
+        In order to prevent blurry images, An image won&apos;t scale up larger
+        than its natural dimensions.
+      </p>
+      <Zoom {...props}>
+        <img alt={imgKeaSmall.alt} src={imgKeaSmall.src} width="150" />
+      </Zoom>
+    </div>
+  </main>
+)
+
+// =============================================================================
+
+export const CustomModalStyles: Story = props => (
+  <main aria-label="Story">
+    <h1>Custom Modal Styles</h1>
+    <div className="mw-600">
+      <p>Use CSS to customize the zoom modal styles.</p>
+      <p>
+        Here, we slow down the transition time and use a different overlay
+        color.
+      </p>
+      <div className="custom-zoom">
+        <Zoom {...props}>
+          <img
+            alt={imgGlenorchyLagoon.alt}
+            src={imgGlenorchyLagoon.src}
+            width="400"
+          />
+        </Zoom>
+      </div>
+      <p>
+        The shadow-DOM internals are styled via CSS custom properties and{' '}
+        <code>::part()</code> selectors. Here are the styles used:
+      </p>
+      <pre>
+        <code>
+          {`
+.custom-zoom image-zoom {
+  --rmiz-transition-duration: 0.8s;
+  --rmiz-overlay-bg: rgb(56, 58, 89);
+  --rmiz-overlay-bg-hidden: rgb(56, 58, 89, 0);
+  --rmiz-btn-unzoom-bg: #bd93f9;
+  --rmiz-btn-unzoom-color: #000;
+}
+.custom-zoom image-zoom::part(btn-unzoom):focus-visible {
+  outline-offset: 0.4rem;
+  outline: 0.2rem solid #bd93f9;
+}
+`}
+        </code>
+      </pre>
+    </div>
+  </main>
+)
+
+// =============================================================================
+
+export const ZoomImageFromInsideDialog: Story = props => {
+  const refBtn = React.useRef<HTMLButtonElement>(null)
+  const refModal = React.useRef<HTMLDialogElement>(null)
+
+  const handleBtnClick = React.useCallback(() => {
+    refModal.current?.showModal()
+  }, [])
+
+  React.useEffect(() => {
+    const handleDocumentClick = (e: MouseEvent): void => {
+      const { target } = e
+      if (!(target instanceof Element)) return
+
+      if (
+        refBtn.current?.contains(target) !== true &&
+        refModal.current?.contains(target) !== true
+      ) {
+        refModal.current?.close()
+      }
+    }
+
+    document.addEventListener('click', handleDocumentClick)
+
+    return () => {
+      document.removeEventListener('click', handleDocumentClick)
+    }
+  }, [])
+
+  return (
+    <main aria-label="Story">
+      <h1>Zoom Image From Inside Dialog</h1>
+      <div className="mw-600">
+        <button onClick={handleBtnClick} ref={refBtn} type="button">
+          Open Modal
+        </button>
+        <dialog aria-modal="true" ref={refModal}>
+          <form method="dialog">
+            <button type="submit">Close</button>
+          </form>
+          <h1>Zooming should work!</h1>
+          <div>
+            <Zoom {...props}>
+              <img
+                alt={imgGlenorchyLagoon.alt}
+                src={imgGlenorchyLagoon.src}
+                width="400"
+              />
+            </Zoom>
+          </div>
+        </dialog>
+      </div>
+    </main>
+  )
+}
+// =============================================================================
+
+interface DelayedImgProps {
+  timer: number
+  alt: string
+  src: string
+  width: string
+  height: string
+}
+
+const DelayedImg = (props: DelayedImgProps): React.JSX.Element => {
+  const { alt, height, src, timer, width } = props
+
+  const stylePlaceholder: React.CSSProperties =
+    timer === 0
+      ? { opacity: 0, visibility: 'hidden', position: 'absolute' }
+      : { opacity: 1 }
+
+  React.useEffect(() => {
+    const img = new Image()
+    img.src = src
+    void img.decode()
+  }, [src])
+
+  return (
+    <div>
+      <img /* placeholder */
+        alt=""
+        aria-hidden="true"
+        decoding="async"
+        height={height}
+        src="data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAALABQDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAgQA/8QAFgEBAQEAAAAAAAAAAAAAAAAAAgED/9oADAMBAAIQAxAAAAFutLOHXan/xAAaEAACAwEBAAAAAAAAAAAAAAAAEwIDEQES/9oACAEBAAEFAmyxnT3YKhiqxcD/xAAYEQADAQEAAAAAAAAAAAAAAAAAAQISUf/aAAgBAwEBPwFKjNdP/8QAFxEBAAMAAAAAAAAAAAAAAAAAAAERIf/aAAgBAgEBPwHFw//EABcQAQEBAQAAAAAAAAAAAAAAAAAxATL/2gAIAQEABj8Cq6qOUf/EAB0QAQACAgIDAAAAAAAAAAAAAAEAETFBIVFhcYH/2gAIAQEAAT8hLTa9xQK5/MRwq9wB94FrKsV+z//aAAwDAQACAAMAAAAQg+//xAAYEQACAwAAAAAAAAAAAAAAAAAAARFB0f/aAAgBAwEBPxBCxzaP/8QAFhEBAQEAAAAAAAAAAAAAAAAAAQAx/9oACAECAQE/EEUAZf/EAB0QAAICAgMBAAAAAAAAAAAAAAERADEhQVGRocH/2gAIAQEAAT8QrTbZUQmHR1CiO0TexMDR5OfZSZbuE1IcAh9n/9k="
+        style={stylePlaceholder}
+        width={width}
+      />
+      {timer === 0 && (
+        <img
+          alt={alt}
+          decoding="async"
+          loading="lazy"
+          src={src}
+          width={width}
+        />
+      )}
+    </div>
+  )
+}
+
+export const DelayedImageRender: Story = props => {
+  const { timer } = useTimer(5000)
+
+  return (
+    <main aria-label="Story">
+      <h1>A sub-component which delays rendering</h1>
+      <div className="mw-600">
+        <p>
+          This examples simulates an issue caused by the gatsby-plugin-image
+          (and potentially others) where the actual image element isn&apos;t
+          found on the first render.
+        </p>
+        <div>
+          Image loads in: <span role="timer">{timer / 1000}</span>
+        </div>
+        <Zoom {...props}>
+          <DelayedImg
+            timer={timer}
+            alt={imgEarth.alt}
+            src={imgEarth.src}
+            height="200"
+            width="400"
+          />
+        </Zoom>
+      </div>
+    </main>
+  )
+}
+
+// =============================================================================
+
+export const DelayedDisplayNone: Story = props => {
+  const { timer } = useTimer(5000)
+  const classImg = timer === 0 ? undefined : 'display-none'
+
+  return (
+    <main aria-label="Story">
+      <h1>
+        A delayed <code>display: none;</code> image
+      </h1>
+      <div className="mw-600">
+        <p>
+          This examples simulates an image being hidden with CSS and then shown
+          after the countdown.
+        </p>
+        <div>
+          Image loads in: <span role="timer">{timer / 1000}</span>
+        </div>
+        <Zoom {...props}>
+          <img
+            alt={imgTekapo.alt}
+            src={imgTekapo.src}
+            className={classImg}
+            height="320"
+            decoding="async"
+            loading="lazy"
+          />
+        </Zoom>
+      </div>
+    </main>
+  )
+}
+
+// =============================================================================
+
+export const InlineImage: Story = props => (
+  <main aria-label="Story">
+    <h1>Inline Image</h1>
+    <p className="inline">
+      This example is of an image that is inline with text.
+      <Zoom {...props}>
+        <img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height="320"
+          decoding="async"
+          loading="lazy"
+        />
+      </Zoom>
+    </p>
+  </main>
+)
+
+// =============================================================================
+
+export const CycleImages: Story = props => {
+  const [img, setImg] = React.useState<{ alt: string; src: string }>(
+    imgThatWanakaTree,
+  )
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setImg(
+        shuffle([
+          imgThatWanakaTree,
+          imgEarth,
+          imgNzMap,
+          imgTekapo,
+          imgKeaLarge,
+          imgTeAraiPoint,
+          imgGlenorchyLagoon,
+          imgHookerValleyTrack,
+        ] as const)[0],
+      )
+    }, 3000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+
+  return (
+    <main aria-label="Story">
+      <h1>Cycle through images</h1>
+      <p>
+        This helps to test the ghost element that positions the button. Press
+        Tab to focus the button, then sit and watch it reposition with each new
+        image!
+      </p>
+      <p>
+        <Zoom {...props}>
+          <img
+            alt={img.alt}
+            src={img.src}
+            height="320"
+            decoding="async"
+            loading="lazy"
+          />
+        </Zoom>
+      </p>
+    </main>
+  )
+}
+
+// =============================================================================
+
+export const SwipeToUnzoomDisabled: Story = props => (
+  <main aria-label="Story">
+    <h1>Swipe to Unzoom Disabled</h1>
+    <p>
+      This example demonstrates preventing swipe gestures from unzooming when an
+      image is zoomed. This is best tested on a touchscreen device!
+    </p>
+    <div>
+      <Zoom {...props} canSwipeToUnzoom={false}>
+        <img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height="320"
+          decoding="async"
+          loading="lazy"
+        />
+      </Zoom>
+    </div>
+  </main>
+)
+
+export const SwipeToUnzoomThreshold: Story = props => (
+  <main aria-label="Story">
+    <h1>Swipe to Unzoom Threshold</h1>
+    <p>
+      This example demonstrates increasing the threshold required for a swipe
+      gesture on a touchscreen device to unzoom when an image is zoomed. This is
+      best tested on a touchscreen device!
+    </p>
+    <p>
+      The default is <code>10</code> (px), but this example is set to{' '}
+      <code>200</code> (px); that&apos;s how far you&apos;ll have to move your
+      finger across the screen.
+    </p>
+    <div>
+      <Zoom {...props} swipeToUnzoomThreshold={200}>
+        <img
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          height="320"
+          decoding="async"
+          loading="lazy"
+        />
+      </Zoom>
+    </div>
+  </main>
+)
+
+// =============================================================================
+
+export const SelectCards: Story = props => (
+  <main aria-label="Story">
+    <h1>Selecting cards and zooming without triggering selection state</h1>
+    <div
+      className="mw-600"
+      style={{ display: 'flex', flexDirection: 'column' }}
+    >
+      <ul className="cards">
+        <CardItem
+          alt={imgThatWanakaTree.alt}
+          src={imgThatWanakaTree.src}
+          zoomProps={props}
+        />
+        <CardItem
+          alt={imgGlenorchyLagoon.alt}
+          src={imgGlenorchyLagoon.src}
+          zoomProps={props}
+        />
+      </ul>
+    </div>
+  </main>
+)
+
+function CardItem({
+  alt,
+  src,
+  zoomProps,
+}: {
+  alt: string
+  src: string
+  zoomProps: Omit<React.ComponentProps<typeof Zoom>, 'children'>
+}): React.JSX.Element {
+  const [isSelected, setIsSelected] = React.useState(false)
+
+  const handleItemClick = React.useCallback(() => {
+    setIsSelected(isSelected => !isSelected)
+  }, [])
+
+  const handleInputClick: React.MouseEventHandler<HTMLInputElement> =
+    React.useCallback(e => {
+      e.stopPropagation()
+    }, [])
+
+  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> =
+    React.useCallback(e => {
+      setIsSelected(e.currentTarget.checked)
+    }, [])
+
+  const handleZoomChange = React.useCallback<
+    NonNullable<React.ComponentProps<typeof Zoom>['onZoomChange']>
+  >((value, { event }) => {
+    event.stopPropagation()
+
+    console.log('handleZoomChange (after event.stopPropagation())', {
+      value,
+      event,
+    })
+  }, [])
+
+  return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- demo card selection uses click handler on li for simplicity
+    <li className="card" onClick={handleItemClick}>
+      <label>
+        <input
+          aria-label="Select item"
+          checked={isSelected}
+          onChange={handleInputChange}
+          onClick={handleInputClick}
+          type="checkbox"
+        />
+      </label>
+      <Zoom {...zoomProps} onZoomChange={handleZoomChange}>
+        <img
+          alt={alt}
+          src={src}
+          height="320"
+          width="320"
+          decoding="async"
+          loading="lazy"
+        />
+      </Zoom>
+    </li>
+  )
+}
+
+// =============================================================================
+// INTERACTIONS
+
+export const AutomatedTest: Story = Regular.bind({})
+AutomatedTest.args = { ...Regular.args }
+AutomatedTest.storyName = '(Automated Test)'
+AutomatedTest.play = async ({ canvasElement }) => {
+  const canvas = within(canvasElement)
+
+  await waitFor(async () => {
+    await expect(
+      canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`),
+    ).toBeVisible()
+  })
+
+  await delay(1000)
+
+  // TAB to expand button and press ENTER
+  await userEvent.tab()
+  await userEvent.keyboard('{Enter}', { delay: 1000 })
+
+  await waitFor(async () => {
+    const dialog = document.querySelector('dialog')
+
+    if (dialog == null) {
+      throw new Error('rmiz automated test failure: cannot find <dialog>')
+    }
+
+    await expect(dialog).toHaveAttribute('open')
+    await expect(
+      dialog.querySelector(`img[alt="${imgThatWanakaTree.alt}"]`),
+    ).toBeVisible()
+    await expect(
+      dialog.querySelector('[aria-label="Minimize image"'),
+    ).toHaveFocus()
+  })
+
+  await delay(1000)
+
+  await userEvent.keyboard('{Escape}', { delay: 1000 })
+
+  await waitFor(async () => {
+    await expect(document.querySelector('dialog')).not.toHaveAttribute('open')
+    await expect(
+      canvas.getByLabelText(`Expand image: ${imgThatWanakaTree.alt}`),
+    ).toHaveFocus()
+  })
+}
+
+// =============================================================================
+// HELPERS
+
+const delay = async (duration: number): Promise<void> => {
+  // eslint-disable-next-line promise/avoid-new -- setTimeout requires a Promise wrapper
+  await new Promise<void>(resolve => {
+    setTimeout(resolve, duration)
+  })
+}
+
+const useTimer = (duration: number): { timer: number } => {
+  const [timer, setTimer] = React.useState(duration)
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      if (timer === 0) {
+        clearInterval(interval)
+      } else {
+        setTimer(timer - 1000)
+      }
+    }, 1000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [timer])
+
+  return { timer }
+}

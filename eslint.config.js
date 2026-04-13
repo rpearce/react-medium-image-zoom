@@ -19,6 +19,15 @@ export default [
       '**/docs/',
       '**/node_modules/',
       'eslint.config.js',
+      // Stub side-effect target for the optional `@rpearce/image-zoom/react`
+      // JSX type augmentation. The actual augmentation lives in the sibling
+      // react.d.ts; this file is just an empty module so the runtime side-
+      // effect import resolves.
+      'packages/image-zoom/react.js',
+      // Build config for @custom-elements-manifest/analyzer. Non-TS file
+      // that would otherwise trip the bottom config block's TS-specific
+      // rules (same reason as react.js above).
+      'packages/image-zoom/custom-elements-manifest.config.mjs',
     ],
   },
   eslintPluginReact.configs.flat.recommended,
@@ -37,15 +46,13 @@ export default [
           allowDefaultProject: [
             '.storybook/main.ts',
             '.storybook/preview.tsx',
-            'vitest.config.ts',
-            'test/setup.ts',
           ],
         },
       },
     },
   },
   {
-    files: ['stories/**/*'],
+    files: ['packages/stories/**/*'],
     rules: {
       'max-lines': 'off',
       'no-console': 'off',
@@ -72,6 +79,7 @@ export default [
       eqeqeq: ['error', 'always', { null: 'ignore' }],
       'react/prop-types': 'off',
       '@typescript-eslint/prefer-function-type': 'off',
+      '@typescript-eslint/prefer-destructuring': 'off',
       '@typescript-eslint/consistent-type-imports': [
         'error',
         { fixStyle: 'inline-type-imports' },

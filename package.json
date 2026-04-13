@@ -1,15 +1,8 @@
 {
-  "name": "react-medium-image-zoom",
-  "version": "5.4.3",
+  "name": "react-medium-image-zoom-root",
+  "private": true,
   "license": "BSD-3-Clause",
-  "description": "Accessible medium.com-style image zoom for React",
   "type": "module",
-  "main": "./dist/index.js",
-  "exports": {
-    ".": "./dist/index.js",
-    "./dist/styles.css": "./dist/styles.css"
-  },
-  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/rpearce/react-medium-image-zoom.git"
@@ -17,77 +10,27 @@
   "homepage": "https://github.com/rpearce/react-medium-image-zoom",
   "bugs": "https://github.com/rpearce/react-medium-image-zoom/issues",
   "author": "Robert Pearce <me@robertwpearce.com> (https://robertwpearce.com)",
-  "contributors": [
-    "Robert Pearce <me@robertwpearce.com> (https://robertwpearce.com)",
-    "Cameron Bothner (https://github.com/cbothner)",
-    "ismay <ismay@ismaywolff.nl> (https://www.ismaywolff.nl)",
-    "Jeremy Bini <jeremybini@gmail.com> (https://jbini.com)",
-    "Josh Sloat (http://www.joshsloat.com)",
-    "Kaycee Ingram <kayceeingram33@gmail.com> (https://github.com/HippoDippo)",
-    "Ludwig Frank (https://github.com/ludwigfrank)",
-    "Rahul Gaba <rahulgaba16@gmail.com> (http://rahulgaba.com)",
-    "Spencer Davis (https://github.com/spencerfdavis)",
-    "dnlnvl (https://github.com/dnlnvl)",
-    "Douglas Galdino <dougg0k@gmail.com> (https://dougg0k.js.org)",
-    "Sun Knudsen (https://sunknudsen.com)",
-    "Youngrok Kim <rok0810@gmail.com> (https://rokoroku.github.io)",
-    "Josh-Cena <sidachen2003@gmail.com> (https://joshcena.com)",
-    "Yida Zhang <zjhch123@qq.com>",
-    "eych",
-    "tshmieldev",
-    "David Edler (https://github.com/edlerd)",
-    "Zohaib Khan <dev-zohaib@proton.me> (https://zohaib.is-a.dev)",
-    "Sukka <github@skk.moe> (https://skk.moe)"
-  ],
   "funding": [
     {
       "type": "github",
       "url": "https://github.com/sponsors/rpearce"
     }
   ],
-  "keywords": [
-    "react",
-    "medium",
-    "image",
-    "zoom",
-    "image-zoom",
-    "modal",
-    "react-component"
-  ],
-  "tags": [
-    "react",
-    "medium",
-    "image",
-    "zoom",
-    "image-zoom",
-    "modal",
-    "react-component"
-  ],
-  "sideEffects": [
-    "**/*.css"
-  ],
-  "files": [
-    "LICENSE",
-    "dist/"
-  ],
   "scripts": {
-    "build": "tsc --project tsconfig.build.json && cp ./source/styles.css ./dist/styles.css && pnpm run check:ssr",
+    "build": "pnpm --filter @rpearce/image-zoom build && pnpm --filter react-medium-image-zoom build",
     "build:docs": "rm -rf ./docs && mkdir ./docs && pnpm run storybook:build",
     "changeset": "changeset",
     "check:all": "conc 'pnpm:check:js' 'pnpm:check:types' 'pnpm:check:fmt'",
     "check:all:fix": "conc 'pnpm:check:js:fix' 'pnpm:check:types' 'pnpm:check:fmt:fix'",
     "check:fmt": "prettier --log-level warn --check '**/*.{ts,tsx,json,md,yml,yaml}'",
     "check:fmt:fix": "prettier --log-level warn --write '**/*.{ts,tsx,json,md,yml,yaml}'",
-    "check:ssr": "node scripts/check-ssr",
     "check:js": "eslint .",
     "check:js:fix": "eslint . --fix",
-    "check:types": "tsc --noEmit --emitDeclarationOnly false",
+    "check:types": "pnpm -r run check:types",
     "test": "vitest run",
     "ci": "conc 'pnpm:check:all' 'pnpm:test' 'pnpm:build' 'pnpm:build:docs'",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
-    "prebuild": "rm -rf ./dist",
-    "prepack": "conc 'pnpm:check:js' 'pnpm:build'",
     "prerelease": "pnpm run ci",
     "release": "changeset publish",
     "start": "pnpm run storybook:dev",
@@ -96,6 +39,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.30.0",
+    "@custom-elements-manifest/analyzer": "^0.11.0",
     "@storybook/addon-a11y": "^10.3.4",
     "@storybook/addon-docs": "^10.3.4",
     "@storybook/react-vite": "^10.3.4",
@@ -119,10 +63,6 @@
     "tsx": "^4.21.0",
     "typescript": "^6.0.2",
     "vitest": "^4.1.4"
-  },
-  "peerDependencies": {
-    "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
-    "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
   },
   "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
   "pnpm": {

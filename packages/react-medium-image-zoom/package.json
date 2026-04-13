@@ -1,0 +1,36 @@
+{
+  "name": "react-medium-image-zoom",
+  "version": "6.0.0",
+  "license": "BSD-3-Clause",
+  "description": "Accessible medium.com-style image zoom for React",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "LICENSE",
+    "dist/"
+  ],
+  "scripts": {
+    "prebuild": "rm -rf ./dist",
+    "build": "tsc --project tsconfig.build.json",
+    "check:types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@rpearce/image-zoom": "workspace:^"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/rpearce/react-medium-image-zoom.git",
+    "directory": "packages/react-medium-image-zoom"
+  }
+}

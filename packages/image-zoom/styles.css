@@ -1,0 +1,46 @@
+/*
+ * Styles for consumer-slotted modal content.
+ *
+ * The <image-zoom> web component now keeps its <dialog> + fallback modal
+ * elements inside its shadow DOM, and ships the necessary rules inline in
+ * the shadow stylesheet. That covers the default "wrap an <img>, get a
+ * default zoom modal" case without requiring this file.
+ *
+ * You still need this file if you provide a custom modal layout via
+ * `slot="modal"` (e.g. wrapping your modal image in a <figure> with a
+ * caption). Those elements live in LIGHT DOM and are outside the shadow
+ * stylesheet's scope — so the positioning / transition rules must live
+ * here to cascade through.
+ */
+[data-rmiz-btn-unzoom] {
+  background-color: var(--rmiz-btn-unzoom-bg, rgba(0, 0, 0, 0.7));
+  border-radius: 50%;
+  border: none;
+  box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+  color: var(--rmiz-btn-unzoom-color, #fff);
+  height: 40px;
+  margin: 0;
+  outline-offset: 2px;
+  padding: 9px;
+  touch-action: manipulation;
+  width: 40px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: absolute;
+  inset: 20px 20px auto auto;
+  cursor: zoom-out;
+  z-index: 1;
+}
+[data-rmiz-modal-img] {
+  position: absolute;
+  cursor: zoom-out;
+  image-rendering: high-quality;
+  transform-origin: top left;
+  transition: transform var(--rmiz-transition-duration, 0.3s);
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-rmiz-modal-img] {
+    transition-duration: 0.01ms !important;
+  }
+}

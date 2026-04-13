@@ -3,44 +3,57 @@
 [![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![bundlephobia size](https://badgen.net/bundlephobia/minzip/react-medium-image-zoom)](https://bundlephobia.com/result?p=react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-95-orange.svg)](#contributors-)
 
 The original [medium.com-inspired image zooming](https://medium.design/image-zoom-on-medium-24d146fc0c20)
-library for [React](https://reactjs.org).
+library for [React](https://reactjs.org) — wrap an image, get a smooth,
+accessible, click-to-zoom experience with zero configuration.
 
-[View the storybook examples](https://rpearce.github.io/react-medium-image-zoom/)
-to see various usages.
+```jsx
+import Zoom from 'react-medium-image-zoom'
+import '@rpearce/image-zoom/styles.css'
 
-Features:
+<Zoom>
+  <img src="photo.jpg" alt="A photo" />
+</Zoom>
+```
 
-- `<img />`, including all [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit)
-  values, any [`object-position`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-position),
-  and [`loading="lazy"`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-loading)
-- `<div>` and `<span>` with any [`background-image`](https://developer.mozilla.org/en-US/docs/Web/CSS/background-image),
-  [`background-size`](https://developer.mozilla.org/en-US/docs/Web/CSS/background-size),
-  and [`background-position`](https://developer.mozilla.org/en-US/docs/Web/CSS/background-position)
-- `<picture>` with `<source />` and `<img />`
-- `<figure>` with `<img />`
-- `<svg>`
-- [Custom zoom modal content](#custom-zoom-modal-content) (👇)
-- Accessibility:
-  - JAWS in Chrome, Edge, and Firefox (Windows)
-  - NVDA in Chrome, Edge, and Firefox (Windows)
-  - VoiceOver in Safari (macOS, iOS)
-  - TalkBack in Chrome (Android)
-- Supports popular tools:
-  - [Gatsby](https://www.gatsbyjs.com) and [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/)
-  - [Next.js](https://nextjs.org/docs/api-reference/next/image)
-- Zero `dependencies`
+[View the storybook examples →](https://rpearce.github.io/react-medium-image-zoom/)
 
-Requirements to know about:
+> **Upgrading from v5?** For most users the migration is a **one-line
+> change**: update your CSS import path. See
+> [Migrating From v5 to v6](#migrating-from-v5-to-v6) for details on
+> the handful of advanced cases that need more.
 
-- `<dialog>` element ([caniuse dialog](https://caniuse.com/dialog))
-- `ResizeObserver` ([caniuse ResizeObserver](https://caniuse.com/mdn-api_resizeobserver))
-- Package build target is `ES2021`. If you need to support older environments,
-  run this package through your build system.
+> **Not using React?** The zoom behavior is implemented as a framework-
+> agnostic web component. Install
+> [`@rpearce/image-zoom`](https://www.npmjs.com/package/@rpearce/image-zoom)
+> directly for Vue, Svelte, Angular, Lit, Solid, Astro, or vanilla
+> HTML/JS — see [its README](./packages/image-zoom/README.md) for
+> framework-specific examples.
 
-## Media and Tutorials
+## Features
 
-- [2024-08-2024 — _React Round Up_ — "Building a Seamless Image Zoom Feature"](https://topenddevs.com/podcasts/react-round-up/episodes/building-a-seamless-image-zoom-feature-rru-265)
-- [Build a React.js Image Zoom Feature with react-medium-image-zoom Library and State Management](https://www.youtube.com/watch?v=w24gLJzmXp0)
+- Works with `<img />`, `<svg>`, `<picture>`, `<figure>`, and `<div>` /
+  `<span>` elements with a CSS `background-image`
+- Respects `object-fit`, `object-position`, `background-size`,
+  `background-position`, and `loading="lazy"`
+- [Custom zoom modal content](#custom-zoom-modal-content) via slots
+  (captions, forms, anything you want inside the zoomed view)
+- Controlled and uncontrolled modes
+- Tested with JAWS, NVDA, VoiceOver, and TalkBack
+- Works with [Gatsby](https://www.gatsbyjs.com) /
+  [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/),
+  [Next.js](https://nextjs.org/docs/api-reference/next/image), and
+  any other React setup
+- Built on top of the framework-agnostic
+  [`@rpearce/image-zoom`](https://www.npmjs.com/package/@rpearce/image-zoom)
+  web component — the React wrapper adds only React-specific concerns
+  on top
+
+## Requirements
+
+- [`<dialog>` element](https://caniuse.com/dialog)
+- [`ResizeObserver`](https://caniuse.com/mdn-api_resizeobserver)
+- Build target is `ES2022`. For older environments, run this package
+  through your build system.
 
 ## Quickstart
 
@@ -51,7 +64,7 @@ npm install --save react-medium-image-zoom
 ```javascript
 import React from 'react'
 import Zoom from 'react-medium-image-zoom'
-import 'react-medium-image-zoom/dist/styles.css'
+import '@rpearce/image-zoom/styles.css'
 
 export const MyImg = () => (
   <Zoom>
@@ -64,102 +77,18 @@ export const MyImg = () => (
 )
 ```
 
-## API
-
-You can pass these options to either the `Uncontrolled` (default) or
-`Controlled` components.
-
-```typescript
-export interface UncontrolledProps {
-  // Accessible label text for when you want to unzoom.
-  // Default: 'Minimize image'
-  a11yNameButtonUnzoom?: string
-
-  // Accessible label text for when you want to zoom.
-  // Default: 'Expand image'
-  a11yNameButtonZoom?: string
-
-  // Allow swipe gesture to unzoom.
-  // Default: true
-  canSwipeToUnzoom?: boolean
-
-  // Your image (required).
-  children: ReactNode
-
-  // Custom CSS className to add to the zoomed <dialog>.
-  classDialog?: string
-
-  // Provide your own unzoom button icon.
-  // Default: ICompress
-  IconUnzoom?: ElementType
-
-  // Provide your own zoom button icon.
-  // Default: IEnlarge
-  IconZoom?: ElementType
-
-  // Disables the zoom/unzoom behavior.
-  // Default: false
-  isDisabled?: boolean
-
-  // First argument: boolean value of a new zoomed state (Uncontrolled
-  // component) or a suggested new state (Controlled component).
-  // Second argument: object containing the event that triggered the change.
-  // Default: undefined
-  onZoomChange?: (
-    value: boolean,
-    data: { event: React.SyntheticEvent | Event },
-  ) => void
-
-  // Swipe gesture threshold after which to unzoom.
-  // Default: 10
-  swipeToUnzoomThreshold?: number
-
-  // Specify what type of element should be used for
-  // internal component usage. This is useful if the
-  // image is inside a <p> or <button>, for example.
-  // Default: 'div'
-  wrapElement?: 'div' | 'span'
-
-  // Provide your own custom modal content component.
-  ZoomContent?: (props: {
-    img: ReactElement | null
-    buttonUnzoom: ReactElement<HTMLButtonElement>
-    onUnzoom: () => void
-  }) => ReactElement
-
-  // Higher quality image attributes to use on zoom.
-  zoomImg?: ImgHTMLAttributes<HTMLImageElement>
-
-  // Offset in pixels the zoomed image should
-  // be from the window's boundaries.
-  // Default: 0
-  zoomMargin?: number
-}
-```
-
-You can pass these options to only the `Controlled` component.
-
-```typescript
-export interface ControlledProps {
-  // ...same as UncontrolledProps
-
-  // Tell the component whether or not it should be zoomed
-  // Default: false
-  isZoomed: boolean
-}
-```
-
 ## Basic Usage
 
 ### Uncontrolled component (default)
 
-Import the component and the CSS, wrap your image with the component, and the
-component will handle it's own state.
+Wrap your image in `<Zoom>`. The component tracks its own open/closed
+state and fires `onZoomChange` so you can observe transitions without
+owning the state.
 
 ```javascript
 import React from 'react'
 import Zoom from 'react-medium-image-zoom'
-import 'react-medium-image-zoom/dist/styles.css'
+import '@rpearce/image-zoom/styles.css'
 
 // <img />
 export const MyImg = () => (
@@ -229,7 +158,7 @@ component, and then dictate the `isZoomed` state to the component.
 ```javascript
 import React, { useCallback, useState } from 'react'
 import { Controlled as ControlledZoom } from 'react-medium-image-zoom'
-import 'react-medium-image-zoom/dist/styles.css'
+import '@rpearce/image-zoom/styles.css'
 
 const MyComponent = () => {
   const [isZoomed, setIsZoomed] = useState(false)
@@ -258,112 +187,356 @@ determining when to zoom and unzoom the component.
 
 ## Styles
 
-You can import the default styles from `react-medium-image-zoom/dist/styles.css`
-and override the values from your code, or you can copy [the styles.css
-file](./source/styles.css) and alter it to your liking. The latter is the best
-option, given `rem`s should be used instead of `px` to account for different
-default browser font sizes, and it's hard for a library to guess at what these
-values should be.
-
-An example of customizing the transition duration, timing function, overlay
-background color, and unzoom button styles with `:focus-visible` can be found in
-this story: https://rpearce.github.io/react-medium-image-zoom/?path=/story/img--custom-modal-styles
-
-### Custom zoom modal content
-
-If you want to customize the zoomed modal experience with a caption, form, or
-other set of components, you can do so by providing a custom component to the
-`ZoomContent` prop.
-
-[View the live example of custom zoom modal content.](https://rpearce.github.io/react-medium-image-zoom/?path=/story/img--modal-figure-caption)
-
-Below is some example code that demonstrates how to use this feature.
+The base styles ship with the package:
 
 ```javascript
+import '@rpearce/image-zoom/styles.css'
+```
+
+The zoom modal lives inside the web component's shadow DOM, so you
+customize it with CSS custom properties and `::part()` selectors on the
+`image-zoom` host — plain CSS in your own stylesheet, no wrapper class
+needed.
+
+```css
+/* Custom properties — applied to the host element */
+image-zoom {
+  --rmiz-transition-duration: 0.4s;
+  --rmiz-overlay-bg: rgb(56 58 89 / 100%);
+  --rmiz-overlay-bg-hidden: rgb(56 58 89 / 0%);
+  --rmiz-btn-bg: rgb(0 0 0 / 80%);
+  --rmiz-btn-color: #fff;
+  --rmiz-btn-unzoom-bg: #bd93f9;
+  --rmiz-btn-unzoom-color: #000;
+}
+
+/* Parts — reach into the shadow DOM without using attribute selectors */
+image-zoom::part(btn-unzoom):focus-visible {
+  outline-offset: 0.4rem;
+  outline: 0.2rem solid #bd93f9;
+}
+```
+
+Exposed parts: `content`, `ghost`, `btn-zoom`, `btn-zoom-icon`, `modal`,
+`modal-overlay`, `modal-content`, `modal-img`, `btn-unzoom`,
+`btn-unzoom-icon`.
+
+A live example of customizing the transition, overlay color, and unzoom
+button is in this story:
+https://rpearce.github.io/react-medium-image-zoom/?path=/story/img--custom-modal-styles
+
+## Custom zoom modal content
+
+Want to add a caption, a form, download links, or any other UI inside
+the zoomed view? Slot your own layout into the underlying web
+component's `modal` slot. React projects the slotted JSX directly into
+the web component's shadow DOM via React's built-in slot support — no
+render prop, no state machine to wire up, no extra API surface.
+
+The only requirement is that the element you want the zoom transform to
+apply to must carry the `data-rmiz-modal-img` attribute (this is how the
+library identifies which element to animate).
+
+```javascript
+import Zoom from 'react-medium-image-zoom'
+import '@rpearce/image-zoom/styles.css'
+
 export const MyImg = () => (
-  <Zoom ZoomContent={CustomZoomContent}>
+  <Zoom>
     <img
       alt="That Wanaka Tree, New Zealand by Laura Smetsers"
       src="/path/to/thatwanakatree.jpg"
       width="500"
     />
+    <figure slot="modal">
+      <img
+        alt="That Wanaka Tree, New Zealand by Laura Smetsers"
+        data-rmiz-modal-img
+        src="/path/to/thatwanakatree.jpg"
+      />
+      <figcaption>
+        That Wanaka Tree, also known as the Wanaka Willow, is a willow tree
+        located at the southern end of Lake Wānaka in the Otago region of New
+        Zealand.{' '}
+        <cite>
+          Wikipedia,{' '}
+          <a href="https://en.wikipedia.org/wiki/That_Wanaka_Tree">
+            That Wanaka Tree
+          </a>
+        </cite>
+      </figcaption>
+    </figure>
   </Zoom>
 )
+```
 
-const CustomZoomContent = ({
-  /** Default unzoom button */
-  buttonUnzoom,
+If you need to react to state transitions (e.g. to fade in a caption after
+the zoom finishes animating), listen for the `image-zoom:state-change`
+event on the host element — its `detail.state` is one of `UNLOADED`,
+`LOADING`, `LOADED`, or `UNLOADING`.
 
-  /** Current state of the zoom modal: UNLOADED, LOADING, LOADED, UNLOADING */
-  modalState,
+```javascript
+const ref = React.useRef<ImageZoomElement>(null)
 
-  /** Your image, prepped for zooming */
-  img,
+React.useEffect(() => {
+  const el = ref.current
+  if (el == null) return
+  const handler = (e: Event) => {
+    const ce = e as CustomEvent<{ state: string }>
+    // do something with ce.detail.state
+  }
+  el.addEventListener('image-zoom:state-change', handler)
+  return () => {
+    el.removeEventListener('image-zoom:state-change', handler)
+  }
+}, [])
+```
 
-  /** A state to check if the zoom img is loaded (useful for loading state) */
-  // isZoomImgLoaded,
+## Props reference
 
-  /**
-   * A callback to manually unzoom the image and close the modal if you want to
-   * use your own buttons or listeners in your custom experience.
-   */
-  //onUnzoom,
-}) => {
-  const [isLoaded, setIsLoaded] = useState(false)
+Full TypeScript interface. You won't need this for basic usage — most
+consumers never set anything past `isZoomed` / `onZoomChange` — but it's
+here when you do.
 
-  useLayoutEffect(() => {
-    if (modalState === 'LOADED') {
-      setIsLoaded(true)
-    } else if (modalState === 'UNLOADING') {
-      setIsLoaded(false)
-    }
-  }, [modalState])
+```typescript
+export interface ControlledProps {
+  // Your image (required). Usually an <img>, but can be <svg>,
+  // <picture>, <figure>, or a <div>/<span> with a background-image.
+  children: React.ReactNode
 
-  const classCaption = isLoaded
-    ? 'zoom-caption zoom-caption--loaded'
-    : 'zoom-caption'
+  // Tell the component whether or not it should be zoomed.
+  // Uncontrolled omits this — it tracks its own state.
+  isZoomed: boolean
 
-  return (
-    <>
-      {buttonUnzoom}
+  // Called when the user initiates a zoom or unzoom.
+  // In Controlled mode, use this to update your own `isZoomed` state.
+  onZoomChange?: (
+    value: boolean,
+    data: { event: React.SyntheticEvent | Event },
+  ) => void
 
-      <figure>
-        {img}
-        <figcaption className={classCaption}>
-          That Wanaka Tree, also known as the Wanaka Willow, is a willow tree
-          located at the southern end of Lake Wānaka in the Otago region of New
-          Zealand.
-          <cite className="zoom-caption-cite">
-            Wikipedia,{' '}
-            <a
-              className="zoom-caption-link"
-              href="https://en.wikipedia.org/wiki/That_Wanaka_Tree"
-            >
-              That Wanaka Tree
-            </a>
-          </cite>
-        </figcaption>
-      </figure>
-    </>
-  )
+  // Disables the zoom/unzoom behavior entirely.
+  // Default: false
+  isDisabled?: boolean
+
+  // Accessible label for the zoom trigger button.
+  // The image's alt text is appended when present.
+  // Default: 'Expand image'
+  labelZoom?: string
+
+  // Accessible label for the unzoom button.
+  // Default: 'Minimize image'
+  labelUnzoom?: string
+
+  // Provide your own unzoom button icon as JSX. Rendered via React
+  // portal into the web component's unzoom button.
+  IconUnzoom?: React.ReactNode
+
+  // Higher-quality image attributes to load when zoomed.
+  zoomImg?: React.ImgHTMLAttributes<HTMLImageElement>
+
+  // Offset in pixels between the zoomed image and the viewport edges.
+  // Default: 0
+  zoomMargin?: number
+
+  // Allow swipe-down gesture to unzoom on touch devices.
+  // Default: true
+  canSwipeToUnzoom?: boolean
+
+  // Pixel threshold for the swipe-to-unzoom gesture.
+  // Default: 10
+  swipeToUnzoomThreshold?: number
+}
+
+// The Uncontrolled component tracks its own zoomed state:
+export type UncontrolledProps = Omit<ControlledProps, 'isZoomed'>
+```
+
+Anything not in this interface (custom modal layouts, trigger buttons,
+dialog styling) is handled via the underlying web component — see
+[Custom zoom modal content](#custom-zoom-modal-content) and
+[Styles](#styles).
+
+## Migrating From v5 to v6
+
+v6 is a significant rewrite under the hood — the zoom behavior now
+lives in a framework-agnostic web component (`@rpearce/image-zoom`),
+and `react-medium-image-zoom` is a thin React wrapper around it.
+
+**Good news: for most React consumers, the migration is a one-line
+change.**
+
+### The common case (basic zoom, no custom icons or modal content)
+
+```diff
+-import 'react-medium-image-zoom/dist/styles.css'
++import '@rpearce/image-zoom/styles.css'
+```
+
+That's it. Your existing `<Zoom>` / `<Controlled>` components,
+`isZoomed`, `onZoomChange`, `zoomImg`, `zoomMargin`, `isDisabled`,
+`canSwipeToUnzoom`, and `swipeToUnzoomThreshold` all work identically.
+
+### If you used accessibility label props
+
+Two props were renamed for consistency with the underlying web
+component:
+
+| v5                     | v6             |
+| ---------------------- | -------------- |
+| `a11yNameButtonZoom`   | `labelZoom`    |
+| `a11yNameButtonUnzoom` | `labelUnzoom`  |
+
+```diff
+-<Zoom a11yNameButtonZoom="Open photo" a11yNameButtonUnzoom="Close photo">
++<Zoom labelZoom="Open photo" labelUnzoom="Close photo">
+```
+
+### If you used `IconUnzoom`
+
+`IconUnzoom` now takes JSX directly (a `ReactNode`) instead of a
+component type (`ElementType`). React renders it into the web
+component's unzoom button via `createPortal`.
+
+```diff
+-<Zoom IconUnzoom={MyIconComponent}>
++<Zoom IconUnzoom={<MyIconComponent />}>
+```
+
+Any inline JSX works:
+
+```jsx
+<Zoom IconUnzoom={<span aria-hidden>×</span>}>…</Zoom>
+```
+
+### If you used `classDialog` / custom CSS
+
+`classDialog` was a way to scope custom styles to the zoom modal. In v6
+the modal lives in the web component's shadow DOM, so you style it with
+CSS custom properties and `::part()` selectors on the `image-zoom` host
+— no wrapper class needed. Instead of:
+
+```css
+/* v5 */
+.my-zoom [data-rmiz-modal-overlay] { background: rebeccapurple; }
+```
+
+…do:
+
+```css
+/* v6 */
+image-zoom {
+  --rmiz-overlay-bg: rebeccapurple;
+}
+image-zoom::part(btn-unzoom):focus-visible {
+  outline: 2px solid rebeccapurple;
 }
 ```
+
+See [Styles](#styles) for the full list of CSS custom properties and
+exposed parts.
+
+### If you used `IconZoom`
+
+The prop is gone. Slot your own trigger as a child element instead:
+
+```diff
+-<Zoom IconZoom={MyZoomIcon}>
+-  <img src="photo.jpg" alt="Photo" />
+-</Zoom>
++<Zoom>
++  <img src="photo.jpg" alt="Photo" />
++  <button slot="trigger"><MyZoomIcon /></button>
++</Zoom>
+```
+
+### If you used `wrapElement`
+
+Drop the prop. In v6 the component no longer injects a wrapping element
+at all — the `<image-zoom>` custom element is `display: inline-block`
+and works inside `<p>`, `<button>`, inline flow, and any other context
+you previously needed `wrapElement="span"` for.
+
+```diff
+-<Zoom wrapElement="span">
++<Zoom>
+   <img src="photo.jpg" alt="Photo" />
+ </Zoom>
+```
+
+### If you used `ZoomContent`
+
+The `ZoomContent` render-prop is gone. Any custom modal layout you
+rendered via `ZoomContent` now goes in as slotted JSX with
+`slot="modal"`. The element that should receive the zoom transform
+must carry `data-rmiz-modal-img`.
+
+Before (v5):
+
+```jsx
+<Zoom ZoomContent={({ img, buttonUnzoom }) => (
+  <>
+    {buttonUnzoom}
+    <figure>
+      {img}
+      <figcaption>Caption</figcaption>
+    </figure>
+  </>
+)}>
+  <img src="photo.jpg" alt="Photo" />
+</Zoom>
+```
+
+After (v6):
+
+```jsx
+<Zoom>
+  <img src="photo.jpg" alt="Photo" />
+  <figure slot="modal">
+    <img data-rmiz-modal-img src="photo.jpg" alt="Photo" />
+    <figcaption>Caption</figcaption>
+  </figure>
+</Zoom>
+```
+
+If you need to react to modal state transitions (the v5 `modalState`
+argument to `ZoomContent`), listen for the `image-zoom:state-change`
+event on the host element — see the event-listener snippet at the end
+of [Custom zoom modal content](#custom-zoom-modal-content).
+
+### Summary
+
+| Using in v5                                                       | v6 change |
+| ----------------------------------------------------------------- | --------- |
+| Just `<Zoom>` with an image                                       | Update CSS import path — **done**. |
+| `isZoomed` / `onZoomChange` / `zoomImg` / `zoomMargin` / `isDisabled` / `canSwipeToUnzoom` / `swipeToUnzoomThreshold` | No change. |
+| `a11yNameButtonZoom` / `a11yNameButtonUnzoom`                     | Rename to `labelZoom` / `labelUnzoom`. |
+| `IconUnzoom={Comp}`                                               | Pass JSX: `IconUnzoom={<Comp />}`. |
+| `classDialog="foo"`                                               | Use `image-zoom` CSS custom properties + `::part()`. |
+| `IconZoom={Comp}`                                                 | `<button slot="trigger"><Comp /></button>` as a child. |
+| `wrapElement="span"`                                              | Drop — no longer needed. |
+| `ZoomContent={Render}`                                            | Slot as a child: `<figure slot="modal">…</figure>`. |
 
 ## Migrating From v4 to v5
 
 Here are the prop changes from `v4` to be aware of:
 
-- `closeText` was renamed to `a11yNameButtonUnzoom`
-- `openText` was renamed to `a11yNameButtonZoom`
+- `closeText` was renamed to `a11yNameButtonUnzoom` (now `labelUnzoom` in v6)
+- `openText` was renamed to `a11yNameButtonZoom` (now `labelZoom` in v6)
 - `overlayBgColorStart` was removed and is now controlled via the CSS selector `[data-rmiz-modal-overlay="hidden"]`
 - `overlayBgColorEnd` was removed and is now controlled via the CSS selector `[data-rmiz-modal-overlay="visible"]`
 - `portalEl` was removed, for we are using the `<dialog>` element now
 - `transitionDuration` was removed and is now controlled via the CSS selectors `[data-rmiz-modal-overlay]` and `[data-rmiz-modal-img]`
-- `wrapElement` was removed then added back in `v5.1.0`
+- `wrapElement` was removed then added back in `v5.1.0` (removed again in v6)
 - `wrapStyle` was removed
 - `zoomZindex` was removed, for we are using the `<dialog>` element now
 
 And you can now provide `zoomImg` props to specify a different image to load when zooming.
+
+## Media and Tutorials
+
+- [2024-08 — _React Round Up_ — "Building a Seamless Image Zoom Feature"](https://topenddevs.com/podcasts/react-round-up/episodes/building-a-seamless-image-zoom-feature-rru-265)
+- [Build a React.js Image Zoom Feature with react-medium-image-zoom Library and State Management](https://www.youtube.com/watch?v=w24gLJzmXp0)
 
 ## Contributors ✨
 

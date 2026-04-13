@@ -1,13 +1,21 @@
 #!/usr/bin/env node
 
 /**
- * Verifies that the component can be server-side rendered without access to
- * browser globals like Element, window, document, etc.
+ * Verifies that the React wrapper can be server-side rendered.
+ *
+ * The web component extends HTMLElement (browser-only), so we provide a
+ * minimal global shim. In real SSR frameworks (Next.js, Remix), this is
+ * handled by the 'use client' directive on the wrapper module.
  */
 
-import { createElement } from 'react'
-import { renderToString } from 'react-dom/server'
-import Zoom, { Controlled } from '../dist/index.js'
+globalThis.HTMLElement ??= class HTMLElement {}
+globalThis.customElements ??= { define() {}, get() {} }
+
+const { createElement } = await import('react')
+const { renderToString } = await import('react-dom/server')
+const { default: Zoom, Controlled } = await import(
+  '../packages/react-medium-image-zoom/dist/index.js'
+)
 
 try {
   renderToString(

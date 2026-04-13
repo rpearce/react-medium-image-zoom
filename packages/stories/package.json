@@ -1,0 +1,13 @@
+{
+  "name": "@rpearce/image-zoom-stories",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check:types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@rpearce/image-zoom": "workspace:*",
+    "react-medium-image-zoom": "workspace:*"
+  }
+}

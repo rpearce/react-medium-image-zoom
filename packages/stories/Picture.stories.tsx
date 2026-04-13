@@ -1,0 +1,36 @@
+import React from 'react'
+import type { Meta, StoryFn } from '@storybook/react-vite'
+
+import Zoom from 'react-medium-image-zoom'
+import '@rpearce/image-zoom/styles.css'
+import './base.css'
+
+import { imgNzBeach, imgTeAraiPoint } from './images'
+
+const meta: Meta<typeof Zoom> = {
+  title: '<picture>',
+  component: Zoom,
+}
+
+export default meta
+
+// =============================================================================
+
+type Story = StoryFn<typeof Zoom>
+
+export const Picture: Story = props => (
+  <main aria-label="Story">
+    <h1>{'Zoom an <img /> in a <picture> element with a <source />'}</h1>
+    <div className="mw-600">
+      <p>
+        Hint: reduce the window&apos;s width to see a portrait picture, instead.
+      </p>
+      <Zoom {...props}>
+        <picture>
+          <source media="(max-width: 800px)" srcSet={imgTeAraiPoint.src} />
+          <img alt={imgNzBeach.alt} src={imgNzBeach.src} width="500" />
+        </picture>
+      </Zoom>
+    </div>
+  </main>
+)

@@ -4,14 +4,15 @@
     "declaration": true,
     "jsx": "react",
     "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "outDir": "./dist",
     "removeComments": true,
     "skipLibCheck": true,
     "sourceMap": false,
+    "strict": true,
     "target": "es2021"
-  },
-  "include": ["source/**/*", "stories/**/*"]
+  }
 }
