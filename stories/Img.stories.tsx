@@ -3,7 +3,10 @@ import type { Meta, StoryFn } from '@storybook/react-vite'
 
 import { waitFor, within, userEvent, expect } from 'storybook/test'
 
-import Zoom, { type UncontrolledProps } from '../src'
+import Zoom, {
+  Controlled as ControlledZoom,
+  type UncontrolledProps,
+} from '../src'
 import '../src/styles.css'
 import './base.css'
 
@@ -400,28 +403,65 @@ export const ZoomImageFromInsideDialog: Story = props => {
 }
 // =============================================================================
 
-export const ModalFigureCaption: Story = props => (
-  <main aria-label="Story">
-    <h1>Modal With Figure And Caption</h1>
-    <p>
-      If you want more control over the zoom modal&apos;s content, you can pass
-      a <code>ZoomContent</code> component
-    </p>
-    <div className="mw-600">
-      <Zoom {...props} ZoomContent={CustomZoomContent}>
-        <img
-          alt={imgThatWanakaTree.alt}
-          src={imgThatWanakaTree.src}
-          height="320"
-          decoding="async"
-          loading="lazy"
-        />
-      </Zoom>
-    </div>
-  </main>
-)
+export const ModalFigureCaption: Story = props => {
+  const [isZoomed, setIsZoomed] = React.useState(false)
 
-const CustomZoomContent: UncontrolledProps['ZoomContent'] = ({
+  const handleZoomChange = React.useCallback((value: boolean) => {
+    setIsZoomed(value)
+  }, [])
+
+  return (
+    <main aria-label="Story">
+      <h1>Modal With Figure And Caption</h1>
+      <p>
+        If you want more control over the zoom modal&apos;s content, you can
+        pass a <code>ZoomContent</code> component.
+      </p>
+
+      <h2>Uncontrolled</h2>
+      <div className="mw-600">
+        <Zoom {...props} ZoomContent={CustomZoomContent}>
+          <img
+            alt={imgThatWanakaTree.alt}
+            src={imgThatWanakaTree.src}
+            height="320"
+            decoding="async"
+            loading="lazy"
+          />
+        </Zoom>
+      </div>
+
+      <h2>Controlled</h2>
+      <p>
+        Regression for{' '}
+        <a href="https://github.com/rpearce/react-medium-image-zoom/issues/448">
+          issue #448
+        </a>
+        : when the parent owns <code>isZoomed</code> and passes{' '}
+        <code>ZoomContent</code> as an inline arrow function, its identity
+        changes on every parent render, causing the modal subtree to remount.
+        Zoom and unzoom should both animate smoothly.
+      </p>
+      <div className="mw-600">
+        <ControlledZoom
+          isZoomed={isZoomed}
+          onZoomChange={handleZoomChange}
+          ZoomContent={zoomProps => <CustomZoomContent {...zoomProps} />}
+        >
+          <img
+            alt={imgThatWanakaTree.alt}
+            src={imgThatWanakaTree.src}
+            height="320"
+            decoding="async"
+            loading="lazy"
+          />
+        </ControlledZoom>
+      </div>
+    </main>
+  )
+}
+
+const CustomZoomContent: NonNullable<UncontrolledProps['ZoomContent']> = ({
   buttonUnzoom,
   modalState,
   img,

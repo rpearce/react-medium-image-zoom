@@ -186,7 +186,6 @@ class ControlledBase extends React.Component<
         classDialog,
         IconUnzoom,
         IconZoom,
-        isZoomed,
         wrapElement: WrapElement,
         ZoomContent,
         zoomImg,
@@ -247,13 +246,20 @@ class ControlledBase extends React.Component<
     }
 
     // Share this with UNSAFE_handleSvg
+    // NOTE: drive the "zoomed" style off modalState only (not `isZoomed`).
+    // When a consumer passes an inline `ZoomContent` whose identity changes
+    // per render, the ZoomContent subtree remounts on each parent render.
+    // Using `isZoomed` prop here would cause the fresh modalImg to mount
+    // directly in the unzoomed state on the way out, skipping the transition.
+    // Driving off modalState means the new modalImg mounts zoomed at LOADED and
+    // transitions to unzoomed when we flip to UNLOADING.
     this.styleModalImg =
       hasImage && imgEl !== null
         ? getStyleModalImg({
             hasZoomImg,
             imgSrc,
             isSvg,
-            isZoomed: isZoomed && isModalActive,
+            isZoomed: isModalActive,
             loadedImgEl,
             offset: zoomMargin,
             shouldRefresh,
@@ -279,6 +285,7 @@ class ControlledBase extends React.Component<
             data-rmiz-modal-img=""
             height={this.styleModalImg.height ?? undefined}
             id={idModalImg}
+            onTransitionEnd={this.handleImgTransitionEnd}
             ref={refModalImg}
             style={this.styleModalImg}
             width={this.styleModalImg.width ?? undefined}
@@ -286,6 +293,7 @@ class ControlledBase extends React.Component<
         ) : isSvg ? (
           <div
             data-rmiz-modal-img
+            onTransitionEnd={this.handleImgTransitionEnd}
             ref={refModalImg}
             style={this.styleModalImg}
           />
@@ -385,10 +393,7 @@ class ControlledBase extends React.Component<
     this.imgElResizeObserver?.disconnect()
     this.imgEl?.removeEventListener('load', this.handleImgLoad)
     this.imgEl?.removeEventListener('click', this.handleZoom)
-    this.refModalImg.current?.removeEventListener(
-      'transitionend',
-      this.handleImgTransitionEnd,
-    )
+    clearTimeout(this.timeoutTransitionEnd)
     window.removeEventListener('wheel', this.handleWheel)
     window.removeEventListener('touchstart', this.handleTouchStart)
     window.removeEventListener('touchmove', this.handleTouchMove)
@@ -409,7 +414,6 @@ class ControlledBase extends React.Component<
     this.handleIfZoomChanged(prevProps.isZoomed)
   }
 
-  // eslint-disable-next-line complexity -- state machine handler with one branch per modal state transition
   handleModalStateChange = (
     prevModalState: ControlledState['modalState'],
   ): void => {
@@ -446,10 +450,6 @@ class ControlledBase extends React.Component<
     } else if (prevModalState !== 'UNLOADED' && modalState === 'UNLOADED') {
       this.bodyScrollEnable()
       window.removeEventListener('resize', this.handleResize)
-      this.refModalImg.current?.removeEventListener(
-        'transitionend',
-        this.handleImgTransitionEnd,
-      )
       this.refDialog.current?.close()
     }
   }
@@ -765,10 +765,6 @@ class ControlledBase extends React.Component<
   zoom = (): void => {
     this.bodyScrollDisable()
     this.refDialog.current?.showModal()
-    this.refModalImg.current?.addEventListener(
-      'transitionend',
-      this.handleImgTransitionEnd,
-    ) // must be added after showModal
     this.setState({ modalState: 'LOADING' })
   }
 
