@@ -713,6 +713,13 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/17525378?v=4",
       "profile": "https://github.com/MichalKowalczyk",
       "contributions": ["bug"]
+    },
+    {
+      "login": "tarngerine",
+      "name": "Julius Tarng",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1629901?v=4",
+      "profile": "https://github.com/tarngerine",
+      "contributions": ["bug"]
     }
   ],
   "repoType": "github",
