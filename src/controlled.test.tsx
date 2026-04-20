@@ -251,6 +251,7 @@ describe('Controlled', () => {
     })
 
     const modalImgUnzoomed = getPortalModalImg()
+    expect(modalImgUnzoomed).not.toBe(modalImgZoomed)
     if (modalImgUnzoomed !== null) await fireTransitionEnd(modalImgUnzoomed)
 
     expect(document.body.style.overflow).toBe('auto')
