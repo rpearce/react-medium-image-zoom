@@ -202,6 +202,61 @@ describe('Controlled', () => {
     unmount()
     expect(document.body.style.overflow).toBe('auto')
   })
+
+  // Regression: https://github.com/rpearce/react-medium-image-zoom/issues/448
+  // When a parent passes an inline `ZoomContent={(props) => ...}` whose
+  // function identity changes on every render, the ZoomContent subtree
+  // remounts on each parent re-render, which remounts the modalImg.  The
+  // transitionend handler must survive that remount, otherwise unzoom gets
+  // stuck in UNLOADING, body scroll is never restored, and the dialog is
+  // never closed.
+  it('unzoom still completes when ZoomContent identity changes each render', async () => {
+    document.body.style.overflow = 'auto'
+    const { rerender } = await renderZoom({
+      isZoomed: false,
+      ZoomContent: props => (
+        <>
+          {props.buttonUnzoom}
+          {props.img}
+        </>
+      ),
+    })
+
+    // Zoom in.  This re-render passes a *new* inline ZoomContent function
+    // because renderZoom's rerender reconstructs the element each call.
+    await rerender({
+      isZoomed: true,
+      ZoomContent: props => (
+        <>
+          {props.buttonUnzoom}
+          {props.img}
+        </>
+      ),
+    })
+    expect(document.body.style.overflow).toBe('hidden')
+
+    const modalImgZoomed = getPortalModalImg()
+    if (modalImgZoomed !== null) await fireTransitionEnd(modalImgZoomed)
+    expect(getPortalDialog()?.open).toBe(true)
+
+    // Unzoom with *another* new inline ZoomContent.
+    await rerender({
+      isZoomed: false,
+      ZoomContent: props => (
+        <>
+          {props.buttonUnzoom}
+          {props.img}
+        </>
+      ),
+    })
+
+    const modalImgUnzoomed = getPortalModalImg()
+    expect(modalImgUnzoomed).not.toBe(modalImgZoomed)
+    if (modalImgUnzoomed !== null) await fireTransitionEnd(modalImgUnzoomed)
+
+    expect(document.body.style.overflow).toBe('auto')
+    expect(getPortalDialog()?.open).toBe(false)
+  })
 })
 
 // =============================================================================
@@ -271,7 +326,7 @@ function getPortalModalContent(): HTMLElement | null {
 
 async function fireTransitionEnd(el: Element): Promise<void> {
   await act(async () => {
-    el.dispatchEvent(new Event('transitionend'))
+    el.dispatchEvent(new Event('transitionend', { bubbles: true }))
     await Promise.resolve()
   })
 }
