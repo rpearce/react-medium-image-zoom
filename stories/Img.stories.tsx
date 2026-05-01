@@ -187,21 +187,23 @@ const CustomZoomContentWithLoader: UncontrolledProps['ZoomContent'] = ({
   isZoomImgLoaded,
   modalState,
 }) => {
-  const [showLoader, setShowLoader] = React.useState(!isZoomImgLoaded)
+  const [hideLoader, setHideLoader] = React.useState(false)
 
   /**
    * Delay the loader so the loading spinner is noticeable
    */
   React.useEffect(() => {
-    if (modalState === 'LOADING') {
-      setShowLoader(true)
-      if (isZoomImgLoaded) {
-        setTimeout(() => {
-          setShowLoader(false)
-        }, 1000)
-      }
+    if (modalState !== 'LOADING' || !isZoomImgLoaded) return undefined
+    const timer = setTimeout(() => {
+      setHideLoader(true)
+    }, 1000)
+    return () => {
+      clearTimeout(timer)
+      setHideLoader(false)
     }
   }, [isZoomImgLoaded, modalState])
+
+  const showLoader = modalState === 'LOADING' && !hideLoader
 
   return (
     <>
@@ -468,7 +470,7 @@ const CustomZoomContent: NonNullable<UncontrolledProps['ZoomContent']> = ({
   // isZoomImgLoaded, // Not used in this example
   // onUnzooom, // Not used in this example
 }) => {
-  const [isLoaded, setIsLoaded] = React.useState(false)
+  const isLoaded = modalState === 'LOADED'
 
   const imgEl = React.isValidElement<{ width?: number; height?: number }>(img)
     ? img
@@ -489,14 +491,6 @@ const CustomZoomContent: NonNullable<UncontrolledProps['ZoomContent']> = ({
       'zoom-caption--left': hasWidthHeight && !imgRatioLargerThanWindow,
     })
   }, [imgWidth, imgHeight, isLoaded])
-
-  React.useLayoutEffect(() => {
-    if (modalState === 'LOADED') {
-      setIsLoaded(true)
-    } else if (modalState === 'UNLOADING') {
-      setIsLoaded(false)
-    }
-  }, [modalState])
 
   return (
     <>
