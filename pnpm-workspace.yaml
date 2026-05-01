@@ -1,7 +1,7 @@
-ignoredBuiltDependencies:
-  - '@swc/core'
-  - 'esbuild'
-  - 'unrs-resolver'
+allowBuilds:
+  '@swc/core': false
+  esbuild: false
+  unrs-resolver: false
 
 minimumReleaseAge: 2880
 

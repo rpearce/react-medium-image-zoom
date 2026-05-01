@@ -476,7 +476,7 @@ class ControlledBase extends React.Component<
 
     if (contentEl == null) return
 
-    this.imgEl = contentEl.querySelector(IMAGE_QUERY) as SupportedImage | null
+    this.imgEl = contentEl.querySelector(IMAGE_QUERY)
 
     if (this.imgEl !== null) {
       this.contentNotFoundChangeObserver?.disconnect()
