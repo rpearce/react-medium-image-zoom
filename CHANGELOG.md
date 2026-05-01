@@ -1,5 +1,24 @@
 # Changelog
 
+## 5.4.4
+
+### Patch Changes
+
+- 7a50f4a: Update contributing documentation
+- ae3ed4d: change internal ModalState from enum to union type
+- 8b02794: add VSCode settings and recommendations
+- 400dba3: fix "Using Controlled zoom & ZoomContent at the same time breaks" (#448)
+- 7edc384: move icons into the controlled component (only usage)
+- d63fcc7: Remove old and incorrect Dockerfile in favor of pnpm and nvm
+- 296fa58: rename source/ directory to src/
+- 1da6a9f: use snakecase filenames over CamelCase
+- 33de39f: set project node version to 24 (latest LTS)
+- cfc2a2c: refactor and test utils for efficiency and clarity
+- e90ecdb: set pnpm cooldown for (dev) dependencies and leverage pnpm-workspace.yaml
+- 7f30732: Fix "Mirror effect on zoomed image - transform: scaleX(-100%) doesn't work" (#363)
+- af59874: Remove nix dev setup
+- 1da6a9f: add component tests
+
 ## 5.4.3
 
 ### Patch Changes
