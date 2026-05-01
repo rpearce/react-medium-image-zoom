@@ -62,6 +62,7 @@
   border: 0;
   background: transparent;
   overflow: hidden;
+  overscroll-behavior: none;
   pointer-events: all;
 }
 [data-rmiz-modal-overlay] {
