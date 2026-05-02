@@ -720,6 +720,13 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/1629901?v=4",
       "profile": "https://github.com/tarngerine",
       "contributions": ["bug"]
+    },
+    {
+      "login": "joeyvanlierop",
+      "name": "Joey Van Lierop",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13614780?v=4",
+      "profile": "https://github.com/joeyvanlierop",
+      "contributions": ["bug", "review"]
     }
   ],
   "repoType": "github",
