@@ -32,6 +32,8 @@ type ModalState = 'LOADED' | 'LOADING' | 'UNLOADED' | 'UNLOADING'
 
 interface BodyAttrs {
   overflow: string
+  position: string
+  top: string
   width: string
 }
 
@@ -42,6 +44,8 @@ interface BodyAttrs {
  */
 const defaultBodyAttrs: BodyAttrs = {
   overflow: '',
+  position: '',
+  top: '',
   width: '',
 }
 
@@ -164,6 +168,7 @@ class ControlledBase extends React.Component<
   private imgElResizeObserver: ResizeObserver | undefined
   private isScaling = false
   private prevBodyAttrs: BodyAttrs = defaultBodyAttrs
+  private prevScrollY = 0
   private styleModalImg: StyleObject = {}
   private touchYStart?: number
   private touchYEnd?: number
@@ -422,6 +427,7 @@ class ControlledBase extends React.Component<
     } = this
 
     if (prevModalState !== 'LOADING' && modalState === 'LOADING') {
+      this.isScaling = false
       this.loadZoomImg()
       window.addEventListener('resize', this.handleResize, { passive: true })
       window.addEventListener('touchstart', this.handleTouchStart, {
@@ -661,8 +667,12 @@ class ControlledBase extends React.Component<
    * Unzoom on wheel event
    */
   handleWheel = (e: WheelEvent): void => {
-    // don't handle the event when the user is zooming with ctrl + wheel (or with pinch to zoom)
+    // ctrlKey indicates pinch-to-zoom on trackpads
     if (e.ctrlKey) return
+    if (this.isScaling) return
+
+    const browserScale = window.visualViewport?.scale ?? 1
+    if (browserScale > 1) return
 
     e.stopPropagation()
     queueMicrotask(() => {
@@ -721,19 +731,17 @@ class ControlledBase extends React.Component<
   }
 
   /**
-   * Reset the scaling check and the Y-axis start and end tracking points
+   * Reset the Y-axis start and end tracking points
    */
   handleTouchEnd = (): void => {
-    this.isScaling = false
     this.touchYStart = undefined
     this.touchYEnd = undefined
   }
 
   /**
-   * Reset the scaling check and the Y-axis start and end tracking points
+   * Reset the Y-axis start and end tracking points
    */
   handleTouchCancel = (): void => {
-    this.isScaling = false
     this.touchYStart = undefined
     this.touchYEnd = undefined
   }
@@ -819,30 +827,39 @@ class ControlledBase extends React.Component<
    * Disable body scrolling
    */
   bodyScrollDisable = (): void => {
+    const bodyStyle = document.body.style
     this.prevBodyAttrs = {
-      overflow: document.body.style.overflow,
-      width: document.body.style.width,
+      overflow: bodyStyle.overflow,
+      position: bodyStyle.position,
+      top: bodyStyle.top,
+      width: bodyStyle.width,
     }
 
-    // Get clientWidth before setting overflow: 'hidden'
-    const {
-      body: { clientWidth },
-    } = document
+    const scrollY = window.scrollY
+    this.prevScrollY = scrollY
 
-    document.body.style.overflow = 'hidden'
-    document.body.style.width = `${clientWidth}px`
+    // Get clientWidth before changing styles to avoid scrollbar shift
+    const clientWidth = document.body.clientWidth
+
+    bodyStyle.overflow = 'hidden'
+    bodyStyle.position = 'fixed'
+    bodyStyle.top = `-${scrollY}px`
+    bodyStyle.width = `${clientWidth}px`
   }
 
   /**
    * Enable body scrolling
    */
   bodyScrollEnable = (): void => {
-    const {
-      prevBodyAttrs: { overflow, width },
-    } = this
-    document.body.style.width = width
-    document.body.style.overflow = overflow
+    const bodyStyle = document.body.style
+    const prev = this.prevBodyAttrs
+    bodyStyle.width = prev.width
+    bodyStyle.position = prev.position
+    bodyStyle.top = prev.top
+    bodyStyle.overflow = prev.overflow
+    window.scrollTo(0, this.prevScrollY)
     this.prevBodyAttrs = defaultBodyAttrs
+    this.prevScrollY = 0
   }
 
   // ===========================================================================

@@ -1,6 +1,6 @@
 # react-medium-image-zoom
 
-[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![bundlephobia size](https://badgen.net/bundlephobia/minzip/react-medium-image-zoom)](https://bundlephobia.com/package/react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-96-orange.svg)](#contributors-)
+[![npm version](https://img.shields.io/npm/v/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![bundlephobia size](https://badgen.net/bundlephobia/minzip/react-medium-image-zoom)](https://bundlephobia.com/package/react-medium-image-zoom) [![npm downloads](https://img.shields.io/npm/dm/react-medium-image-zoom.svg)](https://www.npmjs.com/package/react-medium-image-zoom) [![All Contributors](https://img.shields.io/badge/all_contributors-97-orange.svg)](#contributors-)
 
 The original [medium.com-inspired image zooming](https://medium.design/image-zoom-on-medium-24d146fc0c20)
 library for [React](https://reactjs.org).
@@ -497,6 +497,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://skk.moe/"><img src="https://avatars.githubusercontent.com/u/40715044?v=4?s=40" width="40px;" alt="Sukka"/><br /><sub><b>Sukka</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/commits?author=SukkaW" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/MichalKowalczyk"><img src="https://avatars.githubusercontent.com/u/17525378?v=4?s=40" width="40px;" alt="Michał Kowalczyk"/><br /><sub><b>Michał Kowalczyk</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3AMichalKowalczyk" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/tarngerine"><img src="https://avatars.githubusercontent.com/u/1629901?v=4?s=40" width="40px;" alt="Julius Tarng"/><br /><sub><b>Julius Tarng</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Atarngerine" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/joeyvanlierop"><img src="https://avatars.githubusercontent.com/u/13614780?v=4?s=40" width="40px;" alt="Joey Van Lierop"/><br /><sub><b>Joey Van Lierop</b></sub></a><br /><a href="https://github.com/rpearce/react-medium-image-zoom/issues?q=author%3Ajoeyvanlierop" title="Bug reports">🐛</a> <a href="https://github.com/rpearce/react-medium-image-zoom/pulls?q=is%3Apr+reviewed-by%3Ajoeyvanlierop" title="Reviewed Pull Requests">👀</a></td>
     </tr>
   </tbody>
 </table>

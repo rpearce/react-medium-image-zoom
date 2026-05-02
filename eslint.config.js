@@ -71,6 +71,7 @@ export default [
       'require-unicode-regexp': 'off',
       eqeqeq: ['error', 'always', { null: 'ignore' }],
       'react/prop-types': 'off',
+      '@typescript-eslint/prefer-destructuring': 'off',
       '@typescript-eslint/prefer-function-type': 'off',
       '@typescript-eslint/consistent-type-imports': [
         'error',
