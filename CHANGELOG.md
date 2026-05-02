@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.4.5
+
+### Patch Changes
+
+- baed043: fix: "Zoom/pan becomes erratic when page height exceeds viewport (Safari iOS)" #1060
+
 ## 5.4.4
 
 ### Patch Changes
