@@ -3,6 +3,8 @@ allowBuilds:
   esbuild: false
   unrs-resolver: false
 
-minimumReleaseAge: 2880
+minimumReleaseAge: 10080
 
-strictDepBuilds: true
+trustPolicy: 'no-downgrade'
+trustPolicyExclude:
+  - 'semver@6.3.1'
