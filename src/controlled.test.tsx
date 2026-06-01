@@ -203,6 +203,35 @@ describe('Controlled', () => {
     expect(document.body.style.overflow).toBe('auto')
   })
 
+  // Regression: https://github.com/rpearce/react-medium-image-zoom/issues/1085
+  // The position:fixed scroll lock restores the page's scroll position on
+  // unzoom.  Restoring it with the legacy `scrollTo(x, y)` form honors a
+  // page-level `scroll-behavior: smooth` (common in Next.js), so the page
+  // animates from the top of the document down to the previous position - a
+  // visible jump.  The restore must be instant regardless of scroll-behavior.
+  it('restores scroll position instantly on unzoom, ignoring smooth scroll', async () => {
+    Object.defineProperty(window, 'scrollY', { value: 500, configurable: true })
+    const scrollToSpy = vi.spyOn(window, 'scrollTo').mockImplementation(noop)
+
+    try {
+      const { rerender } = await renderZoom({ isZoomed: false })
+
+      await rerender({ isZoomed: true })
+      const modalImg = getPortalModalImg()
+      if (modalImg !== null) await fireTransitionEnd(modalImg)
+
+      await rerender({ isZoomed: false })
+      if (modalImg !== null) await fireTransitionEnd(modalImg)
+
+      expect(scrollToSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ top: 500, behavior: 'instant' }),
+      )
+    } finally {
+      scrollToSpy.mockRestore()
+      Object.defineProperty(window, 'scrollY', { value: 0, configurable: true })
+    }
+  })
+
   // Regression: https://github.com/rpearce/react-medium-image-zoom/issues/448
   // When a parent passes an inline `ZoomContent={(props) => ...}` whose
   // function identity changes on every render, the ZoomContent subtree

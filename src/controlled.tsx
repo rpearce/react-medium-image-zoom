@@ -857,7 +857,10 @@ class ControlledBase extends React.Component<
     bodyStyle.position = prev.position
     bodyStyle.top = prev.top
     bodyStyle.overflow = prev.overflow
-    window.scrollTo(0, this.prevScrollY)
+    // `behavior: 'instant'` so restoring the scroll position is not animated by
+    // a page-level `scroll-behavior: smooth`, which would otherwise scroll from
+    // the top of the document down to the previous position (#1085).
+    window.scrollTo({ left: 0, top: this.prevScrollY, behavior: 'instant' })
     this.prevBodyAttrs = defaultBodyAttrs
     this.prevScrollY = 0
   }
