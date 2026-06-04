@@ -867,6 +867,67 @@ function CardItem({
 }
 
 // =============================================================================
+
+/**
+ * Manual regression demo for #1085: with `scroll-behavior: smooth`, closing the
+ * zoom must restore the scroll position instantly, with no animated jump.
+ * https://github.com/rpearce/react-medium-image-zoom/issues/1085
+ */
+export const ScrollRestoreOnClose: Story = props => {
+  // #1085 only reproduces with smooth scrolling enabled.
+  React.useEffect(() => {
+    const html = document.documentElement
+    const prev = html.style.scrollBehavior
+    html.style.scrollBehavior = 'smooth'
+
+    return () => {
+      html.style.scrollBehavior = prev
+    }
+  }, [])
+
+  return (
+    <main aria-label="Story">
+      <div style={{ padding: 16, maxWidth: 640 }}>
+        <h1>Scroll restore on close (#1085)</h1>
+        <p>
+          Scroll down to the image, zoom it, then close it. Your position should
+          restore <strong>instantly</strong> — no jump — even though this page
+          uses <code>scroll-behavior: smooth</code>.
+        </p>
+      </div>
+
+      <div
+        aria-hidden="true"
+        style={{
+          height: '150vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#888',
+          background: 'linear-gradient(#fafafa, #d8d8d8)',
+        }}
+      >
+        ↓ keep scrolling ↓
+      </div>
+
+      <div style={{ padding: 16, maxWidth: 640 }}>
+        <Zoom {...props}>
+          <img
+            alt={imgThatWanakaTree.alt}
+            src={imgThatWanakaTree.src}
+            height="320"
+            decoding="async"
+          />
+        </Zoom>
+      </div>
+
+      <div aria-hidden="true" style={{ height: '120vh' }} />
+    </main>
+  )
+}
+ScrollRestoreOnClose.parameters = { layout: 'fullscreen' }
+
+// =============================================================================
 // INTERACTIONS
 
 export const AutomatedTest: Story = Regular.bind({})
