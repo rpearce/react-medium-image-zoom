@@ -727,6 +727,13 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/13614780?v=4",
       "profile": "https://github.com/joeyvanlierop",
       "contributions": ["bug", "review"]
+    },
+    {
+      "login": "fakkio",
+      "name": "Fabio Lazzaroni",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15056746?v=4",
+      "profile": "https://fabiolazzaroni.dev/",
+      "contributions": ["bug"]
     }
   ],
   "repoType": "github",
