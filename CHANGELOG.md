@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.4.6
+
+### Patch Changes
+
+- 56789a4: fix: restore scroll position instantly on unzoom so pages with `scroll-behavior: smooth` no longer animate from the top of the document back to the previous position #1085
+
 ## 5.4.5
 
 ### Patch Changes
