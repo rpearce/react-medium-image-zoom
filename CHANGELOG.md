@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.4.7
+
+### Patch Changes
+
+- bf0424c: fix: opening or closing a zoom no longer shifts the page's scroll position, so scroll-driven UI (sticky/condensing headers, scroll-spies, scroll-triggered animations) no longer fires as though the user scrolled #1085
+
 ## 5.4.6
 
 ### Patch Changes
