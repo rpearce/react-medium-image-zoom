@@ -5,6 +5,9 @@ allowBuilds:
 
 minimumReleaseAge: 10080
 
+minimumReleaseAgeExclude:
+  - concurrently@10.0.3
+
 trustPolicy: 'no-downgrade'
 trustPolicyExclude:
   - 'semver@6.3.1'
