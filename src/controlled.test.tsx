@@ -176,22 +176,6 @@ describe('Controlled', () => {
     expectCalledWith(onZoomChange, false)
   })
 
-  it('disables body scroll on zoom and restores it after full unload', async () => {
-    document.body.style.overflow = 'auto'
-    const { rerender } = await renderZoom({ isZoomed: false })
-
-    await rerender({ isZoomed: true })
-    expect(document.body.style.overflow).toBe('hidden')
-
-    const modalImg = getPortalModalImg()
-    if (modalImg !== null) await fireTransitionEnd(modalImg)
-
-    await rerender({ isZoomed: false })
-    if (modalImg !== null) await fireTransitionEnd(modalImg)
-
-    expect(document.body.style.overflow).toBe('auto')
-  })
-
   it('restores body scroll if unmounted while zoomed', async () => {
     document.body.style.overflow = 'auto'
     const { rerender, unmount } = await renderZoom({ isZoomed: false })
@@ -204,12 +188,12 @@ describe('Controlled', () => {
   })
 
   // Regression: https://github.com/rpearce/react-medium-image-zoom/issues/1085
-  // The position:fixed scroll lock restores the page's scroll position on
-  // unzoom.  Restoring it with the legacy `scrollTo(x, y)` form honors a
-  // page-level `scroll-behavior: smooth` (common in Next.js), so the page
-  // animates from the top of the document down to the previous position - a
-  // visible jump.  The restore must be instant regardless of scroll-behavior.
-  it('restores scroll position instantly on unzoom, ignoring smooth scroll', async () => {
+  // The lock must not use `position: fixed`/`scrollTo`: those zero
+  // `window.scrollY` and fire scroll events on lock/unlock that spuriously
+  // trigger scroll-position-driven UI on close. `overflow: hidden` alone leaves
+  // `window.scrollY` untouched.
+  it('locks with overflow only and never scrolls the window', async () => {
+    document.body.style.overflow = 'auto'
     Object.defineProperty(window, 'scrollY', { value: 500, configurable: true })
     const scrollToSpy = vi.spyOn(window, 'scrollTo').mockImplementation(noop)
 
@@ -217,15 +201,19 @@ describe('Controlled', () => {
       const { rerender } = await renderZoom({ isZoomed: false })
 
       await rerender({ isZoomed: true })
+      expect(document.body.style.overflow).toBe('hidden')
+      expect(document.body.style.position).not.toBe('fixed')
+      expect(document.body.style.top).toBe('')
+
       const modalImg = getPortalModalImg()
       if (modalImg !== null) await fireTransitionEnd(modalImg)
 
       await rerender({ isZoomed: false })
       if (modalImg !== null) await fireTransitionEnd(modalImg)
 
-      expect(scrollToSpy).toHaveBeenCalledWith(
-        expect.objectContaining({ top: 500, behavior: 'instant' }),
-      )
+      // Restored to the original value, and the window was never scrolled.
+      expect(document.body.style.overflow).toBe('auto')
+      expect(scrollToSpy).not.toHaveBeenCalled()
     } finally {
       scrollToSpy.mockRestore()
       Object.defineProperty(window, 'scrollY', { value: 0, configurable: true })
