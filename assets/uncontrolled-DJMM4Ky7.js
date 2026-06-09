@@ -1,1 +1,0 @@
-import{R as o}from"./iframe-BX1mk9YF.js";import{C as c}from"./styles-ByqX_qo_.js";function d({onZoomChange:e,...n}){const[s,a]=o.useState(!1),r=o.useCallback((t,{event:l})=>{a(t),e?.(t,{event:l})},[e]);return o.createElement(c,{...n,isZoomed:s,onZoomChange:r})}d.__docgenInfo={description:"",methods:[],displayName:"Uncontrolled"};export{d as U};
