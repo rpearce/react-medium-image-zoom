@@ -32,8 +32,6 @@ type ModalState = 'LOADED' | 'LOADING' | 'UNLOADED' | 'UNLOADING'
 
 interface BodyAttrs {
   overflow: string
-  position: string
-  top: string
   width: string
 }
 
@@ -44,8 +42,6 @@ interface BodyAttrs {
  */
 const defaultBodyAttrs: BodyAttrs = {
   overflow: '',
-  position: '',
-  top: '',
   width: '',
 }
 
@@ -168,7 +164,6 @@ class ControlledBase extends React.Component<
   private imgElResizeObserver: ResizeObserver | undefined
   private isScaling = false
   private prevBodyAttrs: BodyAttrs = defaultBodyAttrs
-  private prevScrollY = 0
   private styleModalImg: StyleObject = {}
   private touchYStart?: number
   private touchYEnd?: number
@@ -824,26 +819,22 @@ class ControlledBase extends React.Component<
   // ===========================================================================
 
   /**
-   * Disable body scrolling
+   * Disable body scrolling with `overflow: hidden` only — no `position: fixed`,
+   * which would zero `window.scrollY` and fire scroll events that break
+   * scroll-driven UI (#1085). iOS pinch-pan (#1060) is handled by the
+   * `handleWheel` pinch guards + the modal's `overscroll-behavior: none`.
    */
   bodyScrollDisable = (): void => {
     const bodyStyle = document.body.style
     this.prevBodyAttrs = {
       overflow: bodyStyle.overflow,
-      position: bodyStyle.position,
-      top: bodyStyle.top,
       width: bodyStyle.width,
     }
-
-    const scrollY = window.scrollY
-    this.prevScrollY = scrollY
 
     // Get clientWidth before changing styles to avoid scrollbar shift
     const clientWidth = document.body.clientWidth
 
     bodyStyle.overflow = 'hidden'
-    bodyStyle.position = 'fixed'
-    bodyStyle.top = `-${scrollY}px`
     bodyStyle.width = `${clientWidth}px`
   }
 
@@ -854,15 +845,8 @@ class ControlledBase extends React.Component<
     const bodyStyle = document.body.style
     const prev = this.prevBodyAttrs
     bodyStyle.width = prev.width
-    bodyStyle.position = prev.position
-    bodyStyle.top = prev.top
     bodyStyle.overflow = prev.overflow
-    // `behavior: 'instant'` so restoring the scroll position is not animated by
-    // a page-level `scroll-behavior: smooth`, which would otherwise scroll from
-    // the top of the document down to the previous position (#1085).
-    window.scrollTo({ left: 0, top: this.prevScrollY, behavior: 'instant' })
     this.prevBodyAttrs = defaultBodyAttrs
-    this.prevScrollY = 0
   }
 
   // ===========================================================================

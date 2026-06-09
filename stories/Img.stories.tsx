@@ -869,31 +869,106 @@ function CardItem({
 // =============================================================================
 
 /**
- * Manual regression demo for #1085: with `scroll-behavior: smooth`, closing the
- * zoom must restore the scroll position instantly, with no animated jump.
+ * Manual regression demo for the #1085 follow-up: opening/closing the zoom must
+ * not perturb `window.scrollY` or fire phantom `scroll` events, or
+ * scroll-position-driven UI reacts as if the user scrolled. The header collapses
+ * on scroll; the "phantom" counter must stay 0 across a zoom cycle.
  * https://github.com/rpearce/react-medium-image-zoom/issues/1085
  */
-export const ScrollRestoreOnClose: Story = props => {
-  // #1085 only reproduces with smooth scrolling enabled.
+export const ScrollPositionUiStaysStable: Story = props => {
+  const threshold = 200
+  const [scrollY, setScrollY] = React.useState(0)
+  const [scrollEvents, setScrollEvents] = React.useState(0)
+  const [phantomEvents, setPhantomEvents] = React.useState(0)
+  const zoomWindowRef = React.useRef(false)
+
   React.useEffect(() => {
-    const html = document.documentElement
-    const prev = html.style.scrollBehavior
-    html.style.scrollBehavior = 'smooth'
+    const handleScroll = (): void => {
+      setScrollY(window.scrollY)
+      setScrollEvents(n => n + 1)
+
+      // A scroll event firing while a zoom is opening/closing is a phantom: the
+      // user did not scroll, so off iOS this must never happen.
+      if (zoomWindowRef.current) {
+        setPhantomEvents(n => n + 1)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => {
-      html.style.scrollBehavior = prev
+      window.removeEventListener('scroll', handleScroll)
     }
   }, [])
 
+  const handleZoomChange = (active: boolean): void => {
+    if (active) {
+      zoomWindowRef.current = true
+    } else {
+      // Keep the window open briefly so the close-time restore scroll event (if
+      // any) is still attributed to this zoom cycle.
+      window.setTimeout(() => {
+        zoomWindowRef.current = false
+      }, 150)
+    }
+  }
+
+  const isCompact = scrollY > threshold
+
   return (
     <main aria-label="Story">
-      <div style={{ padding: 16, maxWidth: 640 }}>
-        <h1>Scroll restore on close (#1085)</h1>
-        <p>
-          Scroll down to the image, zoom it, then close it. Your position should
-          restore <strong>instantly</strong> — no jump — even though this page
-          uses <code>scroll-behavior: smooth</code>.
-        </p>
+      <header
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1,
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 16,
+          alignItems: 'center',
+          padding: isCompact ? '8px 16px' : '24px 16px',
+          background: isCompact ? '#1f2937' : '#2563eb',
+          color: '#fff',
+          fontFamily: 'sans-serif',
+          transition: 'padding 250ms ease, background 250ms ease',
+        }}
+      >
+        <strong
+          style={{
+            fontSize: isCompact ? 16 : 22,
+            transition: 'font-size 250ms ease',
+          }}
+        >
+          {isCompact ? 'Header — COMPACT' : 'Header — EXPANDED'}
+        </strong>
+        <span>scrollY: {Math.round(scrollY)}</span>
+        <span>scroll events: {scrollEvents}</span>
+        <span style={{ color: phantomEvents > 0 ? '#fca5a5' : '#86efac' }}>
+          phantom (during zoom): {phantomEvents}
+        </span>
+      </header>
+
+      <div style={{ padding: '96px 16px 16px', maxWidth: 640 }}>
+        <h1>Scroll-position UI stays stable across zoom (#1085)</h1>
+        <ol>
+          <li>
+            Scroll down until the header collapses to <strong>COMPACT</strong>{' '}
+            (scrollY &gt; {threshold}).
+          </li>
+          <li>Without scrolling further, zoom the image, then close it.</li>
+          <li>
+            ✅ Fixed: the header stays COMPACT, <code>scrollY</code> is
+            unchanged, and <strong>phantom (during zoom)</strong> stays{' '}
+            <strong>0</strong>.
+          </li>
+          <li>
+            ❌ Before the fix: the header flickered EXPANDED→COMPACT and the
+            phantom counter jumped by 2 each cycle (the body scroll-lock used{' '}
+            <code>position: fixed</code>, which zeroed <code>scrollY</code>).
+          </li>
+        </ol>
       </div>
 
       <div
@@ -911,7 +986,7 @@ export const ScrollRestoreOnClose: Story = props => {
       </div>
 
       <div style={{ padding: 16, maxWidth: 640 }}>
-        <Zoom {...props}>
+        <Zoom {...props} onZoomChange={handleZoomChange}>
           <img
             alt={imgThatWanakaTree.alt}
             src={imgThatWanakaTree.src}
@@ -925,7 +1000,8 @@ export const ScrollRestoreOnClose: Story = props => {
     </main>
   )
 }
-ScrollRestoreOnClose.parameters = { layout: 'fullscreen' }
+ScrollPositionUiStaysStable.storyName = 'Scroll Position UI Stays Stable'
+ScrollPositionUiStaysStable.parameters = { layout: 'fullscreen' }
 
 // =============================================================================
 // INTERACTIONS
