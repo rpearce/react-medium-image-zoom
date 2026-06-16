@@ -330,7 +330,7 @@ class ControlledBase extends React.Component<
     // =========================================================================
 
     return (
-      <WrapElement aria-owns={idModal} data-rmiz="" ref={refWrap}>
+      <WrapElement data-rmiz="" ref={refWrap}>
         <WrapElement
           data-rmiz-content={dataContentState}
           ref={refContent}
@@ -357,7 +357,7 @@ class ControlledBase extends React.Component<
               aria-modal="true"
               className={classDialog}
               data-rmiz-modal=""
-              id={idModal}
+              id={idModal} /* not referenced here; keep for backwards compat */
               onClick={handleDialogClick}
               onClose={handleDialogClose}
               onCancel={handleDialogCancelStatic}
