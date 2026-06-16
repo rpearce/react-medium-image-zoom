@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.4.8
+
+### Patch Changes
+
+- e5503b2: remove invalid aria-owns usage
+
 ## 5.4.7
 
 ### Patch Changes
