@@ -1,4 +1,4 @@
-import{u as r,j as e,M as i}from"./blocks-BvfNxETK.js";/* empty css             */import"./preload-helper-PPVm8Dsz.js";import"./iframe-F0KbCADE.js";import"./index-gwnNOiz-.js";import"./index-B-EPBLPp.js";function n(o){const t={a:"a",code:"code",h1:"h1",p:"p",...r(),...o.components};return e.jsxs(e.Fragment,{children:[e.jsx(i,{title:"Introduction"}),`
+import{u as r,j as e,M as i}from"./blocks-Bc1P59fY.js";/* empty css             */import"./preload-helper-PPVm8Dsz.js";import"./iframe-Cr2v-AxT.js";import"./index-DY8CbGS3.js";import"./index-f9Tzh4de.js";function n(o){const t={a:"a",code:"code",h1:"h1",p:"p",...r(),...o.components};return e.jsxs(e.Fragment,{children:[e.jsx(i,{title:"Introduction"}),`
 `,e.jsx(t.h1,{id:"introduction",children:"Introduction"}),`
 `,e.jsxs(t.p,{children:[`This site showcases different usages of
 `,e.jsx(t.a,{href:"https://github.com/rpearce/react-medium-image-zoom",rel:"nofollow",children:e.jsx(t.code,{children:"react-medium-image-zoom"})}),`,
