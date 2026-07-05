@@ -20,10 +20,15 @@ on:
       - 'LICENSE'
       - 'compose.yml'
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout repo under GH workspace
         uses: actions/checkout@v7.0.0
