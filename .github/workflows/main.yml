@@ -31,7 +31,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout repo under GH workspace
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
 
       - name: Install
         uses: ./.github/actions/install
