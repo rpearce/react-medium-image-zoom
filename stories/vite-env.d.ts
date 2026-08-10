@@ -1,4 +1,3 @@
-// oxlint-disable-next-line typescript/triple-slash-reference -- required for ambient declarations to remain global
 /// <reference types="vite/client" />
 
 declare module '*.jpg' {

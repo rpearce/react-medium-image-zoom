@@ -5,6 +5,15 @@
   "prConcurrentLimit": 5,
   "minimumReleaseAge": "2 days",
   "rangeStrategy": "bump",
+  "osvVulnerabilityAlerts": true,
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "minimumReleaseAge": null
+  },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 6am on monday"]
+  },
   "packageRules": [
     {
       "description": "Never touch peerDependencies. The supported React range is a published API contract, not a dependency to keep current.",
