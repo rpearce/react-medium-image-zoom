@@ -1,0 +1,36 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "semanticCommits": "enabled",
+  "prConcurrentLimit": 5,
+  "minimumReleaseAge": "2 days",
+  "rangeStrategy": "bump",
+  "packageRules": [
+    {
+      "description": "Never touch peerDependencies. The supported React range is a published API contract, not a dependency to keep current.",
+      "matchDepTypes": ["peerDependencies"],
+      "enabled": false
+    },
+    {
+      "description": "Leave the node version alone. Both .nvmrc and the node-version input in .github/actions/install pin the major line ('24') on purpose; Renovate would rewrite them to an exact 24.x.y.",
+      "matchDepNames": ["node"],
+      "enabled": false
+    },
+    {
+      "description": "Match the minimumReleaseAge (10080 minutes) in pnpm-workspace.yaml. Without this, Renovate proposes versions that pnpm itself refuses to resolve, and the lockfile update fails.",
+      "matchManagers": ["npm"],
+      "minimumReleaseAge": "7 days"
+    },
+    {
+      "description": "Keep the pnpm toolchain bump on its own PR. Renovate rewrites the packageManager pin via `corepack use`, which regenerates the sha512 hash. The pnpm gate above does not apply here — corepack installs the binary, it is not resolved from the registry by pnpm.",
+      "matchDepTypes": ["packageManager"],
+      "groupName": "pnpm",
+      "minimumReleaseAge": "2 days"
+    },
+    {
+      "description": "One grouped PR for devDependencies, replacing the dependabot dev-dependencies group. Note this does NOT capture packages that config:recommended detects as monorepos (storybook, oxlint, vitest, happy-dom) — those keep their own grouped PRs, which is desirable since their packages must move in lockstep.",
+      "matchDepTypes": ["devDependencies"],
+      "groupName": "dev-dependencies"
+    }
+  ]
+}

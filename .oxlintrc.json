@@ -1,0 +1,83 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "import", "promise", "oxc", "vitest"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error",
+    "perf": "error"
+  },
+  "ignorePatterns": [
+    "coverage/",
+    "dist/",
+    "docs/",
+    "node_modules/",
+    "packages/"
+  ],
+  "rules": {
+    "react/react-compiler": "error",
+    "react/exhaustive-deps": "error",
+    "react/rules-of-hooks": "error",
+
+    "typescript/no-floating-promises": "error",
+    "typescript/no-misused-promises": "error",
+    "typescript/strict-boolean-expressions": "error",
+    "typescript/no-unsafe-assignment": "error",
+    "typescript/no-unsafe-call": "error",
+    "typescript/no-unsafe-member-access": "error",
+    "typescript/no-unsafe-return": "error",
+    "typescript/no-unsafe-argument": "error",
+    "typescript/restrict-template-expressions": "error",
+    "typescript/restrict-plus-operands": "error",
+    "typescript/no-unnecessary-condition": "error",
+    "typescript/prefer-nullish-coalescing": "error",
+    "typescript/prefer-optional-chain": "error",
+    "typescript/await-thenable": "error",
+    "typescript/no-confusing-void-expression": "error",
+    "typescript/promise-function-async": "error",
+    "typescript/no-unnecessary-type-assertion": "error",
+    "typescript/no-base-to-string": "error",
+    "typescript/only-throw-error": "error",
+    "typescript/return-await": "error",
+    "typescript/use-unknown-in-catch-callback-variable": "error",
+    "typescript/no-deprecated": "error",
+    "typescript/no-explicit-any": "error",
+    "typescript/explicit-function-return-type": "error",
+    "typescript/no-shadow": "error",
+    "typescript/consistent-type-imports": [
+      "error",
+      { "fixStyle": "inline-type-imports" }
+    ],
+
+    "eqeqeq": ["error", "always", { "null": "ignore" }],
+    "complexity": "error",
+    "max-lines": [
+      "error",
+      { "max": 300, "skipBlankLines": true, "skipComments": true }
+    ],
+
+    "typescript/triple-slash-reference": "error",
+    "typescript/no-unsafe-type-assertion": "error",
+    "promise/avoid-new": "error",
+
+    "typescript/no-magic-numbers": "off",
+    "require-unicode-regexp": "off",
+    "typescript/prefer-function-type": "off",
+    "typescript/consistent-return": "off"
+  },
+  "overrides": [
+    {
+      "files": ["stories/**/*", "**/*.test.{ts,tsx}", "test/**/*"],
+      "rules": {
+        "max-lines": "off",
+        "max-lines-per-function": "off",
+        "no-console": "off",
+        "typescript/explicit-function-return-type": "off",
+        "react/no-unstable-nested-components": "off",
+        "react/no-array-index-key": "off",
+        "vitest/expect-expect": "off",
+        "vitest/no-conditional-in-test": "off",
+        "import/no-unassigned-import": "off"
+      }
+    }
+  ]
+}

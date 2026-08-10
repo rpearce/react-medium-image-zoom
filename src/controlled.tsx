@@ -1,4 +1,4 @@
-/* eslint-disable max-lines -- this file contains a single React class component that manages zoom state and rendering */
+/* oxlint-disable max-lines -- this file contains a single React class component that manages zoom state and rendering */
 import React from 'react'
 import ReactDOM from 'react-dom'
 
@@ -170,7 +170,7 @@ class ControlledBase extends React.Component<
 
   private timeoutTransitionEnd?: ReturnType<typeof setTimeout>
 
-  // eslint-disable-next-line complexity -- render method requires many conditional branches for modal states and image types
+  // oxlint-disable-next-line complexity -- render method requires many conditional branches for modal states and image types
   render(): React.ReactNode {
     const {
       handleBtnUnzoomClick,
@@ -352,7 +352,7 @@ class ControlledBase extends React.Component<
         )}
         {hasImage &&
           ReactDOM.createPortal(
-            <dialog /* eslint-disable-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-redundant-roles -- dialog element requires these for accessibility workarounds */
+            <dialog
               aria-labelledby={idModalImg}
               aria-modal="true"
               className={classDialog}
@@ -492,7 +492,7 @@ class ControlledBase extends React.Component<
         const [entry] = entries
 
         if (entry?.target !== undefined) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- ResizeObserver is observing this.imgEl which is always a SupportedImage
+          // oxlint-disable-next-line typescript/no-unsafe-type-assertion -- ResizeObserver is observing this.imgEl which is always a SupportedImage
           this.imgEl = entry.target as SupportedImage
 
           // Update ghost and force a re-render.
@@ -896,7 +896,7 @@ class ControlledBase extends React.Component<
     const { imgEl, refModalImg, styleModalImg } = this
 
     if (testSvg(imgEl)) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion -- cloneNode of an SVGElement returns the same type
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion -- cloneNode of an SVGElement returns the same type
       const svgEl = imgEl.cloneNode(true) as typeof imgEl
 
       // Deal with cloned SVG ID duplicate issues from https://github.com/rpearce/react-medium-image-zoom/issues/438

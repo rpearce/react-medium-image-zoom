@@ -73,7 +73,7 @@ export function createTargetEl<K extends 'div' | 'img' | 'span'>(
     bottom: rect.top + rect.height,
     x: rect.left,
     y: rect.top,
-    toJSON: () => undefined,
+    toJSON: (): undefined => undefined,
   })
 
   return el
