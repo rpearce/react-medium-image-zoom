@@ -80,10 +80,10 @@ img {
   transition-duration: 0.8s;
   transition-timing-function: linear;
 }
-.custom-zoom [data-rmiz-modal-overlay="hidden"] {
+.custom-zoom [data-rmiz-modal-overlay='hidden'] {
   background-color: rgb(56, 58, 89, 0);
 }
-.custom-zoom [data-rmiz-modal-overlay="visible"] {
+.custom-zoom [data-rmiz-modal-overlay='visible'] {
   background-color: rgb(56, 58, 89, 1);
 }
 .custom-zoom [data-rmiz-btn-unzoom] {
@@ -181,6 +181,10 @@ img {
   user-select: none;
 }
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
