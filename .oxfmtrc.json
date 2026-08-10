@@ -10,6 +10,14 @@
   "useTabs": false,
   "printWidth": 80,
   "sortPackageJson": false,
+  "overrides": [
+    {
+      "files": ["**/*.css"],
+      "options": {
+        "singleQuote": false
+      }
+    }
+  ],
   "ignorePatterns": [
     "./.changeset/",
     "./.git/",
