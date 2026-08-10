@@ -6,7 +6,6 @@
   "editor.formatOnSave": true,
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
-  "typescript.tsdk": "node_modules/typescript/lib",
   "[css]": {
     "editor.insertSpaces": true,
     "editor.tabSize": 2

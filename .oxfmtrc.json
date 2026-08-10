@@ -19,10 +19,10 @@
     }
   ],
   "ignorePatterns": [
-    "./.changeset/",
-    "./.git/",
-    "./.pnpm-store/",
-    "./dist/",
+    ".changeset/",
+    ".git/",
+    ".pnpm-store/",
+    "dist/",
     "node_modules/",
     "pnpm-lock.yaml"
   ]

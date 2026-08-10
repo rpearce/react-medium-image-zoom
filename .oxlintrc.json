@@ -83,6 +83,7 @@
     ],
 
     "promise/avoid-new": "error",
+    "no-console": "error",
     "eqeqeq": ["error", "always", { "null": "ignore" }],
     "complexity": "error",
     "max-lines": [
