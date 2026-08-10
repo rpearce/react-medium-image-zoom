@@ -114,9 +114,11 @@ export const ImageGallery: Story = () => {
           margin: 0,
           padding: 0,
         }}
+        /* oxlint-disable-next-line jsx-a11y/no-redundant-roles -- role="list" restores VoiceOver semantics removed by list-style:none */
         role="list"
       >
         {images.map((img, i) => (
+          /* oxlint-disable-next-line jsx-a11y/no-redundant-roles -- role="listitem" restores VoiceOver semantics */
           <li key={i} role="listitem">
             <Zoom>
               <img

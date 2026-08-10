@@ -352,6 +352,7 @@ class ControlledBase extends React.Component<
         )}
         {hasImage &&
           ReactDOM.createPortal(
+            /* oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- click-outside-to-close; keyboard dismissal is handled by the native dialog via onCancel */
             <dialog
               aria-labelledby={idModalImg}
               aria-modal="true"
@@ -362,6 +363,7 @@ class ControlledBase extends React.Component<
               onClose={handleDialogClose}
               onCancel={handleDialogCancelStatic}
               ref={refDialog}
+              /* oxlint-disable-next-line jsx-a11y/no-redundant-roles -- explicit role="dialog" for AT that lack native <dialog> support */
               role="dialog"
             >
               <div data-rmiz-modal-overlay={dataOverlayState} />

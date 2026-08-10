@@ -841,6 +841,7 @@ function CardItem({
   }, [])
 
   return (
+    /* oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- demo card selection uses a click handler on li for simplicity */
     <li className="card" onClick={handleItemClick}>
       <label>
         <input

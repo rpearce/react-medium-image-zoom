@@ -1,6 +1,14 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["typescript", "react", "import", "promise", "oxc", "vitest"],
+  "plugins": [
+    "typescript",
+    "react",
+    "jsx-a11y",
+    "import",
+    "promise",
+    "oxc",
+    "vitest"
+  ],
   "options": {
     "typeAware": true,
     "reportUnusedDisableDirectives": "error"
@@ -96,6 +104,8 @@
     "no-shadow": "off",
     "no-throw-literal": "off",
     "require-await": "off",
+
+    "jsx-a11y/prefer-tag-over-role": "off",
 
     "typescript/no-magic-numbers": "off",
     "typescript/prefer-function-type": "off",
