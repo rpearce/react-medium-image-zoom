@@ -105,22 +105,21 @@ export const ImageGallery: Story = () => {
         </div>
         <button type="submit">Apply changes</button>
       </form>
-      <ul /* eslint-disable-line jsx-a11y/no-redundant-roles -- role="list" restores VoiceOver semantics removed by list-style:none */
+      <ul
         style={{
           display: 'grid',
           gridTemplateColumns: '2fr 2fr 2fr',
-          gridGap: '2rem',
+          gap: '2rem',
           listStyle: 'none',
           margin: 0,
           padding: 0,
         }}
+        /* oxlint-disable-next-line jsx-a11y/no-redundant-roles -- role="list" restores VoiceOver semantics removed by list-style:none */
         role="list"
       >
         {images.map((img, i) => (
-          <li /* eslint-disable-line jsx-a11y/no-redundant-roles -- role="listitem" restores VoiceOver semantics */
-            key={i}
-            role="listitem"
-          >
+          /* oxlint-disable-next-line jsx-a11y/no-redundant-roles -- role="listitem" restores VoiceOver semantics */
+          <li key={i} role="listitem">
             <Zoom>
               <img
                 alt={img.alt}

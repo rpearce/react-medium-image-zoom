@@ -1,13 +1,11 @@
 {
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "always"
+    "source.fixAll.oxc": "always"
   },
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.formatOnSave": true,
-  "eslint.format.enable": true,
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
-  "typescript.tsdk": "node_modules/typescript/lib",
   "[css]": {
     "editor.insertSpaces": true,
     "editor.tabSize": 2

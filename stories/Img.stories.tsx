@@ -816,7 +816,7 @@ function CardItem({
   const [isSelected, setIsSelected] = React.useState(false)
 
   const handleItemClick = React.useCallback(() => {
-    setIsSelected(isSelected => !isSelected)
+    setIsSelected(prevIsSelected => !prevIsSelected)
   }, [])
 
   const handleInputClick: React.MouseEventHandler<HTMLInputElement> =
@@ -841,7 +841,7 @@ function CardItem({
   }, [])
 
   return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- demo card selection uses click handler on li for simplicity
+    /* oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions -- demo card selection uses a click handler on li for simplicity */
     <li className="card" onClick={handleItemClick}>
       <label>
         <input
@@ -1068,7 +1068,7 @@ const cx = (mods: Record<string, boolean>): string => {
 }
 
 const delay = async (duration: number): Promise<void> => {
-  // eslint-disable-next-line promise/avoid-new -- setTimeout requires a Promise wrapper
+  // oxlint-disable-next-line promise/avoid-new -- setTimeout requires a Promise wrapper
   await new Promise<void>(resolve => {
     setTimeout(resolve, duration)
   })
