@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.4.9
+
+### Patch Changes
+
+- a05d79d: build with TypeScript 7
+- a05d79d: replace Dependabot with Renovate for dependency updates
+- a05d79d: upgrade dev dependencies, including storybook 10.5.5 and react 19.2.8
+- a05d79d: stop publishing test files in dist/ — the build's exclude pattern only matched `.ts`, so `controlled.test.tsx` was compiled into the published package
+- a05d79d: replace eslint and prettier with oxlint and oxfmt
+
 ## 5.4.8
 
 ### Patch Changes
