@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { afterEach, describe, it, expect, vi } from 'vitest'
 
 import { Controlled, type ControlledProps } from './controlled.js'
+import { mockComputedStyle } from './utils/test-helpers.js'
 
 type OnZoomChange = NonNullable<ControlledProps['onZoomChange']>
 
@@ -292,9 +293,7 @@ afterEach(() => {
 })
 
 function mockBrowserApis(): void {
-  const baseStyle = window.getComputedStyle(document.createElement('div'))
-
-  for (const [key, value] of Object.entries({
+  mockComputedStyle({
     display: 'block',
     transitionDuration: '0.3s',
     objectFit: 'fill',
@@ -302,11 +301,7 @@ function mockBrowserApis(): void {
     backgroundPosition: '50% 50%',
     backgroundSize: 'auto',
     transform: 'none',
-  })) {
-    Object.defineProperty(baseStyle, key, { value, configurable: true })
-  }
-
-  vi.spyOn(window, 'getComputedStyle').mockReturnValue(baseStyle)
+  })
 
   // happy-dom's Image never loads, so naturalWidth/Height stay 0 → NaN in
   // style calculations.  Give every decoded Image realistic dimensions.

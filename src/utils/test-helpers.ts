@@ -52,11 +52,12 @@ export function setupBrowserGlobals(
 
   setWindowDimensions(viewport.width, viewport.height)
 
-  const baseStyle = window.getComputedStyle(document.createElement('div'))
+  mockComputedStyle(cs)
+}
 
-  for (const [key, value] of Object.entries(cs)) {
-    Object.defineProperty(baseStyle, key, { value, configurable: true })
-  }
+export function mockComputedStyle(style: object): void {
+  const baseStyle = document.createElement('div').style
+  Object.assign(baseStyle, style)
 
   vi.spyOn(window, 'getComputedStyle').mockReturnValue(baseStyle)
 }
