@@ -1,14 +1,16 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
+  "extends": ["config:best-practices"],
   "semanticCommits": "enabled",
   "prConcurrentLimit": 5,
-  "minimumReleaseAge": "2 days",
+  "prCreation": "not-pending",
   "rangeStrategy": "bump",
   "osvVulnerabilityAlerts": true,
   "vulnerabilityAlerts": {
     "enabled": true,
-    "minimumReleaseAge": null
+    "minimumReleaseAge": null,
+    "prCreation": "immediate",
+    "prConcurrentLimit": 5
   },
   "lockFileMaintenance": {
     "enabled": true,
@@ -28,7 +30,14 @@
     {
       "description": "Match the minimumReleaseAge (10080 minutes) in pnpm-workspace.yaml. Without this, Renovate proposes versions that pnpm itself refuses to resolve, and the lockfile update fails.",
       "matchManagers": ["npm"],
+      "internalChecksFilter": "strict",
       "minimumReleaseAge": "7 days"
+    },
+    {
+      "description": "Let pnpm enforce minimumReleaseAge during lockfile maintenance.",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["lockFileMaintenance"],
+      "minimumReleaseAge": null
     },
     {
       "description": "Keep the pnpm toolchain bump on its own PR. Renovate rewrites the packageManager pin via `corepack use`, which regenerates the sha512 hash. The pnpm gate above does not apply here — corepack installs the binary, it is not resolved from the registry by pnpm.",
@@ -37,8 +46,9 @@
       "minimumReleaseAge": "2 days"
     },
     {
-      "description": "One grouped PR for devDependencies, replacing the dependabot dev-dependencies group. Note this does NOT capture packages that config:recommended detects as monorepos (storybook, oxlint, vitest, happy-dom) — those keep their own grouped PRs, which is desirable since their packages must move in lockstep.",
+      "description": "Group non-major devDependency updates together while keeping major upgrades reviewable separately.",
       "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["pin", "minor", "patch"],
       "groupName": "dev-dependencies"
     }
   ]
