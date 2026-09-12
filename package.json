@@ -95,28 +95,28 @@
     "storybook:dev": "storybook dev -p 6006"
   },
   "devDependencies": {
-    "@changesets/cli": "^3.0.0",
-    "@storybook/addon-a11y": "^10.5.9",
-    "@storybook/addon-docs": "^10.5.9",
-    "@storybook/react-vite": "^10.5.9",
+    "@changesets/cli": "^3.0.2",
+    "@storybook/addon-a11y": "^10.6.0",
+    "@storybook/addon-docs": "^10.6.0",
+    "@storybook/react-vite": "^10.6.0",
     "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
+    "@types/react-dom": "^19.2.7",
     "all-contributors-cli": "^6.26.1",
     "concurrently": "^10.0.5",
-    "happy-dom": "^20.11.2",
-    "oxfmt": "^0.64.0",
-    "oxlint": "^1.79.0",
+    "happy-dom": "^20.14.0",
+    "oxfmt": "^0.66.0",
+    "oxlint": "^1.81.0",
     "oxlint-tsgolint": "^7.0.2001",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "storybook": "^10.5.9",
-    "tsx": "^4.23.12",
+    "storybook": "^10.6.0",
+    "tsx": "^4.23.13",
     "typescript": "^7.0.2",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.0"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
     "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
   },
-  "packageManager": "pnpm@11.24.0+sha512.bd27e345e976dcb0be0b7a1228217b049a817e21b1f355c90dbe7dc46671895a8bc1e6d06c24554505ea93ea0b45f489a27ec1bfbc8de6a9659fca0f16fa0000"
+  "packageManager": "pnpm@12.4.1+sha512.2e81e399d73fe8390dab25e06aa788ab7a5908248d2f5a370f82b481147a6a7a367bf8048f9a6fdb6460f21a66f0542dedb8b94ca2c8723596741920b1656d4c"
 }
