@@ -415,7 +415,7 @@ Closes #164, #166, #213, #227, #259, #265, #281, #282
 ### Changed
 
 - `react` and `react-dom` `peerDependencies` moved from `>= 16.8.0` to `^16.8.0
-|| ^17.0.0`
+  || ^17.0.0`
 - upgraded `react-use`
 
 ### Fixed
