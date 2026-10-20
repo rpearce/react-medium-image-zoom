@@ -10976,6 +10976,7 @@ var band = (cols) => {
     Preview,
     {
       ref: iframeRef,
+      "data-is-storybook-thumbnail": !0,
       title: readableTitle,
       src,
       "data-content-width": rememberedDimensions?.width,
@@ -14798,7 +14799,7 @@ init_react();
 
 // ../addons/a11y/src/constants.ts
 var ADDON_ID2 = "storybook/a11y", PANEL_ID2 = `${ADDON_ID2}/panel`;
-var UI_STATE_ID = `${ADDON_ID2}/ui`, RESULT = `${ADDON_ID2}/result`, REQUEST = `${ADDON_ID2}/request`, RUNNING = `${ADDON_ID2}/running`, ERROR = `${ADDON_ID2}/error`, MANUAL = `${ADDON_ID2}/manual`, SELECT = `${ADDON_ID2}/select`, DOCUMENTATION_LINK = "writing-tests/accessibility-testing", DOCUMENTATION_DISCREPANCY_LINK = `${DOCUMENTATION_LINK}#why-are-my-tests-failing-in-different-environments`;
+var UI_STATE_ID = `${ADDON_ID2}/ui`, RESULT = `${ADDON_ID2}/result`, REQUEST = `${ADDON_ID2}/request`, RUNNING = `${ADDON_ID2}/running`, ERROR = `${ADDON_ID2}/error`, MANUAL = `${ADDON_ID2}/manual`, DOCUMENTATION_LINK = "writing-tests/accessibility-testing", DOCUMENTATION_DISCREPANCY_LINK = `${DOCUMENTATION_LINK}#why-are-my-tests-failing-in-different-environments`;
 
 // ../addons/onboarding/src/constants.ts
 var ADDON_ID3 = "storybook/onboarding", ADDON_ONBOARDING_CHANNEL = `${ADDON_ID3}/channel`;
