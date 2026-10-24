@@ -103,7 +103,7 @@
     "@types/react-dom": "^19.3.0",
     "all-contributors-cli": "^6.26.1",
     "concurrently": "^10.0.6",
-    "happy-dom": "^21.0.1",
+    "happy-dom": "^21.0.3",
     "oxfmt": "^0.73.0",
     "oxlint": "^1.88.0",
     "oxlint-tsgolint": "^7.0.2004",
