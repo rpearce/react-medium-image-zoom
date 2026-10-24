@@ -4,3 +4,6 @@ allowBuilds:
   unrs-resolver: false
 
 minimumReleaseAge: 10080
+minimumReleaseAgeExclude:
+  # Renovate security update: happy-dom@21.0.4
+  - happy-dom@21.0.4
