@@ -191,7 +191,7 @@ importers:
         specifier: ^10.0.6
         version: 10.0.6
       happy-dom:
-        specifier: ^21.0.1
+        specifier: ^21.0.3
         version: 21.0.4
       oxfmt:
         specifier: ^0.73.0
