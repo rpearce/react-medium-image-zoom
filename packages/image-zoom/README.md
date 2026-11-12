@@ -248,7 +248,12 @@ the event.
 - **`icon-zoom` slot:** replaces the icon inside the built-in zoom button.
 - **`zoom-button` slot:** replaces the whole zoom button. You own everything
   about your button, including its `aria-label`, because the element never
-  writes to slotted nodes. A click on it requests a zoom.
+  writes to slotted nodes. A click on it requests a zoom. It sits inside the
+  ghost, which has `pointer-events: none`, and inherits that, so a mouse click
+  goes through it to whatever is underneath. Over the image, the click still
+  zooms, because it lands on the image. A button that should take clicks
+  itself, or that you place outside the image, needs `pointer-events: auto`;
+  the `[data-rmiz-btn-zoom]` rules in `styles.css` don't set it.
 - **`icon-unzoom` child:** a child with `slot="icon-unzoom"` becomes the icon
   of the built-in unzoom button. It isn't a real slot, because the dialog
   isn't inside the element. Each time a zoom starts, the element copies that
@@ -647,9 +652,12 @@ features it uses, are Safari 15.4 (macOS and iOS) and Firefox 98, set by
 `<dialog>`, and Chrome and Edge 93, set by `Object.hasOwn`. The code is
 compiled to ES2021; to support older syntax, run it through your build.
 `Object.hasOwn` is an ES2022 library function, which a build step doesn't add:
-for Chrome or Edge 85–92, polyfill it. Chrome and Edge 85–87 also lack
-`:where()`, which `styles.css` uses for its `image-zoom` rules, so there the
-element is `display: inline`. The automated tests run in Chromium.
+Chrome and Edge 88–92 work with a polyfill for it. Chrome and Edge 87 and older
+aren't supported, even with the polyfill: they lack `:where()`, so they drop
+all five `:where(image-zoom…)` rules in `styles.css`. There the element is
+`display: inline`, `inline` changes nothing, slotted children show before the
+element is defined, and a found image gets no `cursor: zoom-in`. The automated
+tests run in Chromium.
 
 Two features are used only where they exist:
 
@@ -669,6 +677,19 @@ without `'unsafe-inline'`, the built-in zoom button is unstyled. A slotted
 
 ## Limits
 
+- **A replaced image.** The element keeps tracking the image it found first,
+  and searches for another only while it tracks none. If the page or a
+  framework replaces the `<img>` node inside `<image-zoom>` with a new one
+  (Vue's `v-if` or `:key`, Svelte's `{#key}`), the element still tracks the
+  removed node: a click on the new image does nothing, and the zoom button
+  opens an empty modal. Change `src` on the same `<img>` instead, or replace
+  the whole `<image-zoom>`, for example by putting the key on it rather than
+  on the image.
+- **`visibility: hidden` ancestors.** Content inside `<image-zoom>` stays
+  visible under an ancestor with `visibility: hidden`, because the element
+  sets `visibility: visible` on the shadow slot that shows it (as v5 did on
+  its content wrapper); hide the element with `display: none` or `hidden`
+  instead.
 - **Forwarded slots.** If another component renders
   `<image-zoom><slot></slot></image-zoom>` in its shadow root, the element
   finds the forwarded image, but it doesn't notice changes to the forwarded

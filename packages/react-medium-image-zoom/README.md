@@ -39,8 +39,11 @@ Requirements to know about:
   ([browser support](https://github.com/rpearce/react-medium-image-zoom/blob/main/packages/image-zoom/README.md#browser-support))
 - Package build target is `ES2021`. If you need to support older environments,
   run this package through your build system. The code also calls
-  `Object.hasOwn`, an ES2022 library function that a build step doesn't add; a
-  page that must run on Chrome or Edge 85–92 needs a polyfill for it.
+  `Object.hasOwn`, an ES2022 library function that a build step doesn't add;
+  Chrome and Edge 88–92 work with a polyfill for it. Chrome and Edge 87 and
+  older aren't supported, even with the polyfill: they lack `:where()`, so they
+  drop all five `:where(image-zoom…)` rules in the stylesheet, and
+  `<image-zoom>` is `display: inline` whatever `wrapElement` says.
 
 ## Media and Tutorials
 
@@ -422,11 +425,14 @@ are the same as in v5. These things changed:
    (no `nativeEvent`, no `persist()`). That holds for requests that start in
    the element (a click on the image or the zoom button, Escape, scrolling, a
    swipe, the dialog closing), and for clicks on the unzoom button and the
-   modal content. `ZoomContent`'s `onUnzoom(e)` still passes on whatever it is
+   modal content. Its `currentTarget` differs too: for a click on the zoom
+   button it is now the `<image-zoom>` element, and for a click on the unzoom
+   button the dialog, where in v5 it was the button. Its `target` is
+   unchanged. `ZoomContent`'s `onUnzoom(e)` still passes on whatever it is
    given.
 
    **What to do:** use the event directly, and remove `.nativeEvent` and
-   `.persist()` calls.
+   `.persist()` calls. Read `event.target`, not `event.currentTarget`.
 
 7. **`ZoomContent`'s `img`.** It no longer has `props.id` or
    `props.onTransitionEnd`; the element now owns both. Its `props.style`
@@ -508,13 +514,15 @@ are the same as in v5. These things changed:
     ```
 
 13. **Browser floor.** v6 calls `Object.hasOwn`, which v5 doesn't. That
-    raises the lowest Chrome and Edge version from 85 to 93. Safari (15.4) and
-    Firefox (98) are unchanged; `<dialog>` sets those.
+    raises the lowest Chrome and Edge version to 93, up from 87: v5's ES2021
+    syntax needs 85, but its stylesheet uses `inset`, which needs 87. Safari
+    (15.4) and Firefox (98) are unchanged; `<dialog>` sets those.
 
-    **What to do:** nothing for current browsers. To keep Chrome or Edge
-    85–92, polyfill `Object.hasOwn`. In Chrome and Edge 85–87, which also lack
-    `:where()`, the stylesheet's rules for `<image-zoom>` don't apply, so it is
-    `display: inline` there even with the polyfill.
+    **What to do:** nothing for current browsers. Chrome and Edge 88–92 work
+    with an `Object.hasOwn` polyfill. Chrome and Edge 87 aren't supported,
+    even with the polyfill: they lack `:where()`, so they drop all five
+    `:where(image-zoom…)` rules in the stylesheet, and `<image-zoom>` is
+    `display: inline` whatever `wrapElement` says.
 
 **Performance on large galleries.** With hundreds of images on one page, v6
 mounts somewhat slower than v5. Measured with 500 images on React 19, it took
