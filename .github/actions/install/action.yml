@@ -18,3 +18,7 @@ runs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile --ignore-scripts
       shell: bash
+
+    - name: Install Chromium for the browser tests
+      run: pnpm exec playwright install --with-deps chromium
+      shell: bash

@@ -36,3 +36,6 @@
 
 Ensure sure your changes are adequately tested via the Storybook `stories/`, and
 if automated testing is possible, feel free to add test coverage.
+
+The component tests run in a real browser. Run
+`pnpm exec playwright install chromium` once after `pnpm install`.
