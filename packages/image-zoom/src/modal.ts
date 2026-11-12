@@ -12,6 +12,18 @@ const STYLE_KEYS = [
   'transitionDuration',
 ] as const
 
+// The dialog-class value last written to each dialog (null: no class)
+const writtenClass = new WeakMap<HTMLDialogElement, string | null>()
+
+function setClass(dialog: HTMLDialogElement, value: string | null): void {
+  writtenClass.set(dialog, value)
+  if (value === null) {
+    dialog.removeAttribute('class')
+  } else {
+    dialog.setAttribute('class', value)
+  }
+}
+
 /**
  * Find or create a container for the dialog
  */
@@ -31,7 +43,7 @@ export function getDialogContainer(): HTMLDivElement {
 
 /**
  * The light-DOM dialog: the overlay, then (built-in content only) the
- * content, appended to the portal. Its class is written by every update.
+ * content, appended to the portal
  */
 export function createDialog(inst: Instance): void {
   const dialog = document.createElement('dialog')
@@ -40,6 +52,7 @@ export function createDialog(inst: Instance): void {
   dialog.setAttribute('aria-modal', 'true')
   dialog.id = `rmiz-modal-${inst.id}`
   dialog.setAttribute('aria-labelledby', `rmiz-modal-img-${inst.id}`)
+  setClass(dialog, inst.host.getAttribute('dialog-class'))
 
   const overlay = document.createElement('div')
   overlay.setAttribute('data-rmiz-modal-overlay', 'hidden')
@@ -62,6 +75,18 @@ export function removeDialog(inst: Instance): void {
   inst.dialog?.remove()
   inst.dialog = null
   inst.overlay = null
+}
+
+/**
+ * Follow dialog-class, writing only when it differs from what was last
+ * written to this dialog. As with React's className diff, a class a consumer
+ * adds survives until dialog-class itself changes.
+ */
+export function writeDialogClass(inst: Instance): void {
+  const dialog = inst.dialog
+  if (dialog === null) return
+  const value = inst.host.getAttribute('dialog-class')
+  if (writtenClass.get(dialog) !== value) setClass(dialog, value)
 }
 
 export function findModalImg(inst: Instance): HTMLElement | null {

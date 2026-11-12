@@ -1,7 +1,12 @@
 import { parseBool, parseNumber } from './attributes.js'
 import { writeBuiltIn } from './content.js'
 import { type Instance, INITIAL_STATE, statesEqual } from './instance.js'
-import { createDialog, removeDialog, writeModalImg } from './modal.js'
+import {
+  createDialog,
+  removeDialog,
+  writeDialogClass,
+  writeModalImg,
+} from './modal.js'
 import { type Job, runJobs, schedule, unschedule } from './scheduler.js'
 import { defaultBodyAttrs } from './scroll-lock.js'
 import { hasImage, track, untrack } from './source.js'
@@ -120,17 +125,10 @@ function writeShadow(inst: Instance, ghostStyle: StyleObject): void {
 function writeDialog(inst: Instance): void {
   if (!inst.state.hasImage) {
     removeDialog(inst)
-  } else if (inst.dialog === null) {
-    createDialog(inst)
+    return
   }
-  const dialog = inst.dialog
-  if (dialog === null) return
-  const dialogClass = inst.host.getAttribute('dialog-class')
-  if (dialogClass === null) {
-    dialog.removeAttribute('class')
-  } else {
-    dialog.setAttribute('class', dialogClass)
-  }
+  if (inst.dialog === null) createDialog(inst)
+  writeDialogClass(inst)
   if (!inst.isCustom) writeBuiltIn(inst)
   writeModalImg(inst, inst.state.modalImgStyle)
 }

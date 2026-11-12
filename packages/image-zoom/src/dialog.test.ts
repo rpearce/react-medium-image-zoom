@@ -109,6 +109,26 @@ it('reflects label-unzoom and dialog-class, and follows changes', async () => {
   expect(el.dialog!.className).toBe('c')
 })
 
+it('keeps a consumer class on the dialog until dialog-class changes', async () => {
+  const el = await ready(
+    `<image-zoom dialog-class="a"><img src="${IMG}"></image-zoom>`,
+  )
+  el.dialog!.classList.add('x')
+  el.labelZoom = 'Open'
+  expect(el.dialog!.className).toBe('a x')
+  el.dialogClass = 'c'
+  expect(el.dialog!.className).toBe('c')
+  el.dialogClass = null
+  expect(el.dialog!.hasAttribute('class')).toBe(false)
+})
+
+it('keeps a consumer class on the dialog without dialog-class', async () => {
+  const el = await ready(IMG_HTML)
+  el.dialog!.classList.add('x')
+  el.zoomMargin = 10
+  expect(el.dialog!.className).toBe('x')
+})
+
 it('removes the dialog before reporting hasImage: false, and creates it before reporting true', async () => {
   const el = mountZoom(IMG_HTML)
   const seen: Array<[boolean, boolean]> = []
