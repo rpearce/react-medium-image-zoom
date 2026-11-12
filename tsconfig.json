@@ -1,5 +1,10 @@
 {
   "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "@rpearce/image-zoom": ["./packages/image-zoom/src/index.ts"]
+    }
+  },
   "include": [
     "packages/*/src/**/*",
     "packages/*/demo/**/*",

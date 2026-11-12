@@ -35,6 +35,25 @@ describe('scheduler', () => {
     ])
   })
 
+  // happy-dom's window has no MessageChannel, and vitest's vm pools, which use
+  // it as the global, add none (run). First to schedule in this file, so no
+  // channel exists yet.
+  it('falls back to a timer where there is no MessageChannel', async () => {
+    const log: string[] = []
+    const original = globalThis.MessageChannel
+    Reflect.deleteProperty(globalThis, 'MessageChannel')
+    try {
+      schedule(job('a', log))
+      await Promise.resolve()
+      expect(log).toEqual([])
+      await vi.waitFor(() => {
+        expect(log).toEqual(['read a', 'write a', 'finish a'])
+      })
+    } finally {
+      globalThis.MessageChannel = original
+    }
+  })
+
   it('flushes scheduled jobs together in a later task, each once', async () => {
     const log: string[] = []
     const a = job('a', log)

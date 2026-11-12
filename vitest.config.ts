@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 import { playwright } from '@vitest/browser-playwright'
 import { defineConfig } from 'vitest/config'
 
@@ -8,6 +9,17 @@ const HAPPY = [
 const JSDOM = ['packages/*/src/**/*.jsdom.test.tsx']
 
 export default defineConfig({
+  resolve: {
+    // Exact match: @rpearce/image-zoom/styles.css must keep its own resolution
+    alias: [
+      {
+        find: /^@rpearce\/image-zoom$/,
+        replacement: fileURLToPath(
+          new URL('./packages/image-zoom/src/index.ts', import.meta.url),
+        ),
+      },
+    ],
+  },
   test: {
     restoreMocks: true,
     setupFiles: ['./test/setup.ts'],

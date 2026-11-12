@@ -40,12 +40,24 @@ function createChannel(): MessageChannel {
 }
 
 /**
+ * Post the flush as a task: a MessageChannel message, or a timer where there
+ * is no MessageChannel (happy-dom), as React's scheduler does
+ */
+function postFlush(): void {
+  if (typeof MessageChannel === 'undefined') {
+    setTimeout(flushQueue, 0)
+    return
+  }
+  channel ??= createChannel()
+  channel.port2.postMessage(null)
+}
+
+/**
  * Queue a job; every job queued in one task runs together in a later task
  */
 export function schedule(job: Job): void {
   if (queued.size === 0) {
-    channel ??= createChannel()
-    channel.port2.postMessage(null)
+    postFlush()
   }
   queued.add(job)
 }

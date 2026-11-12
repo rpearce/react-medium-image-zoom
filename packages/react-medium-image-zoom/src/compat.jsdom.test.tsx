@@ -7,6 +7,13 @@
 // - HTMLDialogElement showModal: missing, and called on zoom
 // close() needs no stub: it runs only once an unzoom ends, which never happens
 // here.
+// Needed since v6 (the <image-zoom> element), not by v5:
+// - ResizeObserver unobserve(): the element shares one observer across
+//   instances and unobserves each image at teardown (unmount)
+// The wait runs inside act: the element batches image loads in a task of its
+// own, which act doesn't flush, so the update that renders the zoom button
+// would otherwise land outside act (a warning). It waits for the element's
+// state, not the button: React renders nothing until the act scope ends.
 
 import React, { act } from 'react'
 import ReactDOM from 'react-dom/client'
@@ -37,6 +44,7 @@ beforeEach(() => {
     'ResizeObserver',
     class {
       observe = vi.fn<ResizeObserver['observe']>()
+      unobserve = vi.fn<ResizeObserver['unobserve']>()
       disconnect = vi.fn<ResizeObserver['disconnect']>()
     },
   )
@@ -72,11 +80,16 @@ it('renders, and a click on the zoom button requests zoom', async () => {
       <img alt="x" src="x.jpg" />
     </Zoom>,
   )
-  const button = await vi.waitFor(() => {
-    const b = document.querySelector<HTMLButtonElement>('[data-rmiz-btn-zoom]')
-    if (b === null) throw new Error('no zoom button yet')
-    return b
+  await act(async () => {
+    await vi.waitFor(() => {
+      if (document.querySelector('image-zoom')?.state.hasImage !== true)
+        throw new Error('waiting for the image')
+    })
   })
+  const button = document.querySelector<HTMLButtonElement>(
+    '[data-rmiz-btn-zoom]',
+  )
+  if (button === null) throw new Error('no zoom button')
   // Async act: the zoom re-render trips the component's MutationObserver, whose
   // setState would otherwise land after a sync act() returns (an act warning).
   await act(async () => {

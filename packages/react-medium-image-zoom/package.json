@@ -76,8 +76,11 @@
   ],
   "scripts": {
     "prebuild": "rm -rf ./dist",
-    "build": "tsc --project tsconfig.build.json && cp ./src/styles.css ./dist/styles.css && node scripts/check-ssr",
+    "build": "tsc --project tsconfig.build.json && cp ../image-zoom/dist/styles.css ./dist/styles.css && node scripts/check-ssr",
     "prepack": "pnpm run build"
+  },
+  "dependencies": {
+    "@rpearce/image-zoom": "workspace:*"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",

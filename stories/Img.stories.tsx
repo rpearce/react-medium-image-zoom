@@ -7,7 +7,7 @@ import Zoom, {
   Controlled as ControlledZoom,
   type UncontrolledProps,
 } from '../packages/react-medium-image-zoom/src'
-import '../packages/react-medium-image-zoom/src/styles.css'
+import '../packages/image-zoom/src/styles.css'
 import './base.css'
 
 import {

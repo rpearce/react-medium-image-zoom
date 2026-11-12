@@ -2,7 +2,7 @@ import React from 'react'
 import type { Meta, StoryFn } from '@storybook/react-vite'
 
 import Zoom from '../packages/react-medium-image-zoom/src'
-import '../packages/react-medium-image-zoom/src/styles.css'
+import '../packages/image-zoom/src/styles.css'
 import './base.css'
 
 const meta: Meta<typeof Zoom> = {

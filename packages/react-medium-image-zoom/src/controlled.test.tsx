@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { afterEach, describe, it, expect, vi } from 'vitest'
 
 import { Controlled, type ControlledProps } from './controlled.js'
-import { mockComputedStyle } from './utils/test-helpers.js'
+import { mockComputedStyle } from './test-helpers.js'
 
 type OnZoomChange = NonNullable<ControlledProps['onZoomChange']>
 
@@ -303,8 +303,9 @@ function mockBrowserApis(): void {
     transform: 'none',
   })
 
-  // happy-dom's Image never loads, so naturalWidth/Height stay 0 → NaN in
-  // style calculations.  Give every decoded Image realistic dimensions.
+  // test-image.jpg doesn't exist, so an Image never loads and
+  // naturalWidth/Height stay 0 → NaN in style calculations.  Give every
+  // decoded Image realistic dimensions.
   vi.spyOn(HTMLImageElement.prototype, 'decode').mockImplementation(
     async function (this: HTMLImageElement) {
       Object.defineProperty(this, 'naturalWidth', {
@@ -372,11 +373,11 @@ async function renderZoom(
     root.render(<Controlled {...defaultProps}>{children}</Controlled>)
   })
 
-  // happy-dom doesn't load images, so currentSrc stays ''.  The component
-  // calls getImgSrc which returns undefined when currentSrc is empty,
-  // causing it to think there is no image.  Fix that, mock geometry so
-  // style calculations don't produce NaN, then fire load to flush the
-  // Image.decode → loadedImgEl state update.
+  // test-image.jpg never loads.  Pin currentSrc, which getImgSrc reads (an
+  // empty one means no image), mock geometry so style calculations don't
+  // produce NaN, then fire load and wait until the element reports the
+  // image: it batches image loads in a task of its own, which act doesn't
+  // flush.
   const img = container.querySelector('img')
   if (img !== null) {
     Object.defineProperty(img, 'currentSrc', {
@@ -397,7 +398,10 @@ async function renderZoom(
 
     await act(async () => {
       img.dispatchEvent(new Event('load'))
-      await Promise.resolve()
+      await vi.waitFor(() => {
+        if (container.querySelector('image-zoom')?.state.hasImage !== true)
+          throw new Error('waiting for the image')
+      })
     })
   }
 
