@@ -124,6 +124,9 @@ it('inside an open outer dialog, Escape unzooms and the outer dialog stays open'
   await until(el, s => s.hasImage)
   await open(el)
   await userEvent.keyboard('{Escape}')
+  // The key was intercepted, not left to close the dialog natively, so the
+  // unzoom can animate
+  expect([el.state.modalState, el.dialog?.open]).toEqual(['UNLOADING', true])
   end(el)
   expect([el.state.modalState, el.dialog!.open, outer.open]).toEqual([
     'UNLOADED',

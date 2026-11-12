@@ -191,7 +191,7 @@ it('dispatches statechange after the side effects', async () => {
   const seen: string[] = []
   el.addEventListener('statechange', () =>
     seen.push(
-      `${el.state.modalState}:${String(el.dialog!.open)}:${document.body.style.overflow}`,
+      `${el.state.modalState}:${String(el.dialog?.open)}:${document.body.style.overflow}`,
     ),
   )
   el.zoomed = true

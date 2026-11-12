@@ -55,6 +55,7 @@ function request(inst: Instance, zoomed: boolean, event: Event): void {
 function setUp(inst: Instance, onZoomClick: (event: Event) => void): void {
   if (inst.isSetUp) return
   inst.isSetUp = true
+  inst.mustReport = true
   inst.isCustom = parseBool(inst.host.getAttribute('custom-content'))
   inst.parts.button.addEventListener('click', onZoomClick)
   track(inst)
@@ -62,8 +63,9 @@ function setUp(inst: Instance, onZoomClick: (event: Event) => void): void {
 }
 
 /**
- * Undo setup when the host is really gone. Every task that adds a listener,
- * observer, timer, lock or piece of state adds its removal here.
+ * Undo setup when the host is really gone, then report the initial state
+ * once. Every task that adds a listener, observer, timer, lock or piece of
+ * state adds its removal here.
  */
 function teardown(inst: Instance, onZoomClick: (event: Event) => void): void {
   if (inst.modalState !== 'UNLOADED') {
@@ -75,8 +77,9 @@ function teardown(inst: Instance, onZoomClick: (event: Event) => void): void {
   unschedule(inst.job)
   clearTimeout(inst.fallbackTimer)
   inst.gestures.removeAll()
-  // The dialog's listeners leave with it (a late `close` from it no longer
-  // requests); built-in content stays in inst.content
+  // The dialog leaves the DOM but keeps its listeners: a late `close` still
+  // reaches it, and its `dialog !== inst.dialog` guard makes it inert.
+  // Built-in content stays in inst.content.
   removeDialog(inst)
   inst.generation += 1
   inst.imgEl = null
@@ -86,7 +89,13 @@ function teardown(inst: Instance, onZoomClick: (event: Event) => void): void {
   inst.shouldRefresh = false
   inst.isZoomImgLoaded = false
   inst.isSetUp = false
+  inst.internals?.states.delete('found')
+  inst.state = INITIAL_STATE
+  // Reported always, and last, with isSetUp false so a listener's writes
+  // start no operation. A job of this element still running in the current
+  // flush then has nothing new to report; the next setup sets mustReport.
   inst.mustReport = true
+  report(inst)
 }
 
 /**

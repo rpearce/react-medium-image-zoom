@@ -1,7 +1,3 @@
-[data-rmiz-ghost] {
-  position: absolute;
-  pointer-events: none;
-}
 [data-rmiz-btn-zoom],
 [data-rmiz-btn-unzoom] {
   background-color: rgba(0, 0, 0, 0.7);
@@ -93,4 +89,22 @@
   [data-rmiz-modal-img] {
     transition-duration: 0.01ms !important;
   }
+}
+:where(image-zoom) {
+  display: block;
+}
+:where(image-zoom[inline]:not([inline="false"])) {
+  display: inline;
+}
+:where(image-zoom[hidden]) {
+  display: none;
+}
+:where(image-zoom:not(:defined)) > :where([slot]) {
+  display: none;
+}
+:where(image-zoom:state(found))
+  :where(img, svg, [role="img"], [data-zoom]):not(
+    :where(image-zoom > [slot], image-zoom > [slot] *)
+  ) {
+  cursor: zoom-in;
 }
