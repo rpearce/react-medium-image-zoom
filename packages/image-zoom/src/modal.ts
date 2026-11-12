@@ -62,6 +62,18 @@ export function createDialog(inst: Instance): void {
     dialog.appendChild(ensureContent(inst))
   }
 
+  // React's onTransitionEnd on the modal img bubbles from its descendants;
+  // nothing else in the modal (the overlay, a caption) ends a transition
+  dialog.addEventListener('transitionend', event => {
+    const target = event.target
+    if (
+      target instanceof Node &&
+      findModalImg(inst)?.contains(target) === true
+    ) {
+      inst.hooks.transitionEnd()
+    }
+  })
+
   getDialogContainer().appendChild(dialog)
   inst.dialog = dialog
   inst.overlay = overlay
@@ -128,4 +140,16 @@ export function writeModalImg(inst: Instance, style: StyleObject): void {
 
   inst.writtenStyle = style
   inst.styled.add(node)
+}
+
+/**
+ * Port of ensureImgTransitionEnd's parse: the modal img's computed
+ * transitionDuration (the first entry of a list) in ms, plus 50; undefined,
+ * so no fallback timer, for 0 or NaN. Safari can fire transitionend late.
+ */
+export function fallbackMs(modalImg: Element): number | undefined {
+  const td = getComputedStyle(modalImg).transitionDuration
+  const tdFloat = parseFloat(td)
+  if (tdFloat === 0 || Number.isNaN(tdFloat)) return undefined
+  return tdFloat * (td.endsWith('ms') ? 1 : 1000) + 50
 }

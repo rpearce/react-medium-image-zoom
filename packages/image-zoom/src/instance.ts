@@ -12,6 +12,14 @@ export interface Hooks {
   transitionEnd: () => void
 }
 
+/**
+ * The listeners each modal state adds and removes (listeners.ts)
+ */
+export interface Gestures {
+  enter: (state: ModalState) => void
+  removeAll: () => void
+}
+
 export interface Instance {
   readonly host: HTMLElement
   readonly parts: ShadowParts
@@ -19,6 +27,7 @@ export interface Instance {
   readonly id: string // 12 hex chars
   readonly hooks: Hooks
   readonly job: Job
+  gestures: Gestures
   isSetUp: boolean
   generation: number // +1 at teardown; async completions compare it
   isCustom: boolean // custom-content, latched at setup

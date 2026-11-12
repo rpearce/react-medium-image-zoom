@@ -133,6 +133,22 @@ export function modalImg(el: ImageZoomElement): HTMLElement {
   return found
 }
 
+/**
+ * End the modal img's transition: a bubbling `transitionend` on it
+ */
+export function end(el: ImageZoomElement): void {
+  modalImg(el).dispatchEvent(new Event('transitionend', { bubbles: true }))
+}
+
+/**
+ * Zoom and finish the zoom-in transition: zoomed = true, end(), until LOADED
+ */
+export async function open(el: ImageZoomElement): Promise<void> {
+  el.zoomed = true
+  end(el)
+  await until(el, s => s.modalState === 'LOADED')
+}
+
 export function ghost(el: ImageZoomElement): HTMLElement {
   const found = el.shadowRoot?.querySelector('[data-rmiz-ghost]')
   if (!(found instanceof HTMLElement)) {
