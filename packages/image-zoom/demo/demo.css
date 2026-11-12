@@ -42,8 +42,8 @@ pre {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.85);
   color: #fff;
-  font-size: 1.4rem;
-  padding: 1.7rem 2.5rem;
+  font-size: 14px;
+  padding: 17px 25px;
   opacity: 0.0001;
   transition: opacity 0.3s;
 }
@@ -54,15 +54,15 @@ pre {
   inset: auto 0 0 0;
 }
 .zoom-caption--left {
-  max-width: 40rem;
+  max-width: 400px;
   top: 50%;
   transform: translateY(-50%);
 }
 .zoom-caption-cite {
   display: block;
-  margin-top: 1.5rem;
+  margin-top: 15px;
 }
 .zoom-caption-link {
   color: #fff;
-  text-underline-offset: 0.5rem;
+  text-underline-offset: 5px;
 }

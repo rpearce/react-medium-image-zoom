@@ -28,7 +28,6 @@ Features:
 - Supports popular tools:
   - [Gatsby](https://www.gatsbyjs.com) and [gatsby-plugin-image](https://www.gatsbyjs.com/plugins/gatsby-plugin-image/)
   - [Next.js](https://nextjs.org/docs/api-reference/next/image)
-- Zero `dependencies`
 
 Requirements to know about:
 
@@ -122,9 +121,11 @@ export interface UncontrolledProps {
 
   // Provide your own custom modal content component.
   ZoomContent?: (props: {
-    img: ReactElement | null
     buttonUnzoom: ReactElement<HTMLButtonElement>
-    onUnzoom: () => void
+    img: ReactElement | null
+    isZoomImgLoaded: boolean
+    modalState: 'UNLOADED' | 'LOADING' | 'LOADED' | 'UNLOADING'
+    onUnzoom: (e: Event) => void
   }) => ReactElement
 
   // Higher quality image attributes to use on zoom.
@@ -259,11 +260,11 @@ determining when to zoom and unzoom the component.
 ## Styles
 
 You can import the default styles from `react-medium-image-zoom/dist/styles.css`
-and override the values from your code, or you can copy [the styles.css
-file](./src/styles.css) and alter it to your liking. The latter is the best
-option, given `rem`s should be used instead of `px` to account for different
-default browser font sizes, and it's hard for a library to guess at what these
-values should be.
+(or `react-medium-image-zoom/styles.css`) and override the values from your
+code, or you can copy [the styles.css file](../image-zoom/src/styles.css) and
+alter it to your liking. The latter is the best option, given `rem`s should be
+used instead of `px` to account for different default browser font sizes, and
+it's hard for a library to guess at what these values should be.
 
 An example of customizing the transition duration, timing function, overlay
 background color, and unzoom button styles with `:focus-visible` can be found in
@@ -348,6 +349,157 @@ const CustomZoomContent = ({
   )
 }
 ```
+
+## Migrating from v5 to v6
+
+In v6, `<Zoom>` renders the `<image-zoom>` custom element from
+[`@rpearce/image-zoom`](../image-zoom/README.md) and does its work through it.
+The props, the exports and every `[data-rmiz-*]` styling hook not named below
+are the same as in v5. These things changed:
+
+1. **Outer wrapper.** The outer element is now the custom element
+   `<image-zoom data-rmiz>` instead of `<div data-rmiz>` or
+   `<span data-rmiz>`. It is a block by default and inline with
+   `wrapElement="span"`. It carries attributes (`disabled`, `inline`, `swipe`,
+   `zoom-margin`, `zoom-src` and other `zoom-*` attributes, `custom-content`),
+   so broad page selectors such as `[disabled]` now match it.
+
+   **What to do:** change selectors such as `div[data-rmiz]` to `[data-rmiz]`,
+   and check page-wide attribute selectors such as `[disabled]`.
+
+2. **Ghost.** `[data-rmiz-ghost]`, the box over the image that holds the zoom
+   button, now lives in the element's shadow DOM. Rules that select it, or
+   that reach the zoom button through it, stop matching. Its `position` and
+   `pointer-events` are inline styles.
+
+   **What to do:** style it with `image-zoom::part(ghost)`. Overriding
+   `position` or `pointer-events` there needs `!important`. Select the zoom
+   button as `[data-rmiz-btn-zoom]`.
+
+3. **Content visibility.** `[data-rmiz-content]` no longer gets an inline
+   `visibility` style. While zoomed, the image is hidden by `visibility` it
+   inherits from a slot in the element's shadow DOM.
+   - A page rule that sets `visibility` on `[data-rmiz-content]` now wins
+     while zoomed.
+   - happy-dom doesn't model inheritance through slots: a zoomed image's
+     computed `visibility` is `""` where it was `hidden`. jsdom probably
+     behaves the same. Tests that assert the image is hidden while zoomed, or
+     that find a single image by role while zoomed, get a different result.
+
+   **What to do:** remove `visibility` rules from `[data-rmiz-content]`. In
+   happy-dom and jsdom tests, don't assert on the image's visibility while
+   zoomed, and look for the zoomed image inside the dialog
+   (`[data-rmiz-modal]`).
+
+4. **Zoom button.** It is now a slotted child of `<image-zoom>`
+   (`slot="zoom-button"`). It is still `[data-rmiz-btn-zoom]` and still
+   positioned inside the ghost.
+
+   **What to do:** rules that select `[data-rmiz-btn-zoom]` keep working.
+   Rules that rely on its old parent select `[data-rmiz-btn-zoom]` instead.
+
+5. **Dialog.** The element creates the dialog, still inside
+   `[data-rmiz-portal]` and with the same attributes. React portals
+   `[data-rmiz-modal-content]` into it, and that element now has
+   `role="presentation"`. Because React no longer renders the dialog itself,
+   events whose target is the dialog or its overlay no longer reach `<Zoom>`'s
+   React ancestors: overlay clicks and other pointer events, the dialog's
+   `cancel`, and key or focus events while the dialog itself has focus.
+
+   **What to do:** if a React ancestor of `<Zoom>` relied on one of those
+   events, listen for it natively instead, for example with
+   `document.addEventListener(type, listener, true)`.
+
+6. **Events.** The `event` passed to `onZoomChange` is now a native `Event`
+   (no `nativeEvent`, no `persist()`). That holds for requests that start in
+   the element (a click on the image or the zoom button, Escape, scrolling, a
+   swipe, the dialog closing), and for clicks on the unzoom button and the
+   modal content. `ZoomContent`'s `onUnzoom(e)` still passes on whatever it is
+   given.
+
+   **What to do:** use the event directly, and remove `.nativeEvent` and
+   `.persist()` calls.
+
+7. **`ZoomContent`'s `img`.** It no longer has `props.id` or
+   `props.onTransitionEnd`; the element now owns both. Its `props.style`
+   object is frozen, and `props.crossOrigin` is `undefined` where it was
+   `null`. `props.width`, `props.height` and `props.style` are still there.
+
+   **What to do:** don't read `img.props.id` or `img.props.onTransitionEnd`.
+   Copy the style (`{ ...img.props.style }`) before changing it. Treat a
+   missing `crossOrigin` as `undefined`.
+
+8. **Timing.** On React 18 and 19, a click on the zoom button opens the dialog
+   one task later than before, because the update now starts in a native
+   listener. For the same reason, the zoom button appears one task after the
+   image loads, and `act` no longer flushes that on its own. The zoom button
+   also becomes visible and focusable one task after React renders it.
+
+   **What to do:**
+   - Tests that click and then await a single microtask without `act` wait
+     for the dialog to open instead.
+   - With Testing Library, `findBy` queries wait for the zoom button.
+   - Tests on plain `react-dom` can't await the button inside `act`, because
+     React holds the re-render until the `act` scope ends. Wait inside `act`
+     for the `<image-zoom>` element's `state.hasImage`, then read the button.
+     With Vitest:
+
+     ```javascript
+     await act(async () => {
+       await vi.waitFor(() => {
+         if (document.querySelector('image-zoom')?.state.hasImage !== true)
+           throw new Error('waiting for the image')
+       })
+     })
+     const button = document.querySelector('[data-rmiz-btn-zoom]')
+     ```
+
+   - Code that focuses the zoom button in the same tick that it renders waits
+     until it is visible.
+
+9. **Global registration.** Importing the package registers the
+   `<image-zoom>` custom element globally. If another library has already
+   defined `image-zoom`, the import throws.
+
+   **What to do:** nothing, unless your page defines another `image-zoom`
+   element. The tag name can't be changed.
+
+10. **A dependency.** The package now depends on `@rpearce/image-zoom`, which
+    is ESM. It is also larger: a one-line `<Zoom>` consumer, minified with
+    React external, is about 9.9 kB gzip, up from about 5.4 kB.
+
+    **What to do:** wherever you list `react-medium-image-zoom` for
+    transpiling, such as Jest's `transformIgnorePatterns` or Next.js's
+    `transpilePackages`, add `@rpearce/image-zoom`.
+
+11. **Copied stylesheets.** This README suggests copying `styles.css`. A copy
+    made from v5 lacks the new `:where(image-zoom…)` rules, which give the
+    element its `display`, and its `[data-rmiz-ghost]` rule no longer matches
+    anything.
+
+    **What to do:** add the `:where(image-zoom…)` rules from the end of the
+    new [styles.css](../image-zoom/src/styles.css) to your copy, and delete
+    the `[data-rmiz-ghost]` rule.
+
+12. **Test stubs.** A hand-written `ResizeObserver` stub (jsdom has none) now
+    needs an `unobserve` method as well as `observe`. Without it, unmounting
+    throws. The element no longer calls `disconnect`.
+
+    **What to do:** add `unobserve` to the stub:
+
+    ```javascript
+    globalThis.ResizeObserver = class {
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    }
+    ```
+
+**Performance on large galleries.** With hundreds of images on one page, v6
+mounts somewhat slower than v5. Measured with 500 images on React 19, it took
+about 17% more time from navigation and about 1.8 MB more heap. Each `<Zoom>`
+portals its modal content into its own dialog, and React installs its event
+listeners on every portal container, where v5 used one shared container.
 
 ## Migrating From v4 to v5
 
