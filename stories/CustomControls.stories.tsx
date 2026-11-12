@@ -1,8 +1,8 @@
 import React from 'react'
 import type { Meta, StoryFn } from '@storybook/react-vite'
 
-import { Controlled as Zoom } from '../src'
-import '../src/styles.css'
+import { Controlled as Zoom } from '../packages/react-medium-image-zoom/src'
+import '../packages/react-medium-image-zoom/src/styles.css'
 import './base.css'
 
 import { imgThatWanakaTree } from './images'

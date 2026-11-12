@@ -19,13 +19,7 @@
     "pedantic": "error",
     "perf": "error"
   },
-  "ignorePatterns": [
-    "coverage/",
-    "dist/",
-    "docs/",
-    "node_modules/",
-    "packages/"
-  ],
+  "ignorePatterns": ["coverage/", "dist/", "docs/", "node_modules/"],
   "rules": {
     "react/exhaustive-deps": "error",
     "react/rules-of-hooks": "error",

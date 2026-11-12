@@ -1,7 +1,7 @@
 {
   "projectName": "react-medium-image-zoom",
   "projectOwner": "rpearce",
-  "files": ["README.md"],
+  "files": ["packages/react-medium-image-zoom/README.md"],
   "imageSize": 40,
   "commit": true,
   "contributors": [

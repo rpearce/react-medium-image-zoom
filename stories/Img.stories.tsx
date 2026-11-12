@@ -6,8 +6,8 @@ import { waitFor, within, userEvent, expect } from 'storybook/test'
 import Zoom, {
   Controlled as ControlledZoom,
   type UncontrolledProps,
-} from '../src'
-import '../src/styles.css'
+} from '../packages/react-medium-image-zoom/src'
+import '../packages/react-medium-image-zoom/src/styles.css'
 import './base.css'
 
 import {

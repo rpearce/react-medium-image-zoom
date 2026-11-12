@@ -1,0 +1,86 @@
+{
+  "name": "react-medium-image-zoom",
+  "version": "5.4.9",
+  "license": "BSD-3-Clause",
+  "description": "Accessible medium.com-style image zoom for React",
+  "type": "module",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./styles.css": "./dist/styles.css",
+    "./dist/styles.css": "./dist/styles.css"
+  },
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/rpearce/react-medium-image-zoom.git",
+    "directory": "packages/react-medium-image-zoom"
+  },
+  "homepage": "https://github.com/rpearce/react-medium-image-zoom",
+  "bugs": "https://github.com/rpearce/react-medium-image-zoom/issues",
+  "author": "Robert Pearce <me@robertwpearce.com> (https://robertwpearce.com)",
+  "contributors": [
+    "Robert Pearce <me@robertwpearce.com> (https://robertwpearce.com)",
+    "Cameron Bothner (https://github.com/cbothner)",
+    "ismay <ismay@ismaywolff.nl> (https://www.ismaywolff.nl)",
+    "Jeremy Bini <jeremybini@gmail.com> (https://jbini.com)",
+    "Josh Sloat (http://www.joshsloat.com)",
+    "Kaycee Ingram <kayceeingram33@gmail.com> (https://github.com/HippoDippo)",
+    "Ludwig Frank (https://github.com/ludwigfrank)",
+    "Rahul Gaba <rahulgaba16@gmail.com> (http://rahulgaba.com)",
+    "Spencer Davis (https://github.com/spencerfdavis)",
+    "dnlnvl (https://github.com/dnlnvl)",
+    "Douglas Galdino <dougg0k@gmail.com> (https://dougg0k.js.org)",
+    "Sun Knudsen (https://sunknudsen.com)",
+    "Youngrok Kim <rok0810@gmail.com> (https://rokoroku.github.io)",
+    "Josh-Cena <sidachen2003@gmail.com> (https://joshcena.com)",
+    "Yida Zhang <zjhch123@qq.com>",
+    "eych",
+    "tshmieldev",
+    "David Edler (https://github.com/edlerd)",
+    "Zohaib Khan <dev-zohaib@proton.me> (https://zohaib.is-a.dev)",
+    "Sukka <github@skk.moe> (https://skk.moe)"
+  ],
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/rpearce"
+    }
+  ],
+  "keywords": [
+    "react",
+    "medium",
+    "image",
+    "zoom",
+    "image-zoom",
+    "modal",
+    "react-component"
+  ],
+  "tags": [
+    "react",
+    "medium",
+    "image",
+    "zoom",
+    "image-zoom",
+    "modal",
+    "react-component"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md",
+    "dist/"
+  ],
+  "scripts": {
+    "prebuild": "rm -rf ./dist",
+    "build": "tsc --project tsconfig.build.json && cp ./src/styles.css ./dist/styles.css && node scripts/check-ssr",
+    "prepack": "pnpm run build"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
+  }
+}
