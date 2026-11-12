@@ -132,7 +132,7 @@ it('refreshes on resize while zoomed, and the next unzoom keeps the full fallbac
   }
 })
 
-it('removes the 0.01ms transition it wrote once the unzoom starts', async () => {
+it('removes the 0.01ms transition once the unzoom starts, and the next zoom has none', async () => {
   const el = await ready(IMG_HTML)
   await open(el)
   window.dispatchEvent(new Event('resize'))
@@ -140,6 +140,12 @@ it('removes the 0.01ms transition it wrote once the unzoom starts', async () => 
   el.zoomed = false
   expect([el.state.modalState, modalImg(el).style.transitionDuration]).toEqual([
     'UNLOADING',
+    '',
+  ])
+  end(el)
+  el.zoomed = true // entering UNLOADED reset shouldRefresh
+  expect([el.state.modalState, modalImg(el).style.transitionDuration]).toEqual([
+    'LOADING',
     '',
   ])
 })
@@ -150,11 +156,18 @@ it('refreshes the unzoomed style before zooming (window resized while unzoomed)'
   setWindowDimensions(640, 500)
   try {
     let atOpen = '' // `beforetoggle` fires synchronously inside showModal(), before the zoomed style is written
+    let seen: string[] = []
     el.dialog!.addEventListener('beforetoggle', () => {
       atOpen = modalImg(el).style.transform
+      seen = [el.state.modalState, document.body.style.overflow]
     })
     el.zoomed = true
+    const atLoading = modalImg(el).style.transform
+    // step 1 (update while UNLOADED) → scroll lock → showModal() → LOADING
+    expect(seen).toEqual(['UNLOADED', 'hidden'])
+    // the refreshed unzoomed style, not the stale one nor the zoomed one
     expect(atOpen).not.toBe(stale)
+    expect(atOpen).not.toBe(atLoading)
     expect(atOpen).toMatch(/scale\(/)
   } finally {
     resetWindowDimensions()
