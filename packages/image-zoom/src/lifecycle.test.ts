@@ -4,6 +4,7 @@ import './styles.css'
 import { INITIAL_STATE } from './instance.js'
 import {
   end,
+  fakeTimeouts,
   flush,
   get,
   idle,
@@ -18,10 +19,6 @@ import {
   record,
   until,
 } from './test-helpers.js'
-
-// Only timeouts: the scheduler's MessageChannel and animation frames stay real
-const fakeTimeouts = () =>
-  vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
 
 async function wait(ms: number): Promise<void> {
   const { promise, resolve } = Promise.withResolvers<void>()
@@ -142,6 +139,62 @@ it('a fallback timer armed before removal does not fire into the next zoom', asy
   } finally {
     vi.useRealTimers()
   }
+})
+
+it('a resize while zoomed does not carry its refresh across a reconnect', async () => {
+  const el = await ready(IMG_HTML)
+  await open(el)
+  window.dispatchEvent(new Event('resize'))
+  expect(modalImg(el).style.transitionDuration).toBe('0.01ms')
+  el.remove()
+  document.body.append(el)
+  await until(el, s => s.hasImage)
+  el.zoomed = true
+  expect([el.state.modalState, modalImg(el).style.transitionDuration]).toEqual([
+    'LOADING',
+    '',
+  ])
+})
+
+it('a reconnect loads the source again before it has an image', async () => {
+  const el = await ready(IMG_HTML)
+  el.remove()
+  document.body.append(el)
+  expect(el.state.hasImage).toBe(false)
+  await until(el, s => s.hasImage)
+  expect(el.state.hasImage).toBe(true)
+})
+
+it('a source load that completes after teardown is ignored', async () => {
+  // A cached src gives the parsed <img> its currentSrc at once, so the
+  // source's preload starts at setup and is still decoding at the removal
+  const probe = new Image()
+  probe.src = IMG
+  await probe.decode()
+  const el = mountZoom(IMG_HTML)
+  expect(get(el, 'img', HTMLImageElement).currentSrc).toBe(IMG)
+  el.remove()
+  await wait(50)
+  document.body.append(el)
+  expect(el.state.hasImage).toBe(false)
+  await until(el, s => s.hasImage)
+  expect(el.state.hasImage).toBe(true)
+})
+
+it('a reconnect starts with the zoom image not loaded', async () => {
+  const el = await ready(
+    `<image-zoom zoom-src="${IMG_2}"><img src="${IMG}"></image-zoom>`,
+  )
+  await open(el)
+  await until(el, s => s.isZoomImgLoaded)
+  expect(el.state.isZoomImgLoaded).toBe(true)
+  el.remove()
+  document.body.append(el)
+  await until(el, s => s.hasImage)
+  expect([el.state.modalState, el.state.isZoomImgLoaded]).toEqual([
+    'UNLOADED',
+    false,
+  ])
 })
 
 it('a statechange listener that removes an element queued in the same flush leaves it nothing to report', async () => {

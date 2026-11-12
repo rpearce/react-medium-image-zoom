@@ -1,4 +1,4 @@
-import { afterEach } from 'vitest'
+import { afterEach, vi } from 'vitest'
 import { createImageZoomElement } from './element.js'
 import type {
   ImageZoomElement,
@@ -54,6 +54,14 @@ export async function flush(): Promise<void> {
     channel.port2.postMessage(null)
   }, 0)
   await promise
+}
+
+/**
+ * Fake only setTimeout and clearTimeout: the scheduler's MessageChannel and
+ * animation frames stay real. Pair with vi.useRealTimers() in a finally.
+ */
+export function fakeTimeouts(): void {
+  vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
 }
 
 async function frame(): Promise<void> {

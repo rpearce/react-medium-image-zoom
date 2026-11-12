@@ -3,6 +3,7 @@ import './index.js'
 import './styles.css'
 import {
   end,
+  fakeTimeouts,
   IMG,
   IMG_HTML,
   lateDefine,
@@ -24,9 +25,6 @@ const overlay = (el: ImageZoomElement) =>
   el
     .dialog!.querySelector('[data-rmiz-modal-overlay]')!
     .getAttribute('data-rmiz-modal-overlay')
-// Only timeouts: the scheduler's MessageChannel and animation frames stay real
-const fakeTimeouts = () =>
-  vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
 
 it('runs UNLOADED → LOADING → LOADED → UNLOADING → UNLOADED', async () => {
   const el = await ready(IMG_HTML)
