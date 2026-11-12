@@ -1,5 +1,6 @@
 .DS_Store
 .claude/settings.local.json
+.vitest/
 coverage/
 dist/
 docs/

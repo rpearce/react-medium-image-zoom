@@ -34,6 +34,12 @@ export function ensureContent(inst: Instance): HTMLElement {
   button.setAttribute('data-rmiz-btn-unzoom', '')
   button.type = 'button'
   button.appendChild(createIconCompress())
+  // Port of handleBtnUnzoomClick
+  button.addEventListener('click', event => {
+    event.preventDefault()
+    event.stopPropagation()
+    inst.hooks.request(false, event)
+  })
 
   content.append(img, button)
   inst.content = content

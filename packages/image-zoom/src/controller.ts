@@ -1,13 +1,14 @@
 import { parseBool } from './attributes.js'
-import { type Gestures, type Instance, INITIAL_STATE } from './instance.js'
+import { type Instance, INITIAL_STATE } from './instance.js'
+import { createGestures } from './listeners.js'
 import { applyZoomed, transitionEnd } from './machine.js'
 import { removeDialog } from './modal.js'
 import { createJob, report, update } from './operation.js'
 import { schedule, unschedule } from './scheduler.js'
 import { bodyScrollEnable, defaultBodyAttrs } from './scroll-lock.js'
-import { track, untrack } from './source.js'
+import { hasImage, track, untrack } from './source.js'
 import type { ShadowParts } from './template.js'
-import type { ImageZoomState } from './types.js'
+import type { ImageZoomState, ZoomChangeEventDetail } from './types.js'
 
 export interface Controller {
   readonly state: ImageZoomState
@@ -27,28 +28,35 @@ function randomId(): string {
 }
 
 /**
- * Until listeners.ts (Task 10): only `resize` on window, added on entering
- * LOADING and removed on entering UNLOADED, as handleModalStateChange does
+ * Every user request goes through here (handleZoom and handleUnzoom today).
+ * Dropped while disabled, and a zoom while !canZoom (hasImage for now).
+ * Otherwise zoomchange, and unless a listener cancels it, the zoomed
+ * attribute, whose change runs the state machine.
  */
-function resizeGestures(onResize: () => void): Gestures {
-  return {
-    enter: state => {
-      if (state === 'LOADING') {
-        window.addEventListener('resize', onResize, { passive: true })
-      } else if (state === 'UNLOADED') {
-        window.removeEventListener('resize', onResize)
-      }
-    },
-    removeAll: () => {
-      window.removeEventListener('resize', onResize)
-    },
+function request(inst: Instance, zoomed: boolean, event: Event): void {
+  const host = inst.host
+  if (parseBool(host.getAttribute('disabled'))) return
+  if (zoomed && !hasImage(inst)) return
+  const change = new CustomEvent<ZoomChangeEventDetail>('zoomchange', {
+    detail: { zoomed, originalEvent: event },
+    bubbles: true,
+    cancelable: true,
+    composed: false,
+  })
+  host.dispatchEvent(change)
+  if (change.defaultPrevented) return
+  if (zoomed) {
+    host.setAttribute('zoomed', '')
+  } else {
+    host.removeAttribute('zoomed')
   }
 }
 
-function setUp(inst: Instance): void {
+function setUp(inst: Instance, onZoomClick: (event: Event) => void): void {
   if (inst.isSetUp) return
   inst.isSetUp = true
   inst.isCustom = parseBool(inst.host.getAttribute('custom-content'))
+  inst.parts.button.addEventListener('click', onZoomClick)
   track(inst)
   inst.hooks.refresh()
 }
@@ -57,17 +65,18 @@ function setUp(inst: Instance): void {
  * Undo setup when the host is really gone. Every task that adds a listener,
  * observer, timer, lock or piece of state adds its removal here.
  */
-function teardown(inst: Instance): void {
+function teardown(inst: Instance, onZoomClick: (event: Event) => void): void {
   if (inst.modalState !== 'UNLOADED') {
     bodyScrollEnable(inst.prevBodyAttrs)
     inst.prevBodyAttrs = defaultBodyAttrs
   }
+  inst.parts.button.removeEventListener('click', onZoomClick)
   untrack(inst)
   unschedule(inst.job)
   clearTimeout(inst.fallbackTimer)
   inst.gestures.removeAll()
-  // The dialog's transitionend listener leaves with it; built-in content
-  // stays in inst.content
+  // The dialog's listeners leave with it (a late `close` from it no longer
+  // requests); built-in content stays in inst.content
   removeDialog(inst)
   inst.generation += 1
   inst.imgEl = null
@@ -94,7 +103,9 @@ export function createController(
     internals,
     id: randomId(),
     hooks: {
-      request: () => {}, // requests arrive in Task 10
+      request: (zoomed, event) => {
+        request(inst, zoomed, event)
+      },
       queue: () => {
         schedule(inst.job)
       },
@@ -111,9 +122,8 @@ export function createController(
       },
     },
     job: createJob(() => inst),
-    gestures: resizeGestures(() => {
-      inst.hooks.resized()
-    }),
+    // Replaced below: createGestures takes the instance itself
+    gestures: { enter: () => {}, removeAll: () => {} },
     isSetUp: false,
     generation: 0,
     isCustom: false,
@@ -137,6 +147,12 @@ export function createController(
     reportedState: undefined,
     reportedDialog: undefined,
   }
+  inst.gestures = createGestures(inst)
+
+  // The built-in zoom button, bound at setup and removed at teardown
+  const onZoomClick = (event: Event): void => {
+    request(inst, true, event)
+  }
 
   return {
     get state() {
@@ -147,11 +163,11 @@ export function createController(
     },
     modalContent: null,
     connect: () => {
-      setUp(inst)
+      setUp(inst, onZoomClick)
     },
     disconnect: () => {
       if (host.isConnected) return // a move, not a removal
-      teardown(inst)
+      teardown(inst, onZoomClick)
     },
     attributeChanged: name => {
       if (!inst.isSetUp) return

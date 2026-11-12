@@ -60,7 +60,30 @@ export function createDialog(inst: Instance): void {
 
   if (!inst.isCustom) {
     dialog.appendChild(ensureContent(inst))
+    // Port of handleDialogClick: have a click only unzoom in certain situations
+    dialog.addEventListener('click', event => {
+      if (event.target === inst.content || event.target === inst.modalImg) {
+        event.stopPropagation()
+        inst.hooks.request(false, event)
+      }
+    })
   }
+
+  // Port of handleDialogClose: keep the close from closing a parent modal.
+  // `close` is async: one queued by close() just before the dialog was
+  // removed (teardown, or hasImage turning false) still fires after the
+  // removal, and must not request.
+  dialog.addEventListener('close', event => {
+    if (dialog !== inst.dialog) return
+    event.stopPropagation()
+    inst.hooks.request(false, event)
+  })
+
+  // Port of handleDialogCancelStatic: prevent the browser from removing the
+  // dialog on Escape
+  dialog.addEventListener('cancel', event => {
+    event.preventDefault()
+  })
 
   // React's onTransitionEnd on the modal img bubbles from its descendants;
   // nothing else in the modal (the overlay, a caption) ends a transition

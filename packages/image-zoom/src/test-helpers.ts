@@ -1,6 +1,10 @@
 import { afterEach } from 'vitest'
 import { createImageZoomElement } from './element.js'
-import type { ImageZoomElement, ImageZoomState } from './types.js'
+import type {
+  ImageZoomElement,
+  ImageZoomState,
+  ZoomChangeEventDetail,
+} from './types.js'
 
 function svgUri(width: number, height: number): string {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="${width}" height="${height}" fill="#468"/></svg>`
@@ -197,6 +201,19 @@ export async function lateDefine(
 export function record(target: EventTarget, type: string): Event[] {
   const events: Event[] = []
   target.addEventListener(type, event => {
+    events.push(event)
+  })
+  return events
+}
+
+/**
+ * record(el, 'zoomchange'), typed through the element's event map
+ */
+export function zoomEvents(
+  el: ImageZoomElement,
+): Array<CustomEvent<ZoomChangeEventDetail>> {
+  const events: Array<CustomEvent<ZoomChangeEventDetail>> = []
+  el.addEventListener('zoomchange', event => {
     events.push(event)
   })
   return events
