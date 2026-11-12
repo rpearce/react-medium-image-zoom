@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="./demo.css" />
     <script type="module" src="../src/index.ts"></script>
     <script type="module" src="./demo.ts"></script>
+    <script type="module" src="./custom-content.ts"></script>
   </head>
   <body>
     <h1>&lt;image-zoom&gt; demo</h1>
@@ -181,6 +182,22 @@
         <img
           alt="Te Arai Point"
           src="../../../stories/images/douglas-bagg-wRwa3Z6GtRI-unsplash-smaller.jpg"
+          width="300"
+        />
+      </image-zoom>
+    </section>
+
+    <section>
+      <h2>custom-content</h2>
+      <p>
+        Zoom: the page renders the modal content itself, a figure with a caption
+        and its own × button. Click the image, the × button or the empty area to
+        unzoom.
+      </p>
+      <image-zoom custom-content>
+        <img
+          alt="Queenstown, New Zealand"
+          src="../../../stories/images/omer-faruk-bekdemir-5BuxuWIJF1Q-unsplash-smaller.jpg"
           width="300"
         />
       </image-zoom>

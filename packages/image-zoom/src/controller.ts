@@ -2,7 +2,7 @@ import { parseBool } from './attributes.js'
 import { type Instance, INITIAL_STATE } from './instance.js'
 import { createGestures } from './listeners.js'
 import { applyZoomed, transitionEnd } from './machine.js'
-import { removeDialog } from './modal.js'
+import { canZoom, removeDialog } from './modal.js'
 import { createJob, report, update } from './operation.js'
 import { schedule, unschedule } from './scheduler.js'
 import { bodyScrollEnable, defaultBodyAttrs } from './scroll-lock.js'
@@ -28,15 +28,23 @@ function randomId(): string {
 }
 
 /**
+ * The click listeners setup adds and teardown removes
+ */
+interface Clicks {
+  readonly button: (event: Event) => void // the built-in zoom button
+  readonly host: (event: Event) => void // a slotted zoom button
+}
+
+/**
  * Every user request goes through here (handleZoom and handleUnzoom today).
- * Dropped while disabled, and a zoom while !canZoom (hasImage for now).
- * Otherwise zoomchange, and unless a listener cancels it, the zoomed
- * attribute, whose change runs the state machine.
+ * Dropped while disabled, and a zoom while !canZoom. Otherwise zoomchange,
+ * and unless a listener cancels it, the zoomed attribute, whose change runs
+ * the state machine.
  */
 function request(inst: Instance, zoomed: boolean, event: Event): void {
   const host = inst.host
   if (parseBool(host.getAttribute('disabled'))) return
-  if (zoomed && !hasImage(inst)) return
+  if (zoomed && !canZoom(inst, hasImage(inst))) return
   const change = new CustomEvent<ZoomChangeEventDetail>('zoomchange', {
     detail: { zoomed, originalEvent: event },
     bubbles: true,
@@ -52,12 +60,28 @@ function request(inst: Instance, zoomed: boolean, event: Event): void {
   }
 }
 
-function setUp(inst: Instance, onZoomClick: (event: Event) => void): void {
+/**
+ * Whether a click's target is inside the host's direct child with
+ * slot="zoom-button". A click from the shadow tree reaches the host
+ * retargeted to the host itself, so the built-in button never matches.
+ */
+function inZoomButton(host: HTMLElement, target: EventTarget | null): boolean {
+  let child = target instanceof Node ? target : null
+  while (child !== null && child.parentNode !== host) {
+    child = child.parentNode
+  }
+  return (
+    child instanceof Element && child.getAttribute('slot') === 'zoom-button'
+  )
+}
+
+function setUp(inst: Instance, clicks: Clicks): void {
   if (inst.isSetUp) return
   inst.isSetUp = true
   inst.mustReport = true
   inst.isCustom = parseBool(inst.host.getAttribute('custom-content'))
-  inst.parts.button.addEventListener('click', onZoomClick)
+  inst.parts.button.addEventListener('click', clicks.button)
+  inst.host.addEventListener('click', clicks.host)
   track(inst)
   inst.hooks.refresh()
 }
@@ -67,19 +91,23 @@ function setUp(inst: Instance, onZoomClick: (event: Event) => void): void {
  * once. Every task that adds a listener, observer, timer, lock or piece of
  * state adds its removal here.
  */
-function teardown(inst: Instance, onZoomClick: (event: Event) => void): void {
+function teardown(inst: Instance, clicks: Clicks): void {
   if (inst.modalState !== 'UNLOADED') {
     bodyScrollEnable(inst.prevBodyAttrs)
     inst.prevBodyAttrs = defaultBodyAttrs
   }
-  inst.parts.button.removeEventListener('click', onZoomClick)
+  inst.parts.button.removeEventListener('click', clicks.button)
+  inst.host.removeEventListener('click', clicks.host)
   untrack(inst)
   unschedule(inst.job)
   clearTimeout(inst.fallbackTimer)
   inst.gestures.removeAll()
   // The dialog leaves the DOM but keeps its listeners: a late `close` still
-  // reaches it, and its `dialog !== inst.dialog` guard makes it inert.
-  // Built-in content stays in inst.content.
+  // reaches it, and its `dialog !== inst.dialog` guard makes it inert. Its
+  // observer (custom content) is disconnected. Built-in content stays in
+  // inst.content. writtenStyle and styled stay too: they describe the inline
+  // style left on that modal img, which the next write must clear (a resize's
+  // 0.01ms), and every write records writtenStyle before preStyle can use it.
   removeDialog(inst)
   inst.generation += 1
   inst.imgEl = null
@@ -159,9 +187,15 @@ export function createController(
   }
   inst.gestures = createGestures(inst)
 
-  // The built-in zoom button, bound at setup and removed at teardown
-  const onZoomClick = (event: Event): void => {
-    request(inst, true, event)
+  // Bound at setup and removed at teardown. The source image has its own
+  // listener (source.ts), so the host's handles only the slotted button.
+  const clicks: Clicks = {
+    button: event => {
+      request(inst, true, event)
+    },
+    host: event => {
+      if (inZoomButton(host, event.target)) request(inst, true, event)
+    },
   }
 
   return {
@@ -173,11 +207,11 @@ export function createController(
     },
     modalContent: null,
     connect: () => {
-      setUp(inst, onZoomClick)
+      setUp(inst, clicks)
     },
     disconnect: () => {
       if (host.isConnected) return // a move, not a removal
-      teardown(inst, onZoomClick)
+      teardown(inst, clicks)
     },
     attributeChanged: name => {
       if (!inst.isSetUp) return

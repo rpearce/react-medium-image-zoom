@@ -15,6 +15,9 @@ const STYLE_KEYS = [
 // The dialog-class value last written to each dialog (null: no class)
 const writtenClass = new WeakMap<HTMLDialogElement, string | null>()
 
+// The MutationObserver of each custom-content dialog
+const observers = new WeakMap<HTMLDialogElement, MutationObserver>()
+
 function setClass(dialog: HTMLDialogElement, value: string | null): void {
   writtenClass.set(dialog, value)
   if (value === null) {
@@ -43,7 +46,9 @@ export function getDialogContainer(): HTMLDivElement {
 
 /**
  * The light-DOM dialog: the overlay, then (built-in content only) the
- * content, appended to the portal
+ * content, appended to the portal. A custom-content dialog gets an observer
+ * instead: the consumer adding its content (canZoom) or remounting its modal
+ * img updates the element.
  */
 export function createDialog(inst: Instance): void {
   const dialog = document.createElement('dialog')
@@ -58,7 +63,21 @@ export function createDialog(inst: Instance): void {
   overlay.setAttribute('data-rmiz-modal-overlay', 'hidden')
   dialog.appendChild(overlay)
 
-  if (!inst.isCustom) {
+  if (inst.isCustom) {
+    // Open: update at once, in the microtask checkpoint right after the
+    // consumer's change, so a new modal img is pre-styled before any frame
+    // can paint it unstyled. Closed: batched, as a gallery's wrappers insert
+    // their content at mount.
+    const observer = new MutationObserver(() => {
+      if (dialog.open) {
+        inst.hooks.refresh()
+      } else {
+        inst.hooks.queue()
+      }
+    })
+    observer.observe(dialog, { childList: true, subtree: true })
+    observers.set(dialog, observer)
+  } else {
     dialog.appendChild(ensureContent(inst))
     // Port of handleDialogClick: have a click only unzoom in certain situations
     dialog.addEventListener('click', event => {
@@ -103,13 +122,25 @@ export function createDialog(inst: Instance): void {
 }
 
 /**
- * Remove the dialog. Built-in content leaves with it and stays in
- * inst.content for the next dialog.
+ * Remove the dialog and disconnect its observer. Built-in content leaves with
+ * it and stays in inst.content for the next dialog.
  */
 export function removeDialog(inst: Instance): void {
-  inst.dialog?.remove()
+  const dialog = inst.dialog
+  if (dialog !== null) {
+    observers.get(dialog)?.disconnect()
+    dialog.remove()
+  }
   inst.dialog = null
   inst.overlay = null
+}
+
+/**
+ * Update model step 3: drop the dialog observer's records of the element's
+ * own writes (the SVG clone), so they never queue another update
+ */
+export function discardOwnRecords(inst: Instance): void {
+  if (inst.dialog !== null) observers.get(inst.dialog)?.takeRecords()
 }
 
 /**
@@ -124,8 +155,39 @@ export function writeDialogClass(inst: Instance): void {
   if (writtenClass.get(dialog) !== value) setClass(dialog, value)
 }
 
+/**
+ * The element's own modal img, or with custom content the dialog's
+ * [data-rmiz-modal-img] as it is now: never cached, so a remount is found
+ */
 export function findModalImg(inst: Instance): HTMLElement | null {
-  return inst.modalImg
+  if (!inst.isCustom) return inst.modalImg
+  const found = inst.dialog?.querySelector('[data-rmiz-modal-img]')
+  return found instanceof HTMLElement ? found : null
+}
+
+/**
+ * Whether a zoom request can proceed: an image (`found`) and, with custom
+ * content, the consumer's [data-rmiz-modal-content] in the dialog. The modal
+ * img may come later.
+ */
+export function canZoom(inst: Instance, found: boolean): boolean {
+  return (
+    found &&
+    (!inst.isCustom ||
+      inst.dialog?.querySelector('[data-rmiz-modal-content]') != null)
+  )
+}
+
+/**
+ * First sighting (#448): while the dialog is open, a modal img the element
+ * hasn't styled yet gets the last written style before the read step, so the
+ * read computes it and the write transitions from it
+ */
+export function preStyle(inst: Instance): void {
+  if (inst.dialog?.open !== true) return
+  const node = findModalImg(inst)
+  if (node === null || inst.styled.has(node)) return
+  writeModalImg(inst, inst.writtenStyle)
 }
 
 const cssValue = (value: number | string): string =>
@@ -134,11 +196,16 @@ const cssValue = (value: number | string): string =>
 /**
  * Write the modal img's geometry one CSSOM property at a time, removing what
  * an earlier call wrote and this style lacks; other inline styles survive.
- * An <img> also gets unrounded width/height attributes and its id.
+ * An <img> also gets unrounded width/height attributes and its id. The style
+ * is recorded even with no modal img, so one that first appears while zoomed
+ * is pre-styled zoomed, as React renders a late img with the current style.
  */
 export function writeModalImg(inst: Instance, style: StyleObject): void {
   const node = findModalImg(inst)
-  if (node === null) return
+  if (node === null) {
+    inst.writtenStyle = style
+    return
+  }
 
   for (const key of STYLE_KEYS) {
     const value = style[key]

@@ -2,8 +2,11 @@ import { parseNumber } from './attributes.js'
 import { cloneSvg, writeBuiltIn } from './content.js'
 import { type Instance, INITIAL_STATE, statesEqual } from './instance.js'
 import {
+  canZoom,
   createDialog,
+  discardOwnRecords,
   findModalImg,
+  preStyle,
   removeDialog,
   writeDialogClass,
   writeModalImg,
@@ -76,7 +79,8 @@ function nextState(
 const px = (n: number | undefined): string => (n === undefined ? '' : `${n}px`)
 
 /**
- * Write the host's state and the shadow tree from inst.state
+ * Write the host's state and the shadow tree from inst.state. The ghost (and
+ * the zoom button in it) is hidden while !canZoom.
  */
 function writeShadow(inst: Instance, ghostStyle: StyleObject): void {
   const found = inst.state.hasImage
@@ -86,7 +90,7 @@ function writeShadow(inst: Instance, ghostStyle: StyleObject): void {
     inst.internals?.states.delete('found')
   }
   const ghost = inst.parts.ghost
-  ghost.hidden = !found
+  ghost.hidden = !canZoom(inst, found)
   ghost.style.top = px(ghostStyle.top)
   ghost.style.left = px(ghostStyle.left)
   ghost.style.width = px(ghostStyle.width)
@@ -129,10 +133,11 @@ function writeDialog(inst: Instance): void {
 }
 
 /**
- * Read layout and the source into the next snapshot; returns the ghost's
- * style for write
+ * Pre-style a newly seen modal img, then read layout and the source into the
+ * next snapshot; returns the ghost's style for write
  */
 function read(inst: Instance): StyleObject {
+  preStyle(inst)
   const source = hasImage(inst) ? inst.imgEl : null
   const ghostStyle = getStyleGhost(source)
   const next = nextState(inst, source)
@@ -142,13 +147,20 @@ function read(inst: Instance): StyleObject {
   return ghostStyle
 }
 
+/**
+ * Write, then discard the dialog observer's records of those writes. Runs
+ * before any dispatch: a takeRecords() after it would also drop what a
+ * statechange listener inserted.
+ */
 function write(inst: Instance, ghostStyle: StyleObject): void {
   writeShadow(inst, ghostStyle)
   writeDialog(inst)
+  discardOwnRecords(inst)
 }
 
 /**
- * Read, then write. It never dispatches: an operation ends with report().
+ * Pre-style, read, write, discard own records. It never dispatches: an
+ * operation ends with report().
  */
 export function update(inst: Instance): void {
   write(inst, read(inst))

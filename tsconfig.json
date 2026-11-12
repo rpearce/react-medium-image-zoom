@@ -1,4 +1,9 @@
 {
   "extends": "./tsconfig.base.json",
-  "include": ["packages/*/src/**/*", "stories/**/*", "test/**/*"]
+  "include": [
+    "packages/*/src/**/*",
+    "packages/*/demo/**/*",
+    "stories/**/*",
+    "test/**/*"
+  ]
 }

@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import './index.js'
 import './styles.css'
@@ -123,12 +123,31 @@ it('inside an open outer dialog, Escape unzooms and the outer dialog stays open'
   const el = outer.querySelector('image-zoom')!
   await until(el, s => s.hasImage)
   await open(el)
+  // Recorded as each state is entered: under load the real-time fallback can
+  // finish the unzoom while the key press is still being awaited
+  const seen: Array<[string, boolean | undefined]> = []
+  el.addEventListener('statechange', () => {
+    seen.push([el.state.modalState, el.dialog?.open])
+  })
+  const dialog = el.dialog
+  if (dialog === null) throw new TypeError('a zoomed element has a dialog')
+  const closedIn: string[] = []
+  dialog.addEventListener('close', () => {
+    closedIn.push(el.state.modalState)
+  })
   await userEvent.keyboard('{Escape}')
+  await until(el, s => s.modalState === 'UNLOADED')
   // The key was intercepted, not left to close the dialog natively, so the
-  // unzoom can animate
-  expect([el.state.modalState, el.dialog?.open]).toEqual(['UNLOADING', true])
-  end(el)
-  expect([el.state.modalState, el.dialog!.open, outer.open]).toEqual([
+  // unzoom can animate: the dialog was open when it started, and closed only
+  // once it had finished
+  expect(seen.find(([state]) => state === 'UNLOADING')).toEqual([
+    'UNLOADING',
+    true,
+  ])
+  await vi.waitFor(() => {
+    expect(closedIn).toEqual(['UNLOADED'])
+  })
+  expect([el.state.modalState, el.dialog?.open, outer.open]).toEqual([
     'UNLOADED',
     false,
     true,
