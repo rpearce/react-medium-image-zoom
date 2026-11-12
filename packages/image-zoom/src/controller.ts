@@ -1,5 +1,7 @@
-import { parseBool } from './attributes.js'
+import { parseBool, parseNumber } from './attributes.js'
+import { writeBuiltIn } from './content.js'
 import { type Instance, INITIAL_STATE, statesEqual } from './instance.js'
+import { createDialog, removeDialog, writeModalImg } from './modal.js'
 import { type Job, runJobs, schedule, unschedule } from './scheduler.js'
 import { defaultBodyAttrs } from './scroll-lock.js'
 import { hasImage, track, untrack } from './source.js'
@@ -9,6 +11,7 @@ import { testImg, testSvg } from './utils/element-tests.js'
 import { getImgAlt } from './utils/get-img-alt.js'
 import { getImgSrc } from './utils/get-img-src.js'
 import { getStyleGhost } from './utils/get-style-ghost.js'
+import { getStyleModalImg } from './utils/get-style-modal-img.js'
 import type { StyleObject, SupportedImage } from './utils/types.js'
 
 export interface Controller {
@@ -35,6 +38,29 @@ function narrowCrossOrigin(
 }
 
 /**
+ * getStyleModalImg as today's render() calls it, frozen for the snapshot
+ */
+function readModalImgStyle(
+  inst: Instance,
+  source: SupportedImage,
+  imgSrc: string | undefined,
+): Readonly<StyleObject> {
+  const host = inst.host
+  return Object.freeze(
+    getStyleModalImg({
+      hasZoomImg: (host.getAttribute('zoom-src') ?? '') !== '',
+      imgSrc,
+      isSvg: testSvg(source),
+      isZoomed: inst.modalState === 'LOADING' || inst.modalState === 'LOADED',
+      loadedImgEl: inst.loadedImgEl,
+      offset: parseNumber(host.getAttribute('zoom-margin'), 0),
+      shouldRefresh: inst.shouldRefresh,
+      targetEl: source,
+    }),
+  )
+}
+
+/**
  * The next snapshot; `source` is the tracked image while hasImage, else null
  */
 function nextState(
@@ -42,17 +68,21 @@ function nextState(
   source: SupportedImage | null,
 ): ImageZoomState {
   const isImg = testImg(source)
+  const src = getImgSrc(source)
   return {
     hasImage: source !== null,
     isSvg: testSvg(source),
     alt: getImgAlt(source),
-    src: getImgSrc(source),
+    src,
     srcset: isImg ? source.srcset : undefined,
     sizes: isImg ? source.sizes : undefined,
     crossOrigin: isImg ? narrowCrossOrigin(source.crossOrigin) : undefined,
     modalState: inst.modalState,
     isZoomImgLoaded: inst.isZoomImgLoaded,
-    modalImgStyle: INITIAL_STATE.modalImgStyle,
+    modalImgStyle:
+      source === null
+        ? INITIAL_STATE.modalImgStyle
+        : readModalImgStyle(inst, source, src),
   }
 }
 
@@ -80,6 +110,29 @@ function writeShadow(inst: Instance, ghostStyle: StyleObject): void {
     'aria-label',
     alt !== undefined && alt !== '' ? `${label}: ${alt}` : label,
   )
+}
+
+/**
+ * The dialog exists while hasImage; then its class, the built-in content and
+ * the modal img's geometry. Runs before the report, so a statechange never
+ * sees hasImage and the dialog disagree.
+ */
+function writeDialog(inst: Instance): void {
+  if (!inst.state.hasImage) {
+    removeDialog(inst)
+  } else if (inst.dialog === null) {
+    createDialog(inst)
+  }
+  const dialog = inst.dialog
+  if (dialog === null) return
+  const dialogClass = inst.host.getAttribute('dialog-class')
+  if (dialogClass === null) {
+    dialog.removeAttribute('class')
+  } else {
+    dialog.setAttribute('class', dialogClass)
+  }
+  if (!inst.isCustom) writeBuiltIn(inst)
+  writeModalImg(inst, inst.state.modalImgStyle)
 }
 
 /**
@@ -116,6 +169,7 @@ function setUp(inst: Instance): void {
 function teardown(inst: Instance): void {
   untrack(inst)
   unschedule(inst.job)
+  removeDialog(inst) // built-in content stays in inst.content
   inst.generation += 1
   inst.imgEl = null
   inst.loadedImgEl = undefined
@@ -144,6 +198,7 @@ export function createController(
     },
     write: () => {
       writeShadow(inst, ghostStyle)
+      writeDialog(inst)
     },
     finish: () => {
       report(inst)

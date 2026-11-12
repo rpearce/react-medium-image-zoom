@@ -103,15 +103,34 @@ function isImageZoom(node: Element): node is ImageZoomElement {
 }
 
 /**
+ * mount(), narrowed: the markup's root must be an upgraded <image-zoom>
+ */
+export function mountZoom(markup: string): ImageZoomElement {
+  const el = mount(markup)
+  if (!isImageZoom(el)) {
+    throw new TypeError('mountZoom: markup must start with <image-zoom>')
+  }
+  return el
+}
+
+/**
  * Mount markup whose root is an <image-zoom>, and wait until it has an image
  */
 export async function ready(markup: string): Promise<ImageZoomElement> {
-  const el = mount(markup)
-  if (!isImageZoom(el)) {
-    throw new TypeError('ready: markup must start with <image-zoom>')
-  }
+  const el = mountZoom(markup)
   await until(el, s => s.hasImage)
   return el
+}
+
+/**
+ * The element's modal img: el.dialog's [data-rmiz-modal-img]
+ */
+export function modalImg(el: ImageZoomElement): HTMLElement {
+  const found = el.dialog?.querySelector('[data-rmiz-modal-img]')
+  if (!(found instanceof HTMLElement)) {
+    throw new TypeError('modalImg: no [data-rmiz-modal-img] in el.dialog')
+  }
+  return found
 }
 
 export function ghost(el: ImageZoomElement): HTMLElement {

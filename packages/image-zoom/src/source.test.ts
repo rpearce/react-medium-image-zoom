@@ -1,5 +1,5 @@
 import { expect, it, vi } from 'vitest'
-import { tagName } from './index.js'
+import './index.js'
 import './styles.css'
 import {
   builtInButton,
@@ -10,25 +10,11 @@ import {
   IMG_2,
   IMG_HTML,
   mount,
+  mountZoom,
   ready,
   record,
   until,
 } from './test-helpers.js'
-import type { ImageZoomElement } from './types.js'
-
-const isImageZoom = (node: Element): node is ImageZoomElement => {
-  const registered = customElements.get(tagName)
-  return registered !== undefined && node instanceof registered
-}
-
-// mount() narrowed to the element, in place of `mount(...) as ImageZoomElement`
-const mountZoom = (markup: string): ImageZoomElement => {
-  const el = mount(markup)
-  if (!isImageZoom(el)) {
-    throw new TypeError('mountZoom: markup must start with <image-zoom>')
-  }
-  return el
-}
 
 it('reports a loaded image and shows the ghost over it', async () => {
   const el = await ready(IMG_HTML)
@@ -63,6 +49,24 @@ it('fires statechange after connect even when nothing changed', () => {
   document.body.append(el)
   expect(events).toHaveLength(1)
   el.remove()
+})
+
+it('an unloaded <img> at connect keeps the initial snapshot', async () => {
+  const el = document.createElement('image-zoom')
+  const img = document.createElement('img')
+  img.alt = 'x'
+  el.append(img)
+  const before = el.state
+  const events = record(el, 'statechange')
+  mount('<div></div>').append(el)
+  await idle()
+  expect(events).toHaveLength(1)
+  expect(el.state).toBe(before)
+  expect(before).toMatchObject({
+    hasImage: false,
+    alt: undefined,
+    src: undefined,
+  })
 })
 
 it('an SVG source is found during connect', () => {
