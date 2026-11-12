@@ -1,0 +1,43 @@
+{
+  "name": "@rpearce/image-zoom",
+  "version": "0.1.0-rc.10",
+  "license": "BSD-3-Clause",
+  "description": "Accessible medium.com-style image zoom as a custom element",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./styles.css": "./dist/styles.css",
+    "./dist/styles.css": "./dist/styles.css"
+  },
+  "sideEffects": [
+    "./dist/index.js",
+    "**/*.css"
+  ],
+  "files": [
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md",
+    "dist/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/rpearce/react-medium-image-zoom.git",
+    "directory": "packages/image-zoom"
+  },
+  "homepage": "https://github.com/rpearce/react-medium-image-zoom",
+  "bugs": "https://github.com/rpearce/react-medium-image-zoom/issues",
+  "author": "Robert Pearce <me@robertwpearce.com> (https://robertwpearce.com)",
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/rpearce"
+    }
+  ],
+  "scripts": {
+    "prebuild": "rm -rf ./dist",
+    "build": "tsc --project tsconfig.build.json && cp ./src/styles.css ./dist/styles.css && node scripts/check-node-import.mjs",
+    "prepack": "pnpm run build"
+  }
+}
