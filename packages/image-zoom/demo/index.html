@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>image-zoom demo</title>
+    <link rel="stylesheet" href="../src/styles.css" />
+    <link rel="stylesheet" href="./demo.css" />
+    <script type="module" src="../src/index.ts"></script>
+    <script type="module" src="./demo.ts"></script>
+  </head>
+  <body>
+    <h1>&lt;image-zoom&gt; demo</h1>
+
+    <section>
+      <h2>Plain img</h2>
+      <p>
+        Click the image, or Tab to the button and press Enter; Escape unzooms.
+      </p>
+      <image-zoom>
+        <img
+          alt="Kea in Arthur's Pass"
+          src="../../../stories/images/pablo-heimplatz-PSF2RhUBORs-unsplash-smaller.jpg"
+          width="300"
+        />
+      </image-zoom>
+    </section>
+
+    <section>
+      <h2>zoom-src</h2>
+      <p>Zoom in and watch the small image be replaced by the large one.</p>
+      <image-zoom
+        zoom-src="../../../stories/images/pablo-heimplatz-PSF2RhUBORs-unsplash.jpg"
+      >
+        <img
+          alt="Kea in Arthur's Pass"
+          src="../../../stories/images/pablo-heimplatz-PSF2RhUBORs-unsplash-300w.jpg"
+          width="150"
+        />
+      </image-zoom>
+    </section>
+
+    <section>
+      <h2>SVG source</h2>
+      <p>Zoom the SVG; its gradient must still render in the modal clone.</p>
+      <image-zoom>
+        <svg
+          role="img"
+          aria-label="Gradient circle"
+          width="200"
+          height="200"
+          viewBox="0 0 200 200"
+        >
+          <defs>
+            <linearGradient id="demo-gradient" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ff5f6d" />
+              <stop offset="1" stop-color="#ffc371" />
+            </linearGradient>
+          </defs>
+          <circle cx="100" cy="100" r="90" fill="url(#demo-gradient)" />
+        </svg>
+      </image-zoom>
+    </section>
+
+    <section>
+      <h2>picture</h2>
+      <p>Zoom, then resize the window across 700px to switch sources.</p>
+      <image-zoom>
+        <picture>
+          <source
+            media="(min-width: 700px)"
+            srcset="
+              ../../../stories/images/rod-long-4dcsLxQxSHY-unsplash-smaller.jpg
+            "
+          />
+          <source
+            media="(max-width: 699px)"
+            srcset="
+              ../../../stories/images/omer-faruk-bekdemir-5BuxuWIJF1Q-unsplash-smaller.jpg
+            "
+          />
+          <img
+            alt="New Zealand scenery"
+            src="../../../stories/images/rod-long-4dcsLxQxSHY-unsplash-smaller.jpg"
+            width="300"
+          />
+        </picture>
+      </image-zoom>
+    </section>
+
+    <section>
+      <h2>Custom icons</h2>
+      <p>Hover or focus the image: the zoom and unzoom icons are replaced.</p>
+      <image-zoom>
+        <svg slot="icon-zoom" width="16" height="16" viewBox="0 0 16 16">
+          <path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="2" />
+        </svg>
+        <svg slot="icon-unzoom" width="16" height="16" viewBox="0 0 16 16">
+          <path
+            d="M3 3l10 10M13 3L3 13"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+        </svg>
+        <img
+          alt="Hobbiton"
+          src="../../../stories/images/andres-iga-7XKkJVw1d8c-unsplash-smaller.jpg"
+          width="300"
+        />
+      </image-zoom>
+    </section>
+
+    <section>
+      <h2>Consumer zoom button</h2>
+      <p>Tab to the button supplied by the page and press Enter.</p>
+      <image-zoom>
+        <button
+          slot="zoom-button"
+          data-rmiz-btn-zoom
+          aria-label="Open the image"
+        >
+          Open
+        </button>
+        <img
+          alt="Hooker Valley Track"
+          src="../../../stories/images/roell-de-ram-2DM7eOR5iyc-unsplash-smaller.jpg"
+          width="300"
+        />
+      </image-zoom>
+    </section>
+
+    <section>
+      <h2>disabled</h2>
+      <p>This image must not zoom by click or keyboard.</p>
+      <image-zoom disabled>
+        <img
+          alt="Lake Tekapo"
+          src="../../../stories/images/tobias-keller-73F4pKoUkM0-unsplash-smaller.jpg"
+          width="300"
+        />
+      </image-zoom>
+    </section>
+
+    <section>
+      <h2>inline</h2>
+      <p>
+        The image sits
+        <image-zoom inline>
+          <img
+            alt="That Wanaka Tree"
+            src="../../../stories/images/laura-smetsers-H-TW2CoNtTk-unsplash-smaller.jpg"
+            width="60"
+          />
+        </image-zoom>
+        inside this sentence; try zooming it and check the line layout.
+      </p>
+    </section>
+
+    <section>
+      <h2>dialog-class</h2>
+      <p>
+        Zoom: the overlay fades slowly to a purple tint with a purple button.
+      </p>
+      <image-zoom dialog-class="custom-zoom">
+        <img
+          alt="Port Waikato"
+          src="../../../stories/images/petr-vysohlid-9fqwGqGLUxc-unsplash-smaller.jpg"
+          width="300"
+        />
+      </image-zoom>
+    </section>
+
+    <section>
+      <h2>Controlled mode</h2>
+      <p>
+        Tick the box to zoom and untick to unzoom; zooming by click or Escape
+        goes through the box too.
+      </p>
+      <label><input id="controlled-state" type="checkbox" /> zoomed</label>
+      <image-zoom id="controlled">
+        <img
+          alt="Te Arai Point"
+          src="../../../stories/images/douglas-bagg-wRwa3Z6GtRI-unsplash-smaller.jpg"
+          width="300"
+        />
+      </image-zoom>
+    </section>
+  </body>
+</html>

@@ -38,6 +38,8 @@
   "scripts": {
     "prebuild": "rm -rf ./dist",
     "build": "tsc --project tsconfig.build.json && cp ./src/styles.css ./dist/styles.css && node scripts/check-node-import.mjs",
-    "prepack": "pnpm run build"
+    "prepack": "pnpm run build",
+    "demo": "vite --config demo/vite.config.ts",
+    "demo:csp": "pnpm run build && node demo/serve.mjs"
   }
 }
