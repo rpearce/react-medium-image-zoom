@@ -1,6 +1,15 @@
-import { INITIAL_STATE } from './instance.js'
+import { parseBool } from './attributes.js'
+import { type Instance, INITIAL_STATE, statesEqual } from './instance.js'
+import { type Job, runJobs, schedule, unschedule } from './scheduler.js'
+import { defaultBodyAttrs } from './scroll-lock.js'
+import { hasImage, track, untrack } from './source.js'
 import type { ShadowParts } from './template.js'
 import type { ImageZoomState } from './types.js'
+import { testImg, testSvg } from './utils/element-tests.js'
+import { getImgAlt } from './utils/get-img-alt.js'
+import { getImgSrc } from './utils/get-img-src.js'
+import { getStyleGhost } from './utils/get-style-ghost.js'
+import type { StyleObject, SupportedImage } from './utils/types.js'
 
 export interface Controller {
   readonly state: ImageZoomState
@@ -12,20 +21,195 @@ export interface Controller {
 }
 
 /**
- * Everything the element does beyond reflecting attributes. A stub for now:
- * the initial state, no dialog, and lifecycle hooks that do nothing.
+ * 12 random hex characters, as setId does today
+ */
+function randomId(): string {
+  const gen4 = (): string => Math.random().toString(16).slice(-4)
+  return gen4() + gen4() + gen4()
+}
+
+function narrowCrossOrigin(
+  value: string | null,
+): 'anonymous' | 'use-credentials' | null {
+  return value === 'anonymous' || value === 'use-credentials' ? value : null
+}
+
+/**
+ * The next snapshot; `source` is the tracked image while hasImage, else null
+ */
+function nextState(
+  inst: Instance,
+  source: SupportedImage | null,
+): ImageZoomState {
+  const isImg = testImg(source)
+  return {
+    hasImage: source !== null,
+    isSvg: testSvg(source),
+    alt: getImgAlt(source),
+    src: getImgSrc(source),
+    srcset: isImg ? source.srcset : undefined,
+    sizes: isImg ? source.sizes : undefined,
+    crossOrigin: isImg ? narrowCrossOrigin(source.crossOrigin) : undefined,
+    modalState: inst.modalState,
+    isZoomImgLoaded: inst.isZoomImgLoaded,
+    modalImgStyle: INITIAL_STATE.modalImgStyle,
+  }
+}
+
+const px = (n: number | undefined): string => (n === undefined ? '' : `${n}px`)
+
+/**
+ * Write the host's state and the shadow tree from inst.state
+ */
+function writeShadow(inst: Instance, ghostStyle: StyleObject): void {
+  const found = inst.state.hasImage
+  if (found) {
+    inst.internals?.states.add('found')
+  } else {
+    inst.internals?.states.delete('found')
+  }
+  const ghost = inst.parts.ghost
+  ghost.hidden = !found
+  ghost.style.top = px(ghostStyle.top)
+  ghost.style.left = px(ghostStyle.left)
+  ghost.style.width = px(ghostStyle.width)
+  ghost.style.height = px(ghostStyle.height)
+  const label = inst.host.getAttribute('label-zoom') ?? 'Expand image'
+  const alt = inst.state.alt
+  inst.parts.button.setAttribute(
+    'aria-label',
+    alt !== undefined && alt !== '' ? `${label}: ${alt}` : label,
+  )
+}
+
+/**
+ * Dispatch one statechange when state or dialog differ from the last report,
+ * or on the first operation after a connect
+ */
+function report(inst: Instance): void {
+  const unchanged =
+    !inst.mustReport &&
+    inst.reportedState !== undefined &&
+    statesEqual(inst.state, inst.reportedState) &&
+    inst.dialog === inst.reportedDialog
+  if (unchanged) return
+  // Recorded before dispatching, so a listener's own operation compares
+  // against this report
+  inst.mustReport = false
+  inst.reportedState = inst.state
+  inst.reportedDialog = inst.dialog
+  inst.host.dispatchEvent(new Event('statechange'))
+}
+
+function setUp(inst: Instance): void {
+  if (inst.isSetUp) return
+  inst.isSetUp = true
+  inst.isCustom = parseBool(inst.host.getAttribute('custom-content'))
+  track(inst)
+  inst.hooks.refresh()
+}
+
+/**
+ * Undo setup when the host is really gone. Every task that adds a listener,
+ * observer, timer, lock or piece of state adds its removal here.
+ */
+function teardown(inst: Instance): void {
+  untrack(inst)
+  unschedule(inst.job)
+  inst.generation += 1
+  inst.imgEl = null
+  inst.loadedImgEl = undefined
+  inst.isSetUp = false
+  inst.mustReport = true
+}
+
+/**
+ * Everything the element does beyond reflecting attributes. An operation is
+ * read → write → side effects → report; `job` lets the scheduler batch it.
  */
 export function createController(
-  _host: HTMLElement,
-  _parts: ShadowParts,
-  _internals: ElementInternals | undefined,
+  host: HTMLElement,
+  parts: ShadowParts,
+  internals: ElementInternals | undefined,
 ): Controller {
-  return {
-    state: INITIAL_STATE,
+  let ghostStyle: StyleObject = {}
+  const job: Job = {
+    read: () => {
+      const source = hasImage(inst) ? inst.imgEl : null
+      ghostStyle = getStyleGhost(source)
+      const next = nextState(inst, source)
+      if (!statesEqual(next, inst.state)) {
+        inst.state = Object.freeze(next)
+      }
+    },
+    write: () => {
+      writeShadow(inst, ghostStyle)
+    },
+    finish: () => {
+      report(inst)
+    },
+  }
+
+  const inst: Instance = {
+    host,
+    parts,
+    internals,
+    id: randomId(),
+    hooks: {
+      request: () => {}, // requests arrive in Task 10
+      queue: () => {
+        schedule(job)
+      },
+      refresh: () => {
+        runJobs([job])
+      },
+      resized: () => {}, // Task 9
+      transitionEnd: () => {}, // Task 9
+    },
+    job,
+    isSetUp: false,
+    generation: 0,
+    isCustom: false,
+    mustReport: true,
+    appliedZoomed: false,
+    modalState: 'UNLOADED',
+    shouldRefresh: false,
+    isZoomImgLoaded: false,
+    prevBodyAttrs: defaultBodyAttrs,
+    fallbackTimer: undefined,
+    imgEl: null,
+    loadedImgEl: undefined,
     dialog: null,
+    overlay: null,
+    content: null,
+    modalImg: null,
+    btnUnzoom: null,
+    writtenStyle: {},
+    styled: new WeakSet(),
+    state: INITIAL_STATE,
+    reportedState: undefined,
+    reportedDialog: undefined,
+  }
+
+  return {
+    get state() {
+      return inst.state
+    },
+    get dialog() {
+      return inst.dialog
+    },
     modalContent: null,
-    connect: () => {},
-    disconnect: () => {},
-    attributeChanged: () => {},
+    connect: () => {
+      setUp(inst)
+    },
+    disconnect: () => {
+      if (host.isConnected) return // a move, not a removal
+      teardown(inst)
+    },
+    attributeChanged: name => {
+      // zoomed is applied by the state machine (Task 9)
+      if (name === 'zoomed' || !inst.isSetUp) return
+      inst.hooks.refresh()
+    },
   }
 }

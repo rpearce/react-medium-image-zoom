@@ -1,6 +1,6 @@
 import { afterEach } from 'vitest'
 import { createImageZoomElement } from './element.js'
-import type { ImageZoomElement } from './types.js'
+import type { ImageZoomElement, ImageZoomState } from './types.js'
 
 function svgUri(width: number, height: number): string {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="${width}" height="${height}" fill="#468"/></svg>`
@@ -9,6 +9,7 @@ function svgUri(width: number, height: number): string {
 
 export const IMG = svgUri(400, 300)
 export const IMG_2 = svgUri(800, 600)
+export const IMG_HTML = `<image-zoom><img src="${IMG}" alt="A lighthouse" width="200"></image-zoom>`
 
 const mounted: Element[] = []
 
@@ -49,6 +50,86 @@ export async function flush(): Promise<void> {
     channel.port2.postMessage(null)
   }, 0)
   await promise
+}
+
+async function frame(): Promise<void> {
+  const { promise, resolve } = Promise.withResolvers<void>()
+  requestAnimationFrame(() => {
+    resolve()
+  })
+  await promise
+}
+
+/**
+ * Two animation frames, then flush(): observers have delivered and whatever
+ * they queued has run
+ */
+export async function idle(): Promise<void> {
+  await frame()
+  await frame()
+  await flush()
+}
+
+/**
+ * Resolve when the element's state passes the test: at once, or on a later
+ * statechange. Reject after 2 s so a wrong expectation fails instead of hanging.
+ */
+export async function until(
+  el: ImageZoomElement,
+  test: (s: ImageZoomState) => boolean,
+): Promise<void> {
+  if (test(el.state)) return
+  const { promise, resolve, reject } = Promise.withResolvers<void>()
+  const check = (): void => {
+    if (test(el.state)) {
+      resolve()
+    }
+  }
+  const timer = setTimeout(() => {
+    reject(new Error('until: no matching statechange within 2 s'))
+  }, 2000)
+  el.addEventListener('statechange', check)
+  try {
+    await promise
+  } finally {
+    clearTimeout(timer)
+    el.removeEventListener('statechange', check)
+  }
+}
+
+function isImageZoom(node: Element): node is ImageZoomElement {
+  const registered = customElements.get('image-zoom')
+  return registered !== undefined && node instanceof registered
+}
+
+/**
+ * Mount markup whose root is an <image-zoom>, and wait until it has an image
+ */
+export async function ready(markup: string): Promise<ImageZoomElement> {
+  const el = mount(markup)
+  if (!isImageZoom(el)) {
+    throw new TypeError('ready: markup must start with <image-zoom>')
+  }
+  await until(el, s => s.hasImage)
+  return el
+}
+
+export function ghost(el: ImageZoomElement): HTMLElement {
+  const found = el.shadowRoot?.querySelector('[data-rmiz-ghost]')
+  if (!(found instanceof HTMLElement)) {
+    throw new TypeError('ghost: no [data-rmiz-ghost] in the shadow root')
+  }
+  return found
+}
+
+export function builtInButton(el: ImageZoomElement): HTMLButtonElement {
+  const found = el.shadowRoot?.querySelector('[data-rmiz-btn-zoom]')
+  if (!(found instanceof HTMLButtonElement)) {
+    throw new TypeError(
+      'builtInButton: no [data-rmiz-btn-zoom] in the shadow root',
+    )
+  }
+  return found
 }
 
 let lateCount = 0
