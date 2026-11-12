@@ -3,7 +3,8 @@
 // - currentSrc: jsdom loads no images, so it stays '' and no button renders
 // - decode: missing in jsdom, and called on mount. It also sets a natural
 //   size, which otherwise stays 0 and makes React warn about NaN sizes.
-// - ResizeObserver: missing; observe() runs on mount, disconnect() on unmount
+// - ResizeObserver: missing; observe() runs on mount (v5 also called
+//   disconnect() on unmount; the element never calls it)
 // - HTMLDialogElement showModal: missing, and called on zoom
 // close() needs no stub: it runs only once an unzoom ends, which never happens
 // here.
@@ -90,8 +91,9 @@ it('renders, and a click on the zoom button requests zoom', async () => {
     '[data-rmiz-btn-zoom]',
   )
   if (button === null) throw new Error('no zoom button')
-  // Async act: the zoom re-render trips the component's MutationObserver, whose
-  // setState would otherwise land after a sync act() returns (an act warning).
+  // Async act, kept from v5, where the zoom re-render tripped the component's
+  // MutationObserver and its setState landed after a sync act() returned (an
+  // act warning). With the element nothing lands late: a sync act() would do.
   await act(async () => {
     button.click()
     await Promise.resolve()

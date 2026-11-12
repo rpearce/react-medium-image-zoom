@@ -69,8 +69,9 @@ it('renders, and a click on the zoom button requests zoom', async () => {
     '[data-rmiz-btn-zoom]',
   )
   if (button === null) throw new Error('no zoom button')
-  // Async act: the zoom re-render trips the component's MutationObserver, whose
-  // setState would otherwise land after a sync act() returns (an act warning).
+  // Async act, kept from v5, where the zoom re-render tripped the component's
+  // MutationObserver and its setState landed after a sync act() returned (an
+  // act warning). With the element nothing lands late: a sync act() would do.
   await act(async () => {
     button.click()
     await Promise.resolve()

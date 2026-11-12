@@ -1,11 +1,16 @@
 import React, { act } from 'react'
+import { createPortal } from 'react-dom'
 import ReactDOM from 'react-dom/client'
 import { afterEach, describe, it, expect, vi } from 'vitest'
 
+import type { ImageZoomElement } from '@rpearce/image-zoom'
+import css from '../../image-zoom/src/styles.css?inline'
 import { Controlled, type ControlledProps } from './controlled.js'
 import { mockComputedStyle } from './test-helpers.js'
+import { Uncontrolled } from './uncontrolled.js'
 
 type OnZoomChange = NonNullable<ControlledProps['onZoomChange']>
+type ZoomContentType = NonNullable<ControlledProps['ZoomContent']>
 
 // =============================================================================
 // TESTS
@@ -275,6 +280,431 @@ describe('Controlled', () => {
     expect(document.body.style.overflow).toBe('auto')
     expect(getPortalDialog()?.open).toBe(false)
   })
+
+  it("passes width, height and style to ZoomContent's img", async () => {
+    const imgs: Array<React.ReactElement | null> = []
+    const ZoomContent: ZoomContentType = props => {
+      imgs.push(props.img)
+      return (
+        <>
+          {props.img}
+          {props.buttonUnzoom}
+        </>
+      )
+    }
+
+    const first = await renderZoom({ ZoomContent })
+    const img = imgs.at(-1)
+    if (!React.isValidElement<React.ImgHTMLAttributes<HTMLImageElement>>(img))
+      throw new Error('no img element')
+    expect(img.type).toBe('img')
+    expect(typeof img.props.width).toBe('number')
+    expect(typeof img.props.height).toBe('number')
+    expect(typeof img.props.style?.transform).toBe('string')
+    first.unmount()
+
+    imgs.length = 0
+    await renderZoom({
+      ZoomContent,
+      children: (
+        <svg height="150" width="200">
+          <rect height="150" width="200" />
+        </svg>
+      ),
+    })
+    const svgImg = imgs.at(-1)
+    if (!React.isValidElement<React.HTMLAttributes<HTMLDivElement>>(svgImg))
+      throw new Error('no img element for the SVG source')
+    expect(svgImg.type).toBe('div')
+    expect(svgImg.props.style).toBeDefined()
+  })
+
+  it('lets a ZoomContent stop the content-click unzoom', async () => {
+    const onZoomChange = vi.fn<OnZoomChange>()
+    const ZoomContent: ZoomContentType = props => (
+      <div
+        role="presentation"
+        onClick={e => {
+          e.stopPropagation()
+        }}
+      >
+        {props.img}
+        {props.buttonUnzoom}
+      </div>
+    )
+    const { rerender } = await renderZoom({ onZoomChange, ZoomContent })
+
+    await rerender({ isZoomed: true })
+    const modalImg = getPortalModalImg()
+    if (modalImg === null) throw new Error('no modal img')
+    await fireTransitionEnd(modalImg)
+    onZoomChange.mockClear()
+
+    act(() => {
+      modalImg.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    })
+
+    expect(onZoomChange).not.toHaveBeenCalled()
+  })
+
+  it('zooms with a ZoomContent that renders img only while zoomed', async () => {
+    const onZoomChange = vi.fn<OnZoomChange>()
+    const ZoomContent: ZoomContentType = props => (
+      <>
+        {props.modalState === 'UNLOADED' ? null : props.img}
+        {props.buttonUnzoom}
+      </>
+    )
+    const { container, rerender } = await renderZoom({
+      onZoomChange,
+      ZoomContent,
+    })
+    expect(getPortalModalImg()).toBeNull()
+
+    act(() => {
+      container
+        .querySelector('img')
+        ?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    })
+    expectCalledWith(onZoomChange, true)
+
+    // The prop follows the request; the modal img appears with LOADING, and
+    // its transition still ends the zoom
+    await rerender({ isZoomed: true })
+    expect(getPortalDialog()?.open).toBe(true)
+    const modalImg = getPortalModalImg()
+    if (modalImg === null) throw new Error('no modal img while zoomed')
+    await fireTransitionEnd(modalImg)
+    expect(getHost(container).state.modalState).toBe('LOADED')
+  })
+
+  it('calls onZoomChange(false) from the unzoom button', async () => {
+    const onZoomChange = vi.fn<OnZoomChange>()
+    await renderZoomed(onZoomChange)
+
+    act(() => {
+      document
+        .querySelector('[data-rmiz-btn-unzoom]')
+        ?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    })
+
+    expectCalledWith(onZoomChange, false)
+  })
+
+  it('applies zoomMargin and zoomImg changed together with isZoomed', async () => {
+    const { container, rerender } = await renderZoom({ isZoomed: false })
+    const host = getHost(container)
+    const seen: Array<[string, string | null, string | null]> = []
+    host.addEventListener('statechange', () => {
+      seen.push([
+        host.state.modalState,
+        host.getAttribute('zoom-margin'),
+        host.getAttribute('zoom-src'),
+      ])
+    })
+
+    await rerender({
+      isZoomed: true,
+      zoomMargin: 60,
+      zoomImg: { src: 'zoom-image.jpg' },
+    })
+
+    // The first LOADING report already carries the new values
+    expect(seen.find(entry => entry[0] === 'LOADING')).toEqual([
+      'LOADING',
+      '60',
+      'zoom-image.jpg',
+    ])
+
+    // ...so the zoom image preloads
+    await act(async () => {
+      await vi.waitFor(() => {
+        if (!host.state.isZoomImgLoaded)
+          throw new Error('waiting for the zoom image')
+      })
+    })
+    expect(host.state.isZoomImgLoaded).toBe(true)
+  })
+
+  it('swaps zoomImg in at LOADED', async () => {
+    const { container, rerender } = await renderZoom({
+      isZoomed: false,
+      zoomImg: { src: 'zoom-image.jpg' },
+    })
+    const host = getHost(container)
+
+    await rerender({ isZoomed: true })
+    await act(async () => {
+      await vi.waitFor(() => {
+        if (!host.state.isZoomImgLoaded)
+          throw new Error('waiting for the zoom image')
+      })
+    })
+    const modalImg = getPortalModalImg()
+    if (modalImg === null) throw new Error('no modal img')
+    // Loaded, but still LOADING: the source stays
+    expect(modalImg.getAttribute('src')).toMatch(/test-image\.jpg$/)
+
+    await fireTransitionEnd(modalImg)
+
+    expect(getPortalModalImg()?.getAttribute('src')).toBe('zoom-image.jpg')
+  })
+
+  it('renders an inline host for wrapElement="span"', async () => {
+    // Without styles.css every host would be inline, so load it
+    const style = document.createElement('style')
+    style.textContent = css
+    document.head.appendChild(style)
+
+    try {
+      const { container } = await renderZoom({ wrapElement: 'span' })
+      vi.mocked(window.getComputedStyle).mockRestore()
+
+      expect(getComputedStyle(getHost(container)).display).toBe('inline')
+    } finally {
+      style.remove()
+    }
+  })
+
+  it('labels the zoom button with the alt text', async () => {
+    const { container } = await renderZoom()
+
+    expect(
+      container
+        .querySelector('[data-rmiz-btn-zoom]')
+        ?.getAttribute('aria-label'),
+    ).toBe('Expand image: That Wanaka Tree')
+  })
+
+  // React 18+ runs componentWillUnmount when Suspense hides a subtree but
+  // keeps its DOM. An Escape meanwhile unzooms the element behind React's
+  // back, and React's state still says zoomed after the reveal.
+  it('still zooms after being hidden by Suspense while zoomed', async () => {
+    const onZoomChange = vi.fn<OnZoomChange>()
+    const gate = Promise.withResolvers<void>()
+    const app = (promise: Promise<void> | null): React.ReactElement => (
+      <React.Suspense fallback={<p>Loading</p>}>
+        <Uncontrolled onZoomChange={onZoomChange}>
+          <img alt="That Wanaka Tree" src="test-image.jpg" />
+        </Uncontrolled>
+        {promise === null ? null : <Gate promise={promise} />}
+      </React.Suspense>
+    )
+    const { container, render } = await renderUi(app(null))
+    const host = getHost(container)
+    const img = container.querySelector('img')
+    if (img === null) throw new Error('no img')
+
+    // Zoom
+    await act(async () => {
+      img.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+      await Promise.resolve()
+    })
+    const dialog = getPortalDialog()
+    const modalImg = getPortalModalImg()
+    if (dialog === null || modalImg === null) throw new Error('no modal')
+    await fireTransitionEnd(modalImg)
+    expect(dialog.open).toBe(true)
+
+    // Hide, then Escape: the wrapper isn't listening, so the element unzooms
+    // itself
+    await render(app(gate.promise))
+    expect(container.textContent).toBe('Loading')
+    onZoomChange.mockClear()
+    const closed = Promise.withResolvers<void>()
+    dialog.addEventListener(
+      'close',
+      () => {
+        closed.resolve()
+      },
+      { once: true },
+    )
+    act(() => {
+      document.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
+      )
+    })
+    await fireTransitionEnd(modalImg)
+    await closed.promise
+    expect(onZoomChange).not.toHaveBeenCalled()
+    expect([host.zoomed, dialog.open]).toEqual([false, false])
+
+    // Reveal: the element zooms again, to match React's state
+    await act(async () => {
+      gate.resolve()
+      await gate.promise
+    })
+    expect(container.textContent).not.toContain('Loading')
+    expect([host.zoomed, dialog.open]).toEqual([true, true])
+
+    // Zoom still works: Escape unzooms through React's state...
+    await act(async () => {
+      document.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
+      )
+      await Promise.resolve()
+    })
+    expectCalledWith(onZoomChange, false)
+    const closedAgain = Promise.withResolvers<void>()
+    dialog.addEventListener(
+      'close',
+      () => {
+        closedAgain.resolve()
+      },
+      { once: true },
+    )
+    const modalImgAgain = getPortalModalImg()
+    if (modalImgAgain === null) throw new Error('no modal img after reveal')
+    await fireTransitionEnd(modalImgAgain)
+    // The close requests unzoom once more, which reaches Uncontrolled
+    await act(async () => {
+      await closedAgain.promise
+    })
+    expect([host.hasAttribute('zoomed'), dialog.open]).toEqual([false, false])
+
+    // ...and a click on the image zooms again
+    onZoomChange.mockClear()
+    await act(async () => {
+      img.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+      await Promise.resolve()
+    })
+
+    expectCalledWith(onZoomChange, true)
+    expect(dialog.open).toBe(true)
+  })
+
+  it('keeps dialog id, aria-labelledby and modal img id in step, also after a ZoomContent remount', async () => {
+    // A new component each call, so each rerender remounts the content
+    const content = (): ZoomContentType =>
+      function Content(props) {
+        return (
+          <>
+            {props.img}
+            {props.buttonUnzoom}
+          </>
+        )
+      }
+    const { rerender } = await renderZoom({ ZoomContent: content() })
+
+    await rerender({ isZoomed: true, ZoomContent: content() })
+    const first = getPortalModalImg()
+    if (first === null) throw new Error('no modal img')
+    await fireTransitionEnd(first)
+    expectIdsInStep()
+
+    await rerender({ isZoomed: true, ZoomContent: content() })
+    expect(getPortalModalImg()).not.toBe(first)
+    expectIdsInStep()
+  })
+
+  it('returns focus to the zoom button after unzoom', async () => {
+    const onZoomChange = vi.fn<OnZoomChange>()
+    const { container, rerender } = await renderZoom({ onZoomChange })
+    const button = container.querySelector<HTMLButtonElement>(
+      '[data-rmiz-btn-zoom]',
+    )
+    if (button === null) throw new Error('no zoom button')
+    // The button's shadow container shows once the element sees the content
+    // in its dialog: a batch after it reports the image
+    await act(async () => {
+      await vi.waitFor(() => {
+        button.focus()
+        if (document.activeElement !== button)
+          throw new Error('waiting for the zoom button to take focus')
+      })
+    })
+    expect(document.activeElement).toBe(button)
+
+    act(() => {
+      button.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    })
+    expectCalledWith(onZoomChange, true)
+    await rerender({ isZoomed: true })
+    const modalImg = getPortalModalImg()
+    if (modalImg === null) throw new Error('no modal img')
+    await fireTransitionEnd(modalImg)
+    expect(getPortalDialog()?.contains(document.activeElement)).toBe(true)
+
+    act(() => {
+      document.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
+      )
+    })
+    expectCalledWith(onZoomChange, false)
+    await rerender({ isZoomed: false })
+    await fireTransitionEnd(modalImg)
+
+    expect(document.activeElement).toBe(button)
+  })
+
+  it('ignores zoomchange from a nested zoom', async () => {
+    const outer = vi.fn<OnZoomChange>()
+    const inner = vi.fn<OnZoomChange>()
+    // The outer image comes first, so each element tracks its own image
+    const { container } = await renderZoom({
+      onZoomChange: outer,
+      children: (
+        <>
+          <img alt="Outer" src="outer.jpg" />
+          <Controlled isZoomed={false} onZoomChange={inner}>
+            <img alt="Inner" src="inner.jpg" />
+          </Controlled>
+        </>
+      ),
+    })
+
+    act(() => {
+      container
+        .querySelector('img[alt="Inner"]')
+        ?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    })
+
+    expectCalledWith(inner, true)
+    expect(outer).not.toHaveBeenCalled()
+  })
+
+  it('passes classDialog to the dialog', async () => {
+    await renderZoom({ classDialog: 'custom-dialog' })
+
+    expect(getPortalDialog()?.getAttribute('class')).toBe('custom-dialog')
+  })
+
+  // A portal into an iframe (react-frame-component): React creates the host
+  // with the frame's document, whose registry doesn't know <image-zoom>, so
+  // the host is a plain HTMLElement. As v5 did, show the image without zoom.
+  it('renders without zoom UI where <image-zoom> is not defined', () => {
+    const frame = document.createElement('iframe')
+    document.body.appendChild(frame)
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const root = ReactDOM.createRoot(container)
+    cleanup = () => {
+      act(() => {
+        root.unmount()
+      })
+      container.remove()
+      frame.remove()
+    }
+    const frameDoc = frame.contentDocument
+    if (frameDoc === null) throw new Error('no frame document')
+    expect(frame.contentWindow?.customElements.get('image-zoom')).toBe(
+      undefined,
+    )
+
+    act(() => {
+      root.render(
+        createPortal(
+          <Controlled isZoomed={false}>
+            <img alt="That Wanaka Tree" src="test-image.jpg" />
+          </Controlled>,
+          frameDoc.body,
+        ),
+      )
+    })
+
+    expect(frameDoc.querySelector('image-zoom img')).not.toBeNull()
+    expect(frameDoc.querySelector('[data-rmiz-btn-zoom]')).toBeNull()
+  })
 })
 
 // =============================================================================
@@ -344,42 +774,31 @@ async function fireTransitionEnd(el: Element): Promise<void> {
   })
 }
 
-interface RenderResult {
-  container: HTMLDivElement
-  rerender: (newProps: Partial<ControlledProps>) => Promise<void>
-  unmount: () => void
+function getHost(container: HTMLElement): ImageZoomElement {
+  const host = container.querySelector('image-zoom')
+  if (host === null) throw new Error('no <image-zoom>')
+  return host
 }
 
-async function renderZoom(
-  props: Partial<ControlledProps> = {},
-): Promise<RenderResult> {
-  mockBrowserApis()
+/**
+ * Suspends until `promise` settles
+ */
+function Gate(props: { promise: Promise<void> }): null {
+  React.use(props.promise)
+  return null
+}
 
-  const defaultProps = {
-    isZoomed: false as boolean,
-    onZoomChange: vi.fn<OnZoomChange>(),
-    ...props,
-  }
+/**
+ * test-image.jpg never loads.  Pin currentSrc, which getImgSrc reads (an
+ * empty one means no image), mock geometry so style calculations don't
+ * produce NaN, then fire load and wait until each image's element reports
+ * it: the element batches image loads in a task of its own, which act
+ * doesn't flush.
+ */
+async function loadImages(imgs: HTMLImageElement[]): Promise<void> {
+  if (imgs.length === 0) return
 
-  const children = props.children ?? (
-    <img alt="That Wanaka Tree" src="test-image.jpg" />
-  )
-
-  const container = document.createElement('div')
-  document.body.appendChild(container)
-  const root = ReactDOM.createRoot(container)
-
-  act(() => {
-    root.render(<Controlled {...defaultProps}>{children}</Controlled>)
-  })
-
-  // test-image.jpg never loads.  Pin currentSrc, which getImgSrc reads (an
-  // empty one means no image), mock geometry so style calculations don't
-  // produce NaN, then fire load and wait until the element reports the
-  // image: it batches image loads in a task of its own, which act doesn't
-  // flush.
-  const img = container.querySelector('img')
-  if (img !== null) {
+  for (const img of imgs) {
     Object.defineProperty(img, 'currentSrc', {
       value: img.src === '' ? 'test-image.jpg' : img.src,
       configurable: true,
@@ -395,15 +814,40 @@ async function renderZoom(
       y: 0,
       toJSON: () => undefined,
     })
-
-    await act(async () => {
-      img.dispatchEvent(new Event('load'))
-      await vi.waitFor(() => {
-        if (container.querySelector('image-zoom')?.state.hasImage !== true)
-          throw new Error('waiting for the image')
-      })
-    })
   }
+
+  await act(async () => {
+    for (const img of imgs) {
+      img.dispatchEvent(new Event('load'))
+    }
+    await vi.waitFor(() => {
+      if (imgs.some(img => img.closest('image-zoom')?.state.hasImage !== true))
+        throw new Error('waiting for the image')
+    })
+  })
+}
+
+interface UiResult {
+  container: HTMLDivElement
+  render: (ui: React.ReactElement) => Promise<void>
+  unmount: () => void
+}
+
+/**
+ * Mount any tree, then load every <img> in it
+ */
+async function renderUi(ui: React.ReactElement): Promise<UiResult> {
+  mockBrowserApis()
+
+  const container = document.createElement('div')
+  document.body.appendChild(container)
+  const root = ReactDOM.createRoot(container)
+
+  act(() => {
+    root.render(ui)
+  })
+
+  await loadImages([...container.querySelectorAll('img')])
 
   const unmount = (): void => {
     act(() => {
@@ -416,14 +860,46 @@ async function renderZoom(
 
   return {
     container,
-    rerender: async (newProps: Partial<ControlledProps>) => {
-      const merged = { ...defaultProps, ...newProps }
+    render: async (next: React.ReactElement) => {
       await act(async () => {
-        root.render(<Controlled {...merged}>{children}</Controlled>)
+        root.render(next)
         await Promise.resolve()
       })
     },
     unmount,
+  }
+}
+
+interface RenderResult {
+  container: HTMLDivElement
+  rerender: (newProps: Partial<ControlledProps>) => Promise<void>
+  unmount: () => void
+}
+
+async function renderZoom(
+  props: Partial<ControlledProps> = {},
+): Promise<RenderResult> {
+  const defaultProps = {
+    isZoomed: false as boolean,
+    onZoomChange: vi.fn<OnZoomChange>(),
+    ...props,
+  }
+
+  const children = props.children ?? (
+    <img alt="That Wanaka Tree" src="test-image.jpg" />
+  )
+
+  const result = await renderUi(
+    <Controlled {...defaultProps}>{children}</Controlled>,
+  )
+
+  return {
+    container: result.container,
+    rerender: async (newProps: Partial<ControlledProps>) => {
+      const merged = { ...defaultProps, ...newProps }
+      await result.render(<Controlled {...merged}>{children}</Controlled>)
+    },
+    unmount: result.unmount,
   }
 }
 
@@ -448,4 +924,16 @@ function expectCalledWith(
   expect(fn).toHaveBeenCalled()
   expect(fn.mock.lastCall?.[0]).toBe(value)
   expect(fn.mock.lastCall?.[1]).toHaveProperty('event')
+}
+
+/**
+ * The dialog's id and aria-labelledby, and the modal img's id, all name the
+ * same instance
+ */
+function expectIdsInStep(): void {
+  const dialog = getPortalDialog()
+  const modalImgId = getPortalModalImg()?.id ?? ''
+  expect(modalImgId).toMatch(/^rmiz-modal-img-./)
+  expect(dialog?.getAttribute('aria-labelledby')).toBe(modalImgId)
+  expect(dialog?.id).toBe(modalImgId.replace('rmiz-modal-img-', 'rmiz-modal-'))
 }

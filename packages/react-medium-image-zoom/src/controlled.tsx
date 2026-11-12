@@ -31,6 +31,14 @@ const INITIAL: ImageZoomState = {
   modalImgStyle: {},
 }
 
+/**
+ * Whether the host is an upgraded <image-zoom>. In another document, such as
+ * an iframe a portal renders into, it's a plain element: no zoom.
+ */
+function isImageZoom(node: HTMLElement | null): node is ImageZoomElement {
+  return node !== null && 'state' in node
+}
+
 // =============================================================================
 
 export interface ControlledProps {
@@ -109,7 +117,7 @@ class ControlledBase extends React.Component<
     dialog: null,
   }
 
-  private readonly refHost = React.createRef<ImageZoomElement>()
+  private readonly refHost = React.createRef<HTMLElement>()
   private readonly refModalImg = React.createRef<HTMLImageElement>()
 
   render(): React.ReactNode {
@@ -259,7 +267,7 @@ class ControlledBase extends React.Component<
 
   componentDidMount(): void {
     const el = this.refHost.current
-    if (el === null) return
+    if (!isImageZoom(el)) return
     el.addEventListener('zoomchange', this.handleZoomChange)
     el.addEventListener('statechange', this.handleStateChange)
     // An SVG source can report hasImage during connect, before the listener
@@ -272,7 +280,7 @@ class ControlledBase extends React.Component<
 
   componentWillUnmount(): void {
     const el = this.refHost.current
-    if (el === null) return
+    if (!isImageZoom(el)) return
     el.removeEventListener('zoomchange', this.handleZoomChange)
     el.removeEventListener('statechange', this.handleStateChange)
   }
@@ -295,7 +303,7 @@ class ControlledBase extends React.Component<
    */
   handleStateChange = (): void => {
     const el = this.refHost.current
-    if (el === null) return
+    if (!isImageZoom(el)) return
     this.setState({ s: el.state, dialog: el.dialog })
   }
 
