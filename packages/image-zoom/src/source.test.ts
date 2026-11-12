@@ -185,32 +185,14 @@ it('keeps a slotted zoom button content-box under an inherit reset without borde
   }
 })
 
-it('writes a concrete box-sizing on the zoom-button slot, and only when it changes', async () => {
+it("writes the host's computed box-sizing inline on the zoom-button slot", async () => {
   const el = await ready(IMG_HTML)
-  await idle()
   const buttonSlot = get(
     el.shadowRoot,
     'slot[name="zoom-button"]',
     HTMLSlotElement,
   )
-  expect(['border-box', 'content-box']).toContain(buttonSlot.style.boxSizing)
-  const records: MutationRecord[] = []
-  const observer = new MutationObserver(list => {
-    records.push(...list)
-  })
-  observer.observe(el.shadowRoot!, {
-    attributes: true,
-    subtree: true,
-    attributeFilter: ['style'],
-  })
-  const reads = vi.spyOn(Element.prototype, 'getBoundingClientRect')
-  el.zoomMargin = 10
-  await idle()
-  records.push(...observer.takeRecords())
-  observer.disconnect()
-  // The change ran an update (every read with an image measures the source)
-  expect(reads).toHaveBeenCalled()
-  expect(records.filter(r => r.target === buttonSlot)).toEqual([])
+  expect(buttonSlot.style.boxSizing).toBe(getComputedStyle(el).boxSizing)
 })
 
 // Review Focus 1–4

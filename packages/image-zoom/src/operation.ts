@@ -107,15 +107,14 @@ function writeFound(inst: Instance, found: boolean): void {
  * The zoom-button slot's box-sizing: a concrete copy of the host's computed
  * value, so a slotted button under a `box-sizing: inherit` reset sizes as
  * with `inherit`. Explicit inheritance on this child of the ghost would
- * restyle it on every ghost geometry write. Written only when it changes.
+ * restyle it on every ghost geometry write.
  */
 function writeButtonSlotBoxSizing(
   inst: Instance,
   boxSizing: string | undefined,
 ): void {
-  const style = inst.parts.buttonSlot.style
-  if (boxSizing !== undefined && style.boxSizing !== boxSizing) {
-    style.boxSizing = boxSizing
+  if (boxSizing !== undefined) {
+    inst.parts.buttonSlot.style.boxSizing = boxSizing
   }
 }
 

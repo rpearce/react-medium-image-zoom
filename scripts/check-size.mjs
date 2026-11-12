@@ -12,8 +12,8 @@ import { fileURLToPath } from 'node:url'
 import { gzipSync } from 'node:zlib'
 import { build } from 'esbuild'
 
-// The measured gzip size when the budget was fixed (9,770 B), rounded up to
-// the next 250 B.
+// The first measurement (9,770 B gzip) rounded up to the next 250 B. Last
+// measured: 9,841 B.
 const BUDGET_BYTES = 10_000
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
@@ -56,10 +56,12 @@ const bundle = async contents => {
 /** @param {number} n */
 const fmt = n => n.toLocaleString('en-US')
 
+// Sets the exit code instead of exiting, so every failure is reported and
+// output still in a pipe (under `conc`) is not lost
 /** @param {string} message */
 const fail = message => {
   process.stderr.write(`check:size failed: ${message}\n`)
-  process.exit(1)
+  process.exitCode = 1
 }
 
 const consumer = await bundle(CONSUMER)
