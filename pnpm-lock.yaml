@@ -193,6 +193,9 @@ importers:
       concurrently:
         specifier: ^10.0.6
         version: 10.0.6
+      esbuild:
+        specifier: ^0.28.2
+        version: 0.28.2
       happy-dom:
         specifier: ^21.0.4
         version: 21.0.4
