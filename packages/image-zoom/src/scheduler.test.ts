@@ -94,7 +94,11 @@ describe('scheduler', () => {
         log.push('first flush done')
       },
     })
-    await flush()
+    // Wait for the second flush itself: engines differ on whether a timer or
+    // an already-posted message comes first, so one flush() may be too early
+    await vi.waitFor(() => {
+      expect(log).toHaveLength(4)
+    })
     expect(log).toEqual(['first flush done', 'read b', 'write b', 'finish b'])
   })
 
