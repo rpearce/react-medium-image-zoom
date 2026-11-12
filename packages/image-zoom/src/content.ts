@@ -32,7 +32,8 @@ function createModalImg(isSvg: boolean): HTMLElement {
 
 /**
  * The built-in modalContent: the modal img, then the unzoom button. Created
- * once per instance; it survives teardown and is appended to every dialog.
+ * once per instance, by the first read of modalContent or the first built-in
+ * dialog; it survives teardown and is appended to every dialog.
  */
 export function ensureContent(inst: Instance): HTMLElement {
   if (inst.content !== null) return inst.content
@@ -63,9 +64,9 @@ export function ensureContent(inst: Instance): HTMLElement {
 /**
  * The modal img of the source's kind. The node has the wrong kind when the
  * content was built before the first update of an SVG source (from the
- * initial state), or when a reconnect finds another kind of source (a tracked
- * image is never re-searched). Only the element's own node is replaced, in
- * place, ahead of the button and any consumer nodes.
+ * initial state, or by a read of modalContent), or when a reconnect finds
+ * another kind of source (a tracked image is never re-searched). Only the
+ * element's own node is replaced, in place.
  */
 function matchKind(inst: Instance, node: HTMLElement): HTMLElement {
   const isSvg = inst.state.isSvg
@@ -75,6 +76,19 @@ function matchKind(inst: Instance, node: HTMLElement): HTMLElement {
   node.replaceWith(next)
   inst.modalImg = next
   return next
+}
+
+/**
+ * The element's own nodes first, img then button, ahead of anything the
+ * consumer added (a prepend, say). Each moves only when out of place, so an
+ * update never touches consumer nodes or their order.
+ */
+function keepFirst(inst: Instance, img: HTMLElement): void {
+  const content = inst.content
+  const button = inst.btnUnzoom
+  if (content === null || button === null) return
+  if (content.firstChild !== img) content.prepend(img)
+  if (img.nextSibling !== button) img.after(button)
 }
 
 /**
@@ -98,13 +112,14 @@ function writeImg(inst: Instance, img: HTMLImageElement): void {
 
 /**
  * The element as its own consumer: while there is an image, the modal img of
- * the source's kind and, for an <img>, its source attributes; then the unzoom
- * button's label
+ * the source's kind, first with the button after it, and for an <img> its
+ * source attributes; then the unzoom button's label
  */
 export function writeBuiltIn(inst: Instance): void {
   const node = inst.modalImg
   if (node !== null && inst.state.hasImage) {
     const img = matchKind(inst, node)
+    keepFirst(inst, img)
     if (img instanceof HTMLImageElement) writeImg(inst, img)
   }
   inst.btnUnzoom?.setAttribute(

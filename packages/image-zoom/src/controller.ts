@@ -1,4 +1,5 @@
 import { parseBool } from './attributes.js'
+import { ensureContent } from './content.js'
 import { type Instance, INITIAL_STATE } from './instance.js'
 import { createGestures } from './listeners.js'
 import { applyZoomed, transitionEnd } from './machine.js'
@@ -205,7 +206,14 @@ export function createController(
     get dialog() {
       return inst.dialog
     },
-    modalContent: null,
+    // Null in custom-content mode: the mode latched at setup while set up,
+    // the attribute otherwise. The first built-in read creates the content.
+    get modalContent() {
+      const isCustom = inst.isSetUp
+        ? inst.isCustom
+        : parseBool(host.getAttribute('custom-content'))
+      return isCustom ? null : ensureContent(inst)
+    },
     connect: () => {
       setUp(inst, clicks)
     },

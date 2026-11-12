@@ -9,6 +9,7 @@
     <script type="module" src="../src/index.ts"></script>
     <script type="module" src="./demo.ts"></script>
     <script type="module" src="./custom-content.ts"></script>
+    <script type="module" src="./caption.ts"></script>
   </head>
   <body>
     <h1>&lt;image-zoom&gt; demo</h1>
@@ -201,6 +202,36 @@
           width="300"
         />
       </image-zoom>
+    </section>
+
+    <section>
+      <h2>Caption (modalContent)</h2>
+      <p>
+        Zoom: a caption the page added once to the modal content fades in below
+        or beside the image. Zoom again and it is still there.
+      </p>
+      <image-zoom id="tree">
+        <img
+          alt="That Wanaka Tree, New Zealand"
+          src="../../../stories/images/laura-smetsers-H-TW2CoNtTk-unsplash-smaller.jpg"
+          width="300"
+        />
+      </image-zoom>
+      <template id="tree-caption">
+        <div class="zoom-caption">
+          That Wanaka Tree, also known as the Wanaka Willow, is a willow tree
+          located at the southern end of Lake Wānaka in the Otago region of New
+          Zealand.
+          <cite class="zoom-caption-cite">
+            Wikipedia,
+            <a
+              class="zoom-caption-link"
+              href="https://en.wikipedia.org/wiki/That_Wanaka_Tree"
+              >That Wanaka Tree</a
+            >
+          </cite>
+        </div>
+      </template>
     </section>
   </body>
 </html>
