@@ -43,7 +43,9 @@ it('writes the structural styles inline', () => {
   const { parts } = shadow()
   expect(parts.slot.style.visibility).toBe('visible')
   expect(parts.slot.style.boxSizing).toBe('inherit')
-  expect(parts.buttonSlot.style.boxSizing).toBe('inherit')
+  // The zoom-button slot gets a concrete copy of the host's box-sizing at
+  // the first update that finds the image (operation.ts), never `inherit`
+  expect(parts.buttonSlot.style.boxSizing).toBe('')
   expect(parts.ghost.style.position).toBe('absolute')
   expect(parts.ghost.style.pointerEvents).toBe('none')
   expect(parts.ghost.style.boxSizing).toBe('inherit')

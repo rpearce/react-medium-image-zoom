@@ -106,9 +106,11 @@ export function buildShadow(root: ShadowRoot): ShadowParts {
   ghost.style.pointerEvents = 'none'
   ghost.style.boxSizing = 'inherit'
 
+  // No box-sizing yet: each update that finds the image writes the host's
+  // computed value (operation.ts). `inherit` here, a child of the ghost, would
+  // restyle the slot on every ghost geometry write.
   const buttonSlot = document.createElement('slot')
   buttonSlot.name = 'zoom-button'
-  buttonSlot.style.boxSizing = 'inherit'
 
   const button = document.createElement('button')
   button.setAttribute('part', 'btn-zoom')

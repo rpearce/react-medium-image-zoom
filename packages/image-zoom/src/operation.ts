@@ -79,16 +79,55 @@ function nextState(
 const px = (n: number | undefined): string => (n === undefined ? '' : `${n}px`)
 
 /**
+ * What the read step hands to the write step
+ */
+interface Reading {
+  ghostStyle: StyleObject
+  // The host's computed box-sizing, read while the image is found (the ghost,
+  // and the zoom-button slot in it, are hidden otherwise)
+  boxSizing: string | undefined
+}
+
+/**
+ * :state(found), written only when it changes: Chromium re-invalidates the
+ * :state() rules on every add, even of a state the set already has. The set
+ * is private to the element, so it is the record of the last write.
+ */
+function writeFound(inst: Instance, found: boolean): void {
+  const states = inst.internals?.states
+  if (states === undefined || states.has('found') === found) return
+  if (found) {
+    states.add('found')
+  } else {
+    states.delete('found')
+  }
+}
+
+/**
+ * The zoom-button slot's box-sizing: a concrete copy of the host's computed
+ * value, so a slotted button under a `box-sizing: inherit` reset sizes as
+ * with `inherit`. Explicit inheritance on this child of the ghost would
+ * restyle it on every ghost geometry write. Written only when it changes.
+ */
+function writeButtonSlotBoxSizing(
+  inst: Instance,
+  boxSizing: string | undefined,
+): void {
+  const style = inst.parts.buttonSlot.style
+  if (boxSizing !== undefined && style.boxSizing !== boxSizing) {
+    style.boxSizing = boxSizing
+  }
+}
+
+/**
  * Write the host's state and the shadow tree from inst.state. The ghost (and
  * the zoom button in it) is hidden while !canZoom.
  */
-function writeShadow(inst: Instance, ghostStyle: StyleObject): void {
+function writeShadow(inst: Instance, reading: Reading): void {
   const found = inst.state.hasImage
-  if (found) {
-    inst.internals?.states.add('found')
-  } else {
-    inst.internals?.states.delete('found')
-  }
+  writeFound(inst, found)
+  writeButtonSlotBoxSizing(inst, reading.boxSizing)
+  const ghostStyle = reading.ghostStyle
   const ghost = inst.parts.ghost
   ghost.hidden = !canZoom(inst, found)
   ghost.style.top = px(ghostStyle.top)
@@ -134,9 +173,11 @@ function writeDialog(inst: Instance): void {
 
 /**
  * Pre-style a newly seen modal img, then read layout and the source into the
- * next snapshot; returns the ghost's style for write
+ * next snapshot; returns the ghost's style and the host's box-sizing for
+ * write. With an image, hasImage and getStyleGhost have already brought style
+ * and layout up to date, so the box-sizing read forces nothing more.
  */
-function read(inst: Instance): StyleObject {
+function read(inst: Instance): Reading {
   preStyle(inst)
   const source = hasImage(inst) ? inst.imgEl : null
   const ghostStyle = getStyleGhost(source)
@@ -144,7 +185,11 @@ function read(inst: Instance): StyleObject {
   if (!statesEqual(next, inst.state)) {
     inst.state = Object.freeze(next)
   }
-  return ghostStyle
+  return {
+    ghostStyle,
+    boxSizing:
+      source === null ? undefined : getComputedStyle(inst.host).boxSizing,
+  }
 }
 
 /**
@@ -152,8 +197,8 @@ function read(inst: Instance): StyleObject {
  * before any dispatch: a takeRecords() after it would also drop what a
  * statechange listener inserted.
  */
-function write(inst: Instance, ghostStyle: StyleObject): void {
-  writeShadow(inst, ghostStyle)
+function write(inst: Instance, reading: Reading): void {
+  writeShadow(inst, reading)
   writeDialog(inst)
   discardOwnRecords(inst)
 }
@@ -190,13 +235,13 @@ export function report(inst: Instance): void {
  * before any write. `target` resolves the instance, which holds the job.
  */
 export function createJob(target: () => Instance): Job {
-  let ghostStyle: StyleObject = {}
+  let reading: Reading = { ghostStyle: {}, boxSizing: undefined }
   return {
     read: () => {
-      ghostStyle = read(target())
+      reading = read(target())
     },
     write: () => {
-      write(target(), ghostStyle)
+      write(target(), reading)
     },
     finish: () => {
       report(target())

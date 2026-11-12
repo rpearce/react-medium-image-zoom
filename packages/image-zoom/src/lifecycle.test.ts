@@ -253,6 +253,31 @@ it('sets :state(found) where supported, and teardown clears it', async () => {
   expect(el.matches(':state(found)')).toBe(false)
 })
 
+it('adds :state(found) once, when the image is first found', async () => {
+  if (!CSS.supports('selector(:state(found))')) return
+  const add = vi.spyOn(CustomStateSet.prototype, 'add')
+  const el = await ready(IMG_HTML)
+  await idle()
+  expect(el.matches(':state(found)')).toBe(true)
+  expect(add.mock.calls).toEqual([['found']])
+})
+
+it('an update that keeps hasImage does not write :state(found) again', async () => {
+  if (!CSS.supports('selector(:state(found))')) return
+  const el = await ready(IMG_HTML)
+  await idle()
+  const add = vi.spyOn(CustomStateSet.prototype, 'add')
+  const remove = vi.spyOn(CustomStateSet.prototype, 'delete')
+  const reads = vi.spyOn(Element.prototype, 'getBoundingClientRect')
+  el.zoomMargin = 10
+  await idle()
+  // The change ran an update (every read with an image measures the source)
+  expect(reads).toHaveBeenCalled()
+  expect(add).not.toHaveBeenCalled()
+  expect(remove).not.toHaveBeenCalled()
+  expect(el.matches(':state(found)')).toBe(true)
+})
+
 it('attribute changes while disconnected do not update', () => {
   const el = document.createElement('image-zoom')
   const events = record(el, 'statechange')

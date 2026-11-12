@@ -4,6 +4,7 @@ import './styles.css'
 import {
   builtInButton,
   flush,
+  get,
   ghost,
   idle,
   IMG,
@@ -157,6 +158,59 @@ it('keeps sizes under a box-sizing: inherit reset', async () => {
   } finally {
     document.adoptedStyleSheets = previous
   }
+})
+
+it('keeps a slotted zoom button content-box under an inherit reset without border-box', async () => {
+  const sheet = new CSSStyleSheet()
+  sheet.replaceSync('*,*::before,*::after{box-sizing:inherit}')
+  const previous = document.adoptedStyleSheets
+  document.adoptedStyleSheets = [sheet]
+  const button = `<button slot="zoom-button" style="padding:9px;width:40px">z</button>`
+  try {
+    const el = await ready(
+      `<image-zoom><img src="${IMG}" width="100">${button}</image-zoom>`,
+    )
+    // The same button as a plain child of a <div> on this page
+    const baseline = mount(`<div>${button}</div>`).querySelector('button')!
+    const slotted = el.querySelector('button')!
+    expect(getComputedStyle(el).boxSizing).toBe('content-box')
+    expect(getComputedStyle(slotted).boxSizing).toBe(
+      getComputedStyle(el).boxSizing,
+    )
+    expect(slotted.getBoundingClientRect().width).toBe(
+      baseline.getBoundingClientRect().width,
+    )
+  } finally {
+    document.adoptedStyleSheets = previous
+  }
+})
+
+it('writes a concrete box-sizing on the zoom-button slot, and only when it changes', async () => {
+  const el = await ready(IMG_HTML)
+  await idle()
+  const buttonSlot = get(
+    el.shadowRoot,
+    'slot[name="zoom-button"]',
+    HTMLSlotElement,
+  )
+  expect(['border-box', 'content-box']).toContain(buttonSlot.style.boxSizing)
+  const records: MutationRecord[] = []
+  const observer = new MutationObserver(list => {
+    records.push(...list)
+  })
+  observer.observe(el.shadowRoot!, {
+    attributes: true,
+    subtree: true,
+    attributeFilter: ['style'],
+  })
+  const reads = vi.spyOn(Element.prototype, 'getBoundingClientRect')
+  el.zoomMargin = 10
+  await idle()
+  records.push(...observer.takeRecords())
+  observer.disconnect()
+  // The change ran an update (every read with an image measures the source)
+  expect(reads).toHaveBeenCalled()
+  expect(records.filter(r => r.target === buttonSlot)).toEqual([])
 })
 
 // Review Focus 1–4
