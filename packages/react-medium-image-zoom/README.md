@@ -427,8 +427,8 @@ are the same as in v5. These things changed:
    swipe, the dialog closing), and for clicks on the unzoom button and the
    modal content. Its `currentTarget` differs too: for a click on the zoom
    button it is now the `<image-zoom>` element, and for a click on the unzoom
-   button the dialog, where in v5 it was the button. Its `target` is
-   unchanged. `ZoomContent`'s `onUnzoom(e)` still passes on whatever it is
+   button the dialog (on React 16, which listens on the document, the
+   document), where in v5 it was the button. Its `target` is unchanged. `ZoomContent`'s `onUnzoom(e)` still passes on whatever it is
    given.
 
    **What to do:** use the event directly, and remove `.nativeEvent` and

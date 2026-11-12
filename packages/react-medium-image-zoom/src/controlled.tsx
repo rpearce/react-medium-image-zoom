@@ -326,8 +326,9 @@ class ControlledBase extends React.Component<
   }
 
   /**
-   * Only a click on the content itself or the modal img unzooms. The stop
-   * keeps it from reaching this component's React ancestors.
+   * Only a click on the content itself or the modal img unzooms. A click
+   * inside the modal img (the SVG clone, which the element unzooms) is only
+   * stopped. The stop keeps it from reaching this component's React ancestors.
    */
   handleModalContentClick = (e: React.MouseEvent<HTMLDivElement>): void => {
     const img = this.refModalImg.current

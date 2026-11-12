@@ -830,6 +830,7 @@ describe('Controlled with server markup and StrictMode', () => {
 
   it('zooms and unzooms twice in StrictMode, and unlocks scrolling at unmount', async () => {
     document.body.style.overflow = 'auto'
+    const consoleError = vi.spyOn(console, 'error')
     const { container, unmount } = await renderUi(
       <React.StrictMode>
         <Uncontrolled>
@@ -853,6 +854,7 @@ describe('Controlled with server markup and StrictMode', () => {
     unmount()
 
     expect(document.body.style.overflow).toBe('auto')
+    expect(consoleError).not.toHaveBeenCalled()
   })
 })
 
@@ -1067,15 +1069,15 @@ interface HydrateResult {
 /**
  * Server-render `ui` and insert the markup, where each <image-zoom> upgrades
  * and starts tracking its image. With `findFirst`, the element finds its
- * images before hydration, otherwise after it. console.error is stubbed
- * throughout, so a test can expect that it never ran.
+ * images before hydration, otherwise after it. console.error is spied on
+ * throughout (and still prints), so a test can expect that it never ran.
  */
 async function hydrateUi(
   ui: React.ReactElement,
   findFirst: boolean,
 ): Promise<HydrateResult> {
   mockBrowserApis()
-  const consoleError = vi.spyOn(console, 'error').mockImplementation(noop)
+  const consoleError = vi.spyOn(console, 'error')
   const onRecoverableError = vi.fn<OnRecoverableError>()
 
   const container = document.createElement('div')

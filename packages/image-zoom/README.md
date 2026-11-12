@@ -248,12 +248,13 @@ the event.
 - **`icon-zoom` slot:** replaces the icon inside the built-in zoom button.
 - **`zoom-button` slot:** replaces the whole zoom button. You own everything
   about your button, including its `aria-label`, because the element never
-  writes to slotted nodes. A click on it requests a zoom. It sits inside the
-  ghost, which has `pointer-events: none`, and inherits that, so a mouse click
-  goes through it to whatever is underneath. Over the image, the click still
-  zooms, because it lands on the image. A button that should take clicks
-  itself, or that you place outside the image, needs `pointer-events: auto`;
-  the `[data-rmiz-btn-zoom]` rules in `styles.css` don't set it.
+  writes to slotted nodes. Activating it from the keyboard requests a zoom. For
+  the mouse there is a catch: it sits inside the ghost, which has
+  `pointer-events: none`, and inherits that, so a mouse click goes through it
+  to whatever is underneath. Over the image, the click still zooms, because
+  it lands on the image. A button that should take mouse clicks itself, or
+  that you place outside the image, needs `pointer-events: auto`; the
+  `[data-rmiz-btn-zoom]` rules in `styles.css` never set `auto`.
 - **`icon-unzoom` child:** a child with `slot="icon-unzoom"` becomes the icon
   of the built-in unzoom button. It isn't a real slot, because the dialog
   isn't inside the element. Each time a zoom starts, the element copies that
