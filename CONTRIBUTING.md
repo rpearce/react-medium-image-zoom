@@ -60,7 +60,8 @@ $ pnpm exec playwright install --with-deps chromium
 ```
 
 The second command downloads the Chromium build that the browser tests run in,
-as CI does. Run it once, and again after Playwright is upgraded.
+as CI does (`--with-deps` installs system libraries and may ask for sudo on
+Linux). Run it once, and again after Playwright is upgraded.
 
 ## Commands
 
@@ -79,7 +80,7 @@ as CI does. Run it once, and again after Playwright is upgraded.
 
 ## Testing
 
-Ensure sure your changes are adequately tested via the Storybook `stories/`, and
+Ensure your changes are adequately tested via the Storybook `stories/`, and
 if automated testing is possible, feel free to add test coverage.
 
 Vitest runs three projects, defined in `vitest.config.ts`. A test file's name
@@ -91,8 +92,9 @@ decides which one runs it:
 | `happy-dom` | happy-dom                       | `packages/*/src/utils/**/*.test.ts` and `packages/*/src/**/*.happy-dom.test.{ts,tsx}` |
 | `jsdom`     | jsdom                           | `packages/*/src/**/*.jsdom.test.tsx`                                                  |
 
-So a new `foo.test.ts` runs in the browser, `foo.happy-dom.test.ts` in
-happy-dom, and `foo.jsdom.test.tsx` in jsdom.
+So a new `foo.test.ts` runs in the browser (under `src/utils/`, in happy-dom),
+`foo.happy-dom.test.ts` in happy-dom, and `foo.jsdom.test.tsx` (`.tsx` only)
+in jsdom.
 
 ## The zoom button's CSS lives in two places
 

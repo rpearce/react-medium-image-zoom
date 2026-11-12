@@ -5,7 +5,8 @@ in the style of medium.com. It has no dependencies and needs no framework. It
 works from plain HTML and JavaScript, Vue, Svelte, and anything else that
 renders HTML.
 
-React users: [`react-medium-image-zoom`](../react-medium-image-zoom/README.md)
+React users:
+[`react-medium-image-zoom`](https://github.com/rpearce/react-medium-image-zoom/tree/main/packages/react-medium-image-zoom#readme)
 wraps this element in a `<Zoom>` component.
 
 - [Install and usage](#install-and-usage)
@@ -74,22 +75,22 @@ manage it yourself, see [controlled mode](#events-and-controlled-mode).
 
 ## Attributes and properties
 
-Every property reads and writes its attribute. The attribute is the storage, so
-server-rendered HTML and the live DOM always agree.
+Every property in this table reads and writes its attribute. The attribute is
+the storage, so server-rendered HTML and the live DOM always agree.
 
-| Attribute                                                   | Property                                                | Default                          | What it does                                                                                                                        |
-| ----------------------------------------------------------- | ------------------------------------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `zoomed`                                                    | `zoomed: boolean`                                       | `false`                          | Whether the image is zoomed. See [Zooming from code](#zooming-from-code).                                                           |
-| `disabled`                                                  | `disabled: boolean`                                     | `false`                          | Ignores clicks, keys and gestures that would zoom or unzoom. Setting `zoomed` from code still works.                                |
-| `zoom-margin`                                               | `zoomMargin: number`                                    | `0`                              | Space, in pixels, between the zoomed image and the edges of the window.                                                             |
-| `label-zoom`                                                | `labelZoom: string`                                     | `"Expand image"`                 | Accessible name of the built-in zoom button. When the image has alt text (or an `aria-label`), the name is `"<label-zoom>: <alt>"`. |
-| `label-unzoom`                                              | `labelUnzoom: string`                                   | `"Minimize image"`               | Accessible name of the built-in unzoom button.                                                                                      |
-| `swipe`                                                     | `swipe: 'unzoom' \| 'none'`                             | `'unzoom'`                       | `none` turns swipe-to-unzoom off.                                                                                                   |
-| `swipe-to-unzoom-threshold`                                 | `swipeToUnzoomThreshold: number`                        | `10`                             | How far, in pixels, a vertical swipe must travel before it unzooms.                                                                 |
-| `dialog-class`                                              | `dialogClass: string`                                   | `""`                             | The `class` of the modal's `<dialog>`, for scoping your CSS.                                                                        |
-| `zoom-src`, `zoom-srcset`, `zoom-sizes`, `zoom-crossorigin` | `zoomSrc`, `zoomSrcset`, `zoomSizes`, `zoomCrossOrigin` | `""` (`zoomCrossOrigin`: `null`) | A larger image for the zoomed view. It loads when a zoom starts and replaces the small one once it has loaded.                      |
-| `inline`                                                    | `inline: boolean`                                       | `false`                          | Makes the element `display: inline` instead of `block`, for an image inside a paragraph, say.                                       |
-| `custom-content`                                            | `customContent: boolean`                                | `false`                          | You render the modal's content yourself. See [Replacing the modal content](#replacing-the-modal-content).                           |
+| Attribute                                                   | Property                                                | Default                          | What it does                                                                                                                                                          |
+| ----------------------------------------------------------- | ------------------------------------------------------- | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `zoomed`                                                    | `zoomed: boolean`                                       | `false`                          | Whether the image is zoomed. See [Zooming from code](#zooming-from-code).                                                                                             |
+| `disabled`                                                  | `disabled: boolean`                                     | `false`                          | Ignores clicks, keys and gestures that would zoom or unzoom. Setting `zoomed` from code still works.                                                                  |
+| `zoom-margin`                                               | `zoomMargin: number`                                    | `0`                              | Space, in pixels, between the zoomed image and the edges of the window.                                                                                               |
+| `label-zoom`                                                | `labelZoom: string`                                     | `"Expand image"`                 | Accessible name of the built-in zoom button. When the image has alt text (an `<img>`'s `alt`, or another source's `aria-label`), the name is `"<label-zoom>: <alt>"`. |
+| `label-unzoom`                                              | `labelUnzoom: string`                                   | `"Minimize image"`               | Accessible name of the built-in unzoom button.                                                                                                                        |
+| `swipe`                                                     | `swipe: 'unzoom' \| 'none'`                             | `'unzoom'`                       | `none` turns swipe-to-unzoom off.                                                                                                                                     |
+| `swipe-to-unzoom-threshold`                                 | `swipeToUnzoomThreshold: number`                        | `10`                             | How far, in pixels, a vertical swipe must travel before it unzooms.                                                                                                   |
+| `dialog-class`                                              | `dialogClass: string`                                   | `""`                             | The `class` of the modal's `<dialog>`, for scoping your CSS.                                                                                                          |
+| `zoom-src`, `zoom-srcset`, `zoom-sizes`, `zoom-crossorigin` | `zoomSrc`, `zoomSrcset`, `zoomSizes`, `zoomCrossOrigin` | `""` (`zoomCrossOrigin`: `null`) | A larger image for the zoomed view. It loads when a zoom starts and replaces the small one once it has loaded.                                                        |
+| `inline`                                                    | `inline: boolean`                                       | `false`                          | Makes the element `display: inline` instead of `block`, for an image inside a paragraph, say.                                                                         |
+| `custom-content`                                            | `customContent: boolean`                                | `false`                          | You render the modal's content yourself. See [Replacing the modal content](#replacing-the-modal-content).                                                             |
 
 - **Booleans** (`zoomed`, `disabled`, `inline`, `custom-content`) are true when
   the attribute is present and not the literal string `"false"`. Vue and
@@ -112,7 +113,8 @@ server-rendered HTML and the live DOM always agree.
   `swipe-to-unzoom-threshold="Infinity"` means no swipe is ever long enough.
 - **`zoom-*`** attributes are read when a zoom starts, so set them before
   `zoomed`. Only the ones you set replace the source image's values: with only
-  `zoom-src`, the zoomed image keeps the source's `srcset` and `sizes`.
+  `zoom-src`, the zoomed image keeps the source's `srcset` and `sizes`. If the
+  source has a `srcset`, set `zoom-srcset` too.
 - **`inline` and the default `display: block`** come from `styles.css`.
 - **Templates use the attribute names.** In Vue, Svelte and other template
   languages, bind the kebab-case attribute names (`zoom-margin`, not
@@ -127,7 +129,7 @@ server-rendered HTML and the live DOM always agree.
 ### Zooming from code
 
 Setting `zoomed`, as an attribute or a property, zooms or unzooms. Writing the
-value it already has does nothing.
+value it last applied does nothing.
 
 - **An initial `zoomed` is ignored.** If the attribute is present when the
   element is connected, the element doesn't zoom, and it doesn't remove the
@@ -152,7 +154,7 @@ value it already has does nothing.
   interface ImageZoomState {
     readonly hasImage: boolean // image found, loaded (or an SVG) and not display: none
     readonly isSvg: boolean
-    readonly alt: string | undefined // the image's alt, or its aria-label
+    readonly alt: string | undefined // an <img>'s alt; another source's aria-label
     readonly src: string | undefined // an <img>'s currentSrc, or a background-image URL
     readonly srcset: string | undefined // <img> sources only
     readonly sizes: string | undefined // <img> sources only
@@ -169,14 +171,14 @@ value it already has does nothing.
     `crossOrigin`) are filled in only while `hasImage` is true. Until then they
     are `undefined`, and `isSvg` is `false`.
   - `isZoomImgLoaded` turns true once the `zoom-src` image has loaded, and
-    stays true.
+    stays true until the element is removed from the document.
   - `modalImgStyle` is the zoomed image's position and size (`top`, `left`,
     `width`, `height`, `transform`, `transitionDuration`). It changes whenever
     the geometry does, on a window resize for example.
 
 - **`dialog`** is the modal's `<dialog>`. It is `null` while `hasImage` is
-  false. The dialog lives at the end of `document.body`, not inside the
-  element.
+  false. The dialog lives in a `[data-rmiz-portal]` container in
+  `document.body`, not inside the element.
 - **`modalContent`** is the element inside the dialog that holds the zoomed
   image and the unzoom button (see [Adding to the modal](#adding-to-the-modal)).
   It is created the first time it is read or needed, and keeps its identity for
@@ -320,9 +322,10 @@ focus, and the dialog's accessible name.
 - **Limits.** Your nodes can't wrap or replace the zoomed image, so a caption
   is a sibling of the image, not a `<figcaption>` tied to it. Wrapping needs
   [`custom-content`](#replacing-the-modal-content).
-- **Event bubbling.** Events from your nodes bubble through the dialog at the
-  end of `document.body`, not through the element. A listener on an ancestor
-  of `<image-zoom>` doesn't hear a click on your caption.
+- **Event bubbling.** Events from your nodes bubble through the dialog, in a
+  `[data-rmiz-portal]` container in `document.body`, not through the element.
+  A listener on an ancestor of `<image-zoom>` doesn't hear a click on your
+  caption.
 
 A caption that fades in below a wide image, or beside a tall one:
 
@@ -461,8 +464,8 @@ onMounted(sync)
 ```
 
 **Controlled mode.** Bind `zoomed` to your state and cancel `zoomchange`. With
-`import type { ZoomChangeEventDetail } from '@rpearce/image-zoom'` and a
-boolean `z`:
+`import type { ZoomChangeEventDetail } from '@rpearce/image-zoom'` and reactive
+state `z` (Vue: `const z = ref(false)`; Svelte: `let z = $state(false)`):
 
 - Vue:
   `:zoomed="z" @zoomchange="(e: CustomEvent<ZoomChangeEventDetail>) => { e.preventDefault(); z = e.detail.zoomed }"`
@@ -474,8 +477,9 @@ The handlers are annotated because, under strict type checking, `vue-tsc` and
 
 **Vue notes.**
 
-- Tell Vue that `image-zoom` is a custom element, and import the element and
-  its stylesheet on the client. With Vite:
+- Tell Vue that `image-zoom` is a custom element. Import the element on the
+  client, and the stylesheet globally, so that its rules are in the
+  server-rendered page too. With Vite:
 
   ```js
   // vite.config.js
@@ -492,8 +496,9 @@ The handlers are annotated because, under strict type checking, `vue-tsc` and
   }
   ```
 
-  In Nuxt, set `vue.compilerOptions.isCustomElement` in `nuxt.config`, and
-  import the element from a `.client` plugin.
+  In Nuxt, set `vue.compilerOptions.isCustomElement` in `nuxt.config`, add the
+  stylesheet there with `css: ['@rpearce/image-zoom/styles.css']`, and import
+  the element from a `.client` plugin.
 
 - The `v-if` on `Teleport` is required. Without it, Vue throws once the target
   appears.
@@ -603,12 +608,13 @@ Types, build the same nodes with DOM calls.
 `styles.css` is a global stylesheet. Override its rules, or copy the file and
 change it. These hooks are stable:
 
-- **`data-rmiz-*` attributes** on the modal, which lives in light DOM at the
-  end of `document.body`:
+- **`data-rmiz-*` attributes** on the modal, which lives in light DOM, in a
+  `[data-rmiz-portal]` container in `document.body`:
   - `[data-rmiz-portal]`: the container for every dialog
   - `[data-rmiz-modal]`: the `<dialog>`
-  - `[data-rmiz-modal-overlay="hidden"]` and `[data-rmiz-modal-overlay="visible"]`:
-    the background, before and during the zoom
+  - `[data-rmiz-modal-overlay]`: the background. It is `"hidden"` while
+    unzoomed or zooming out, and `"visible"` while zooming in or zoomed; the
+    overlay transitions between them.
   - `[data-rmiz-modal-content]`: `modalContent`
   - `[data-rmiz-modal-img]`: the zoomed image
   - `[data-rmiz-btn-unzoom]`: the unzoom button, and
@@ -637,24 +643,28 @@ reduced-motion rule in `styles.css` uses `0.01ms`.
 
 The element needs `<dialog>`, custom elements, shadow DOM and
 `ResizeObserver`. The lowest versions, from compatibility data for the
-features it uses, are Safari 15.4 (macOS and iOS), Firefox 98, and Chrome and
-Edge 93. The code is compiled to ES2021; to support older syntax, run it
-through your build. The automated tests run in Chromium.
+features it uses, are Safari 15.4 (macOS and iOS) and Firefox 98, set by
+`<dialog>`, and Chrome and Edge 93, set by `Object.hasOwn`. The code is
+compiled to ES2021; to support older syntax, run it through your build.
+`Object.hasOwn` is an ES2022 library function, which a build step doesn't add:
+for Chrome or Edge 85–92, polyfill it. Chrome and Edge 85–87 also lack
+`:where()`, which `styles.css` uses for its `image-zoom` rules, so there the
+element is `display: inline`. The automated tests run in Chromium.
 
 Two features are used only where they exist:
 
 | Feature                 | Missing in                                                | Effect where missing                                                                                               |
 | ----------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | `:state(found)`         | Safari before 17.4, Firefox before 126, Chrome before 125 | The `:state(found)` rules don't match, so the image doesn't get `cursor: zoom-in`. Nothing else changes.           |
-| Constructed stylesheets | Safari before 16.4                                        | The built-in zoom button's styles go in a `<style>` element in the shadow root, which a strict CSP blocks (below). |
+| Constructed stylesheets | Safari before 16.4, Firefox before 101                    | The built-in zoom button's styles go in a `<style>` element in the shadow root, which a strict CSP blocks (below). |
 
 **Content Security Policy.** The element builds its shadow tree with DOM calls
 and writes styles through the CSSOM (`element.style`), never through HTML
 strings or `setAttribute('style', …)`. It works under `style-src 'self'`
 (without `'unsafe-inline'`) and `require-trusted-types-for 'script'`. Load
 `styles.css` as a file, with a `<link>` or through your bundler. The one
-exception is Safari 15.4 to 16.3: there, under a `style-src` without
-`'unsafe-inline'`, the built-in zoom button is unstyled. A slotted
+exception is Safari 15.4–16.3 and Firefox 98–100: there, under a `style-src`
+without `'unsafe-inline'`, the built-in zoom button is unstyled. A slotted
 `zoom-button` styled from your own stylesheet is unaffected.
 
 ## Limits
@@ -679,5 +689,6 @@ exception is Safari 15.4 to 16.3: there, under a `style-src` without
 
 ## React
 
-For React, use [`react-medium-image-zoom`](../react-medium-image-zoom/README.md).
+For React, use
+[`react-medium-image-zoom`](https://github.com/rpearce/react-medium-image-zoom/tree/main/packages/react-medium-image-zoom#readme).
 Its `<Zoom>` component renders this element and keeps the v5 props.

@@ -33,8 +33,14 @@ Requirements to know about:
 
 - `<dialog>` element ([caniuse dialog](https://caniuse.com/dialog))
 - `ResizeObserver` ([caniuse ResizeObserver](https://caniuse.com/mdn-api_resizeobserver))
+- Custom elements ([caniuse custom elements](https://caniuse.com/custom-elementsv1))
+  and shadow DOM ([caniuse shadow DOM](https://caniuse.com/shadowdomv1))
+- The lowest browsers are Safari 15.4, Firefox 98, and Chrome and Edge 93
+  ([browser support](https://github.com/rpearce/react-medium-image-zoom/blob/main/packages/image-zoom/README.md#browser-support))
 - Package build target is `ES2021`. If you need to support older environments,
-  run this package through your build system.
+  run this package through your build system. The code also calls
+  `Object.hasOwn`, an ES2022 library function that a build step doesn't add; a
+  page that must run on Chrome or Edge 85–92 needs a polyfill for it.
 
 ## Media and Tutorials
 
@@ -261,10 +267,11 @@ determining when to zoom and unzoom the component.
 
 You can import the default styles from `react-medium-image-zoom/dist/styles.css`
 (or `react-medium-image-zoom/styles.css`) and override the values from your
-code, or you can copy [the styles.css file](../image-zoom/src/styles.css) and
-alter it to your liking. The latter is the best option, given `rem`s should be
-used instead of `px` to account for different default browser font sizes, and
-it's hard for a library to guess at what these values should be.
+code, or you can copy
+[the styles.css file](https://github.com/rpearce/react-medium-image-zoom/blob/main/packages/image-zoom/src/styles.css)
+and alter it to your liking. The latter is the best option, given `rem`s should
+be used instead of `px` to account for different default browser font sizes,
+and it's hard for a library to guess at what these values should be.
 
 An example of customizing the transition duration, timing function, overlay
 background color, and unzoom button styles with `:focus-visible` can be found in
@@ -353,7 +360,8 @@ const CustomZoomContent = ({
 ## Migrating from v5 to v6
 
 In v6, `<Zoom>` renders the `<image-zoom>` custom element from
-[`@rpearce/image-zoom`](../image-zoom/README.md) and does its work through it.
+[`@rpearce/image-zoom`](https://github.com/rpearce/react-medium-image-zoom/tree/main/packages/image-zoom#readme)
+and does its work through it.
 The props, the exports and every `[data-rmiz-*]` styling hook not named below
 are the same as in v5. These things changed:
 
@@ -369,12 +377,12 @@ are the same as in v5. These things changed:
 
 2. **Ghost.** `[data-rmiz-ghost]`, the box over the image that holds the zoom
    button, now lives in the element's shadow DOM. Rules that select it, or
-   that reach the zoom button through it, stop matching. Its `position` and
-   `pointer-events` are inline styles.
+   that reach the zoom button through it, stop matching. Its `position`,
+   `pointer-events` and `box-sizing` are inline styles.
 
    **What to do:** style it with `image-zoom::part(ghost)`. Overriding
-   `position` or `pointer-events` there needs `!important`. Select the zoom
-   button as `[data-rmiz-btn-zoom]`.
+   `position`, `pointer-events` or `box-sizing` there needs `!important`.
+   Select the zoom button as `[data-rmiz-btn-zoom]`.
 
 3. **Content visibility.** `[data-rmiz-content]` no longer gets an inline
    `visibility` style. While zoomed, the image is hidden by `visibility` it
@@ -426,8 +434,9 @@ are the same as in v5. These things changed:
    `null`. `props.width`, `props.height` and `props.style` are still there.
 
    **What to do:** don't read `img.props.id` or `img.props.onTransitionEnd`.
-   Copy the style (`{ ...img.props.style }`) before changing it. Treat a
-   missing `crossOrigin` as `undefined`.
+   Copy the style (`{ ...img.props.style }`) before changing it. Code that
+   tests `img.props.crossOrigin === null` tests for `undefined` (or `== null`)
+   instead.
 
 8. **Timing.** On React 18 and 19, a click on the zoom button opens the dialog
    one task later than before, because the update now starts in a native
@@ -455,7 +464,9 @@ are the same as in v5. These things changed:
      ```
 
    - Code that focuses the zoom button in the same tick that it renders waits
-     until it is visible.
+     a task first: the element shows the button in a task of its own, which it
+     queues once it sees the modal content. That task is a `MessageChannel`
+     message, and WebKit can run a zero-delay `setTimeout` before it.
 
 9. **Global registration.** Importing the package registers the
    `<image-zoom>` custom element globally. If another library has already
@@ -478,8 +489,9 @@ are the same as in v5. These things changed:
     anything.
 
     **What to do:** add the `:where(image-zoom…)` rules from the end of the
-    new [styles.css](../image-zoom/src/styles.css) to your copy, and delete
-    the `[data-rmiz-ghost]` rule.
+    new
+    [styles.css](https://github.com/rpearce/react-medium-image-zoom/blob/main/packages/image-zoom/src/styles.css)
+    to your copy, and delete the `[data-rmiz-ghost]` rule.
 
 12. **Test stubs.** A hand-written `ResizeObserver` stub (jsdom has none) now
     needs an `unobserve` method as well as `observe`. Without it, unmounting
@@ -495,11 +507,22 @@ are the same as in v5. These things changed:
     }
     ```
 
+13. **Browser floor.** v6 calls `Object.hasOwn`, which v5 doesn't. That
+    raises the lowest Chrome and Edge version from 85 to 93. Safari (15.4) and
+    Firefox (98) are unchanged; `<dialog>` sets those.
+
+    **What to do:** nothing for current browsers. To keep Chrome or Edge
+    85–92, polyfill `Object.hasOwn`. In Chrome and Edge 85–87, which also lack
+    `:where()`, the stylesheet's rules for `<image-zoom>` don't apply, so it is
+    `display: inline` there even with the polyfill.
+
 **Performance on large galleries.** With hundreds of images on one page, v6
 mounts somewhat slower than v5. Measured with 500 images on React 19, it took
-about 17% more time from navigation and about 1.8 MB more heap. Each `<Zoom>`
-portals its modal content into its own dialog, and React installs its event
-listeners on every portal container, where v5 used one shared container.
+about 17–20% longer from navigation start until the gallery had mounted (about
+122 ms against 102–104 ms for v5, in two measurement sessions), and about
+1.8 MB more heap. Each `<Zoom>` portals its modal content into its own dialog,
+and React installs its event listeners on every portal container, where v5
+used one shared container.
 
 ## Migrating From v4 to v5
 

@@ -16,3 +16,4 @@
 10. **A dependency.** The package depends on `@rpearce/image-zoom` (ESM); add it next to `react-medium-image-zoom` in Jest `transformIgnorePatterns` or Next.js `transpilePackages` lists. It is larger: about 9.9 kB gzip, up from about 5.4 kB.
 11. **Copied stylesheets.** A copy of `styles.css` needs the new `:where(image-zoom…)` rules, and its `[data-rmiz-ghost]` rule is dead.
 12. **Test stubs.** A hand-written `ResizeObserver` stub needs an `unobserve` method. The element no longer calls `disconnect`.
+13. **Browser floor.** v6 calls `Object.hasOwn`, which raises the lowest Chrome and Edge version from 85 to 93; polyfill it to keep 85–92. Safari (15.4) and Firefox (98) are unchanged.
