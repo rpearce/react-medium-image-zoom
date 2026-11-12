@@ -1,8 +1,9 @@
 import { parseNumber } from './attributes.js'
-import { writeBuiltIn } from './content.js'
+import { cloneSvg, writeBuiltIn } from './content.js'
 import { type Instance, INITIAL_STATE, statesEqual } from './instance.js'
 import {
   createDialog,
+  findModalImg,
   removeDialog,
   writeDialogClass,
   writeModalImg,
@@ -103,8 +104,10 @@ function writeShadow(inst: Instance, ghostStyle: StyleObject): void {
 
 /**
  * The dialog exists while hasImage; then its class, the overlay state, the
- * built-in content and the modal img's geometry. Runs before the report, so a
- * statechange never sees hasImage and the dialog disagree.
+ * built-in content, the modal img's geometry and, for an SVG source, a fresh
+ * clone in the modal img (today's componentDidUpdate re-clones on every
+ * update). Runs before the report, so a statechange never sees hasImage and
+ * the dialog disagree.
  */
 function writeDialog(inst: Instance): void {
   if (!inst.state.hasImage) {
@@ -119,7 +122,10 @@ function writeDialog(inst: Instance): void {
     modalState === 'LOADING' || modalState === 'LOADED' ? 'visible' : 'hidden',
   )
   if (!inst.isCustom) writeBuiltIn(inst)
-  writeModalImg(inst, inst.state.modalImgStyle)
+  const style = inst.state.modalImgStyle
+  writeModalImg(inst, style)
+  const target = findModalImg(inst)
+  if (target !== null) cloneSvg(inst, target, style)
 }
 
 /**

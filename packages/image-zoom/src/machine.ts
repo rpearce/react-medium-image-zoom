@@ -1,3 +1,4 @@
+import { cloneUnzoomIcon, loadZoomImage } from './content.js'
 import type { Instance } from './instance.js'
 import { fallbackMs, findModalImg } from './modal.js'
 import { report, update } from './operation.js'
@@ -33,7 +34,7 @@ export function enter(inst: Instance, state: ModalState): void {
   update(inst)
   switch (state) {
     case 'LOADING':
-      // Task 11: preload the zoom image here
+      loadZoomImage(inst)
       inst.gestures.enter(state)
       break
     case 'LOADED':
@@ -58,12 +59,14 @@ export function enter(inst: Instance, state: ModalState): void {
 /**
  * Apply a zoomed change as one operation: update in the current state (as
  * today's prop-change render, so a zoom starts from fresh geometry); for a
- * zoom, scroll lock and showModal() as zoom() does; then enter the state.
- * With no dialog (no image yet) a zoom still locks and enters LOADING.
+ * zoom, the built-in unzoom icon, then scroll lock and showModal() as zoom()
+ * does; then enter the state. With no dialog (no image yet) a zoom still
+ * locks and enters LOADING.
  */
 export function applyZoomed(inst: Instance, zoomed: boolean): void {
   update(inst)
   if (zoomed) {
+    if (!inst.isCustom) cloneUnzoomIcon(inst)
     inst.prevBodyAttrs = bodyScrollDisable()
     inst.dialog?.showModal()
   }

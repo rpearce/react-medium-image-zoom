@@ -84,6 +84,7 @@ function teardown(inst: Instance, onZoomClick: (event: Event) => void): void {
   inst.modalState = 'UNLOADED'
   inst.appliedZoomed = false
   inst.shouldRefresh = false
+  inst.isZoomImgLoaded = false
   inst.isSetUp = false
   inst.mustReport = true
 }
