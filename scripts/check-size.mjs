@@ -13,7 +13,7 @@ import { gzipSync } from 'node:zlib'
 import { build } from 'esbuild'
 
 // The first measurement (9,770 B gzip) rounded up to the next 250 B. Last
-// measured: 9,841 B.
+// measured: 9,936 B.
 const BUDGET_BYTES = 10_000
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))

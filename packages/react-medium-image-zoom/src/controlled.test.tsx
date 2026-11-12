@@ -1,7 +1,16 @@
 import React, { act } from 'react'
 import { createPortal } from 'react-dom'
 import ReactDOM from 'react-dom/client'
-import { afterEach, describe, it, expect, vi } from 'vitest'
+import { renderToString } from 'react-dom/server'
+import {
+  afterEach,
+  describe,
+  it,
+  expect,
+  type Mock,
+  type MockInstance,
+  vi,
+} from 'vitest'
 
 import type { ImageZoomElement } from '@rpearce/image-zoom'
 import css from '../../image-zoom/src/styles.css?inline'
@@ -345,6 +354,39 @@ describe('Controlled', () => {
     })
 
     expect(onZoomChange).not.toHaveBeenCalled()
+  })
+
+  // As in v5: unzooming by a click on the SVG clone doesn't also click
+  // whatever is above <Zoom> (a card that selects, a row that navigates)
+  it('keeps a click inside the zoomed SVG from reaching its ancestors', async () => {
+    const onZoomChange = vi.fn<OnZoomChange>()
+    const onAncestorClick = vi.fn<() => void>()
+    const app = (isZoomed: boolean): React.ReactElement => (
+      <div role="presentation" onClick={onAncestorClick}>
+        <Controlled isZoomed={isZoomed} onZoomChange={onZoomChange}>
+          <svg height="150" width="200">
+            <circle cx="100" cy="75" r="50" />
+          </svg>
+        </Controlled>
+      </div>
+    )
+    const { render } = await renderUi(app(false))
+
+    await render(app(true))
+    const modalImg = getPortalModalImg()
+    if (modalImg === null) throw new Error('no modal img')
+    await fireTransitionEnd(modalImg)
+    const circle = modalImg.querySelector('svg circle')
+    if (circle === null) throw new Error('no circle in the zoomed clone')
+    onZoomChange.mockClear()
+
+    act(() => {
+      circle.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    })
+
+    expect(onZoomChange).toHaveBeenCalledTimes(1)
+    expectCalledWith(onZoomChange, false)
+    expect(onAncestorClick).not.toHaveBeenCalled()
   })
 
   it('zooms with a ZoomContent that renders img only while zoomed', async () => {
@@ -707,6 +749,113 @@ describe('Controlled', () => {
   })
 })
 
+describe('Controlled with server markup and StrictMode', () => {
+  it('hydrates server markup, then zooms on a click', async () => {
+    const h = await hydrateUi(
+      <Uncontrolled>
+        <img alt="That Wanaka Tree" src="test-image.jpg" />
+      </Uncontrolled>,
+      false,
+    )
+    expect(h.foundFirst).toBe(false)
+    const img = h.container.querySelector('img')
+    if (img === null) throw new Error('no img')
+
+    await click(img)
+
+    expect(getPortalDialog()?.open).toBe(true)
+    expect(h.onRecoverableError).not.toHaveBeenCalled()
+    expect(h.consoleError).not.toHaveBeenCalled()
+  })
+
+  it('hydrates server markup after the element found its image, then zooms on a click', async () => {
+    const h = await hydrateUi(
+      <Uncontrolled>
+        <img alt="That Wanaka Tree" src="test-image.jpg" />
+      </Uncontrolled>,
+      true,
+    )
+    expect(h.foundFirst).toBe(true)
+    const img = h.container.querySelector('img')
+    if (img === null) throw new Error('no img')
+
+    await click(img)
+
+    expect(getPortalDialog()?.open).toBe(true)
+    expect(h.onRecoverableError).not.toHaveBeenCalled()
+    expect(h.consoleError).not.toHaveBeenCalled()
+  })
+
+  it('hydrates a zoomed, disabled Controlled with an SVG source', async () => {
+    const h = await hydrateUi(
+      <Controlled
+        canSwipeToUnzoom={false}
+        classDialog="custom-dialog"
+        isDisabled
+        isZoomed
+        wrapElement="span"
+        zoomImg={{ src: 'zoom-image.jpg' }}
+      >
+        <svg
+          aria-label="A circle"
+          height="100"
+          role="img"
+          viewBox="0 0 10 10"
+          width="100"
+        >
+          <circle cx="5" cy="5" r="4" />
+        </svg>
+      </Controlled>,
+      true,
+    )
+    expect(h.foundFirst).toBe(true)
+    const ghost = getHost(h.container).shadowRoot?.querySelector(
+      '[data-rmiz-ghost]',
+    )
+    if (!(ghost instanceof HTMLElement)) throw new Error('no ghost')
+
+    // The zoom button shows once the element sees the hydrated content
+    await act(async () => {
+      await vi.waitFor(() => {
+        if (ghost.hidden !== false)
+          throw new Error('waiting for the zoom button')
+      })
+    })
+
+    expect(ghost.hidden).toBe(false)
+    expect(getPortalDialog()?.getAttribute('class')).toBe('custom-dialog')
+    expect(h.onRecoverableError).not.toHaveBeenCalled()
+    expect(h.consoleError).not.toHaveBeenCalled()
+  })
+
+  it('zooms and unzooms twice in StrictMode, and unlocks scrolling at unmount', async () => {
+    document.body.style.overflow = 'auto'
+    const { container, unmount } = await renderUi(
+      <React.StrictMode>
+        <Uncontrolled>
+          <img alt="That Wanaka Tree" src="test-image.jpg" />
+        </Uncontrolled>
+      </React.StrictMode>,
+    )
+    const button = container.querySelector('[data-rmiz-btn-zoom]')
+    const img = container.querySelector('img')
+    if (button === null || img === null) throw new Error('no zoom button')
+
+    await zoomAndUnzoom(button)
+    await zoomAndUnzoom(img)
+    expect(document.querySelectorAll('[data-rmiz-modal]')).toHaveLength(1)
+    expect(document.querySelectorAll('[data-rmiz-modal-content]')).toHaveLength(
+      1,
+    )
+
+    await click(img)
+    expect(document.body.style.overflow).toBe('hidden')
+    unmount()
+
+    expect(document.body.style.overflow).toBe('auto')
+  })
+})
+
 // =============================================================================
 // TEST HELPERS
 // =============================================================================
@@ -901,6 +1050,94 @@ async function renderZoom(
     },
     unmount: result.unmount,
   }
+}
+
+type OnRecoverableError = NonNullable<
+  ReactDOM.HydrationOptions['onRecoverableError']
+>
+
+interface HydrateResult {
+  container: HTMLDivElement
+  // Whether the element had found its image when hydration began
+  foundFirst: boolean
+  onRecoverableError: Mock<OnRecoverableError>
+  consoleError: MockInstance<typeof console.error>
+}
+
+/**
+ * Server-render `ui` and insert the markup, where each <image-zoom> upgrades
+ * and starts tracking its image. With `findFirst`, the element finds its
+ * images before hydration, otherwise after it. console.error is stubbed
+ * throughout, so a test can expect that it never ran.
+ */
+async function hydrateUi(
+  ui: React.ReactElement,
+  findFirst: boolean,
+): Promise<HydrateResult> {
+  mockBrowserApis()
+  const consoleError = vi.spyOn(console, 'error').mockImplementation(noop)
+  const onRecoverableError = vi.fn<OnRecoverableError>()
+
+  const container = document.createElement('div')
+  document.body.appendChild(container)
+  container.innerHTML = renderToString(ui)
+  const imgs = [...container.querySelectorAll('img')]
+  if (findFirst) await loadImages(imgs)
+  const foundFirst = getHost(container).state.hasImage
+
+  let root: ReactDOM.Root | null = null
+  act(() => {
+    root = ReactDOM.hydrateRoot(container, ui, { onRecoverableError })
+  })
+  cleanup = () => {
+    act(() => {
+      root?.unmount()
+    })
+    container.remove()
+  }
+
+  if (!findFirst) await loadImages(imgs)
+  return { container, foundFirst, onRecoverableError, consoleError }
+}
+
+async function click(el: Element): Promise<void> {
+  await act(async () => {
+    el.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    await Promise.resolve()
+  })
+}
+
+/**
+ * Zoom with a click on `trigger` and end the transition, then unzoom with
+ * Escape, end that transition and wait for the dialog's close, whose unzoom
+ * request reaches Uncontrolled
+ */
+async function zoomAndUnzoom(trigger: Element): Promise<void> {
+  await click(trigger)
+  const dialog = getPortalDialog()
+  const modalImg = getPortalModalImg()
+  if (dialog === null || modalImg === null) throw new Error('no modal')
+  await fireTransitionEnd(modalImg)
+  expect(dialog.open).toBe(true)
+
+  const closed = Promise.withResolvers<void>()
+  dialog.addEventListener(
+    'close',
+    () => {
+      closed.resolve()
+    },
+    { once: true },
+  )
+  act(() => {
+    document.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
+    )
+  })
+  await fireTransitionEnd(modalImg)
+  await act(async () => {
+    await closed.promise
+  })
+  expect(dialog.open).toBe(false)
 }
 
 async function renderZoomed(

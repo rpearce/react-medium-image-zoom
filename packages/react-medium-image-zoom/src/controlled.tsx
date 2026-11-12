@@ -330,9 +330,13 @@ class ControlledBase extends React.Component<
    * keeps it from reaching this component's React ancestors.
    */
   handleModalContentClick = (e: React.MouseEvent<HTMLDivElement>): void => {
-    if (e.target === e.currentTarget || e.target === this.refModalImg.current) {
+    const img = this.refModalImg.current
+    if (e.target === e.currentTarget || e.target === img) {
       e.stopPropagation()
       this.handleUnzoom(e.nativeEvent)
+    } else if (e.target instanceof Node && img?.contains(e.target) === true) {
+      // The SVG clone: the element's own listener has requested the unzoom
+      e.stopPropagation()
     }
   }
 }
