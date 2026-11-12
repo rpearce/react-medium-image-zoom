@@ -87,6 +87,12 @@ it('renders, and a click on the zoom button requests zoom', async () => {
         throw new Error('waiting for the image')
     })
   })
+  // jsdom has no adoptedStyleSheets: the shadow button's CSS takes the
+  // <style> fallback
+  expect(
+    document.querySelector('image-zoom')?.shadowRoot?.querySelector('style')
+      ?.textContent,
+  ).toContain('[part="btn-zoom"] {')
   const button = document.querySelector<HTMLButtonElement>(
     '[data-rmiz-btn-zoom]',
   )

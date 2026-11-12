@@ -13,6 +13,7 @@
   },
   "sideEffects": [
     "./dist/index.js",
+    "./src/index.ts",
     "**/*.css"
   ],
   "files": [
