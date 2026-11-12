@@ -1,4 +1,6 @@
 import { afterEach } from 'vitest'
+import { createImageZoomElement } from './element.js'
+import type { ImageZoomElement } from './types.js'
 
 function svgUri(width: number, height: number): string {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="${width}" height="${height}" fill="#468"/></svg>`
@@ -47,6 +49,30 @@ export async function flush(): Promise<void> {
     channel.port2.postMessage(null)
   }, 0)
   await promise
+}
+
+let lateCount = 0
+
+/**
+ * Mount markup whose root is the literal tag `x-late` under a fresh tag name,
+ * so the element is in the document but undefined; run `before` on it, then
+ * define that name and resolve with the upgraded element
+ */
+export async function lateDefine(
+  markup: string,
+  before?: (el: HTMLElement) => void,
+): Promise<ImageZoomElement> {
+  lateCount += 1
+  const name = `x-late-${lateCount}`
+  const node = mount(markup.replaceAll('x-late', name))
+  before?.(node)
+  const Late = createImageZoomElement()
+  customElements.define(name, Late)
+  await customElements.whenDefined(name)
+  if (!(node instanceof Late)) {
+    throw new TypeError(`lateDefine: <${name}> did not upgrade`)
+  }
+  return node
 }
 
 /**
