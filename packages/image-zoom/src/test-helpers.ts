@@ -32,6 +32,24 @@ export function mount(markup: string): HTMLElement {
 }
 
 /**
+ * Resolve after the scheduler's next flush. Messages on message channels are
+ * delivered in the order posted, so a message posted from a timeout callback
+ * arrives after a flush posted before that timeout fired.
+ */
+export async function flush(): Promise<void> {
+  const { promise, resolve } = Promise.withResolvers<void>()
+  setTimeout(() => {
+    const channel = new MessageChannel()
+    channel.port1.onmessage = (): void => {
+      channel.port1.close()
+      resolve()
+    }
+    channel.port2.postMessage(null)
+  }, 0)
+  await promise
+}
+
+/**
  * Collect the events of a type fired on a target
  */
 export function record(target: EventTarget, type: string): Event[] {
