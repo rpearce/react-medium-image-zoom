@@ -161,6 +161,21 @@ export function ghost(el: ImageZoomElement): HTMLElement {
   return found
 }
 
+/**
+ * root.querySelector(selector), narrowed to `type`; throws when it is missing
+ */
+export function get<T extends Element>(
+  root: ParentNode | null,
+  selector: string,
+  type: new () => T,
+): T {
+  const found = root?.querySelector(selector)
+  if (!(found instanceof type)) {
+    throw new TypeError(`get: no ${type.name} matching ${selector}`)
+  }
+  return found
+}
+
 export function builtInButton(el: ImageZoomElement): HTMLButtonElement {
   const found = el.shadowRoot?.querySelector('[data-rmiz-btn-zoom]')
   if (!(found instanceof HTMLButtonElement)) {

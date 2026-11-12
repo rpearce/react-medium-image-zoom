@@ -2,6 +2,7 @@ import { expect, it } from 'vitest'
 import './index.js'
 import './styles.css'
 import {
+  get,
   IMG_HTML,
   modalImg,
   mountZoom,
@@ -9,21 +10,6 @@ import {
   ready,
   record,
 } from './test-helpers.js'
-
-/**
- * root.querySelector(selector), narrowed to `type`; throws when it is missing
- */
-function get<T extends Element>(
-  root: ParentNode | null,
-  selector: string,
-  type: new () => T,
-): T {
-  const found = root?.querySelector(selector)
-  if (!(found instanceof type)) {
-    throw new TypeError(`no ${type.name} matching ${selector}`)
-  }
-  return found
-}
 
 const SVG_HTML = `<image-zoom><svg width="100" height="80" viewBox="0 0 100 80"><defs><linearGradient id="g"></linearGradient></defs><rect width="100" height="80" fill="url(#g)"/></svg></image-zoom>`
 

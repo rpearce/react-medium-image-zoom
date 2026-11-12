@@ -61,9 +61,11 @@ export function ensureContent(inst: Instance): HTMLElement {
 }
 
 /**
- * The modal img of the source's kind. A tracked image is never re-searched,
- * so the kind can only change across a reconnect; then only the element's own
- * node is replaced, in place, ahead of the button and any consumer nodes.
+ * The modal img of the source's kind. The node has the wrong kind when the
+ * content was built before the first update of an SVG source (from the
+ * initial state), or when a reconnect finds another kind of source (a tracked
+ * image is never re-searched). Only the element's own node is replaced, in
+ * place, ahead of the button and any consumer nodes.
  */
 function matchKind(inst: Instance, node: HTMLElement): HTMLElement {
   const isSvg = inst.state.isSvg
@@ -76,21 +78,22 @@ function matchKind(inst: Instance, node: HTMLElement): HTMLElement {
 }
 
 /**
- * The source's attributes, with each non-empty zoom-* value swapped in at
- * LOADED once the zoom image has loaded: today's zoomImg spread, which keeps
- * a source value the zoomImg doesn't provide
+ * The source's attributes, with the zoom-* values swapped in at LOADED once
+ * the zoom image has loaded. As today's zoomImg spread does, a provided
+ * (present) value replaces the source's even when empty, and an absent one
+ * keeps it; zoom-src must be non-empty, or there is no zoom image.
  */
 function writeImg(inst: Instance, img: HTMLImageElement): void {
   const s = inst.state
   const swap = s.modalState === 'LOADED' && s.isZoomImgLoaded
-  const zoom = (name: string): string | undefined =>
-    swap ? nonEmpty(inst.host.getAttribute(name)) : undefined
+  const zoom = (name: string): string | null =>
+    swap ? inst.host.getAttribute(name) : null
   put(img, 'alt', s.alt) // an empty alt is meaningful
   put(img, 'crossorigin', zoom('zoom-crossorigin') ?? nonEmpty(s.crossOrigin))
   // sizes and srcset before src, because of Firefox flickering on zoom
   put(img, 'sizes', zoom('zoom-sizes') ?? nonEmpty(s.sizes))
   put(img, 'srcset', zoom('zoom-srcset') ?? nonEmpty(s.srcset))
-  put(img, 'src', zoom('zoom-src') ?? nonEmpty(s.src))
+  put(img, 'src', nonEmpty(zoom('zoom-src')) ?? nonEmpty(s.src))
 }
 
 /**
